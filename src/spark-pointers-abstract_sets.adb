@@ -1,0 +1,21 @@
+--
+--  Copyright (C) 2023-2023, AdaCore
+--
+--  SPDX-License-Identifier: Apache-2.0
+--
+
+package body SPARK.Pointers.Abstract_Sets with
+  SPARK_Mode => Off
+is
+
+   function Elements
+     (Choose : not null access function (E : Element_Type) return Boolean)
+      return Set
+   is ((others => <>));
+
+   procedure All_Elements_Chosen
+     (Choose : not null access function (E : Element_Type) return Boolean;
+      E      : Element_Type)
+   is null;
+
+end SPARK.Pointers.Abstract_Sets;
