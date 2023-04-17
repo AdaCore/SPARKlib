@@ -1,7 +1,7 @@
 --
 --  Copyright (C) 2018-2023, AdaCore
 --
---  SPDX-License-Identifier: Apache-2.0
+--  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
 --  This unit defines fixed-point lemmas in a generic way, subject to the

@@ -1,7 +1,7 @@
 --
 --  Copyright (C) 2004-2023, Free Software Foundation, Inc.
 --
---  SPDX-License-Identifier: Apache-2.0
+--  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
 with SPARK.Containers.Stable_Sorting; use SPARK.Containers.Stable_Sorting;
