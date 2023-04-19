@@ -1,7 +1,7 @@
 --
 --  Copyright (C) 2022-2023, AdaCore
 --
---  SPDX-License-Identifier: Apache-2.0
+--  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
 --  By and So are connectors used to manually help the proof of assertions by

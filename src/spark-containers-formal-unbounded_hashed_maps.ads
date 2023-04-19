@@ -1,7 +1,7 @@
 --
 --  Copyright (C) 2022-2023, Free Software Foundation, Inc.
 --
---  SPDX-License-Identifier: Apache-2.0
+--  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
 --  Iteration over maps is done using the Iterable aspect, which is SPARK

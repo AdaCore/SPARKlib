@@ -1,7 +1,7 @@
 --
 --  Copyright (C) 2023-2023, AdaCore
 --
---  SPDX-License-Identifier: Apache-2.0
+--  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
 --  Introduce a non executable type for sets with size 0. It can be used to

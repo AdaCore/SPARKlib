@@ -1,7 +1,7 @@
 --
 --  Copyright (C) 2018-2023, AdaCore
 --
---  SPDX-License-Identifier: Apache-2.0
+--  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
 package body SPARK.Higher_Order.Fold with SPARK_Mode is

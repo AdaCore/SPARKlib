@@ -1,7 +1,7 @@
 --
 --  Copyright (C) 2023-2023, Free Software Foundation, Inc.
 --
---  SPDX-License-Identifier: Apache-2.0
+--  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
 pragma Ada_2012;
