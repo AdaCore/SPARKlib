@@ -65,6 +65,20 @@ package SPARK.Containers.Functional.Maps with
   Annotate => (GNATprove, Always_Return)
 is
 
+   --  Local package for renamings to avoid polluting the namespace in user
+   --  code.
+
+   package Renamings is
+
+      function "="
+        (Left  : Key_Type;
+         Right : Key_Type) return Boolean renames Equivalent_Keys;
+      --  Predefined equality on keys is never used in this package. Rename
+      --  Equivalent_Keys instead.
+
+   end Renamings;
+   use Renamings;
+
    type Map is private with
      Default_Initial_Condition => Is_Empty (Map),
      Iterable                  => (First       => Iter_First,
@@ -524,10 +538,6 @@ private
    pragma SPARK_Mode (Off);
 
    use SPARK.Containers.Types;
-
-   function "="
-     (Left  : Key_Type;
-      Right : Key_Type) return Boolean renames Equivalent_Keys;
 
    subtype Positive_Count_Type is Count_Type range 1 .. Count_Type'Last;
 

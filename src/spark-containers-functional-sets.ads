@@ -40,6 +40,21 @@ package SPARK.Containers.Functional.Sets with
   Annotate => (GNATprove, Always_Return)
 is
 
+   --  Local package for renamings to avoid polluting the namespace in user
+   --  code.
+
+   package Renamings is
+
+      function "="
+        (Left  : Element_Type;
+         Right : Element_Type) return Boolean renames Equivalent_Elements;
+      --  Predefined equality on elements is never used in this package. Rename
+      --  Equivalent_Elements instead.
+
+   end Renamings;
+   use Renamings;
+
+
    type Set is private with
      Default_Initial_Condition => Is_Empty (Set),
      Iterable                  => (First       => Iter_First,
@@ -394,10 +409,6 @@ private
    use SPARK.Containers.Types;
 
    subtype Positive_Count_Type is Count_Type range 1 .. Count_Type'Last;
-
-   function "="
-     (Left  : Element_Type;
-      Right : Element_Type) return Boolean renames Equivalent_Elements;
 
    package Containers is new SPARK.Containers.Functional.Base
      (Element_Type => Element_Type,
