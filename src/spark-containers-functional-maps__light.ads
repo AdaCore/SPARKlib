@@ -79,12 +79,14 @@ is
 
       function "="
         (Left  : Key_Type;
-         Right : Key_Type) return Boolean renames Equivalent_Keys;
+         Right : Key_Type) return Boolean
+      is
+        (Equivalent_Keys (Left, Right))
+      with Annotate => (GNATprove, Inline_For_Proof);
       --  Predefined equality on keys is never used in this package. Rename
       --  Equivalent_Keys instead.
 
    end Renamings;
-   use Renamings;
 
    type Map is private with
      Default_Initial_Condition => Is_Empty (Map),
@@ -364,7 +366,7 @@ is
    with
      Global => null,
      Pre    => not Is_Empty (Cursor),
-     Post   => Element'Result = Choose (Cursor),
+     Post   => Renamings."=" (Element'Result, Choose (Cursor)),
      Annotate => (GNATprove, Inline_For_Proof);
    --  The next element to be considered for the iteration is the result of
    --  choose on Cursor.

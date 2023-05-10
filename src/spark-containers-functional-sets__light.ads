@@ -54,12 +54,14 @@ is
 
       function "="
         (Left  : Element_Type;
-         Right : Element_Type) return Boolean renames Equivalent_Elements;
+         Right : Element_Type) return Boolean
+      is
+        (Equivalent_Elements (Left, Right))
+      with Annotate => (GNATprove, Inline_For_Proof);
       --  Predefined equality on elements is never used in this package. Rename
       --  Equivalent_Elements instead.
 
    end Renamings;
-   use Renamings;
 
    type Set is private with
      Default_Initial_Condition => Is_Empty (Set),
@@ -323,7 +325,7 @@ is
    with
      Global => null,
      Pre    => not Is_Empty (Cursor),
-     Post   => Element'Result = Choose (Cursor),
+     Post   => Renamings."=" (Element'Result, Choose (Cursor)),
      Annotate => (GNATprove, Inline_For_Proof);
    --  The next element to be considered for the iteration is the result of
    --  choose on Cursor.
