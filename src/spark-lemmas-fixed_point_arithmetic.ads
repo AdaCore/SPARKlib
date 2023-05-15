@@ -15,9 +15,9 @@ generic
    type Fix is delta <>;
 package SPARK.Lemmas.Fixed_Point_Arithmetic
   with Pure,
-       Ghost
+       Ghost,
+       Always_Terminates
 is
-   pragma Annotate (GNATprove, Always_Return, Fixed_Point_Arithmetic);
 
    pragma Warnings
      (Off, "postcondition does not check the outcome of calling");

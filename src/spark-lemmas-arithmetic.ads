@@ -22,9 +22,9 @@ generic
    with function Big (V : Int) return Big_Integer is <>;
 package SPARK.Lemmas.Arithmetic
   with SPARK_Mode,
-       Ghost
+       Ghost,
+       Always_Terminates
 is
-   pragma Annotate (GNATprove, Always_Return, Arithmetic);
 
    pragma Warnings
      (Off, "postcondition does not check the outcome of calling");

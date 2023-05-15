@@ -10,7 +10,7 @@ with SPARK.Big_Integers; use SPARK.Big_Integers;
 generic
 package SPARK.Containers.Functional.Vectors.Higher_Order with
   SPARK_Mode,
-  Annotate => (GNATprove, Always_Return)
+  Always_Terminates
 is
 
    function Create

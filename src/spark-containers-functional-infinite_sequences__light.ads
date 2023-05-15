@@ -49,7 +49,7 @@ generic
 package SPARK.Containers.Functional.Infinite_Sequences with
   SPARK_Mode,
   Ghost,
-  Annotate => (GNATprove, Always_Return)
+  Always_Terminates
 is
 
    type Sequence is private

@@ -18,9 +18,9 @@ with SPARK.Big_Integers;
 
 package SPARK.Big_Reals with
    SPARK_Mode,
-   Ghost
+   Ghost,
+   Always_Terminates
 is
-   pragma Annotate (GNATprove, Always_Return, Big_Reals);
 
    type Big_Real is private with
      Real_Literal => From_Universal_Image;

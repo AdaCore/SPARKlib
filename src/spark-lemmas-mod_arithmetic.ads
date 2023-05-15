@@ -20,9 +20,9 @@ generic
 package SPARK.Lemmas.Mod_Arithmetic
   with SPARK_Mode,
        Pure,
-       Ghost
+       Ghost,
+       Always_Terminates
 is
-   pragma Annotate (GNATprove, Always_Return, Mod_Arithmetic);
 
    pragma Warnings
      (Off, "postcondition does not check the outcome of calling");
