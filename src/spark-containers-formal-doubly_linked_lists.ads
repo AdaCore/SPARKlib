@@ -25,7 +25,7 @@ generic
 
 package SPARK.Containers.Formal.Doubly_Linked_Lists with
   SPARK_Mode,
-  Annotate => (GNATprove, Always_Return)
+  Always_Terminates
 is
 
    --  Contracts in this unit are meant for analysis only, not for run-time

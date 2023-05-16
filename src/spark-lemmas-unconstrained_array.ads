@@ -20,9 +20,9 @@ generic
 package SPARK.Lemmas.Unconstrained_Array
   with SPARK_Mode,
        Pure,
-       Ghost
+       Ghost,
+       Always_Terminates
 is
-   pragma Annotate (GNATprove, Always_Return, Unconstrained_Array);
 
    pragma Warnings
      (Off, "postcondition does not check the outcome of calling");

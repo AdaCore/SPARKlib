@@ -42,10 +42,9 @@ generic
 
 package SPARK.Lemmas.Floating_Point_Arithmetic
   with SPARK_Mode,
-       Ghost
+       Ghost,
+       Always_Terminates
 is
-   pragma Annotate
-     (GNATprove, Always_Return, Floating_Point_Arithmetic);
 
    pragma Warnings
      (Off, "postcondition does not check the outcome of calling");

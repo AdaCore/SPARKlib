@@ -36,7 +36,7 @@ generic
 
 package SPARK.Containers.Functional.Multisets with
   SPARK_Mode => On,
-  Annotate   => (GNATprove, Always_Return)
+  Always_Terminates
 is
    type Multiset is private with
      Default_Initial_Condition => Is_Empty (Multiset),

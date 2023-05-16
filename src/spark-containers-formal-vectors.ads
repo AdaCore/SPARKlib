@@ -30,9 +30,9 @@ generic
      with Ghost;
 
 package SPARK.Containers.Formal.Vectors with
-  SPARK_Mode
+  SPARK_Mode,
+  Always_Terminates
 is
-   pragma Annotate (GNATprove, Always_Return, Vectors);
 
    --  Contracts in this unit are meant for analysis only, not for run-time
    --  checking.

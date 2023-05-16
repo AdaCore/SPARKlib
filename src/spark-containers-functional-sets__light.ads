@@ -44,7 +44,7 @@ generic
 package SPARK.Containers.Functional.Sets with
   SPARK_Mode,
   Ghost,
-  Annotate => (GNATprove, Always_Return)
+  Always_Terminates
 is
 
    --  Local package for renamings to avoid polluting the namespace in user

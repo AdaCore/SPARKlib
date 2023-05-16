@@ -53,7 +53,7 @@ generic
 package SPARK.Containers.Functional.Vectors with
   SPARK_Mode,
   Ghost,
-  Annotate => (GNATprove, Always_Return)
+  Always_Terminates
 is
 
    subtype Extended_Index is Index_Type'Base range

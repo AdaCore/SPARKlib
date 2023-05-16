@@ -13,7 +13,7 @@ generic
    type Object (<>) is private;
 package SPARK.Pointers.Pointers_With_Aliasing_Separate_Memory with
   SPARK_Mode,
-  Annotate => (GNATprove, Always_Return)
+  Always_Terminates
 is
    pragma Unevaluated_Use_Of_Old (Allow);
 

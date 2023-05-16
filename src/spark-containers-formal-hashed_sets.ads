@@ -68,7 +68,7 @@ generic
 
 package SPARK.Containers.Formal.Hashed_Sets with
   SPARK_Mode,
-  Annotate => (GNATprove, Always_Return)
+  Always_Terminates
 is
 
    --  Contracts in this unit are meant for analysis only, not for run-time

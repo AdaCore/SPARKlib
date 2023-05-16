@@ -14,7 +14,7 @@ generic
 
 package SPARK.Pointers.Abstract_Maps with
   SPARK_Mode,
-  Annotate => (GNATprove, Always_Return)
+  Always_Terminates
 is
 
    type Map is private with

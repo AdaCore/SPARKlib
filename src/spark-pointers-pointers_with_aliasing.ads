@@ -11,7 +11,7 @@ generic
    type Object (<>) is private;
 package SPARK.Pointers.Pointers_With_Aliasing with
   SPARK_Mode,
-  Annotate          => (GNATprove, Always_Return),
+  Always_Terminates,
   Initial_Condition =>
     (for all A in Address_Type => not Valid (Memory, A))
     --  The memory is initially empty

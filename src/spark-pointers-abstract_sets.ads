@@ -13,7 +13,7 @@ generic
 
 package SPARK.Pointers.Abstract_Sets with
   SPARK_Mode,
-  Annotate => (GNATprove, Always_Return)
+  Always_Terminates
 is
 
    type Set is private with

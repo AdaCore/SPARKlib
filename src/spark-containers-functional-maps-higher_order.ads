@@ -10,7 +10,7 @@ with SPARK.Big_Intervals; use SPARK.Big_Intervals;
 generic
 package SPARK.Containers.Functional.Maps.Higher_Order with
   SPARK_Mode,
-  Annotate => (GNATprove, Always_Return)
+  Always_Terminates
 is
    use SPARK.Big_Integers;
 
