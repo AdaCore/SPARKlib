@@ -881,7 +881,7 @@ is
         with Ghost;
       with procedure Lt_Order (X, Y, Z : Element_Type) is null
         with Ghost;
-   package Generic_Sorting with SPARK_Mode is
+   package Generic_Sorting with SPARK_Mode, Always_Terminates is
       package Formal_Model with Ghost is
 
          --------------------------

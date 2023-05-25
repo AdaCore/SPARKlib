@@ -1424,7 +1424,7 @@ is
       with procedure Hash_Compatible (X : Element_Type) is null
         with Ghost;
 
-   package Generic_Keys with SPARK_Mode is
+   package Generic_Keys with SPARK_Mode, Always_Terminates is
 
       package Formal_Model with Ghost is
 
