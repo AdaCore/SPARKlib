@@ -1592,7 +1592,7 @@ is
       with procedure Lt_Compatible (X, Y : Element_Type) is null
         with Ghost;
 
-   package Generic_Keys with SPARK_Mode is
+   package Generic_Keys with SPARK_Mode, Always_Terminates is
 
       function Equivalent_Keys (Left, Right : Key_Type) return Boolean with
         Global => null,
