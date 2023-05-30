@@ -78,12 +78,19 @@ is
        Equivalent_Keys'Result = (not (Left < Right) and not (Right < Left));
    pragma Annotate (GNATprove, Inline_For_Proof, Equivalent_Keys);
 
+   pragma Annotate(GNATcheck, Exempt_On,
+                   "Restrictions:No_Specification_Of_Aspect => Iterable",
+                   "The following usage of aspect Iterable has been reviewed"
+                   & "for compliance with GNATprove assumption"
+                   & " [SPARK_ITERABLE]");
    type Map (Capacity : Count_Type) is private with
      Iterable => (First       => First,
                   Next        => Next,
                   Has_Element => Has_Element,
                   Element     => Key),
      Default_Initial_Condition => Is_Empty (Map);
+   pragma Annotate (GNATcheck, Exempt_Off,
+                    "Restrictions:No_Specification_Of_Aspect => Iterable");
 
    type Cursor is record
       Node : Count_Type;

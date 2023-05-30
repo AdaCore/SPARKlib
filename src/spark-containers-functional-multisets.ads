@@ -38,12 +38,19 @@ package SPARK.Containers.Functional.Multisets with
   SPARK_Mode => On,
   Always_Terminates
 is
+   pragma Annotate(GNATcheck, Exempt_On,
+                   "Restrictions:No_Specification_Of_Aspect => Iterable",
+                   "The following usage of aspect Iterable has been reviewed"
+                   & "for compliance with GNATprove assumption"
+                   & " [SPARK_ITERABLE]");
    type Multiset is private with
      Default_Initial_Condition => Is_Empty (Multiset),
      Iterable                  => (First       => Iter_First,
                                    Next        => Iter_Next,
                                    Has_Element => Iter_Has_Element,
                                    Element     => Iter_Element);
+   pragma Annotate (GNATcheck, Exempt_Off,
+                    "Restrictions:No_Specification_Of_Aspect => Iterable");
    --  Multisets are empty when default initialized.
    --  "For in" quantification over multisets should not be used.
    --  "For of" quantification over multisets iterates over elements.
@@ -348,12 +355,19 @@ is
    --  all the elements which have not been traversed yet. The current element
    --  being traversed being the result of Choose on this set.
 
+   pragma Annotate(GNATcheck, Exempt_On,
+                   "Restrictions:No_Specification_Of_Aspect => Iterable",
+                   "The following usage of aspect Iterable has been reviewed"
+                   & "for compliance with GNATprove assumption"
+                   & " [SPARK_ITERABLE]");
    type Iterable_Multiset is private with
      Iterable =>
        (First       => First,
         Has_Element => Has_Element,
         Next        => Next,
         Element     => Element);
+   pragma Annotate (GNATcheck, Exempt_Off,
+                    "Restrictions:No_Specification_Of_Aspect => Iterable");
 
    function Multiset_Logic_Equal (Left, Right : Multiset) return Boolean with
      Ghost,

@@ -17,11 +17,18 @@ package SPARK.Pointers.Abstract_Maps with
   Always_Terminates
 is
 
+   pragma Annotate(GNATcheck, Exempt_On,
+                   "Restrictions:No_Specification_Of_Aspect => Iterable",
+                   "The following usage of aspect Iterable has been reviewed"
+                   & "for compliance with GNATprove assumption"
+                   & " [SPARK_ITERABLE]");
    type Map is private with
      Default_Initial_Condition => Is_Empty (Map),
      Iterable                  => (First       => Iter_First,
                                    Next        => Iter_Next,
                                    Has_Element => Has_Key);
+   pragma Annotate (GNATcheck, Exempt_Off,
+                    "Restrictions:No_Specification_Of_Aspect => Iterable");
 
    function "=" (Left, Right : Map) return Boolean with
      Import,

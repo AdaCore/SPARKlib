@@ -63,12 +63,19 @@ is
 
    subtype Capacity_Range is Count_Type range 0 .. Last_Count;
 
+   pragma Annotate(GNATcheck, Exempt_On,
+                   "Restrictions:No_Specification_Of_Aspect => Iterable",
+                   "The following usage of aspect Iterable has been reviewed"
+                   & "for compliance with GNATprove assumption"
+                   & " [SPARK_ITERABLE]");
    type Vector (Capacity : Capacity_Range) is private with
      Default_Initial_Condition => Is_Empty (Vector),
      Iterable => (First       => Iter_First,
                   Has_Element => Iter_Has_Element,
                   Next        => Iter_Next,
                   Element     => Element);
+   pragma Annotate (GNATcheck, Exempt_Off,
+                    "Restrictions:No_Specification_Of_Aspect => Iterable");
 
    function First_Index (Container : Vector) return Index_Type with
      Global => null,
