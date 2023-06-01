@@ -44,12 +44,20 @@ package SPARK.Containers.Functional.Infinite_Sequences with
   Always_Terminates
 is
 
+   pragma Annotate(GNATcheck, Exempt_On,
+                   "Restrictions:No_Specification_Of_Aspect => Iterable",
+                   "The following usage of aspect Iterable has been reviewed"
+                   & "for compliance with GNATprove assumption"
+                   & " [SPARK_ITERABLE]");
    type Sequence is private
      with Default_Initial_Condition => Length (Sequence) = 0,
      Iterable => (First       => Iter_First,
                   Has_Element => Iter_Has_Element,
                   Next        => Iter_Next,
                   Element     => Get);
+   pragma Annotate (GNATcheck, Exempt_Off,
+                    "Restrictions:No_Specification_Of_Aspect => Iterable");
+
    --  Sequences are empty when default initialized.
    --  Quantification over sequences can be done using the regular
    --  quantification over its range or directly on its elements with "for of".

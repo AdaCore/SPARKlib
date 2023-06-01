@@ -63,12 +63,19 @@ is
 
    end Renamings;
 
+   pragma Annotate(GNATcheck, Exempt_On,
+                   "Restrictions:No_Specification_Of_Aspect => Iterable",
+                   "The following usage of aspect Iterable has been reviewed"
+                   & "for compliance with GNATprove assumption"
+                   & " [SPARK_ITERABLE]");
    type Set is private with
      Default_Initial_Condition => Is_Empty (Set),
      Iterable                  => (First       => Iter_First,
                                    Next        => Iter_Next,
                                    Has_Element => Iter_Has_Element,
                                    Element     => Iter_Element);
+   pragma Annotate (GNATcheck, Exempt_Off,
+                    "Restrictions:No_Specification_Of_Aspect => Iterable");
    --  Sets are empty when default initialized.
    --  "For in" quantification over sets should not be used.
    --  "For of" quantification over sets iterates over elements.
@@ -291,12 +298,19 @@ is
    --  elements which have not been traversed yet. The current element being
    --  traversed being the result of Choose on this set.
 
+   pragma Annotate(GNATcheck, Exempt_On,
+                   "Restrictions:No_Specification_Of_Aspect => Iterable",
+                   "The following usage of aspect Iterable has been reviewed"
+                   & "for compliance with GNATprove assumption"
+                   & " [SPARK_ITERABLE]");
    type Iterable_Set is private with
      Iterable =>
        (First       => First,
         Has_Element => Has_Element,
         Next        => Next,
         Element     => Element);
+   pragma Annotate (GNATcheck, Exempt_Off,
+                    "Restrictions:No_Specification_Of_Aspect => Iterable");
 
    function Set_Logic_Equal (Left, Right : Set) return Boolean with
      Ghost,
