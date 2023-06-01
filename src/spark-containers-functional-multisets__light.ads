@@ -39,11 +39,11 @@ package SPARK.Containers.Functional.Multisets with
   SPARK_Mode => On,
   Always_Terminates
 is
-   pragma Annotate(GNATcheck, Exempt_On,
-                   "Restrictions:No_Specification_Of_Aspect => Iterable",
-                   "The following usage of aspect Iterable has been reviewed"
-                   & "for compliance with GNATprove assumption"
-                   & " [SPARK_ITERABLE]");
+   pragma Annotate (GNATcheck, Exempt_On,
+                    "Restrictions:No_Specification_Of_Aspect => Iterable",
+                    "The following usage of aspect Iterable has been reviewed"
+                    & "for compliance with GNATprove assumption"
+                    & " [SPARK_ITERABLE]");
    type Multiset is private with
      Default_Initial_Condition => Is_Empty (Multiset),
      Iterable                  => (First       => Iter_First,
@@ -356,11 +356,11 @@ is
    --  all the elements which have not been traversed yet. The current element
    --  being traversed being the result of Choose on this set.
 
-   pragma Annotate(GNATcheck, Exempt_On,
-                   "Restrictions:No_Specification_Of_Aspect => Iterable",
-                   "The following usage of aspect Iterable has been reviewed"
-                   & "for compliance with GNATprove assumption"
-                   & " [SPARK_ITERABLE]");
+   pragma Annotate (GNATcheck, Exempt_On,
+                    "Restrictions:No_Specification_Of_Aspect => Iterable",
+                    "The following usage of aspect Iterable has been reviewed"
+                    & "for compliance with GNATprove assumption"
+                    & " [SPARK_ITERABLE]");
    type Iterable_Multiset is private with
      Iterable =>
        (First       => First,

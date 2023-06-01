@@ -81,11 +81,11 @@ is
 
    end Renamings;
 
-   pragma Annotate(GNATcheck, Exempt_On,
-                   "Restrictions:No_Specification_Of_Aspect => Iterable",
-                   "The following usage of aspect Iterable has been reviewed"
-                   & "for compliance with GNATprove assumption"
-                   & " [SPARK_ITERABLE]");
+   pragma Annotate (GNATcheck, Exempt_On,
+                    "Restrictions:No_Specification_Of_Aspect => Iterable",
+                    "The following usage of aspect Iterable has been reviewed"
+                    & "for compliance with GNATprove assumption"
+                    & " [SPARK_ITERABLE]");
    type Map is private with
      Default_Initial_Condition => Is_Empty (Map),
      Iterable                  => (First       => Iter_First,
@@ -333,11 +333,11 @@ is
    --  elements which have not been traversed yet. The current element being
    --  traversed being the result of Choose on this map.
 
-   pragma Annotate(GNATcheck, Exempt_On,
-                   "Restrictions:No_Specification_Of_Aspect => Iterable",
-                   "The following usage of aspect Iterable has been reviewed"
-                   & "for compliance with GNATprove assumption"
-                   & " [SPARK_ITERABLE]");
+   pragma Annotate (GNATcheck, Exempt_On,
+                    "Restrictions:No_Specification_Of_Aspect => Iterable",
+                    "The following usage of aspect Iterable has been reviewed"
+                    & "for compliance with GNATprove assumption"
+                    & " [SPARK_ITERABLE]");
    type Iterable_Map is private with
      Iterable =>
        (First       => First,

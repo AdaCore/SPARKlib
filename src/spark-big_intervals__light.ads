@@ -11,11 +11,11 @@ package SPARK.Big_Intervals with SPARK_Mode, Ghost is
    --  Intervals of big integers to allow iteration. To be replaced by the
    --  appropriate library unit when there is one.
 
-   pragma Annotate(GNATcheck, Exempt_On,
-                   "Restrictions:No_Specification_Of_Aspect => Iterable",
-                   "The following usage of aspect Iterable has been reviewed"
-                   & "for compliance with GNATprove assumption"
-                   & " [SPARK_ITERABLE]");
+   pragma Annotate (GNATcheck, Exempt_On,
+                    "Restrictions:No_Specification_Of_Aspect => Iterable",
+                    "The following usage of aspect Iterable has been reviewed"
+                    & "for compliance with GNATprove assumption"
+                    & " [SPARK_ITERABLE]");
    type Interval is record
       First, Last : Big_Integer;
    end record

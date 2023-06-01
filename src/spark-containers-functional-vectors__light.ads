@@ -70,11 +70,11 @@ is
    function Of_Big (J : Big_Integer) return Extended_Index renames
      Index_Conversions.From_Big_Integer;
 
-   pragma Annotate(GNATcheck, Exempt_On,
-                   "Restrictions:No_Specification_Of_Aspect => Iterable",
-                   "The following usage of aspect Iterable has been reviewed"
-                   & "for compliance with GNATprove assumption"
-                   & " [SPARK_ITERABLE]");
+   pragma Annotate (GNATcheck, Exempt_On,
+                    "Restrictions:No_Specification_Of_Aspect => Iterable",
+                    "The following usage of aspect Iterable has been reviewed"
+                    & "for compliance with GNATprove assumption"
+                    & " [SPARK_ITERABLE]");
    type Sequence is private
      with Default_Initial_Condition => Length (Sequence) = 0,
      Iterable => (First       => Iter_First,

@@ -62,11 +62,11 @@ is
        Equivalent_Keys'Result = (not (Left < Right) and not (Right < Left));
    pragma Annotate (GNATprove, Inline_For_Proof, Equivalent_Keys);
 
-   pragma Annotate(GNATcheck, Exempt_On,
-                   "Restrictions:No_Specification_Of_Aspect => Iterable",
-                   "The following usage of aspect Iterable has been reviewed"
-                   & "for compliance with GNATprove assumption"
-                   & " [SPARK_ITERABLE]");
+   pragma Annotate (GNATcheck, Exempt_On,
+                    "Restrictions:No_Specification_Of_Aspect => Iterable",
+                    "The following usage of aspect Iterable has been reviewed"
+                    & "for compliance with GNATprove assumption"
+                    & " [SPARK_ITERABLE]");
    type Map is private with
      Iterable => (First       => First,
                   Next        => Next,
