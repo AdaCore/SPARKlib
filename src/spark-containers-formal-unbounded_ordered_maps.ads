@@ -13,6 +13,7 @@ with SPARK.Containers.Parameter_Checks;
 with SPARK.Containers.Types; use SPARK.Containers.Types;
 
 private with Ada.Containers.Red_Black_Trees;
+private with Ada.Finalization;
 private with SPARK.Containers.Formal.Holders;
 
 generic
