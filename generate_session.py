@@ -14,7 +14,7 @@ def run(cmd):
 
 
 def run_manual(check_to_prove, option=""):
-    cmd = "gnatprove -j0 -P sparklib.gpr -U --prover=coq"
+    cmd = "gnatprove -j0 -P sparklib.gpr -U --prover=coq --report=provers"
     if ":" not in check_to_prove:
         run(cmd + " " + option + check_to_prove)
     else:
@@ -167,7 +167,7 @@ def kill_and_regenerate(check):
     print("Prove remaining checks with automatic provers")
     print("---------------------------------------------")
     print("")
-    run_automatic("cvc5,z3,alt-ergo,colibri", level=2, timeout=100)
+    run_automatic("cvc5,z3,alt-ergo,colibri", timeout=100)
     print("")
     print("---------------------------")
     print("Summarize all proved checks")
@@ -176,6 +176,9 @@ def kill_and_regenerate(check):
     for shape_file in glob.glob("proof/sessions/*/why3shapes*"):
         print("deleting shapes file ", shape_file)
         os.remove(shape_file)
+    for bak_file in glob.glob("proof/sessions/*/*.bak"):
+        print("deleting temp file ", bak_file)
+        os.remove(bak_file)
 
 
 def choose_mode():
