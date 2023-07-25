@@ -16,9 +16,9 @@ project SPARKlib_Light_External is
 
    case SPARKlib_common.SPARKlib_Installed is
       when "True" =>
-         for Source_Dirs use (SPARKlib_External'Project_Dir & "/../../include/spark");
+         for Source_Dirs use (SPARKlib_Light_External'Project_Dir & "/../../include/spark");
       when others =>
-         for Source_Dirs use (SPARKlib_External'Project_Dir & "/src");
+         for Source_Dirs use (SPARKlib_Light_External'Project_Dir & "/src");
    end case;
 
    SPARK_Body_Mode := SPARKlib_common.SPARK_Body_Mode;

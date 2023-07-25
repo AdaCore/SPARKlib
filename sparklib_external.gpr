@@ -20,6 +20,18 @@ project SPARKlib_External is
 
    SPARK_Body_Mode := SPARKlib_common.SPARK_Body_Mode;
 
+   package Compiler is
+      --  Enforce GNAT style checks, except for multiple blank lines which does
+      --  not work for preprocessed files, and alphabetical ordering of
+      --  subprogram bodies (although not applicable to null subprograms).
+      for Default_Switches ("Ada") use
+         ("-gnat2022", "-gnatygo-u", "-gnata",
+	  "-gnatwI",  --  disable warnings about SPARKlib using GNAT internal units
+          "-gnateDSPARK_BODY_MODE=" & SPARK_Body_Mode);
+   end Compiler;
+
+   package Prove renames SPARKlib_common.Prove;
+
    for Excluded_Source_Files use ("spark-big_integers__light.ads",
 				  "spark-big_intervals__light.ads",
 				  "spark-big_reals__light.adb",
@@ -36,17 +48,5 @@ project SPARKlib_External is
 				  "spark-containers-functional-vectors__light.ads",
 				  "spark-containers-types__light.ads",
 				  "spark-containers__exec.ads");
-
-   package Compiler is
-      --  Enforce GNAT style checks, except for multiple blank lines which does
-      --  not work for preprocessed files, and alphabetical ordering of
-      --  subprogram bodies (although not applicable to null subprograms).
-      for Default_Switches ("Ada") use
-         ("-gnat2022", "-gnatygo-u", "-gnata",
-	  "-gnatwI",  --  disable warnings about SPARKlib using GNAT internal units
-          "-gnateDSPARK_BODY_MODE=" & SPARK_Body_Mode);
-   end Compiler;
-
-   package Prove renames SPARKlib_common.Prove;
 
 end SPARKlib_External;
