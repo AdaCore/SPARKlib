@@ -2,7 +2,7 @@ with "sparklib_common";
 
 project SPARKlib_External is
 
-   for Externally_Built use "True";
+   for Externally_Built use SPARKlib_common.SPARKlib_Installed;
 
    -- This project is not supposed to be used directly. Instead, copy
    -- sparklib.gpr in your code and provide appropriate values for the object
