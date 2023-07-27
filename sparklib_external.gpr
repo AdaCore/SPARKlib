@@ -32,7 +32,7 @@ project SPARKlib_External is
 
    package Prove renames SPARKlib_common.Prove;
 
-   for Excluded_Source_Files use ("spark-big_integers__light.ads",
+   Common_Excluded_Source_Files := ("spark-big_integers__light.ads",
 				  "spark-big_intervals__light.ads",
 				  "spark-big_reals__light.adb",
 				  "spark-big_reals__light.ads",
@@ -46,7 +46,24 @@ project SPARKlib_External is
 				  "spark-containers-functional-sets__light.ads",
 				  "spark-containers-functional-vectors__light.adb",
 				  "spark-containers-functional-vectors__light.ads",
-				  "spark-containers-types__light.ads",
-				  "spark-containers__exec.ads");
+				  "spark-containers-types__light.ads");
+
+   case SPARK_Body_Mode is
+      when "On" =>
+         for Excluded_Source_Files use Common_Excluded_Source_Files
+                                       & ("spark-containers.ads");
+      when "Off" =>
+         for Excluded_Source_Files use Common_Excluded_Source_Files
+                                       & ("spark-containers__exec.ads");
+   end case;
+
+   package Naming is
+      case SPARK_Body_Mode is
+         when "On" =>
+            for Spec ("SPARK.Containers") use "spark-containers__exec.ads";
+         when "Off" =>
+            null;
+      end case;
+   end Naming;
 
 end SPARKlib_External;
