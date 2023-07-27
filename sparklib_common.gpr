@@ -14,6 +14,7 @@ abstract project SPARKlib_common is
    --  Environment variable SPARKLIB_BODY_MODE controls whether the
    --  project is with'ed in client projects to use lemmas (value "Off"),
    --  or whether it is being itself formally verified (value "On").
+   --  Users should not set the value of this variable to "On".
 
    type SPARK_Body_Mode_T is ("Off", "On");
    SPARK_Body_Mode := External ("SPARKLIB_BODY_MODE", "Off");
