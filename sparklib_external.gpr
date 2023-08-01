@@ -18,7 +18,7 @@ project SPARKlib_External is
          for Source_Dirs use (SPARKlib_External'Project_Dir & "/src");
    end case;
 
-   SPARK_Body_Mode := SPARKlib_common.SPARK_Body_Mode;
+   SPARK_Body_Mode : SPARKlib_common.SPARK_Body_Mode_T := SPARKlib_common.SPARK_Body_Mode;
 
    package Compiler is
       --  Enforce GNAT style checks, except for multiple blank lines which does
