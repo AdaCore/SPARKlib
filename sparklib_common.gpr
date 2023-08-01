@@ -9,7 +9,7 @@ abstract project SPARKlib_common is
    --  in <install>/lib/gnat and the sources in <install>/include/spark
 
    type SPARKlib_Installed_T is ("True", "False");
-   SPARKlib_Installed := External("SPARKLIB_INSTALLED", "True");
+   SPARKlib_Installed : SPARKlib_Installed_T := External("SPARKLIB_INSTALLED", "True");
 
    --  Environment variable SPARKLIB_BODY_MODE controls whether the
    --  project is with'ed in client projects to use lemmas (value "Off"),
@@ -17,7 +17,7 @@ abstract project SPARKlib_common is
    --  Users should not set the value of this variable to "On".
 
    type SPARK_Body_Mode_T is ("Off", "On");
-   SPARK_Body_Mode := External ("SPARKLIB_BODY_MODE", "Off");
+   SPARK_Body_Mode : SPARK_Body_Mode_T := External ("SPARKLIB_BODY_MODE", "Off");
 
    package Compiler is
       --  Enforce GNAT style checks, except for multiple blank lines which does
