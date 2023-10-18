@@ -321,6 +321,21 @@ is
       return Add (Container, Element, 1);
    end Add;
 
+   ------------------
+   -- Aggr_Include --
+   ------------------
+
+   procedure Aggr_Include
+     (Container : in out Multiset;
+      Element   : Element_Type;
+      Count     : Big_Natural)
+   is
+   begin
+      if Count /= 0 then
+         Container := Add (Container, Element, Count);
+      end if;
+   end Aggr_Include;
+
    -----------------
    -- Cardinality --
    -----------------

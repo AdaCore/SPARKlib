@@ -4,7 +4,7 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
-pragma Ada_2012;
+pragma Ada_2022;
 
 with SPARK.Containers.Parameter_Checks;
 with SPARK.Big_Integers; use SPARK.Big_Integers;
@@ -49,7 +49,11 @@ is
      Iterable                  => (First       => Iter_First,
                                    Next        => Iter_Next,
                                    Has_Element => Iter_Has_Element,
-                                   Element     => Iter_Element);
+                                   Element     => Iter_Element),
+     Aggregate                 => (Empty     => Empty_Multiset,
+                                   Add_Named => Aggr_Include),
+     Annotate                  =>
+       (GNATprove, Container_Aggregates, "Predefined_Maps");
    pragma Annotate (GNATcheck, Exempt_Off,
                     "Restrictions:No_Specification_Of_Aspect => Iterable");
    --  Multisets are empty when default initialized.
@@ -71,7 +75,8 @@ is
       Element   : Element_Type) return Big_Natural with
    --  Get the number of occurence of Element in the Container
 
-     Global => null;
+     Global   => null,
+     Annotate => (GNATprove, Container_Aggregates, "Get");
 
    procedure Lemma_Nb_Occurence_Equivalent
      (Container            : Multiset;
@@ -481,6 +486,42 @@ is
      Global => null,
      Pre    => Iter_Has_Element (Container, Key);
    pragma Annotate (GNATprove, Iterable_For_Proof, "Contains", Contains);
+
+   ------------------------------------------
+   -- Additional Primitives For Aggregates --
+   ------------------------------------------
+
+   function Aggr_Eq_Elements (Left, Right : Element_Type) return Boolean is
+     (Equivalent_Elements (Left, Right))
+   with
+     Global   => null,
+     Annotate => (GNATprove, Inline_For_Proof),
+     Annotate => (GNATprove, Container_Aggregates, "Equivalent_Keys");
+
+   function Default_Count return Big_Natural is
+     (0)
+   with
+     Annotate => (GNATprove, Inline_For_Proof),
+     Annotate => (GNATprove, Container_Aggregates, "Default_Item");
+
+   procedure Aggr_Include
+     (Container : in out Multiset;
+      Element   : Element_Type;
+      Count     : Big_Natural)
+   with
+     Global => null,
+     Pre    => Nb_Occurence (Container, Element) = 0,
+     Post   => Nb_Occurence (Container, Element) = Count
+       and then
+         (for all E of Container =>
+            (if not Equivalent_Elements (E, Element)
+             then Nb_Occurence (Container, E) =
+                 Nb_Occurence (Container'Old, E)))
+         and then
+         (for all E of Container'Old =>
+            (if not Equivalent_Elements (E, Element)
+             then Nb_Occurence (Container, E) =
+                 Nb_Occurence (Container'Old, E)));
 
 private
 

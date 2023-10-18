@@ -33,6 +33,15 @@ package body SPARK.Containers.Functional.Sets with SPARK_Mode => Off is
    function Add (Container : Set; Item : Element_Type) return Set is
      (raise Program_Error);
 
+   ------------------
+   -- Aggr_Include --
+   ------------------
+
+   procedure Aggr_Include (Container : in out Set; Item : Element_Type) is
+   begin
+      raise Program_Error;
+   end Aggr_Include;
+
    --------------
    -- Contains --
    --------------

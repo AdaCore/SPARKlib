@@ -37,6 +37,19 @@ is
       Element   : Element_Type) return Multiset is
      (raise Program_Error);
 
+   ------------------
+   -- Aggr_Include --
+   ------------------
+
+   procedure Aggr_Include
+     (Container : in out Multiset;
+      Element   : Element_Type;
+      Count     : Big_Natural)
+   is
+   begin
+      raise Program_Error;
+   end Aggr_Include;
+
    -----------------
    -- Cardinality --
    -----------------

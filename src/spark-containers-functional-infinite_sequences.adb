@@ -73,6 +73,18 @@ is
       New_Item  : Element_Type) return Sequence is
      (Content => Add (Container.Content, To_Count (Position), New_Item));
 
+   -----------------
+   -- Aggr_Append --
+   -----------------
+
+   procedure Aggr_Append
+     (Container : in out Sequence;
+      New_Item  : Element_Type)
+   is
+   begin
+      Container := Add (Container, New_Item);
+   end Aggr_Append;
+
    --------------------
    -- Constant_Range --
    --------------------

@@ -66,6 +66,19 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
              (Container.Elements, Length (Container.Elements) + 1, New_Item));
    end Add;
 
+   ------------------
+   -- Aggr_Include --
+   ------------------
+
+   procedure Aggr_Include
+     (Container : in out Map;
+      New_Key   : Key_Type;
+      New_Item  : Element_Type)
+   is
+   begin
+      Container := Add (Container, New_Key, New_Item);
+   end Aggr_Include;
+
    ------------
    -- Choose --
    ------------
