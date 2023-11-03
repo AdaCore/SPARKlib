@@ -36,6 +36,19 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
    is
      (raise Program_Error);
 
+   ------------------
+   -- Aggr_Include --
+   ------------------
+
+   procedure Aggr_Include
+     (Container : in out Map;
+      New_Key   : Key_Type;
+      New_Item  : Element_Type)
+   is
+   begin
+      raise Program_Error;
+   end Aggr_Include;
+
    ------------
    -- Choose --
    ------------

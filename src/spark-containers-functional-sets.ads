@@ -4,7 +4,7 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
-pragma Ada_2012;
+pragma Ada_2022;
 
 private with SPARK.Containers.Functional.Base;
 private with SPARK.Containers.Types;
@@ -66,7 +66,11 @@ is
      Iterable                  => (First       => Iter_First,
                                    Next        => Iter_Next,
                                    Has_Element => Iter_Has_Element,
-                                   Element     => Iter_Element);
+                                   Element     => Iter_Element),
+     Aggregate                 => (Empty       => Empty_Set,
+                                   Add_Unnamed => Aggr_Include),
+     Annotate                  =>
+       (GNATprove, Container_Aggregates, "Predefined_Sets");
    pragma Annotate (GNATcheck, Exempt_Off,
                     "Restrictions:No_Specification_Of_Aspect => Iterable");
    --  Sets are empty when default initialized.
@@ -88,7 +92,8 @@ is
    --  against overflows but it is not actually modeled.
 
    function Contains (Container : Set; Item : Element_Type) return Boolean with
-     Global => null;
+     Global   => null,
+     Annotate => (GNATprove, Container_Aggregates, "Contains");
    --  Return True if Item is contained in Container
 
    procedure Lemma_Contains_Equivalent
@@ -111,7 +116,8 @@ is
    Post   => Contains (Container, Choose'Result);
 
    function Length (Container : Set) return Big_Natural with
-     Global => null;
+     Global   => null,
+     Annotate => (GNATprove, Container_Aggregates, "Length");
    --  Return the number of elements in Container
 
    ------------------------
@@ -416,6 +422,28 @@ is
      Global => null,
      Pre    => Iter_Has_Element (Container, Key);
    pragma Annotate (GNATprove, Iterable_For_Proof, "Contains", Contains);
+
+   ------------------------------------------
+   -- Additional Primitives For Aggregates --
+   ------------------------------------------
+
+   function Aggr_Eq_Elements (Left, Right : Element_Type) return Boolean is
+     (Equivalent_Elements (Left, Right))
+   with
+     Global   => null,
+     Annotate => (GNATprove, Inline_For_Proof),
+     Annotate => (GNATprove, Container_Aggregates, "Equivalent_Elements");
+
+   procedure Aggr_Include (Container : in out Set; Item : Element_Type) with
+     Global         => null,
+     Contract_Cases =>
+       (Contains (Container, Item) =>
+          Set_Logic_Equal (Container, Container'Old),
+        others =>
+          Length (Container) = Length (Container)'Old + 1
+          and Contains (Container, Item)
+          and Container'Old <= Container
+          and Included_Except (Container, Container'Old, Item));
 
 private
 

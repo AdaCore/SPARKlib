@@ -63,6 +63,18 @@ package body SPARK.Containers.Functional.Vectors with SPARK_Mode => Off is
    is
      (Content => Add (Container.Content, Position, New_Item));
 
+   -----------------
+   -- Aggr_Append --
+   -----------------
+
+   procedure Aggr_Append
+     (Container : in out Sequence;
+      New_Item  : Element_Type)
+   is
+   begin
+      Container := Add (Container, New_Item);
+   end Aggr_Append;
+
    --------------------
    -- Constant_Range --
    --------------------

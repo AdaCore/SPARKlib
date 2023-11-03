@@ -4,7 +4,7 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
-pragma Ada_2012;
+pragma Ada_2022;
 private with SPARK.Containers.Types;
 private with SPARK.Containers.Functional.Base;
 
@@ -49,12 +49,16 @@ is
                     "The following usage of aspect Iterable has been reviewed"
                     & "for compliance with GNATprove assumption"
                     & " [SPARK_ITERABLE]");
-   type Sequence is private
-     with Default_Initial_Condition => Length (Sequence) = 0,
-     Iterable => (First       => Iter_First,
-                  Has_Element => Iter_Has_Element,
-                  Next        => Iter_Next,
-                  Element     => Get);
+   type Sequence is private with
+     Default_Initial_Condition => Length (Sequence) = 0,
+     Iterable                  => (First       => Iter_First,
+                                   Has_Element => Iter_Has_Element,
+                                   Next        => Iter_Next,
+                                   Element     => Get),
+     Aggregate                 => (Empty       => Empty_Sequence,
+                                   Add_Unnamed => Aggr_Append),
+     Annotate                  =>
+       (GNATprove, Container_Aggregates, "Predefined_Sequences");
    pragma Annotate (GNATcheck, Exempt_Off,
                     "Restrictions:No_Specification_Of_Aspect => Iterable");
 
@@ -72,7 +76,8 @@ is
    function Length (Container : Sequence) return Big_Natural with
    --  Length of a sequence
 
-     Global => null;
+     Global   => null,
+     Annotate => (GNATprove, Container_Aggregates, "Last");
 
    function Get
      (Container : Sequence;
@@ -80,8 +85,9 @@ is
    --  Access the Element at position Position in Container
 
    with
-     Global => null,
-     Pre    => Iter_Has_Element (Container, Position);
+     Global   => null,
+     Pre      => Iter_Has_Element (Container, Position),
+     Annotate => (GNATprove, Container_Aggregates, "Get");
 
    function Last (Container : Sequence) return Big_Natural with
    --  Last index of a sequence
@@ -94,7 +100,8 @@ is
    function First return Big_Positive is (1) with
    --  First index of a sequence
 
-     Global => null;
+     Global   => null,
+     Annotate => (GNATprove, Container_Aggregates, "First");
 
    ------------------------
    -- Property Functions --
@@ -469,6 +476,21 @@ is
                   Element_Logic_Equal
                     (Get (Left, J - Offset), Get (Right, J)))));
    pragma Annotate (GNATprove, Inline_For_Proof, Range_Shifted);
+
+   ------------------------------------------
+   -- Additional Primitives For Aggregates --
+   ------------------------------------------
+
+   procedure Aggr_Append
+     (Container : in out Sequence;
+      New_Item  : Element_Type)
+   with
+     Global => null,
+     Post   =>
+       Last (Container) = Last (Container'Old) + 1
+         and then Element_Logic_Equal
+           (Get (Container, Last (Container)), Copy_Element (New_Item))
+         and then Equal_Prefix (Container'Old, Container);
 
 private
    pragma SPARK_Mode (Off);

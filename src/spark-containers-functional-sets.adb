@@ -34,6 +34,17 @@ package body SPARK.Containers.Functional.Sets with SPARK_Mode => Off is
      (Content =>
        Add (Container.Content, Length (Container.Content) + 1, Item));
 
+   ------------------
+   -- Aggr_Include --
+   ------------------
+
+   procedure Aggr_Include (Container : in out Set; Item : Element_Type) is
+   begin
+      if not Contains (Container, Item) then
+         Container := Add (Container, Item);
+      end if;
+   end Aggr_Include;
+
    --------------
    -- Contains --
    --------------

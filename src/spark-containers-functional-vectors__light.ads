@@ -13,7 +13,7 @@
 --  depend on System or Ada.Finalization, which makes it more convenient for
 --  use in run-time units.
 
-pragma Ada_2012;
+pragma Ada_2022;
 
 with SPARK.Big_Integers; use SPARK.Big_Integers;
 with SPARK.Containers.Parameter_Checks;
@@ -75,12 +75,16 @@ is
                     "The following usage of aspect Iterable has been reviewed"
                     & "for compliance with GNATprove assumption"
                     & " [SPARK_ITERABLE]");
-   type Sequence is private
-     with Default_Initial_Condition => Length (Sequence) = 0,
-     Iterable => (First       => Iter_First,
-                  Has_Element => Iter_Has_Element,
-                  Next        => Iter_Next,
-                  Element     => Get);
+   type Sequence is private with
+     Default_Initial_Condition => Length (Sequence) = 0,
+     Iterable                  => (First       => Iter_First,
+                                   Has_Element => Iter_Has_Element,
+                                   Next        => Iter_Next,
+                                   Element     => Get),
+     Aggregate                 => (Empty       => Empty_Sequence,
+                                   Add_Unnamed => Aggr_Append),
+     Annotate                  =>
+       (GNATprove, Container_Aggregates, "Predefined_Sequences");
    pragma Annotate (GNATcheck, Exempt_Off,
                     "Restrictions:No_Specification_Of_Aspect => Iterable");
    --  Sequences are empty when default initialized.
@@ -99,7 +103,8 @@ is
    --  Last index of a sequence. Index_Type'First - 1 if empty.
 
    with
-     Global => null;
+     Global   => null,
+     Annotate => (GNATprove, Container_Aggregates, "Last");
 
    function Get
      (Container : Sequence;
@@ -107,8 +112,9 @@ is
    --  Access the Element at position Position in Container
 
    with
-     Global => null,
-     Pre    => Position in Index_Type'First .. Last (Container);
+     Global   => null,
+     Pre      => Position in Index_Type'First .. Last (Container),
+     Annotate => (GNATprove, Container_Aggregates, "Get");
 
    function Length (Container : Sequence) return Big_Natural with
    --  Length of a sequence
@@ -119,7 +125,8 @@ is
    pragma Annotate (GNATprove, Inline_For_Proof, Length);
 
    function First return Extended_Index is (Index_Type'First) with
-     Global => null;
+     Global   => null,
+     Annotate => (GNATprove, Container_Aggregates, "First");
    --  First index of a sequence
 
    ------------------------
@@ -486,6 +493,22 @@ is
                  (Get (Left, Of_Big (Big (I) - Offset)),
                   Get (Right, I))));
    pragma Annotate (GNATprove, Inline_For_Proof, Range_Shifted);
+
+   ------------------------------------------
+   -- Additional Primitives For Aggregates --
+   ------------------------------------------
+
+   procedure Aggr_Append
+     (Container : in out Sequence;
+      New_Item  : Element_Type)
+   with
+     Global => null,
+     Pre    => Last (Container) < Index_Type'Last,
+     Post   =>
+       Last (Container) = Last (Container'Old) + 1
+         and then Element_Logic_Equal
+           (Get (Container, Last (Container)), Copy_Element (New_Item))
+         and then Equal_Prefix (Container'Old, Container);
 
 private
 
