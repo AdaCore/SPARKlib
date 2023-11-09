@@ -15,6 +15,8 @@ with System; use type System.Address;
 package body SPARK.Containers.Formal.Hashed_Sets with
   SPARK_Mode => Off
 is
+   use HT_Types;
+
    -----------------------
    -- Local Subprograms --
    -----------------------
@@ -417,6 +419,23 @@ is
 
       return Container.Content.Nodes (Position.Node).Element;
    end Element;
+
+   ---------------
+   -- Empty_Set --
+   ---------------
+
+   function Empty_Set (Capacity : Count_Type := 10) return Set is
+      Modulus : constant Hash_Type := Default_Modulus (Capacity);
+      Table   : constant HT_Types.Hash_Table_Type :=
+        (Capacity => Capacity,
+         Modulus  => Modulus,
+         others   => <>);
+   begin
+      return
+        (Capacity => Capacity,
+         Modulus  => Modulus,
+         Content  => Table);
+   end Empty_Set;
 
    ---------------------
    -- Equivalent_Keys --

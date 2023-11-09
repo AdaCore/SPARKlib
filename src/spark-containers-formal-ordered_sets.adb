@@ -469,6 +469,20 @@ is
       return Container.Content.Nodes (Position.Node).Element;
    end Element;
 
+   ---------------
+   -- Empty_Set --
+   ---------------
+
+   function Empty_Set (Capacity : Count_Type := 10) return Set is
+      Tree : constant Tree_Types.Tree_Type :=
+        (Capacity => Capacity,
+         others   => <>);
+   begin
+      return
+        (Capacity => Capacity,
+         Content  => Tree);
+   end Empty_Set;
+
    -------------------------
    -- Equivalent_Elements --
    -------------------------

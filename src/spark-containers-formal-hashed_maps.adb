@@ -319,6 +319,23 @@ is
       return Container.Content.Nodes (Position.Node).Element;
    end Element;
 
+   ---------------
+   -- Empty_Map --
+   ---------------
+
+   function Empty_Map (Capacity : Count_Type := 10) return Map is
+      Modulus : constant Hash_Type := Default_Modulus (Capacity);
+      Table   : constant HT_Types.Hash_Table_Type :=
+        (Capacity => Capacity,
+         Modulus  => Modulus,
+         others   => <>);
+   begin
+      return
+        (Capacity => Capacity,
+         Modulus  => Modulus,
+         Content  => Table);
+   end Empty_Map;
+
    ---------------------
    -- Equivalent_Keys --
    ---------------------

@@ -7,6 +7,7 @@
 --  Iteration over maps is done using the Iterable aspect, which is SPARK
 --  compatible. "For of" iteration ranges over keys instead of elements.
 
+with SPARK.Big_Integers;     use SPARK.Big_Integers;
 with SPARK.Containers.Functional.Vectors;
 with SPARK.Containers.Functional.Maps;
 with SPARK.Containers.Parameter_Checks;
@@ -69,21 +70,26 @@ is
                     & "for compliance with GNATprove assumption"
                     & " [SPARK_ITERABLE]");
    type Map is private with
-     Iterable => (First       => First,
-                  Next        => Next,
-                  Has_Element => Has_Element,
-                  Element     => Key),
-     Default_Initial_Condition => Is_Empty (Map);
+     Iterable                  => (First       => First,
+                                   Next        => Next,
+                                   Has_Element => Has_Element,
+                                   Element     => Key),
+     Default_Initial_Condition => Is_Empty (Map),
+     Aggregate                 => (Empty     => Empty_Map,
+                                   Add_Named => Insert),
+     Annotate                  =>
+       (GNATprove, Container_Aggregates, "From_Model");
    pragma Annotate (GNATcheck, Exempt_Off,
                     "Restrictions:No_Specification_Of_Aspect => Iterable");
+
+   function Empty_Map return Map with
+     Post => Is_Empty (Empty_Map'Result);
 
    type Cursor is record
       Node : Count_Type;
    end record;
 
    No_Element : constant Cursor := (Node => 0);
-
-   Empty_Map : constant Map;
 
    function Length (Container : Map) return Count_Type with
      Global => null;
@@ -298,7 +304,8 @@ is
       --  modeled up to equivalence.
 
         Ghost,
-        Global => null;
+        Global => null,
+        Post   => M.Length (Model'Result) = K.Big (Length (Container));
 
       function Keys (Container : Map) return K.Sequence with
       --  The Keys sequence represents the underlying list structure of maps
@@ -411,14 +418,6 @@ is
        Model (Copy'Result) = Model (Source)
          and Keys (Copy'Result) = Keys (Source)
          and Positions (Copy'Result) = Positions (Source);
-
-   function Iter_Model (Container : Map) return K.Sequence is
-      (Keys (Container))
-   with
-     Ghost,
-     Global   => null,
-     Annotate => (GNATprove, Inline_For_Proof),
-     Annotate => (GNATprove, Iterable_For_Proof, "Model");
 
    function Key (Container : Map; Position : Cursor) return Key_Type with
      Global   => null,
@@ -1190,16 +1189,44 @@ is
                    P.Get (Positions (Container), Ceiling'Result)));
 
    function Contains (Container : Map; Key : Key_Type) return Boolean with
-     Global => null,
-     Post   => Contains'Result = Contains (Model (Container), Key);
-   pragma Annotate (GNATprove, Inline_For_Proof, Contains);
+     Global   => null,
+     Post     => Contains'Result = Contains (Model (Container), Key),
+     Annotate => (GNATprove, Inline_For_Proof);
 
    function Has_Element (Container : Map; Position : Cursor) return Boolean
    with
      Global => null,
      Post   =>
-       Has_Element'Result = P.Has_Key (Positions (Container), Position);
-   pragma Annotate (GNATprove, Inline_For_Proof, Has_Element);
+       Has_Element'Result = P.Has_Key (Positions (Container), Position),
+     Annotate => (GNATprove, Inline_For_Proof);
+
+   ------------------------------------------------------------------
+   -- Additional Expression Functions For Iteration and Aggregates --
+   ------------------------------------------------------------------
+
+   function Aggr_Capacity return Count_Type is
+      (Count_Type'Last)
+   with
+     Ghost,
+     Global   => null,
+     Annotate => (GNATprove, Inline_For_Proof),
+     Annotate => (GNATprove, Container_Aggregates, "Capacity");
+
+   function Aggr_Model (Container : Map) return M.Map is
+      (Model (Container))
+   with
+     Ghost,
+     Global   => null,
+     Annotate => (GNATprove, Inline_For_Proof),
+     Annotate => (GNATprove, Container_Aggregates, "Model");
+
+   function Iter_Model (Container : Map) return K.Sequence is
+      (Keys (Container))
+   with
+     Ghost,
+     Global   => null,
+     Annotate => (GNATprove, Inline_For_Proof),
+     Annotate => (GNATprove, Iterable_For_Proof, "Model");
 
 private
    pragma SPARK_Mode (Off);
@@ -1248,7 +1275,5 @@ private
 
    overriding procedure Finalize (Container : in out Map);
    --  Dealocate the Content field if necessary
-
-   Empty_Map : constant Map := (Ada.Finalization.Controlled with others => <>);
 
 end SPARK.Containers.Formal.Unbounded_Ordered_Maps;

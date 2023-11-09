@@ -1303,7 +1303,7 @@ is
    is
    begin
       if Length = 0 then
-         return Empty_Vector;
+         return Empty_Vector (0);
       end if;
 
       declare

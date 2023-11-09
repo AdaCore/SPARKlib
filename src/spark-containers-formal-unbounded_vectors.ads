@@ -64,11 +64,15 @@ is
                     & "for compliance with GNATprove assumption"
                     & " [SPARK_ITERABLE]");
    type Vector is private with
+     Iterable                  => (First       => Iter_First,
+                                   Next        => Iter_Next,
+                                   Has_Element => Iter_Has_Element,
+                                   Element     => Element),
      Default_Initial_Condition => Is_Empty (Vector),
-     Iterable => (First       => Iter_First,
-                  Has_Element => Iter_Has_Element,
-                  Next        => Iter_Next,
-                  Element     => Element);
+     Aggregate                 => (Empty       => Empty_Vector,
+                                   Add_Unnamed => Append),
+     Annotate                  =>
+       (GNATprove, Container_Aggregates, "From_Model");
    pragma Annotate (GNATcheck, Exempt_Off,
                     "Restrictions:No_Specification_Of_Aspect => Iterable");
 
@@ -287,14 +291,6 @@ is
    with
      Global => null,
      Post   => Model (Target) = Model (Source)'Old and Length (Source) = 0;
-
-   function Iter_Model (Container : Vector) return M.Sequence is
-      (Model (Container))
-   with
-     Ghost,
-     Global   => null,
-     Annotate => (GNATprove, Inline_For_Proof),
-     Annotate => (GNATprove, Iterable_For_Proof, "Model");
 
    function Element
      (Container : Vector;
@@ -985,11 +981,11 @@ is
      (Container : Vector;
       Position  : Extended_Index) return Boolean
    with
-     Global => null,
-     Post   =>
+     Global   => null,
+     Post     =>
        Iter_Has_Element'Result =
-         (Position in Index_Type'First .. Last_Index (Container));
-   pragma Annotate (GNATprove, Inline_For_Proof, Iter_Has_Element);
+         (Position in Index_Type'First .. Last_Index (Container)),
+     Annotate => (GNATprove, Inline_For_Proof);
 
    function Iter_Next
      (Container : Vector;
@@ -997,6 +993,27 @@ is
    with
      Global => null,
      Pre    => Iter_Has_Element (Container, Position);
+
+   ------------------------------------------------------------------
+   -- Additional Expression Functions For Iteration and Aggregates --
+   ------------------------------------------------------------------
+
+   function Aggr_Capacity return Count_Type is
+      (Count_Type'Last)
+   with
+     Ghost,
+     Global   => null,
+     Annotate => (GNATprove, Inline_For_Proof),
+     Annotate => (GNATprove, Container_Aggregates, "Capacity");
+
+   function Aggr_And_Iter_Model (Container : Vector) return M.Sequence is
+      (Model (Container))
+   with
+     Ghost,
+     Global   => null,
+     Annotate => (GNATprove, Inline_For_Proof),
+     Annotate => (GNATprove, Iterable_For_Proof, "Model"),
+     Annotate => (GNATprove, Container_Aggregates, "Model");
 
 private
    pragma SPARK_Mode (Off);

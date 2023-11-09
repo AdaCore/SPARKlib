@@ -423,6 +423,20 @@ is
       return Container.Content.Nodes (Node).Element;
    end Element;
 
+   ---------------
+   -- Empty_Map --
+   ---------------
+
+   function Empty_Map (Capacity : Count_Type := 10) return Map is
+      Tree : constant Tree_Types.Tree_Type :=
+        (Capacity => Capacity,
+         others   => <>);
+   begin
+      return
+        (Capacity => Capacity,
+         Content  => Tree);
+   end Empty_Map;
+
    ---------------------
    -- Equivalent_Keys --
    ---------------------

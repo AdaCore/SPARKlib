@@ -70,11 +70,15 @@ is
                     & "for compliance with GNATprove assumption"
                     & " [SPARK_ITERABLE]");
    type Set is private with
-     Iterable => (First       => First,
-                  Next        => Next,
-                  Has_Element => Has_Element,
-                  Element     => Element),
-     Default_Initial_Condition => Is_Empty (Set);
+     Iterable                  => (First       => First,
+                                   Next        => Next,
+                                   Has_Element => Has_Element,
+                                   Element     => Element),
+     Default_Initial_Condition => Is_Empty (Set),
+     Aggregate                 => (Empty       => Empty_Set,
+                                   Add_Unnamed => Insert),
+     Annotate                  =>
+       (GNATprove, Container_Aggregates, "From_Model");
    pragma Annotate (GNATcheck, Exempt_Off,
                     "Restrictions:No_Specification_Of_Aspect => Iterable");
 
@@ -512,14 +516,6 @@ is
          and Elements (Copy'Result) = Elements (Source)
          and Positions (Copy'Result) = Positions (Source);
    --  Constructs a new set object whose elements correspond to Source
-
-   function Iter_Model (Container : Set) return E.Sequence is
-      (Elements (Container))
-   with
-     Ghost,
-     Global => null,
-     Annotate => (GNATprove, Inline_For_Proof),
-     Annotate => (GNATprove, Iterable_For_Proof, "Model");
 
    function Element
      (Container : Set;
@@ -1565,6 +1561,34 @@ is
               Equivalent_Keys (Key, Generic_Keys.Key (E)));
 
    end Generic_Keys;
+
+   ------------------------------------------------------------------
+   -- Additional Expression Functions For Iteration and Aggregates --
+   ------------------------------------------------------------------
+
+   function Aggr_Capacity return Count_Type is
+      (Count_Type'Last)
+   with
+     Ghost,
+     Global   => null,
+     Annotate => (GNATprove, Inline_For_Proof),
+     Annotate => (GNATprove, Container_Aggregates, "Capacity");
+
+   function Aggr_Model (Container : Set) return M.Set is
+      (Model (Container))
+   with
+     Ghost,
+     Global   => null,
+     Annotate => (GNATprove, Inline_For_Proof),
+     Annotate => (GNATprove, Container_Aggregates, "Model");
+
+   function Iter_Model (Container : Set) return E.Sequence is
+      (Elements (Container))
+   with
+     Ghost,
+     Global   => null,
+     Annotate => (GNATprove, Inline_For_Proof),
+     Annotate => (GNATprove, Iterable_For_Proof, "Model");
 
 private
    pragma SPARK_Mode (Off);
