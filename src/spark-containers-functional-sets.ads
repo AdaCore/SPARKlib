@@ -93,6 +93,7 @@ is
 
    function Contains (Container : Set; Item : Element_Type) return Boolean with
      Global   => null,
+     Annotate => (GNATprove, Iterable_For_Proof, "Contains"),
      Annotate => (GNATprove, Container_Aggregates, "Contains");
    --  Return True if Item is contained in Container
 
@@ -421,7 +422,6 @@ is
    with
      Global => null,
      Pre    => Iter_Has_Element (Container, Key);
-   pragma Annotate (GNATprove, Iterable_For_Proof, "Contains", Contains);
 
    ------------------------------------------
    -- Additional Primitives For Aggregates --

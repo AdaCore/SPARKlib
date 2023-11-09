@@ -98,7 +98,8 @@ is
 
      Global   => null,
      Post     => Contains'Result = (Nb_Occurence (Container, Element) > 0),
-     Annotate => (GNATprove, Inline_For_Proof);
+     Annotate => (GNATprove, Inline_For_Proof),
+     Annotate => (GNATprove, Iterable_For_Proof, "Contains");
 
    function Choose (Container : Multiset) return Element_Type with
    --  Returns an element of the Multiset
@@ -485,7 +486,6 @@ is
    with
      Global => null,
      Pre    => Iter_Has_Element (Container, Key);
-   pragma Annotate (GNATprove, Iterable_For_Proof, "Contains", Contains);
 
    ------------------------------------------
    -- Additional Primitives For Aggregates --

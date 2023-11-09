@@ -293,17 +293,17 @@ is
    with
      Ghost,
      Global   => null,
-     Annotate => (GNATprove, Inline_For_Proof);
+     Annotate => (GNATprove, Inline_For_Proof),
+     Annotate => (GNATprove, Iterable_For_Proof, "Model");
 
    function Element
      (Container : Vector;
       Index     : Extended_Index) return Element_Type
    with
-     Global => null,
-     Pre    => Index in First_Index (Container) .. Last_Index (Container),
-     Post   => Element'Result = Element (Model (Container), Index);
-   pragma Annotate (GNATprove, Inline_For_Proof, Element);
-   pragma Annotate (GNATprove, Iterable_For_Proof, "Model", Iter_Model);
+     Global   => null,
+     Pre      => Index in First_Index (Container) .. Last_Index (Container),
+     Post     => Element'Result = Element (Model (Container), Index),
+     Annotate => (GNATprove, Inline_For_Proof);
 
    procedure Replace_Element
      (Container : in out Vector;

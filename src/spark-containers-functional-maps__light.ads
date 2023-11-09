@@ -123,6 +123,7 @@ is
 
    function Has_Key (Container : Map; Key : Key_Type) return Boolean with
      Global   => null,
+     Annotate => (GNATprove, Iterable_For_Proof, "Contains"),
      Annotate => (GNATprove, Container_Aggregates, "Has_Key");
    --  Return True if Key is present in Container
 
@@ -549,7 +550,6 @@ is
    with
      Global => null,
      Pre    => Iter_Has_Element (Container, Key);
-   pragma Annotate (GNATprove, Iterable_For_Proof, "Contains", Has_Key);
 
    ------------------------------------------
    -- Additional Primitives For Aggregates --

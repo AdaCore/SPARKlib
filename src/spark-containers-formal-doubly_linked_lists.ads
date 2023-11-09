@@ -396,19 +396,19 @@ is
    with
      Ghost,
      Global   => null,
-     Annotate => (GNATprove, Inline_For_Proof);
+     Annotate => (GNATprove, Inline_For_Proof),
+     Annotate => (GNATprove, Iterable_For_Proof, "Model");
 
    function Element
      (Container : List;
       Position : Cursor) return Element_Type
    with
-     Global => null,
-     Pre    => Has_Element (Container, Position),
-     Post   =>
+     Global   => null,
+     Pre      => Has_Element (Container, Position),
+     Post     =>
        Element'Result =
-         Element (Model (Container), P.Get (Positions (Container), Position));
-   pragma Annotate (GNATprove, Inline_For_Proof, Element);
-   pragma Annotate (GNATprove, Iterable_For_Proof, "Model", Iter_Model);
+         Element (Model (Container), P.Get (Positions (Container), Position)),
+     Annotate => (GNATprove, Inline_For_Proof);
 
    procedure Replace_Element
      (Container : in out List;
