@@ -25,6 +25,9 @@ is
    -- Local Subprograms --
    -----------------------
 
+   function Default_Modulus (Capacity : Count_Type) return Hash_Type with
+     Global => null;
+
    function Equivalent_Keys
      (Key  : Key_Type;
       Node : Node_Type) return Boolean;
@@ -70,9 +73,13 @@ is
    --  Allocate a new larger Map
 
      Global => null,
-     Post   => Model (Container) = Model (Container)'Old
-                 and Length (Container) = Length (Container)'Old
-                 and K_Keys_Included (Keys (Container), Keys (Container)'Old);
+     Post   =>
+       Model (Container) = Model (Container)'Old
+         and Mapping_Preserved
+           (K_Left  => Keys (Container)'Old,
+            K_Right => Keys (Container),
+            P_Left  => Positions (Container)'Old,
+            P_Right => Positions (Container));
 
    --------------------------
    -- Local Instantiations --
@@ -267,7 +274,7 @@ is
 
    function Copy (Source : Map) return Map
    is
-      Target : Map (Source.Modulus);
+      Target : Map;
 
    begin
       if Source.Content = Empty_HT'Access then
@@ -354,9 +361,8 @@ is
    -- Empty_Map --
    ---------------
 
-   function Empty_Map (Modulus : Hash_Type := 0) return Map is
-      ((Ada.Finalization.Controlled with Modulus => Modulus,
-                                         Content => Empty_HT'Access));
+   function Empty_Map return Map is
+      ((Ada.Finalization.Controlled with Content => Empty_HT'Access));
 
    ---------------------
    -- Equivalent_Keys --
@@ -922,12 +928,13 @@ is
    procedure Resize (Container : in out Map; Size : Count_Type := 0) is
       Min_Size : constant Count_Type := 100;
       New_Size : constant Count_Type := Count_Type'Max (Min_Size, Size);
+      New_Mod  : constant Hash_Type := Default_Modulus (New_Size);
 
       CC : HT_Access renames Container.Content;
 
    begin
       if CC = Empty_HT'Access then
-         CC := new HT_Types.Hash_Table_Type (New_Size, Container.Modulus);
+         CC := new HT_Types.Hash_Table_Type (New_Size, New_Mod);
          return;
       end if;
 
@@ -939,37 +946,47 @@ is
          return;
       end if;
 
-      declare
+      Rehash : declare
          Next_Size : constant Count_Type :=
-           (if CC.Nodes'Length < Count_Type'Last / 2
-            then 2 * CC.Nodes'Length
-            else Count_Type'Last);
-         New_Map : constant HT_Access :=
-           new HT_Types.Hash_Table_Type (Count_Type'Max (New_Size, Next_Size),
-                                         Container.Modulus);
+           Count_Type'Max
+             (New_Size,
+              (if CC.Nodes'Length < Count_Type'Last / 2
+               then 2 * CC.Nodes'Length
+               else Count_Type'Last));
+         Next_Mod  : constant Hash_Type := Default_Modulus (Next_Size);
+         New_Map   : constant HT_Access :=
+           new HT_Types.Hash_Table_Type (Next_Size, Next_Mod);
 
       begin
+         New_Map.Length := CC.Length;
+         New_Map.Free := CC.Free;
 
-         --  Make a perfect copy of Container.Content
+         --  Reinsert the elements with the proper hash. Elements are not moved
+         --  to another index to preserve the cursor to element relationship
+         --  The free list is preserved.
 
-         New_Map.Length := Container.Content.Length;
-         New_Map.Free   := Container.Content.Free;
-
-         for J in 1 .. Container.Content.Capacity loop
+         for Idx in 1 .. CC.Capacity loop
             declare
-               New_Node : Node_Type renames New_Map.Nodes (J);
-               Old_Node : Node_Type renames CC.Nodes (J);
+               Src_Node : Node_Type renames CC.Nodes (Idx);
+               Tgt_Node : Node_Type renames New_Map.Nodes (Idx);
 
             begin
-               KHT.Move (New_Node.K_Holder, Old_Node.K_Holder);
-               EHT.Move (New_Node.E_Holder, Old_Node.E_Holder);
-               New_Node.Next             := Old_Node.Next;
-               New_Node.Has_Element      := Old_Node.Has_Element;
+               if CC.Nodes (Idx).Has_Element then
+                  declare
+                     Tgt_Bucket : constant Hash_Type :=
+                       HT_Ops.Index (New_Map.Buckets, Src_Node);
+                  begin
+                     KHT.Move (Tgt_Node.K_Holder, Src_Node.K_Holder);
+                     EHT.Move (Tgt_Node.E_Holder, Src_Node.E_Holder);
+                     Set_Next (Tgt_Node, New_Map.Buckets (Tgt_Bucket));
+                     Tgt_Node.Has_Element := True;
+                     New_Map.Buckets (Tgt_Bucket) := Idx;
+                  end;
+               else
+                  Set_Next (Tgt_Node, Src_Node.Next);
+               end if;
             end;
          end loop;
-
-         New_Map.Buckets (1 .. Container.Modulus) :=
-           Container.Content.Buckets (1 .. Container.Modulus);
 
          --  Set up the Free list.
          --  It might be optimized by checking if New_Map.Free < 0 and,
@@ -977,9 +994,8 @@ is
          --  current implementation of the hashed table. A change in the
          --  hashed table could thus create a sneaky bug here.
 
-         for J in Container.Content.Length + 1 .. New_Map.Capacity loop
-            New_Map.Nodes (J).Has_Element := False;
-            HT_Ops.Free (New_Map.all, J);
+         for Idx in CC.Capacity + 1 .. New_Map.Capacity loop
+            HT_Ops.Free (New_Map.all, Idx);
          end loop;
 
          --  The table must be manually deallocated because it is not
@@ -989,7 +1005,7 @@ is
 
          Finalize (Container);
          CC := New_Map;
-      end;
+      end Rehash;
    end Resize;
 
    --------------
