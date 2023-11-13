@@ -37,10 +37,15 @@ package SPARK.Containers.Formal.Holders is
    --  Finalize the element held by Container if necessary. It is still
    --  possible to use a finalized Holder_Type but the former value is lost.
 
+   function Is_Null (Container : Holder_Type) return Boolean;
+
 private
 
    type Holder_Type is new Ada.Finalization.Controlled
    with record
       Element : Element_Type_Access;
    end record;
+
+   function Is_Null (Container : Holder_Type) return Boolean is
+     (Container.Element = null);
 end SPARK.Containers.Formal.Holders;

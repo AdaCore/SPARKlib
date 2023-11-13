@@ -23,6 +23,9 @@ is
    -- Local Subprograms --
    -----------------------
 
+   function Default_Modulus (Capacity : Count_Type) return Hash_Type with
+     Global => null;
+
    procedure Difference (Left : Set; Right : Set; Target : in out Set);
    --  Inserts all the elements of Left that are not in Right in Target
 
@@ -97,9 +100,11 @@ is
      Global => null,
      Post   =>
        Model (Container) = Model (Container)'Old
-         and Length (Container) = Length (Container)'Old
-         and Elements (Container) =  Elements (Container)'Old
-         and Positions (Container) = Positions (Container)'Old;
+         and Mapping_Preserved
+           (E_Left  => Elements (Container)'Old,
+            E_Right => Elements (Container),
+            P_Left  => Positions (Container)'Old,
+            P_Right => Positions (Container));
 
    --------------------------
    -- Local Instantiations --
@@ -180,7 +185,7 @@ is
 
       declare
          New_Set : constant HT_Access := new HT_Types.Hash_Table_Type
-           (Source.Content.Capacity, Source.Modulus);
+           (Source.Content.Capacity, Source.Content.Modulus);
       begin
          New_Set.Length := Source.Content.Length;
          New_Set.Free   := Source.Content.Free;
@@ -196,8 +201,8 @@ is
 
          --  Copy the buckets
 
-         New_Set.Buckets (1 .. Source.Modulus) :=
-           Source.Content.Buckets (1 .. Source.Modulus);
+         New_Set.Buckets (1 .. Source.Content.Modulus) :=
+           Source.Content.Buckets (1 .. Source.Content.Modulus);
 
          --  Put the new Set in Source. Source.Content must not be finalize
          --  since we are doing an "Adjust". In fact, it still exist somewere
@@ -281,7 +286,7 @@ is
 
    function Copy (Source : Set) return Set
    is
-      Target : Set (Source.Modulus);
+      Target : Set;
 
    begin
       if Source.Content = Empty_HT'Access then
@@ -425,21 +430,16 @@ is
    function Difference (Left : Set; Right : Set) return Set is
    begin
       if Length (Left) = 0 then
-         return Empty_Set (Modulus => Left.Modulus);
+         return Empty_Set;
       end if;
 
       if Length (Right) = 0 then
          return Copy (Left);
       end if;
 
-      declare
-         C : constant Count_Type := Length (Left);
-         H : constant Hash_Type  := Default_Modulus (C);
-      begin
-         return S : Set (H) do
-            Difference (Left, Right, Target => S);
-         end return;
-      end;
+      return S : Set do
+         Difference (Left, Right, Target => S);
+      end return;
    end Difference;
 
    -------------
@@ -465,10 +465,9 @@ is
    -- Empty_Set --
    ---------------
 
-   function Empty_Set (Modulus : Hash_Type := 0) return Set is
+   function Empty_Set return Set is
    begin
-      return (Ada.Finalization.Controlled with Modulus => Modulus,
-                                               Content => Empty_HT'Access);
+      return (Ada.Finalization.Controlled with Content => Empty_HT'Access);
    end Empty_Set;
 
    ---------------------
@@ -1266,7 +1265,7 @@ is
         Default_Modulus (Count_Type'Min (Length (Left), Length (Right)));
 
    begin
-      return S : Set (H) do
+      return S : Set do
          if Length (Left) /= 0 and Length (Right) /= 0 then
             Intersection (Left, Right, Target => S);
          end if;
@@ -1463,12 +1462,13 @@ is
    procedure Resize (Container : in out Set; Size : Count_Type := 0) is
       Min_Size : constant Count_Type := 100;
       New_Size : constant Count_Type := Count_Type'Max (Min_Size, Size);
+      New_Mod  : constant Hash_Type := Default_Modulus (New_Size);
 
       CC : HT_Access renames Container.Content;
 
    begin
       if CC = Empty_HT'Access then
-         CC := new HT_Types.Hash_Table_Type (New_Size, Container.Modulus);
+         CC := new HT_Types.Hash_Table_Type (New_Size, New_Mod);
          return;
       end if;
 
@@ -1480,51 +1480,56 @@ is
          return;
       end if;
 
-      declare
+      Rehash : declare
          Next_Size : constant Count_Type :=
-           (if CC.Nodes'Length < Count_Type'Last / 2
-            then 2 * CC.Nodes'Length
-            else Count_Type'Last);
+           Count_Type'Max
+             (New_Size,
+              (if CC.Nodes'Length < Count_Type'Last / 2
+               then 2 * CC.Nodes'Length
+               else Count_Type'Last));
          New_Set : constant HT_Access :=
-           new HT_Types.Hash_Table_Type (Count_Type'Max (New_Size, Next_Size),
-                                         Container.Modulus);
+           new HT_Types.Hash_Table_Type (Next_Size,
+                                         Default_Modulus (Next_Size));
 
       begin
-
-         --  Make a perfect copy of Container.Content
-
          New_Set.Length := CC.Length;
-         New_Set.Free   := CC.Free;
+         New_Set.Free := CC.Free;
 
-         --  Copy the node of Container
+         --  Reinsert the elements with the proper hash. Elements are not moved
+         --  to another index to preserve the cursor to element relationship
+         --  The free list is preserved.
 
-         for J in 1 .. CC.Capacity loop
+         for Idx in 1 .. CC.Capacity loop
             declare
-               New_Node : Node_Type renames New_Set.Nodes (J);
-               Old_Node : Node_Type renames CC.Nodes (J);
+               Src_Node : Node_Type renames CC.Nodes (Idx);
+               Tgt_Node : Node_Type renames New_Set.Nodes (Idx);
 
             begin
-               Move (New_Node.E_Holder, Old_Node.E_Holder);
-               New_Node.Next             := Old_Node.Next;
-               New_Node.Has_Element      := Old_Node.Has_Element;
+               if CC.Nodes (Idx).Has_Element then
+                  declare
+                     Tgt_Bucket : constant Hash_Type :=
+                       HT_Ops.Index (New_Set.Buckets, Src_Node);
+                  begin
+                     Move (Tgt_Node.E_Holder, Src_Node.E_Holder);
+                     Set_Next (Tgt_Node, New_Set.Buckets (Tgt_Bucket));
+                     Tgt_Node.Has_Element := True;
+                     New_Set.Buckets (Tgt_Bucket) := Idx;
+                  end;
+               else
+                  Set_Next (Tgt_Node, Src_Node.Next);
+               end if;
             end;
          end loop;
 
-         --  Put the added node in the free list.
-         --  It might be optimized by checking if New_Map.Free < 0 and,
+         --  Set up the Free list.
+         --  It might be optimized by checking if New_Set.Free < 0 and,
          --  then just do nothing but it would make the unit relies on the
          --  current implementation of the hashed table. A change in the
          --  hashed table could thus create a sneaky bug here.
 
-         for J in CC.Capacity + 1 .. New_Set.Capacity loop
-            New_Set.Nodes (J).Has_Element := False;
-            HT_Ops.Free (New_Set.all, J);
+         for Idx in CC.Capacity + 1 .. New_Set.Capacity loop
+            HT_Ops.Free (New_Set.all, Idx);
          end loop;
-
-         --  Copy the buckets
-
-         New_Set.Buckets (1 .. Container.Modulus) :=
-           CC.Buckets (1 .. Container.Modulus);
 
          --  The table must be manually deallocated because it is not
          --  Controlled. Only Container (and the holder) are controlled
@@ -1533,7 +1538,7 @@ is
 
          Finalize (Container);
          CC := New_Set;
-      end;
+      end Rehash;
    end Resize;
 
    ------------------
@@ -1608,7 +1613,7 @@ is
            Default_Modulus (Length (Left) + Length (Right));
 
       begin
-         return S : Set (H) do
+         return S : Set do
             Difference (Left, Right, S);
             Difference (Right, Left, S);
          end return;
@@ -1624,7 +1629,7 @@ is
       B        : Boolean;
 
    begin
-      return S : Set (Modulus => 1) do
+      return S : Set do
          Insert (S, New_Item, Unused_X, B);
          pragma Assert (B);
       end return;
@@ -1676,7 +1681,7 @@ is
            Default_Modulus (Length (Left) + Length (Right));
 
       begin
-         return S : Set (H) do
+         return S : Set do
             Assign (Target => S, Source => Left);
             Union (Target => S, Source => Right);
          end return;

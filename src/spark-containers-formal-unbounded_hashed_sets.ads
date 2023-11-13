@@ -69,7 +69,7 @@ is
                     "The following usage of aspect Iterable has been reviewed"
                     & "for compliance with GNATprove assumption"
                     & " [SPARK_ITERABLE]");
-   type Set (Modulus : Hash_Type) is private with
+   type Set is private with
      Iterable => (First       => First,
                   Next        => Next,
                   Has_Element => Has_Element,
@@ -433,10 +433,9 @@ is
    end Formal_Model;
    use Formal_Model;
 
-   function Empty_Set (Modulus : Hash_Type := 0) return Set with
+   function Empty_Set return Set with
      Global => null,
-     Post   => Is_Empty (Empty_Set'Result)
-                 and Empty_Set'Result.Modulus = Modulus;
+     Post   => Is_Empty (Empty_Set'Result);
 
    function "=" (Left, Right : Set) return Boolean with
      Global => null,
@@ -511,10 +510,8 @@ is
      Post   =>
        Model (Copy'Result) = Model (Source)
          and Elements (Copy'Result) = Elements (Source)
-         and Positions (Copy'Result) = Positions (Source)
-         and Copy'Result.Modulus = Source.Modulus;
-   --  Constructs a new set object whose elements correspond to Source.
-   --  The modulus is also conserved.
+         and Positions (Copy'Result) = Positions (Source);
+   --  Constructs a new set object whose elements correspond to Source
 
    function Iter_Model (Container : Set) return E.Sequence is
       (Elements (Container))
@@ -1353,9 +1350,6 @@ is
        Has_Element'Result = P.Has_Key (Positions (Container), Position);
    pragma Annotate (GNATprove, Inline_For_Proof, Has_Element);
 
-   function Default_Modulus (Capacity : Count_Type) return Hash_Type with
-     Global => null;
-
    generic
       type Key_Type (<>) is private;
 
@@ -1598,7 +1592,7 @@ private
 
    Empty_HT : aliased HT_Types.Hash_Table_Type (0, 0);
 
-   type Set (Modulus : Hash_Type) is new Ada.Finalization.Controlled
+   type Set is new Ada.Finalization.Controlled
    with record
      Content : not null HT_Access := Empty_HT'Access;
    end record;

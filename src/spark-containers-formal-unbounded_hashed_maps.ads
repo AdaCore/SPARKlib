@@ -68,7 +68,7 @@ is
                     "The following usage of aspect Iterable has been reviewed"
                     & "for compliance with GNATprove assumption"
                     & " [SPARK_ITERABLE]");
-   type Map (Modulus : Hash_Type) is private with
+   type Map is private with
      Iterable => (First       => First,
                   Next        => Next,
                   Has_Element => Has_Element,
@@ -78,10 +78,9 @@ is
                     "Restrictions:No_Specification_Of_Aspect => Iterable");
 
 
-   function Empty_Map (Modulus : Hash_Type := 0) return Map with
+   function Empty_Map return Map with
      Global => null,
-     Post   => Is_Empty (Empty_Map'Result)
-                 and Empty_Map'Result.Modulus = Modulus;
+     Post   => Is_Empty (Empty_Map'Result);
 
    type Cursor is record
       Node : Count_Type;
@@ -400,11 +399,9 @@ is
      Post   =>
        Model (Copy'Result) = Model (Source)
          and Keys (Copy'Result) = Keys (Source)
-         and Positions (Copy'Result) = Positions (Source)
-         and Source.Modulus = Copy'Result.Modulus;
+         and Positions (Copy'Result) = Positions (Source);
    --  Copy returns a container stricty equal to Source. It must have the same
-   --  cursors associated with each element. Therefore the modulus cannot be
-   --  changed.
+   --  cursors associated with each element.
 
    function Iter_Model (Container : Map) return K.Sequence is
       (Keys (Container))
@@ -960,9 +957,6 @@ is
        Has_Element'Result = P.Has_Key (Positions (Container), Position);
    pragma Annotate (GNATprove, Inline_For_Proof, Has_Element);
 
-   function Default_Modulus (Capacity : Count_Type) return Hash_Type with
-     Global => null;
-
 private
    pragma SPARK_Mode (Off);
 
@@ -1000,7 +994,7 @@ private
 
    Empty_HT : aliased HT_Types.Hash_Table_Type (0, 0);
 
-   type Map (Modulus : Hash_Type) is new Ada.Finalization.Controlled
+   type Map is new Ada.Finalization.Controlled
    with record
      Content : not null HT_Access := Empty_HT'Access;
    end record;
