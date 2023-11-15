@@ -78,10 +78,10 @@ is
    --  "For of" quantification over sets iterates over elements.
    --  For proof, "for of" quantification is understood modulo equivalence (the
    --  range of quantification comprises all the elements that are equivalent
-   --  to any element of the set), so it is cannot be safely executed in
-   --  general. Thus, quantified expression should only be used in disabled
-   --  ghost code. This is enforced by having a special imported procedure
-   --  Check_Or_Fail that will lead to link-time errors otherwise.
+   --  to any element of the set), so it cannot be safely executed in general.
+   --  Thus, quantified expression should only be used in disabled ghost code.
+   --  This is enforced by having a special imported procedure Check_Or_Fail
+   --  that will lead to link-time errors otherwise.
 
    -----------------------
    --  Basic operations --
