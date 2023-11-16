@@ -59,12 +59,8 @@ is
    --  Multisets are empty when default initialized.
    --  "For in" quantification over multisets should not be used.
    --  "For of" quantification over multisets iterates over elements.
-   --  For proof, "for of" quantification is understood modulo equivalence (the
-   --  range of quantification comprises all the elements that are equivalent
-   --  to any element of the set), so it cannot be safely executed in
-   --  general. Thus, quantified expression should only be used in disabled
-   --  ghost code. This is enforced by having a special imported procedure
-   --  Check_Or_Fail that will lead to link-time errors otherwise.
+   --  Occurrences in a multiset are counted modulo equivalence, the whole
+   --  equivalence class is included/excluded at once.
 
    ----------------------
    -- Basic Operations --
@@ -109,8 +105,9 @@ is
      Post   => Contains (Container, Choose'Result);
 
    function Cardinality (Container : Multiset) return Big_Natural with
-   --  The Cardinality of a Multiset is the number of elements in the Multiset
-   --  taking into account the number of occurences.
+   --  The Cardinality of a Multiset is the number of equivalence classes in
+   --  the Multiset taking into account the number of occurences of these
+   --  equivalent classes.
 
      Global => null,
      Post   =>
@@ -163,8 +160,9 @@ is
      (Left    : Multiset;
       Right   : Multiset;
       Element : Element_Type) return Boolean with
-   --  Check if all the elements of Left except Element have the same number of
-   --  occurences in Left and in Right and conversely.
+   --  Check if all the elements of Left except the equivalence class of
+   --  Element have the same number of occurences in Left and in Right and
+   --  conversely.
 
    Ghost,
    Global => null,
@@ -194,8 +192,8 @@ is
    function Add
      (Container : Multiset;
       Element   : Element_Type) return Multiset with
-   --  Returns Container with the number of occurences of Element incremented
-   --  by one.
+   --  Returns Container with the number of occurences of the equivalence class
+   --  of Element incremented by one.
 
      Global => null,
      Post   =>
@@ -209,8 +207,8 @@ is
      (Container : Multiset;
       Element   : Element_Type;
       Count     : Big_Positive) return Multiset with
-   --  Returns Container with the number of occurences of Element incremented
-   --  by Count.
+   --  Returns Container with the number of occurences of the equivalence class
+   --  of Element incremented by Count.
 
      Global => null,
      Post   =>
@@ -223,7 +221,7 @@ is
    function Remove_All
      (Container : Multiset;
       Element   : Element_Type) return Multiset with
-   --  Returns Container with no occurences of Element
+   --  Returns Container with no occurences of the equivalence class of Element
 
      Global => null,
      Pre    => Contains (Container, Element),
@@ -237,8 +235,8 @@ is
      (Container : Multiset;
       Element   : Element_Type;
       Count     : Big_Positive := 1) return Multiset with
-   --  Returns Container with the number of occurences of Element decremented
-   --  by Count.
+   --  Returns Container with the number of occurences of the equivalence class
+   --  of Element decremented by Count.
 
      Global => null,
      Pre    => Count <= Nb_Occurence (Container, Element),
@@ -424,7 +422,8 @@ is
      Post   => Valid_Subset (Iterator, Next'Result)
        and then Multiset_Logic_Equal
          (Next'Result, Remove_All (Cursor, Choose (Cursor)));
-   --  At each iteration, remove the considered element from the Cursor set
+   --  At each iteration, remove the equivalence class of considered element
+   --  from the Cursor set.
 
    function Has_Element
      (Iterator : Iterable_Multiset;

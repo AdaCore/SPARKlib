@@ -76,20 +76,20 @@ is
    --  Sets are empty when default initialized.
    --  "For in" quantification over sets should not be used.
    --  "For of" quantification over sets iterates over elements.
-   --  For proof, "for of" quantification is understood modulo equivalence (the
-   --  range of quantification comprises all the elements that are equivalent
-   --  to any element of the set), so it cannot be safely executed in general.
-   --  Thus, quantified expression should only be used in disabled ghost code.
-   --  This is enforced by having a special imported procedure Check_Or_Fail
-   --  that will lead to link-time errors otherwise.
+   --  Inclusion in a set works modulo equivalence, the whole equivalence class
+   --  is included/excluded at once. As equivalence classes might be infinite,
+   --  quantification over elements of a finite set could be infinite. Thus,
+   --  quantified expressions cannot be executed and should only be used in
+   --  disabled ghost code. This is enforced by having a special imported
+   --  procedure Check_Or_Fail that will lead to link-time errors otherwise.
 
    -----------------------
    --  Basic operations --
    -----------------------
 
    --  Sets are axiomatized using Contains, which encodes whether an element is
-   --  contained in a set. The length of a set is also added to protect Add
-   --  against overflows but it is not actually modeled.
+   --  contained in a set and length which returns the number of equivalence
+   --  classes in a set.
 
    function Contains (Container : Set; Item : Element_Type) return Boolean with
      Global   => null,
@@ -119,7 +119,7 @@ is
    function Length (Container : Set) return Big_Natural with
      Global   => null,
      Annotate => (GNATprove, Container_Aggregates, "Length");
-   --  Return the number of elements in Container
+   --  Return the number of equivalence classes in Container
 
    ------------------------
    -- Property Functions --
@@ -152,7 +152,7 @@ is
       Right : Set;
       Item  : Element_Type) return Boolean
    --  Return True if Left contains only elements of Right except possibly
-   --  Item.
+   --  the equivalence class of Item.
 
    with
      Global => null,
@@ -192,7 +192,7 @@ is
      (Container : Set;
       New_Item  : Element_Type) return Boolean
    with
-   --  Return True Container only contains New_Item
+   --  Return True Container only contains elements equivalent to New_Item
 
      Global => null,
      Post   =>
@@ -222,7 +222,7 @@ is
          (for all Item of Left => not Contains (Right, Item));
 
    function Num_Overlaps (Left : Set; Right : Set) return Big_Natural with
-   --  Number of elements that are both in Left and Right
+   --  Number of equivalence classes that are both in Left and Right
 
      Global => null,
      Post   =>
@@ -247,7 +247,8 @@ is
      Post   => Is_Empty (Empty_Set'Result);
 
    function Add (Container : Set; Item : Element_Type) return Set with
-   --  Return a new set containing all the elements of Container plus E
+   --  Return a new set containing all the elements of Container plus the
+   --  equivalence class of E.
 
      Global => null,
      Pre    => not Contains (Container, Item),
@@ -258,7 +259,8 @@ is
          and Included_Except (Add'Result, Container, Item);
 
    function Remove (Container : Set; Item : Element_Type) return Set with
-   --  Return a new set containing all the elements of Container except E
+   --  Return a new set containing all the elements of Container except the
+   --  equivalence class of E.
 
      Global => null,
      Pre    => Contains (Container, Item),
@@ -359,7 +361,8 @@ is
      Post   => Valid_Subset (Iterator, Next'Result)
        and then Set_Logic_Equal
          (Next'Result, Remove (Cursor, Choose (Cursor)));
-   --  At each iteration, remove the considered element from the Cursor set
+   --  At each iteration, remove the equivalence class of the considered
+   --  element from the Cursor set.
 
    function Has_Element
      (Iterator : Iterable_Set;
