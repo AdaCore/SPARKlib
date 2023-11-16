@@ -439,27 +439,27 @@ is
    with
      Ghost,
      Global   => null,
-     Annotate => (GNATprove, Inline_For_Proof);
+     Annotate => (GNATprove, Inline_For_Proof),
+     Annotate => (GNATprove, Iterable_For_Proof, "Model");
 
    function Key (Container : Map; Position : Cursor) return Key_Type with
-     Global => null,
-     Pre    => Has_Element (Container, Position),
-     Post   =>
+     Global   => null,
+     Pre      => Has_Element (Container, Position),
+     Post     =>
        Key'Result =
-         K.Get (Keys (Container), P.Get (Positions (Container), Position));
-   pragma Annotate (GNATprove, Inline_For_Proof, Key);
-   pragma Annotate (GNATprove, Iterable_For_Proof, "Model", Iter_Model);
+         K.Get (Keys (Container), P.Get (Positions (Container), Position)),
+     Annotate => (GNATprove, Inline_For_Proof);
 
 
    function Element
      (Container : Map;
       Position  : Cursor) return Element_Type
    with
-     Global => null,
-     Pre    => Has_Element (Container, Position),
-     Post   =>
-       Element'Result = Element (Model (Container), Key (Container, Position));
-   pragma Annotate (GNATprove, Inline_For_Proof, Element);
+     Global   => null,
+     Pre      => Has_Element (Container, Position),
+     Post     =>
+       Element'Result = Element (Model (Container), Key (Container, Position)),
+     Annotate => (GNATprove, Inline_For_Proof);
 
    procedure Replace_Element
      (Container : in out Map;
