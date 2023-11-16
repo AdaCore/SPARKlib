@@ -435,15 +435,12 @@ is
      Annotate => (GNATprove, Container_Aggregates, "Equivalent_Elements");
 
    procedure Aggr_Include (Container : in out Set; Item : Element_Type) with
-     Global         => null,
-     Contract_Cases =>
-       (Contains (Container, Item) =>
-          Set_Logic_Equal (Container, Container'Old),
-        others =>
-          Length (Container) = Length (Container)'Old + 1
-          and Contains (Container, Item)
-          and Container'Old <= Container
-          and Included_Except (Container, Container'Old, Item));
+     Global => null,
+     Pre    => not Contains (Container, Item),
+     Post   => Length (Container) = Length (Container)'Old + 1
+       and Contains (Container, Item)
+       and Container'Old <= Container
+       and Included_Except (Container, Container'Old, Item);
 
 private
 

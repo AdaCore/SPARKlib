@@ -42,11 +42,15 @@ is
                     & "for compliance with GNATprove assumption"
                     & " [SPARK_ITERABLE]");
    type List (Capacity : Count_Type) is private with
-     Iterable => (First       => First,
-                  Next        => Next,
-                  Has_Element => Has_Element,
-                  Element     => Element),
-     Default_Initial_Condition => Is_Empty (List);
+     Iterable                  => (First       => First,
+                                   Next        => Next,
+                                   Has_Element => Has_Element,
+                                   Element     => Element),
+     Default_Initial_Condition => Is_Empty (List),
+     Aggregate                 => (Empty       => Empty_List,
+                                   Add_Unnamed => Append),
+     Annotate                  =>
+       (GNATprove, Container_Aggregates, "From_Model");
    pragma Annotate (GNATcheck, Exempt_Off,
                     "Restrictions:No_Specification_Of_Aspect => Iterable");
 
@@ -56,7 +60,9 @@ is
 
    No_Element : constant Cursor := Cursor'(Node => 0);
 
-   Empty_List : constant List;
+   function Empty_List (Capacity : Count_Type := 10) return List with
+     Post => Is_Empty (Empty_List'Result)
+       and then Empty_List'Result.Capacity = Capacity;
 
    function Length (Container : List) return Count_Type with
      Global => null,
@@ -390,14 +396,6 @@ is
                  Copy'Result.Capacity = Source.Capacity
               else
                  Copy'Result.Capacity = Capacity);
-
-   function Iter_Model (Container : List) return M.Sequence is
-      (Model (Container))
-   with
-     Ghost,
-     Global   => null,
-     Annotate => (GNATprove, Inline_For_Proof),
-     Annotate => (GNATprove, Iterable_For_Proof, "Model");
 
    function Element
      (Container : List;
@@ -1743,6 +1741,27 @@ is
                    Model (Target)'Old);
    end Generic_Sorting;
 
+   ------------------------------------------------------------------
+   -- Additional Expression Functions For Iteration and Aggregates --
+   ------------------------------------------------------------------
+
+   function Aggr_Capacity (Container : List) return Count_Type is
+      (Container.Capacity)
+   with
+     Ghost,
+     Global   => null,
+     Annotate => (GNATprove, Inline_For_Proof),
+     Annotate => (GNATprove, Container_Aggregates, "Capacity");
+
+   function Aggr_And_Iter_Model (Container : List) return M.Sequence is
+      (Model (Container))
+   with
+     Ghost,
+     Global   => null,
+     Annotate => (GNATprove, Inline_For_Proof),
+     Annotate => (GNATprove, Iterable_For_Proof, "Model"),
+     Annotate => (GNATprove, Container_Aggregates, "Model");
+
 private
    pragma SPARK_Mode (Off);
 
@@ -1765,6 +1784,7 @@ private
       Nodes  : Node_Array (1 .. Capacity);
    end record;
 
-   Empty_List : constant List := (0, others => <>);
+   function Empty_List (Capacity : Count_Type := 10) return List is
+     ((Capacity, others => <>));
 
 end SPARK.Containers.Formal.Doubly_Linked_Lists;

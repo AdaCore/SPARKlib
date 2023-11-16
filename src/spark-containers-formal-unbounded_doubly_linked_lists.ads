@@ -43,11 +43,15 @@ is
                     & "for compliance with GNATprove assumption"
                     & " [SPARK_ITERABLE]");
    type List is private with
-     Iterable => (First       => First,
-                  Next        => Next,
-                  Has_Element => Has_Element,
-                  Element     => Element),
-     Default_Initial_Condition => Is_Empty (List);
+     Iterable                  => (First       => First,
+                                   Next        => Next,
+                                   Has_Element => Has_Element,
+                                   Element     => Element),
+     Default_Initial_Condition => Is_Empty (List),
+     Aggregate                 => (Empty       => Empty_List,
+                                   Add_Unnamed => Append),
+     Annotate                  =>
+       (GNATprove, Container_Aggregates, "From_Model");
    pragma Annotate (GNATcheck, Exempt_Off,
                     "Restrictions:No_Specification_Of_Aspect => Iterable");
 
@@ -386,14 +390,6 @@ is
      Post   =>
        Model (Copy'Result) = Model (Source)
          and Positions (Copy'Result) = Positions (Source);
-
-   function Iter_Model (Container : List) return M.Sequence is
-      (Model (Container))
-   with
-     Ghost,
-     Global   => null,
-     Annotate => (GNATprove, Inline_For_Proof),
-     Annotate => (GNATprove, Iterable_For_Proof, "Model");
 
    function Element
      (Container : List;
@@ -1736,6 +1732,27 @@ is
                    Model (Source)'Old,
                    Model (Target)'Old);
    end Generic_Sorting;
+
+   ------------------------------------------------------------------
+   -- Additional Expression Functions For Iteration and Aggregates --
+   ------------------------------------------------------------------
+
+   function Aggr_Capacity return Count_Type is
+      (Count_Type'Last)
+   with
+     Ghost,
+     Global   => null,
+     Annotate => (GNATprove, Inline_For_Proof),
+     Annotate => (GNATprove, Container_Aggregates, "Capacity");
+
+   function Aggr_And_Iter_Model (Container : List) return M.Sequence is
+      (Model (Container))
+   with
+     Ghost,
+     Global   => null,
+     Annotate => (GNATprove, Inline_For_Proof),
+     Annotate => (GNATprove, Iterable_For_Proof, "Model"),
+     Annotate => (GNATprove, Container_Aggregates, "Model");
 
 private
    pragma SPARK_Mode (Off);

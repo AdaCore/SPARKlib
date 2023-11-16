@@ -460,6 +460,13 @@ is
       return EHT.Element (Container.Content.Nodes (Node).E_Holder);
    end Element;
 
+   ---------------
+   -- Empty_Map --
+   ---------------
+
+   function Empty_Map return Map is
+     ((Ada.Finalization.Controlled with others => <>));
+
    ---------------------
    -- Equivalent_Keys --
    ---------------------

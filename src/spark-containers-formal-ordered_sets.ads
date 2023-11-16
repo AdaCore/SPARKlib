@@ -84,13 +84,21 @@ is
                     & "for compliance with GNATprove assumption"
                     & " [SPARK_ITERABLE]");
    type Set (Capacity : Count_Type) is private with
-     Iterable => (First       => First,
-                  Next        => Next,
-                  Has_Element => Has_Element,
-                  Element     => Element),
-     Default_Initial_Condition => Is_Empty (Set);
+     Iterable                  => (First       => First,
+                                   Next        => Next,
+                                   Has_Element => Has_Element,
+                                   Element     => Element),
+     Default_Initial_Condition => Is_Empty (Set),
+     Aggregate                 => (Empty       => Empty_Set,
+                                   Add_Unnamed => Insert),
+     Annotate                  =>
+       (GNATprove, Container_Aggregates, "From_Model");
    pragma Annotate (GNATcheck, Exempt_Off,
                     "Restrictions:No_Specification_Of_Aspect => Iterable");
+
+   function Empty_Set (Capacity : Count_Type := 10) return Set with
+     Post => Is_Empty (Empty_Set'Result)
+       and then Empty_Set'Result.Capacity = Capacity;
 
    type Cursor is record
       Node : Count_Type;
@@ -512,8 +520,6 @@ is
    end Formal_Model;
    use Formal_Model;
 
-   Empty_Set : constant Set;
-
    function "=" (Left, Right : Set) return Boolean with
      Global => null,
      Post   =>
@@ -572,14 +578,6 @@ is
                  Copy'Result.Capacity = Source.Capacity
               else
                  Copy'Result.Capacity = Capacity);
-
-   function Iter_Model (Container : Set) return E.Sequence is
-     (Elements (Container))
-   with
-     Ghost,
-     Global   => null,
-     Annotate => (GNATprove, Inline_For_Proof),
-     Annotate => (GNATprove, Iterable_For_Proof, "Model");
 
    function Element
      (Container : Set;
@@ -1918,6 +1916,34 @@ is
 
    end Generic_Keys;
 
+   ------------------------------------------------------------------
+   -- Additional Expression Functions For Iteration and Aggregates --
+   ------------------------------------------------------------------
+
+   function Aggr_Capacity (Container : Set) return Count_Type is
+      (Container.Capacity)
+   with
+     Ghost,
+     Global   => null,
+     Annotate => (GNATprove, Inline_For_Proof),
+     Annotate => (GNATprove, Container_Aggregates, "Capacity");
+
+   function Aggr_Model (Container : Set) return M.Set is
+      (Model (Container))
+   with
+     Ghost,
+     Global   => null,
+     Annotate => (GNATprove, Inline_For_Proof),
+     Annotate => (GNATprove, Container_Aggregates, "Model");
+
+   function Iter_Model (Container : Set) return E.Sequence is
+      (Elements (Container))
+   with
+     Ghost,
+     Global   => null,
+     Annotate => (GNATprove, Inline_For_Proof),
+     Annotate => (GNATprove, Iterable_For_Proof, "Model");
+
 private
    pragma SPARK_Mode (Off);
 
@@ -1941,7 +1967,5 @@ private
    end record;
 
    use Red_Black_Trees;
-
-   Empty_Set : constant Set := (Capacity => 0, others => <>);
 
 end SPARK.Containers.Formal.Ordered_Sets;
