@@ -101,12 +101,12 @@ is
    --  Maps are empty when default initialized.
    --  "For in" quantification over maps should not be used.
    --  "For of" quantification over maps iterates over keys.
-   --  For proof, "for of" quantification is understood modulo equivalence (the
-   --  range of quantification comprises all the keys that are equivalent
-   --  to any key of the map), so it is cannot be safely executed in
-   --  general. Thus, quantified expression should only be used in disabled
-   --  ghost code. This is enforced by having a special imported procedure
-   --  Check_Or_Fail that will lead to link-time errors otherwise.
+   --  Inclusion in a map works modulo equivalence, the whole equivalence class
+   --  is included/excluded at once. As equivalence classes might be infinite,
+   --  quantification over the keys of a finite map could be infinite. Thus,
+   --  quantified expressions cannot be executed and should only be used in
+   --  disabled ghost code. This is enforced by having a special imported
+   --  procedure Check_Or_Fail that will lead to link-time errors otherwise.
 
    -----------------------
    --  Basic operations --
@@ -225,7 +225,8 @@ is
      (Left    : Map;
       Right   : Map;
       New_Key : Key_Type) return Boolean
-   --  Returns True if Left contains only keys of Right and possibly New_Key
+   --  Returns True if Left contains only keys of Right and possibly the
+   --  equivalence class of New_Key.
 
    with
      Global => null,
@@ -240,7 +241,8 @@ is
       Right : Map;
       X     : Key_Type;
       Y     : Key_Type) return Boolean
-   --  Returns True if Left contains only keys of Right and possibly X and Y
+   --  Returns True if Left contains only keys of Right and possibly the
+   --  equivalence classes of X and Y.
 
    with
      Global => null,
@@ -284,7 +286,8 @@ is
      (Container : Map;
       New_Key   : Key_Type;
       New_Item  : Element_Type) return Map
-   --  Returns Container augmented with the mapping Key -> New_Item
+   --  Returns Container augmented with the mapping K -> New_Item for all
+   --  key K in the equivalence class of New_Key.
 
    with
      Global => null,
@@ -300,7 +303,7 @@ is
    function Remove
      (Container : Map;
       Key       : Key_Type) return Map
-   --  Returns Container without any mapping for Key
+   --  Returns Container without any mapping for the equivalence class of Key
 
    with
      Global => null,
@@ -315,8 +318,8 @@ is
      (Container : Map;
       Key       : Key_Type;
       New_Item  : Element_Type) return Map
-   --  Returns Container, where the element associated with Key has been
-   --  replaced by New_Item.
+   --  Returns Container, where the element associated with the equivalence
+   --  class of Key has been replaced by New_Item.
 
    with
      Global => null,
@@ -401,7 +404,8 @@ is
      Post   => Valid_Submap (Iterator, Next'Result)
        and then
          Map_Logic_Equal (Next'Result, Remove (Cursor, Choose (Cursor)));
-   --  At each iteration, remove the considered element from the Cursor map
+   --  At each iteration, remove the considered the equivalence class of the
+   --  considered key from the Cursor map.
 
    function Has_Element
      (Iterator : Iterable_Map;
@@ -447,7 +451,7 @@ is
       Right   : Map;
       New_Key : Key_Type) return Boolean
    --  Returns True if all the keys of Left are mapped to the same elements in
-   --  Left and Right except New_Key.
+   --  Left and Right except the equivalence class of New_Key.
 
    with
      Ghost,
@@ -466,7 +470,7 @@ is
       X     : Key_Type;
       Y     : Key_Type) return Boolean
    --  Returns True if all the keys of Left are mapped to the same elements in
-   --  Left and Right except X and Y.
+   --  Left and Right except the equivalence classes of X and Y.
 
    with
      Ghost,
