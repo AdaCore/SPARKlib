@@ -478,13 +478,10 @@ is
 
          pragma Assert
            (for all Element of Set =>
-              Nb_Occurence (Set, Element) <= Nb_Occurence (Left, Element));
-         pragma Assert (for all Element of Set => Contains (Left, Element));
+              (if Equivalent_Elements (Element, E)
+               then Nb_Occurence (Set, Element) <=
+                   Nb_Occurence (Left, Element)));
          pragma Assert (for all Element of Set => Has_Key (Left.Map, Element));
-         pragma Assert
-           (for all Element of Set =>
-              Has_Key (Left.Map, Element)
-                and then Get (Set.Map, Element) <= Get (Left.Map, Element));
          Lemma_Leq_Cardinality (Set.Map, Left.Map);
          pragma Assert (Cardinality (Set) <= Cardinality (Left));
 
