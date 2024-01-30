@@ -12,9 +12,11 @@ def run(cmd):
     print("run: " + cmd)
     os.system(cmd)
 
+projectfile = "sparklib_internal.gpr"
+
 
 def run_manual(check_to_prove, option=""):
-    cmd = "gnatprove -j0 -P sparklib.gpr -U --prover=coq --report=provers"
+    cmd = f"gnatprove -j0 -P {projectfile} -U --prover=coq --report=provers"
     if ":" not in check_to_prove:
         run(cmd + " " + option + check_to_prove)
     else:
@@ -23,7 +25,7 @@ def run_manual(check_to_prove, option=""):
 
 def run_automatic(prover, level=4, timeout=None):
     cmd = (
-        "gnatprove -P sparklib.gpr --counterexamples=off -j0"
+        f"gnatprove -P {projectfile} --counterexamples=off -j0"
         + f" --prover={prover} --level={level}"
     )
     if timeout is not None:
@@ -32,7 +34,7 @@ def run_automatic(prover, level=4, timeout=None):
 
 
 def run_options(opt):
-    cmd = "gnatprove -P sparklib.gpr --counterexamples=off -j0 " + opt
+    cmd = f"gnatprove -P {projectfile} --counterexamples=off -j0 {opt}"
     run(cmd)
 
 
@@ -131,7 +133,7 @@ def kill_and_regenerate(check):
             shutil.rmtree(d)
     os.makedirs("./temp")
     os.system("make clean")
-    for envvar in ["SPARKLIB_OBJECT_DIR", "SPARKLIB_INSTALLED", "SPARKLIB_BODY_MODE"]:
+    for envvar in ["SPARKLIB_INSTALLED", "SPARKLIB_BODY_MODE"]:
         if envvar not in os.environ:
             print(f"{envvar} not set; make sure to run 'source setup.sh'")
             exit(1)
