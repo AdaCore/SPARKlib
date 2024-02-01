@@ -79,12 +79,14 @@ is
    pragma Assertion_Policy (Contract_Cases => Ignore);
    pragma Annotate (CodePeer, Skip_Analysis);
 
+   subtype Pos_Hash_Type is Hash_Type range 1 .. Hash_Type'Last;
+
    pragma Annotate (GNATcheck, Exempt_On,
                     "Restrictions:No_Specification_Of_Aspect => Iterable",
                     "The following usage of aspect Iterable has been reviewed"
                     & "for compliance with GNATprove assumption"
                     & " [SPARK_ITERABLE]");
-   type Set (Capacity : Count_Type; Modulus : Hash_Type) is private with
+   type Set (Capacity : Count_Type; Modulus : Pos_Hash_Type) is private with
      Iterable                  => (First       => First,
                                    Next        => Next,
                                    Has_Element => Has_Element,
@@ -1405,7 +1407,7 @@ is
        Has_Element'Result = P.Has_Key (Positions (Container), Position);
    pragma Annotate (GNATprove, Inline_For_Proof, Has_Element);
 
-   function Default_Modulus (Capacity : Count_Type) return Hash_Type with
+   function Default_Modulus (Capacity : Count_Type) return Pos_Hash_Type with
      Global => null;
 
    generic
@@ -1668,7 +1670,7 @@ private
    package HT_Types is new
      Ada.Containers.Hash_Tables.Generic_Formal_Hash_Table_Types (Node_Type);
 
-   type Set (Capacity : Count_Type; Modulus : Hash_Type) is record
+   type Set (Capacity : Count_Type; Modulus : Pos_Hash_Type) is record
      Content : HT_Types.Hash_Table_Type (Capacity, Modulus);
    end record;
 

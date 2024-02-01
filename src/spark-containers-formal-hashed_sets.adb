@@ -261,7 +261,7 @@ is
    -- Default_Modulus --
    ---------------------
 
-   function Default_Modulus (Capacity : Count_Type) return Hash_Type is
+   function Default_Modulus (Capacity : Count_Type) return Pos_Hash_Type is
    begin
       return To_Prime (Capacity);
    end Default_Modulus;
