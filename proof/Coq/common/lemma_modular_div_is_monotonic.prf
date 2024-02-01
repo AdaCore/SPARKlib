@@ -5,7 +5,7 @@ Open Scope Z_scope.
 unfold in_range in denom_type.
 destruct denom_type as (denom_lb, denom_ub); auto.
 unfold ule in denom_lb, denom_ub, pre.
-rewrite rliteral_axiom in denom_lb.
+rewrite rliteral_axiom2 in denom_lb.
 rewrite rliteral_axiom1 in denom_ub.
 
 (* rewrite goal *)
