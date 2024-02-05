@@ -4,7 +4,7 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
-pragma Ada_2012;
+pragma Ada_2022;
 
 package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
    use Key_Containers;

@@ -4,6 +4,8 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
+pragma Ada_2022;
+
 with SPARK.Containers.Functional.Vectors;
 with SPARK.Containers.Functional.Maps;
 with SPARK.Containers.Parameter_Checks;

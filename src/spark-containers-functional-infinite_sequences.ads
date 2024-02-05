@@ -5,6 +5,7 @@
 --
 
 pragma Ada_2022;
+
 private with SPARK.Containers.Types;
 private with SPARK.Containers.Functional.Base;
 
