@@ -10,6 +10,8 @@
 --  unit compatible with SPARK 2014. Note that the API of this unit may be
 --  subject to incompatible changes as SPARK 2014 evolves.
 
+pragma Ada_2022;
+
 with SPARK.Containers.Types; use SPARK.Containers.Types;
 with SPARK.Big_Integers;     use SPARK.Big_Integers;
 with SPARK.Containers.Functional.Vectors;

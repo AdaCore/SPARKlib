@@ -4,7 +4,7 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
-pragma Ada_2012;
+pragma Ada_2022;
 
 --  To allow reference counting on the base container
 

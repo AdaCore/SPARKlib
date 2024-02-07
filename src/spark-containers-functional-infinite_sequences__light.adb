@@ -8,7 +8,7 @@
 --  currently does not compile instantiations of the spec with imported ghost
 --  generics.
 
-pragma Ada_2012;
+pragma Ada_2022;
 
 package body SPARK.Containers.Functional.Infinite_Sequences
 with SPARK_Mode => Off

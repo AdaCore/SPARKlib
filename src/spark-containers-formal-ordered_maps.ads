@@ -24,6 +24,8 @@
 --  Iteration over maps is done using the Iterable aspect, which is SPARK
 --  compatible. "For of" iteration ranges over keys instead of elements.
 
+pragma Ada_2022;
+
 with SPARK.Big_Integers;     use SPARK.Big_Integers;
 with SPARK.Containers.Functional.Vectors;
 with SPARK.Containers.Functional.Maps;

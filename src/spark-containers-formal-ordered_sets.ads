@@ -21,6 +21,8 @@
 --    container. The operators "<" and ">" that could not be modified that way
 --    have been removed.
 
+pragma Ada_2022;
+
 with SPARK.Big_Integers;     use SPARK.Big_Integers;
 with SPARK.Containers.Functional.Maps;
 with SPARK.Containers.Functional.Sets;

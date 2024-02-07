@@ -8,7 +8,8 @@
 --  currently does not compile instantiations of the spec with imported ghost
 --  generics.
 
-pragma Ada_2012;
+pragma Ada_2022;
+
 with SPARK.Containers.Types; use SPARK.Containers.Types;
 
 package body SPARK.Containers.Functional.Vectors with SPARK_Mode => Off is
