@@ -5,6 +5,9 @@
 <prover id="0" name="Trivial" version="1.0" alternative="trivial" timelimit="1" steplimit="1" memlimit="1000"/>
 <prover id="1" name="Coq" version="8.5pl2" timelimit="0" steplimit="0" memlimit="0"/>
 <prover id="2" name="CVC5" version="0.0.7-gnatprove" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="3" name="altergo" version="1.30-gnatprove" timelimit="100" steplimit="0" memlimit="2000"/>
+<prover id="4" name="Z3" version="4.5.1-gnatprove" timelimit="100" steplimit="0" memlimit="2000"/>
+<prover id="5" name="colibri" version="2137" timelimit="100" steplimit="0" memlimit="2000"/>
 <file format="gnat-json" proved="true">
 <path name=".."/><path name=".."/><path name=".."/><path name="obj"/>
 <path name="gnatprove"/><path name="c952ff1888f9b88502f9-rithmetic__lemma_div_is_monotonic.gnat-json"/>
@@ -24,8 +27,11 @@
   <proof prover="0"><result status="valid" steps="1"/></proof>
   </goal>
   <goal name="def&#39;vc.4" proved="true">
-  <proof prover="1"><path name=".."/><path name=".."/><path name="Coq"/><path name="Ada___ada___spark__lemmas__mod64_arithmetic__lemma_div_is_monotonic__pragargs__cmp.v"/><result status="valid"/></proof>
-  <proof prover="2"><result status="timeout"/></proof>
+  <proof prover="1"><path name=".."/><path name=".."/><path name="Coq"/><path name="Ada___ada___spark__lemmas__mod64_arithmetic__lemma_div_is_monotonic__pragargs__cmp.v"/><result status="unknown"/></proof>
+  <proof prover="2" timelimit="100" memlimit="2000"><result status="highfailure"/></proof>
+  <proof prover="3"><result status="highfailure"/></proof>
+  <proof prover="4"><result status="highfailure"/></proof>
+  <proof prover="5"><result status="valid" steps="48"/></proof>
   </goal>
  </transf>
  </goal>
