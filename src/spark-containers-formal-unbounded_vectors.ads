@@ -34,9 +34,7 @@ is
    --  Contracts in this unit are meant for analysis only, not for run-time
    --  checking.
 
-   pragma Assertion_Policy (Pre => Ignore);
-   pragma Assertion_Policy (Post => Ignore);
-   pragma Assertion_Policy (Contract_Cases => Ignore);
+   pragma Assertion_Policy (Ignore);
    pragma Annotate (CodePeer, Skip_Analysis);
 
    subtype Extended_Index is Index_Type'Base range
@@ -887,6 +885,12 @@ is
       with procedure Lt_Order (X, Y, Z : Element_Type) is null
         with Ghost;
    package Generic_Sorting with SPARK_Mode, Always_Terminates is
+
+      --  Contracts in this unit are meant for analysis only, not for run-time
+      --  checking.
+
+      pragma Assertion_Policy (Ignore);
+
       package Formal_Model with Ghost is
 
          --------------------------

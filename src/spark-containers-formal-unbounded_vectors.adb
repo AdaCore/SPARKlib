@@ -12,6 +12,10 @@ with System; use type System.Address;
 package body SPARK.Containers.Formal.Unbounded_Vectors with
   SPARK_Mode => Off
 is
+   --  Contracts in this unit are meant for analysis only, not for run-time
+   --  checking.
+
+   pragma Assertion_Policy (Ignore);
 
    subtype Int is Long_Long_Integer;
 
@@ -36,6 +40,9 @@ is
      (Container : in out Vector;
       Before    : Extended_Index;
       Count     : Count_Type := 1);
+
+   function Length_Internal (Container : Vector) return Capacity_Range;
+   --  Internal version of Length without a postcondition calling Model
 
    procedure Resize (Container : in out Vector; Size : Count_Type := 0) with
      --  Widen the sub array of the Vector
@@ -573,7 +580,7 @@ is
         (Left  : M.Sequence;
          Right : M.Sequence) return Boolean
       is
-         L : constant Index_Type := M.Last (Left);
+         L : constant Extended_Index := M.Last (Left);
 
       begin
          if L /= M.Last (Right) then
@@ -631,7 +638,7 @@ is
          R : M.Sequence;
 
       begin
-         for Position in 1 .. Length (Container) loop
+         for Position in 1 .. Length_Internal (Container) loop
             R := M.Add (R, Container.Elements (Position).all);
          end loop;
 
@@ -645,6 +652,11 @@ is
    ---------------------
 
    package body Generic_Sorting with SPARK_Mode => Off is
+
+      --  Contracts in this unit are meant for analysis only, not for run-time
+      --  checking.
+
+      pragma Assertion_Policy (Ignore);
 
       ------------------
       -- Formal_Model --
@@ -744,7 +756,7 @@ is
             SA : Element_Array_Access renames Source.Elements;
 
          begin
-            J := Length (Target);
+            J := Length_Internal (Target);
             while Length (Source) /= 0 loop
                if I = 0 then
                   TA (1 .. J) := SA (1 .. Length (Source));
@@ -1132,13 +1144,22 @@ is
    ------------
 
    function Length (Container : Vector) return Capacity_Range is
+   begin
+      return Length_Internal (Container);
+   end Length;
+
+   ---------------------
+   -- Length_Internal --
+   ---------------------
+
+   function Length_Internal (Container : Vector) return Capacity_Range is
       L : constant Int := Int (Container.Last);
       F : constant Int := Int (Index_Type'First);
       N : constant Int'Base := L - F + 1;
 
    begin
       return Capacity_Range (N);
-   end Length;
+   end Length_Internal;
 
    ----------
    -- Move --
