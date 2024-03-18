@@ -76,9 +76,7 @@ is
    --  Contracts in this unit are meant for analysis only, not for run-time
    --  checking.
 
-   pragma Assertion_Policy (Pre => Ignore);
-   pragma Assertion_Policy (Post => Ignore);
-   pragma Assertion_Policy (Contract_Cases => Ignore);
+   pragma Assertion_Policy (Ignore);
    pragma Annotate (CodePeer, Skip_Analysis);
 
    subtype Pos_Hash_Type is Hash_Type range 1 .. Hash_Type'Last;
@@ -1434,6 +1432,11 @@ is
         with Ghost;
 
    package Generic_Keys with SPARK_Mode, Always_Terminates is
+
+      --  Contracts in this unit are meant for analysis only, not for run-time
+      --  checking.
+
+      pragma Assertion_Policy (Ignore);
 
       package Formal_Model with Ghost is
 

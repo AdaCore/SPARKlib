@@ -19,6 +19,11 @@ with System; use type System.Address;
 package body SPARK.Containers.Formal.Unbounded_Hashed_Sets with
   SPARK_Mode => Off
 is
+   --  Contracts in this unit are meant for analysis only, not for run-time
+   --  checking.
+
+   pragma Assertion_Policy (Ignore);
+
    -----------------------
    -- Local Subprograms --
    -----------------------
@@ -901,6 +906,11 @@ is
    end Generic_Allocate;
 
    package body Generic_Keys with SPARK_Mode => Off is
+
+      --  Contracts in this unit are meant for analysis only, not for run-time
+      --  checking.
+
+      pragma Assertion_Policy (Ignore);
 
       -----------------------
       -- Local Subprograms --

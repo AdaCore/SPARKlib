@@ -244,7 +244,8 @@ package body SPARK.Containers.Functional.Vectors with SPARK_Mode => Off is
    ----------
 
    function Last (Container : Sequence) return Extended_Index is
-     (Of_Big ((Big (Index_Type'First) - 1) + Length (Container)));
+     (Of_Big ((Big (Index_Type'First) - 1) +
+       Count_Conversions.To_Big_Integer (Length (Container.Content))));
 
    ------------
    -- Length --

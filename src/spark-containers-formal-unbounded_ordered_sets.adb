@@ -22,6 +22,10 @@ with Ada.Unchecked_Deallocation;
 package body SPARK.Containers.Formal.Unbounded_Ordered_Sets with
   SPARK_Mode => Off
 is
+   --  Contracts in this unit are meant for analysis only, not for run-time
+   --  checking.
+
+   pragma Assertion_Policy (Ignore);
 
    ------------------------------
    -- Access to Fields of Node --
@@ -1061,6 +1065,11 @@ is
    ------------------
 
    package body Generic_Keys with SPARK_Mode => Off is
+
+      --  Contracts in this unit are meant for analysis only, not for run-time
+      --  checking.
+
+      pragma Assertion_Policy (Ignore);
 
       -----------------------
       -- Local Subprograms --

@@ -51,9 +51,7 @@ is
    --  Contracts in this unit are meant for analysis only, not for run-time
    --  checking.
 
-   pragma Assertion_Policy (Pre => Ignore);
-   pragma Assertion_Policy (Post => Ignore);
-   pragma Assertion_Policy (Contract_Cases => Ignore);
+   pragma Assertion_Policy (Ignore);
    pragma Annotate (CodePeer, Skip_Analysis);
 
    function Equivalent_Elements (Left, Right : Element_Type) return Boolean
@@ -1577,6 +1575,11 @@ is
         with Ghost;
 
    package Generic_Keys with SPARK_Mode, Always_Terminates is
+
+      --  Contracts in this unit are meant for analysis only, not for run-time
+      --  checking.
+
+      pragma Assertion_Policy (Ignore);
 
       function Equivalent_Keys (Left, Right : Key_Type) return Boolean with
         Global => null,

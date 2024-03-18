@@ -15,6 +15,10 @@ with SPARK.Big_Integers; use SPARK.Big_Integers;
 package body SPARK.Containers.Formal.Unbounded_Doubly_Linked_Lists with
   SPARK_Mode => Off
 is
+   --  Contracts in this unit are meant for analysis only, not for run-time
+   --  checking.
+
+   pragma Assertion_Policy (Ignore);
 
    -----------------------
    -- Local Subprograms --
@@ -976,6 +980,11 @@ is
    ---------------------
 
    package body Generic_Sorting with SPARK_Mode => Off is
+
+      --  Contracts in this unit are meant for analysis only, not for run-time
+      --  checking.
+
+      pragma Assertion_Policy (Ignore);
 
       ------------------
       -- Formal_Model --
