@@ -28,11 +28,13 @@ is
 
    type chars_ptr is private with
      Annotate => (GNATprove, Ownership, "Needs_Reclamation"),
+     Annotate => (GNATprove, Predefined_Equality, "Only_Null"),
      Default_Initial_Condition => Is_Null (Chars_Ptr);
    pragma Preelaborable_Initialization (chars_ptr);
 
    Null_Ptr : constant chars_ptr with
-     Annotate => (GNATprove, Ownership, "Reclaimed_Value");
+     Annotate => (GNATprove, Ownership, "Reclaimed_Value"),
+     Annotate => (GNATprove, Predefined_Equality, "Null_Value");
 
    function Is_Null (Item : chars_ptr) return Boolean with
      Ghost,
@@ -83,11 +85,8 @@ is
    --  SPARK primitives
 
    function New_Char_Array (Chars : char_array) return chars_ptr with
-     Volatile_Function,
-     --  The value of New_Char_Array'Result is different each time it is
-     --  called.
-
-     Pre    => False,
+     Pre    => Chars'Last < size_t'Last or else Chars'First > 0
+       or else Is_Nul_Terminated (Chars),
      --  This precondition ensures that Strlen does not wrap-around on the
      --  new array.
 
@@ -111,9 +110,6 @@ is
      Global => null;
 
    function New_String (Str : String) return chars_ptr with
-     Volatile_Function,
-     --  The value of New_String'Result is different each time it is called
-
      Post   => New_String'Result /= Null_Ptr
        and then Strlen (New_String'Result) =
          (if Is_Nul_Terminated_Ghost (Str) then size_t (C_Length_Ghost (Str))
