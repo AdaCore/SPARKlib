@@ -35,10 +35,12 @@ is
    --  strict aliasing assumptions for this type.
 
    type chars_ptr is private with
+     Annotate => (GNATprove, Predefined_Equality, "Only_Null"),
      Default_Initial_Condition => Is_Null (Chars_Ptr);
    pragma Preelaborable_Initialization (chars_ptr);
 
-   Null_Ptr : constant chars_ptr;
+   Null_Ptr : constant chars_ptr with
+     Annotate => (GNATprove, Predefined_Equality, "Null_Value");
 
    function Is_Null (Item : chars_ptr) return Boolean with
      Ghost,
@@ -85,9 +87,6 @@ is
      (Item      : const_char_array_access;
       Nul_Check : Boolean := False) return chars_ptr
    with
-     Volatile_Function,
-     --  The value of To_Chars_Ptr'Result depends on the value of Item
-
      Pre            => Item = null or else Is_Nul_Terminated (Item.all),
      Contract_Cases =>
        (Item = null => To_Chars_Ptr'Result = Null_Ptr,
