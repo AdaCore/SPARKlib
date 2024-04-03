@@ -6,6 +6,7 @@
 
 pragma Ada_2022;
 
+pragma Style_Checks (Off);
 package body SPARK.Containers.Functional.Maps.Higher_Order
   with SPARK_Mode =>
 #if SPARK_BODY_MODE="On"
@@ -14,6 +15,7 @@ package body SPARK.Containers.Functional.Maps.Higher_Order
   Off
 #end if;
 is
+   pragma Style_Checks (On);
 
    -----------------------------------
    -- Local subprogram declarations --

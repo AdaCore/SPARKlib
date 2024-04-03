@@ -527,10 +527,12 @@ is
                  Nb_Occurence (Container'Old, E)));
 
 private
+pragma Style_Checks (Off);
 
 #if SPARK_BODY_MODE="Off"
    pragma SPARK_Mode (Off);
 #end if;
+pragma Style_Checks (On);
 
    package Maps is new SPARK.Containers.Functional.Maps
      (Key_Type                   => Element_Type,

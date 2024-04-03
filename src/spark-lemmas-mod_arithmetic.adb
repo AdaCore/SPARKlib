@@ -4,6 +4,7 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
+pragma Style_Checks (Off);
 package body SPARK.Lemmas.Mod_Arithmetic
   with SPARK_Mode =>
 #if SPARK_BODY_MODE="On"
@@ -12,6 +13,7 @@ package body SPARK.Lemmas.Mod_Arithmetic
   Off
 #end if;
 is
+   pragma Style_Checks (On);
 
    procedure Lemma_Div_Is_Monotonic
      (Val1  : Uint;

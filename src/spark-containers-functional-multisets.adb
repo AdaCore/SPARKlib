@@ -4,6 +4,7 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
+pragma Style_Checks (Off);
 package body SPARK.Containers.Functional.Multisets
   with SPARK_Mode =>
 #if SPARK_BODY_MODE="On"
@@ -12,6 +13,7 @@ package body SPARK.Containers.Functional.Multisets
   Off
 #end if;
 is
+   pragma Style_Checks (On);
    use Maps;
 
    -----------------------
@@ -952,7 +954,6 @@ is
          end;
       end if;
 
-
    end Remove;
 
    ----------------
@@ -987,7 +988,6 @@ is
       E         : Element_Type;
       Set_Union : Multiset := Left;
       Buffer    : Multiset;
-
 
    begin
       Buffer := Right;
