@@ -16,4 +16,7 @@ cpp -w -I proof/Coq/common | sed -e 's/^#.*$$//g' > $@
 clean:
 	find proof -name "*.v" -delete
 
+check:
+	SPARKLIB_INSTALLED=False SPARKLIB_BODY_MODE=On gprbuild -P sparklib_internal.gpr -c -f -gnatc -gnatwI -gnateDSPARK_BODY_MODE=On -gnatyg -gnatwe
+
 generate: $(ALL_COQ)

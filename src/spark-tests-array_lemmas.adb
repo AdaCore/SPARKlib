@@ -7,6 +7,7 @@
 with SPARK.Lemmas.Unconstrained_Array;
 with SPARK.Lemmas.Constrained_Array;
 
+pragma Style_Checks (Off);
 package body SPARK.Tests.Array_Lemmas
   with SPARK_Mode =>
 #if SPARK_BODY_MODE="On"
@@ -15,6 +16,7 @@ package body SPARK.Tests.Array_Lemmas
   Off
 #end if;
 is
+   pragma Style_Checks (On);
    pragma Warnings
      (Off, "postcondition does not check the outcome of calling");
 

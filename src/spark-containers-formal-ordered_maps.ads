@@ -450,7 +450,6 @@ is
          K.Get (Keys (Container), P.Get (Positions (Container), Position)),
      Annotate => (GNATprove, Inline_For_Proof);
 
-
    function Element
      (Container : Map;
       Position  : Cursor) return Element_Type
