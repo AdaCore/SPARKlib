@@ -14,7 +14,6 @@ package body SPARK.Containers.Functional.Multisets
 #end if;
 is
    pragma Style_Checks (On);
-   use Maps;
 
    -----------------------
    -- Local Subprograms --
@@ -164,6 +163,7 @@ is
                  (Union (Left, Remove_All (Right, Element)))
                     + Nb_Occurence (Right, Element));
 
+   pragma Warnings (Off, "actuals for this call may be in wrong order");
    procedure Lemma_Sym_Intersection_Rec
      (Left  : Multiset;
       Right : Multiset)
@@ -189,6 +189,7 @@ is
        and then Invariant (Right.Map, Right.Card),
      Post   => Union (Left, Right) = Union (Right, Left),
      Subprogram_Variant => (Decreases => Cardinality (Left));
+   pragma Warnings (On, "actuals for this call may be in wrong order");
 
    ----------
    -- "<=" --
@@ -435,7 +436,7 @@ is
       Element : Element_Type) return Boolean is
 
    begin
-      return B : Boolean :=
+      return B : constant Boolean :=
         Elements_Equal_Except (Left.Map, Right.Map, Element)
           and then Elements_Equal_Except (Right.Map, Left.Map, Element)
       do
@@ -446,12 +447,14 @@ is
             Lemma_Equal_Except (Left, Right, Element);
          end if;
 
+         pragma Warnings (Off, "actuals for this call may be in wrong order");
          if (for all E of Right =>
                (if not Equivalent_Elements (E, Element)
                 then Nb_Occurence (Left, E) = Nb_Occurence (Right, E)))
          then
             Lemma_Equal_Except (Right, Left, Element);
          end if;
+         pragma Warnings (On, "actuals for this call may be in wrong order");
       end return;
    end Equal_Except;
 
@@ -525,7 +528,7 @@ is
    --------------
 
    function Is_Empty (Container : Multiset) return Boolean is
-      B : Boolean := Is_Empty (Container.Map);
+      B : constant Boolean := Is_Empty (Container.Map);
 
    begin
       Lemma_Empty (Container);
@@ -834,12 +837,16 @@ is
          Lemma_Remove_Intersection (Left, Right, E);
          Lemma_Remove_Intersection (Right, Left, E);
          if Contains (Right, E) then
+            pragma Warnings (Off,
+                             "actuals for this call may be in wrong order");
             Lemma_Sym_Intersection_Rec
               (Remove_All (Left, E), Remove_All (Right, E));
 
             pragma Assert
               (Cardinality (Intersection (Left, Right)) =
                  Cardinality (Intersection (Right, Left)));
+            pragma Warnings (On,
+                             "actuals for this call may be in wrong order");
          else
             Lemma_Sym_Intersection_Rec (Remove_All (Left, E), Right);
          end if;
@@ -876,6 +883,7 @@ is
    is
       E : Element_Type;
    begin
+      pragma Warnings (Off, "actuals for this call may be in wrong order");
       if not Is_Empty (Left) then
          E := Choose (Left);
 
@@ -896,6 +904,7 @@ is
       end if;
 
       pragma Assert (Union (Left, Right) = Union (Right, Left));
+      pragma Warnings (On, "actuals for this call may be in wrong order");
    end Lemma_Sym_Union_Rec;
 
    ------------------
@@ -918,6 +927,7 @@ is
    is
       R : constant Multiset := Remove_All (Cursor, Choose (Cursor));
       C : constant Map := Next (Iterator.Map, Cursor.Map) with Ghost;
+      pragma Unreferenced (C);
    begin
       return R;
    end Next;

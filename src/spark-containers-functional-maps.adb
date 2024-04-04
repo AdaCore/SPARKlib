@@ -252,6 +252,7 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
    ----------------
 
    function Iter_First (Container : Map) return Private_Key is
+      pragma Unreferenced (Container);
    begin
       Check_Or_Fail;
       return 1;
@@ -278,6 +279,7 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
      (Container : Map;
       Key       : Private_Key) return Private_Key
    is
+      pragma Unreferenced (Container);
    begin
       Check_Or_Fail;
       return (if Key = Private_Key'Last then 0 else Key + 1);

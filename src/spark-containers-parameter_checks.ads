@@ -148,10 +148,12 @@ is
         Global => null,
         Post   => Eq (X, X);
 
+      pragma Warnings (Off, "actuals for this call may be in wrong order");
       procedure Eq_Symmetric (X, Y : T) with
         Global => null,
         Pre    => Eq (X, Y),
         Post   => Eq (Y, X);
+      pragma Warnings (On, "actuals for this call may be in wrong order");
 
       procedure Eq_Transitive (X, Y, Z : T) with
         Global => null,
@@ -213,10 +215,12 @@ is
         Pre    => X = Y,
         Post   => Eq (X, Y);
 
+      pragma Warnings (Off, "actuals for this call may be in wrong order");
       procedure Eq_Symmetric (X, Y : T) with
         Global => null,
         Pre    => Eq (X, Y),
         Post   => Eq (Y, X);
+      pragma Warnings (On, "actuals for this call may be in wrong order");
 
       procedure Eq_Transitive (X, Y, Z : T) with
         Global => null,
