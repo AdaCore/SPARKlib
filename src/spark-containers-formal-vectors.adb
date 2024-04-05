@@ -445,12 +445,8 @@ is
          Left      : M.Sequence;
          Right     : M.Sequence) return Boolean
       is
-         Elem : Element_Type;
-
       begin
          for Index in Index_Type'First .. M.Last (Container) loop
-            Elem := Element (Container, Index);
-
             declare
                Found : Boolean := False;
             begin

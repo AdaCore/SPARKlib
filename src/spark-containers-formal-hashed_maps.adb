@@ -5,13 +5,8 @@
 --
 
 with Ada.Containers.Hash_Tables.Generic_Formal_Operations;
-
 with Ada.Containers.Hash_Tables.Generic_Formal_Keys;
-
 with Ada.Containers.Prime_Numbers; use Ada.Containers.Prime_Numbers;
-
-with SPARK.Big_Integers; use SPARK.Big_Integers;
-
 with System; use type System.Address;
 
 package body SPARK.Containers.Formal.Hashed_Maps with

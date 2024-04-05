@@ -108,8 +108,8 @@ private
 
    type Set is null record;
 
-   function Empty_Set return Set is ((others => <>));
+   function Empty_Set return Set is ((null record));
 
-   function Singleton (E : Element_Type) return Set is ((others => <>));
+   function Singleton (E : Element_Type) return Set is ((null record));
 
 end SPARK.Pointers.Abstract_Sets;

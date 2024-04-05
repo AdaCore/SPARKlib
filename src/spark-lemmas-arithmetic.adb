@@ -73,6 +73,7 @@ is
       Scale_Denom : Pos;
       Res         : Int)
    is
+      pragma Unreferenced (Scale_Num, Scale_Denom);
    begin
       if Res >= 0 then
          pragma Assert (abs (Big (Res)) <= abs (Big (Val)));

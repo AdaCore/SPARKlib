@@ -101,12 +101,12 @@ private
 
    type Map is null record;
 
-   function Empty_Map return Map is ((others => <>));
+   function Empty_Map return Map is ((null record));
 
    type Ownership_Map is new Map;
 
    function "+" (M : Ownership_Map) return Map is
      (Map (M));
 
-   function Empty_Map return Ownership_Map is ((others => <>));
+   function Empty_Map return Ownership_Map is ((null record));
 end SPARK.Pointers.Abstract_Maps;

@@ -189,13 +189,9 @@ is
                  (for some J in Interval'(1, I) =>
                       Equivalent_Elements (E, New_Item (J))));
             I := I + 1;
-            declare
-               E : Element_Type renames New_Item (I);
-            begin
-               if not Contains (Res, New_Item (I)) then
-                  Res := Add (Res, New_Item (I));
-               end if;
-            end;
+            if not Contains (Res, New_Item (I)) then
+               Res := Add (Res, New_Item (I));
+            end if;
          end loop;
       end return;
    end Create;

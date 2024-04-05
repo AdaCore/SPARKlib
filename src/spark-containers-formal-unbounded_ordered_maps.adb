@@ -7,14 +7,9 @@
 with Ada.Containers.Red_Black_Trees.Generic_Bounded_Operations;
 pragma Elaborate_All
   (Ada.Containers.Red_Black_Trees.Generic_Bounded_Operations);
-
 with Ada.Containers.Red_Black_Trees.Generic_Bounded_Keys;
 pragma Elaborate_All (Ada.Containers.Red_Black_Trees.Generic_Bounded_Keys);
-
-with SPARK.Big_Integers; use SPARK.Big_Integers;
-
 with Ada.Unchecked_Deallocation;
-
 with System; use type System.Address;
 
 package body SPARK.Containers.Formal.Unbounded_Ordered_Maps with

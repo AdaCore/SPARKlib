@@ -128,6 +128,7 @@ is
       ------------------
 
       procedure Eq_Reflexive (X, Y : T) is
+         pragma Unreferenced (Y);
       begin
          Param_Eq_Reflexive (X);
       end Eq_Reflexive;
@@ -178,6 +179,7 @@ is
 
       procedure Eq_Transitive (X, Y, Z : T) is
       begin
+         pragma Warnings (Off, "actuals for this call may be in wrong order");
          if X < Z then
             Lt_Order (X, Z, Y);
             pragma Assert (False);
@@ -185,6 +187,7 @@ is
             Lt_Order (Z, X, Y);
             pragma Assert (False);
          end if;
+         pragma Warnings (On, "actuals for this call may be in wrong order");
       end Eq_Transitive;
 
       -------------------
@@ -243,9 +246,11 @@ is
 
       procedure Eq_Reflexive (X, Y : T) is
       begin
+         pragma Warnings (Off, "actuals for this call may be in wrong order");
          Lt_Irreflexive (X, Y);
          Param_Eq_Symmetric (X, Y);
          Lt_Irreflexive (Y, X);
+         pragma Warnings (On, "actuals for this call may be in wrong order");
       end Eq_Reflexive;
 
       ------------------
@@ -260,6 +265,7 @@ is
 
       procedure Eq_Transitive (X, Y, Z : T) is
       begin
+         pragma Warnings (Off, "actuals for this call may be in wrong order");
          if X < Z then
             Lt_Order (X, Z, Y);
             pragma Assert (False);
@@ -267,6 +273,7 @@ is
             Lt_Order (Z, X, Y);
             pragma Assert (False);
          end if;
+         pragma Warnings (On, "actuals for this call may be in wrong order");
       end Eq_Transitive;
 
       -------------------

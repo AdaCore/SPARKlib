@@ -7,7 +7,6 @@
 with Interfaces; use Interfaces;
 with SPARK.Pointers.Abstract_Maps;
 with SPARK.Pointers.Abstract_Sets;
-with Unchecked_Deallocation;
 
 generic
    type Object (<>) is private;

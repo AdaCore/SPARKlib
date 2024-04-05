@@ -4,13 +4,13 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
-with Unchecked_Conversion;
-with Unchecked_Deallocation;
+with Ada.Unchecked_Conversion;
+with Ada.Unchecked_Deallocation;
 
 package body SPARK.Pointers.Pointers_With_Aliasing with SPARK_Mode => Off is
-   procedure Dealloc_Obj is new Unchecked_Deallocation (Object, Pointer);
+   procedure Dealloc_Obj is new Ada.Unchecked_Deallocation (Object, Pointer);
    function Pointer_To_Integer is new
-     Unchecked_Conversion (Pointer, Address_Type);
+     Ada.Unchecked_Conversion (Pointer, Address_Type);
 
    ---------
    -- "=" --

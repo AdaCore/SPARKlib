@@ -1271,9 +1271,6 @@ is
    end Intersection;
 
    function Intersection (Left : Set; Right : Set) return Set is
-      H : constant Hash_Type :=
-        Default_Modulus (Count_Type'Min (Length (Left), Length (Right)));
-
    begin
       return S : Set do
          if Length (Left) /= 0 and Length (Right) /= 0 then
@@ -1618,16 +1615,10 @@ is
          return Copy (Right);
       end if;
 
-      declare
-         H : constant Hash_Type :=
-           Default_Modulus (Length (Left) + Length (Right));
-
-      begin
-         return S : Set do
-            Difference (Left, Right, S);
-            Difference (Right, Left, S);
-         end return;
-      end;
+      return S : Set do
+         Difference (Left, Right, S);
+         Difference (Right, Left, S);
+      end return;
    end Symmetric_Difference;
 
    ------------
@@ -1686,16 +1677,10 @@ is
          return Copy (Right);
       end if;
 
-      declare
-         H : constant Hash_Type :=
-           Default_Modulus (Length (Left) + Length (Right));
-
-      begin
-         return S : Set do
-            Assign (Target => S, Source => Left);
-            Union (Target => S, Source => Right);
-         end return;
-      end;
+      return S : Set do
+         Assign (Target => S, Source => Left);
+         Union (Target => S, Source => Right);
+      end return;
    end Union;
 
    ---------

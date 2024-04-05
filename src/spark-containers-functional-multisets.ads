@@ -327,6 +327,7 @@ is
    -- Lemmas --
    ------------
 
+   pragma Warnings (Off, "actuals for this call may be in wrong order");
    procedure Lemma_Sym_Intersection
      (Left  : Multiset;
       Right : Multiset) with
@@ -350,6 +351,7 @@ is
 
      Global => null,
      Post   => Sum (Left, Right) = Sum (Right, Left);
+   pragma Warnings (On, "actuals for this call may be in wrong order");
 
    ---------------------------------------
    -- Iteration on Functional Multisets --

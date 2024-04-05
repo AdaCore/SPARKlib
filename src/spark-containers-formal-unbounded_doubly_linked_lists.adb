@@ -5,12 +5,8 @@
 --
 
 with Ada.Unchecked_Deallocation;
-
 with SPARK.Containers.Stable_Sorting; use SPARK.Containers.Stable_Sorting;
-
 with System; use type System.Address;
-
-with SPARK.Big_Integers; use SPARK.Big_Integers;
 
 package body SPARK.Containers.Formal.Unbounded_Doubly_Linked_Lists with
   SPARK_Mode => Off
@@ -602,7 +598,6 @@ is
       begin
          for Index in 1 .. M.Last (Container) loop
             declare
-               Elem  : constant Element_Type := Element (Container, Index);
                Found : Boolean := False;
             begin
                for J in 1 .. M.Last (Left) loop

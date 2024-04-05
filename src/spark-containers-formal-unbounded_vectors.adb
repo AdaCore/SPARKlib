@@ -503,7 +503,6 @@ is
       begin
          for Index in Index_Type'First .. M.Last (Container) loop
             declare
-               Elem : constant Element_Type := Element (Container, Index);
                Found : Boolean := False;
             begin
                for J in Index_Type'First .. M.Last (Left) loop

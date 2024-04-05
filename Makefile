@@ -17,6 +17,6 @@ clean:
 	find proof -name "*.v" -delete
 
 check:
-	SPARKLIB_INSTALLED=False SPARKLIB_BODY_MODE=On gprbuild -P sparklib_internal.gpr -c -f -gnatc -gnatwI -gnateDSPARK_BODY_MODE=On -gnatyg -gnatwe
+	SPARKLIB_INSTALLED=False SPARKLIB_BODY_MODE=On gprbuild -P sparklib_internal.gpr -c -f -gnatc -gnatg -gnat2022 -gnateDSPARK_BODY_MODE=On -gnatwe -k
 
 generate: $(ALL_COQ)

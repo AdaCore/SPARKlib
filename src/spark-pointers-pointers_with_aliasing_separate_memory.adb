@@ -4,14 +4,15 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
-with Unchecked_Conversion;
+with Ada.Unchecked_Conversion;
+with Ada.Unchecked_Deallocation;
 
 package body SPARK.Pointers.Pointers_With_Aliasing_Separate_Memory with
   SPARK_Mode => Off
 is
-   procedure Dealloc_Obj is new Unchecked_Deallocation (Object, Pointer);
+   procedure Dealloc_Obj is new Ada.Unchecked_Deallocation (Object, Pointer);
    function Pointer_To_Integer is new
-     Unchecked_Conversion (Pointer, Address_Type);
+     Ada.Unchecked_Conversion (Pointer, Address_Type);
 
    ---------
    -- "=" --
@@ -31,6 +32,7 @@ is
    ------------
 
    procedure Assign (Memory : in out Memory_Type; P : Pointer; O : Object) is
+      pragma Unreferenced (Memory);
    begin
       P.all := O;
    end Assign;
@@ -50,6 +52,7 @@ is
 
    procedure Create (Memory : in out Memory_Type; O : Object; P : out Pointer)
    is
+      pragma Unreferenced (Memory);
    begin
       P := new Object'(O);
    end Create;
@@ -59,6 +62,7 @@ is
    -------------
 
    procedure Dealloc (Memory : in out Memory_Type; P : in out Pointer) is
+      pragma Unreferenced (Memory);
    begin
       Dealloc_Obj (P);
    end Dealloc;

@@ -6,9 +6,6 @@
 
 with Ada.Containers.Red_Black_Trees.Generic_Bounded_Operations;
 with Ada.Containers.Red_Black_Trees.Generic_Bounded_Keys;
-
-with SPARK.Big_Integers; use SPARK.Big_Integers;
-
 with System; use type System.Address;
 
 package body SPARK.Containers.Formal.Ordered_Maps with

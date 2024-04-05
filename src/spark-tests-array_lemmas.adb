@@ -5,7 +5,6 @@
 --
 
 with SPARK.Lemmas.Unconstrained_Array;
-with SPARK.Lemmas.Constrained_Array;
 
 pragma Style_Checks (Off);
 package body SPARK.Tests.Array_Lemmas

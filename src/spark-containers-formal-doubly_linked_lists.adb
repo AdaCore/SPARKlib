@@ -5,10 +5,7 @@
 --
 
 with SPARK.Containers.Stable_Sorting; use SPARK.Containers.Stable_Sorting;
-
 with System; use type System.Address;
-
-with SPARK.Big_Integers; use SPARK.Big_Integers;
 
 package body SPARK.Containers.Formal.Doubly_Linked_Lists with
   SPARK_Mode => Off
@@ -504,12 +501,8 @@ is
          Left      : M.Sequence;
          Right     : M.Sequence) return Boolean
       is
-         Elem : Element_Type;
-
       begin
          for Index in 1 .. M.Last (Container) loop
-            Elem := Element (Container, Index);
-
             declare
                Found : Boolean := False;
             begin
