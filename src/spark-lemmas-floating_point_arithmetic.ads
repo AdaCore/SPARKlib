@@ -20,6 +20,8 @@ with SPARK.Big_Integers;
 use  SPARK.Big_Integers;
 with SPARK.Big_Reals;
 use  SPARK.Big_Reals;
+with SPARK.Lemmas.Float_Base;
+pragma Unreferenced (SPARK.Lemmas.Float_Base);
 
 generic
    type Fl is digits <>;
