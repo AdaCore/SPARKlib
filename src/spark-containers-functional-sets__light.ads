@@ -4,16 +4,10 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
---  This unit is provided as a replacement for the unit
---  SPARK.Containers.Functional.Sets when only proof with SPARK is
---  intended. It cannot be used for execution, as all subprograms are marked
---  imported with no definition.
-
---  Contrary to SPARK.Containers.Functional.Sets, this unit does not
---  depend on System or Ada.Finalization, which makes it more convenient for
---  use in run-time units.
-
 pragma Ada_2022;
+
+private with SPARK.Containers.Functional.Base;
+private with SPARK.Containers.Types;
 
 with SPARK.Big_Integers; use SPARK.Big_Integers;
 with SPARK.Containers.Parameter_Checks;
@@ -42,8 +36,8 @@ generic
      with Ghost;
 
 package SPARK.Containers.Functional.Sets with
-  SPARK_Mode,
   Ghost,
+  SPARK_Mode,
   Always_Terminates
 is
 
@@ -75,7 +69,7 @@ is
                                    Has_Element => Iter_Has_Element,
                                    Element     => Iter_Element),
      Aggregate                 => (Empty       => Empty_Set,
-                                  Add_Unnamed => Aggr_Include),
+                                   Add_Unnamed => Aggr_Include),
      Annotate                  =>
        (GNATprove, Container_Aggregates, "Predefined_Sets");
    pragma Annotate (GNATcheck, Exempt_Off,
@@ -84,7 +78,11 @@ is
    --  "For in" quantification over sets should not be used.
    --  "For of" quantification over sets iterates over elements.
    --  Inclusion in a set works modulo equivalence, the whole equivalence class
-   --  is included/excluded at once.
+   --  is included/excluded at once. As equivalence classes might be infinite,
+   --  quantification over elements of a finite set could be infinite. Thus,
+   --  quantified expressions cannot be executed and should only be used in
+   --  disabled ghost code. This is enforced by having a special imported
+   --  procedure Check_Or_Fail that will lead to link-time errors otherwise.
 
    -----------------------
    --  Basic operations --
@@ -115,9 +113,9 @@ is
    function Choose (Container : Set) return Element_Type with
    --  Return an arbitrary element in Container
 
-     Global => null,
-     Pre    => not Is_Empty (Container),
-     Post   => Contains (Container, Choose'Result);
+   Global => null,
+   Pre    => not Is_Empty (Container),
+   Post   => Contains (Container, Choose'Result);
 
    function Length (Container : Set) return Big_Natural with
      Global   => null,
@@ -452,70 +450,66 @@ private
 
    pragma SPARK_Mode (Off);
 
-   type Set is null record;
-   type Iterable_Set is null record;
-   type Private_Key is null record;
+   function "="
+     (Left  : Element_Type;
+      Right : Element_Type) return Boolean renames Equivalent_Elements;
 
-   --------------------------------------------------
-   -- Iteration Primitives Used For Quantification --
-   --------------------------------------------------
+   use SPARK.Containers.Types;
 
-   function Iter_Element
-     (Container : Set;
-      Key       : Private_Key) return Element_Type
-   is
-     (raise Program_Error);
+   subtype Positive_Count_Type is Count_Type range 1 .. Count_Type'Last;
 
-   function Iter_First (Container : Set) return Private_Key is
-     (raise Program_Error);
+   package Containers is new SPARK.Containers.Functional.Base
+     (Element_Type => Element_Type,
+      Index_Type   => Positive_Count_Type);
+   use all type Containers.Container;
 
-   function Iter_Has_Element
-     (Container : Set;
-      Key       : Private_Key) return Boolean
-   is
-     (raise Program_Error);
+   type Set is record
+      Content : Containers.Container;
+   end record;
 
-   function Iter_Next
-     (Container : Set;
-      Key       : Private_Key) return Private_Key
-   is
-     (raise Program_Error);
+   type Private_Key is new Count_Type;
 
    ----------------------------------
    -- Iteration on Functional Sets --
    ----------------------------------
 
+   type Iterable_Set is record
+      Container : Set;
+   end record;
+
    function Element
      (Iterator : Iterable_Set;
       Cursor   : Set) return Element_Type
    is
-     (raise Program_Error);
+     (Choose (Cursor));
 
    function First (Iterator : Iterable_Set) return Set is
-     (raise Program_Error);
+     (Iterator.Container);
 
    function Get_Set (Iterator : Iterable_Set) return Set is
-     (raise Program_Error);
+     (Iterator.Container);
 
    function Has_Element
      (Iterator : Iterable_Set;
       Cursor   : Set) return Boolean
    is
-     (raise Program_Error);
+     (Valid_Subset (Iterator, Cursor) and then Length (Cursor) > 0);
 
    function Iterate (Container : Set) return Iterable_Set is
-     (raise Program_Error);
+     (Iterable_Set'(Container => Container));
 
    function Next (Iterator : Iterable_Set; Cursor : Set) return Set is
-     (raise Program_Error);
+     (Remove (Cursor, Choose (Cursor)));
 
    function Set_Logic_Equal (Left, Right : Set) return Boolean is
-     (raise Program_Error);
+     (Ptr_Eq (Left.Content, Right.Content)
+      and then Length (Left.Content) = Length (Right.Content));
 
    function Valid_Subset
      (Iterator : Iterable_Set;
       Cursor   : Set) return Boolean
    is
-     (raise Program_Error);
+     (Ptr_Eq (Cursor.Content, Iterator.Container.Content)
+      and then Length (Cursor.Content) <= Length (Iterator.Container.Content));
 
 end SPARK.Containers.Functional.Sets;

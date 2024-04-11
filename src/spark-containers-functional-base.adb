@@ -175,7 +175,7 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
                         Max_Length      => 0,
                         Elements        => Elements);
    begin
-      return (Ada.Finalization.Controlled with Base => B);
+      return (Base_Type with Base => B);
    end Content_Init;
 
    ------------------
@@ -188,7 +188,7 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
         new Refcounted_Element'(Reference_Count => 1,
                                 E_Access        => new Element_Type'(E));
    begin
-      return (Ada.Finalization.Controlled with Ref => Refcounted_E);
+      return (Base_Type with Ref => Refcounted_E);
    end Element_Init;
 
    --------------

@@ -4,16 +4,10 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
---  This unit is provided as a replacement for the unit
---  SPARK.Containers.Functional.Maps when only proof with SPARK is
---  intended. It cannot be used for execution, as all subprograms are marked
---  imported with no definition.
-
---  Contrary to SPARK.Containers.Functional.Maps, this unit does not
---  depend on System or Ada.Finalization, which makes it more convenient for
---  use in run-time units.
-
 pragma Ada_2022;
+
+private with SPARK.Containers.Functional.Base;
+private with SPARK.Containers.Types;
 
 with SPARK.Big_Integers; use SPARK.Big_Integers;
 with SPARK.Containers.Parameter_Checks;
@@ -67,8 +61,8 @@ generic
      with Ghost;
 
 package SPARK.Containers.Functional.Maps with
-  SPARK_Mode,
   Ghost,
+  SPARK_Mode,
   Always_Terminates
 is
 
@@ -109,7 +103,11 @@ is
    --  "For in" quantification over maps should not be used.
    --  "For of" quantification over maps iterates over keys.
    --  Inclusion in a map works modulo equivalence, the whole equivalence class
-   --  is included/excluded at once.
+   --  is included/excluded at once. As equivalence classes might be infinite,
+   --  quantification over the keys of a finite map could be infinite. Thus,
+   --  quantified expressions cannot be executed and should only be used in
+   --  disabled ghost code. This is enforced by having a special imported
+   --  procedure Check_Or_Fail that will lead to link-time errors otherwise.
 
    -----------------------
    --  Basic operations --
@@ -117,8 +115,8 @@ is
 
    --  Maps are axiomatized using Has_Key and Get, encoding respectively the
    --  presence of a key in a map and an accessor to elements associated with
-   --  its keys. The length function returns the number of equivalence
-   --  classes in a map.
+   --  its keys. The length of a map is also added to protect Add against
+   --  overflows but it is not actually modeled.
 
    function Has_Key (Container : Map; Key : Key_Type) return Boolean with
      Global   => null,
@@ -270,7 +268,7 @@ is
          ((for all Key of Left =>
             Has_Key (Right, Key)
               and then Equivalent_Elements (Get (Right, Key), Get (Left, Key)))
-          and (for all Key of Right => Has_Key (Left, Key)));
+           and (for all Key of Right => Has_Key (Left, Key)));
 
    ----------------------------
    -- Construction Functions --
@@ -420,12 +418,18 @@ is
    --  Return True on non-empty maps which can be reached by iterating over
    --  Container.
 
-   ----------------------------------------------------
-   -- Properties used only in internal specification --
-   ----------------------------------------------------
+   -------------------------------------------------------------------------
+   -- Ghost non-executable properties used only in internal specification --
+   -------------------------------------------------------------------------
+
+   --  Logical equality on elements cannot be safely executed on most element
+   --  types. Thus, this package should only be instantiated with ghost code
+   --  disabled. This is enforced by having a special imported procedure
+   --  Check_Or_Fail that will lead to link-time errors otherwise.
 
    function Element_Logic_Equal (Left, Right : Element_Type) return Boolean
    with
+     Ghost,
      Global => null,
      Annotate => (GNATprove, Logical_Equal);
 
@@ -434,6 +438,7 @@ is
    --  Left and Right.
 
    with
+     Ghost,
      Global => null,
      Post   =>
        Elements_Equal'Result =
@@ -450,6 +455,7 @@ is
    --  Left and Right except the equivalence class of New_Key.
 
    with
+     Ghost,
      Global => null,
      Post   =>
        Elements_Equal_Except'Result =
@@ -468,6 +474,7 @@ is
    --  Left and Right except the equivalence classes of X and Y.
 
    with
+     Ghost,
      Global => null,
      Post   =>
        Elements_Equal_Except'Result =
@@ -584,66 +591,71 @@ private
 
    pragma SPARK_Mode (Off);
 
-   type Map is null record;
-   type Iterable_Map is null record;
-   type Private_Key is null record;
+   function "="
+     (Left  : Key_Type;
+      Right : Key_Type) return Boolean renames Equivalent_Keys;
 
-   --------------------------------------------------
-   -- Iteration Primitives Used For Quantification --
-   --------------------------------------------------
-   function Iter_First (Container : Map) return Private_Key is
-     (raise Program_Error);
+   use SPARK.Containers.Types;
 
-   function Iter_Has_Element
-     (Container : Map;
-      Key       : Private_Key) return Boolean
-   is
-     (raise Program_Error);
+   subtype Positive_Count_Type is Count_Type range 1 .. Count_Type'Last;
 
-   function Iter_Element
-     (Container : Map;
-      Key       : Private_Key) return Key_Type
-   is
-     (raise Program_Error);
+   package Element_Containers is new SPARK.Containers.Functional.Base
+     (Element_Type => Element_Type,
+      Index_Type   => Positive_Count_Type);
+   use all type Element_Containers.Container;
 
-   function Iter_Next
-     (Container : Map;
-      Key       : Private_Key) return Private_Key
-   is
-     (raise Program_Error);
+   package Key_Containers is new SPARK.Containers.Functional.Base
+     (Element_Type => Key_Type,
+      Index_Type   => Positive_Count_Type);
+   use all type Key_Containers.Container;
+
+   type Map is record
+      Keys     : Key_Containers.Container;
+      Elements : Element_Containers.Container;
+   end record;
+
+   type Private_Key is new Count_Type;
 
    ----------------------------------
    -- Iteration on Functional Maps --
    ----------------------------------
 
+   type Iterable_Map is record
+      Container : Map;
+   end record;
+
    function Element (Iterator : Iterable_Map; Cursor : Map) return Key_Type is
-     (raise Program_Error);
+     (Choose (Cursor));
 
    function First (Iterator : Iterable_Map) return Map is
-     (raise Program_Error);
+     (Iterator.Container);
 
    function Get_Map (Iterator : Iterable_Map) return Map is
-     (raise Program_Error);
+     (Iterator.Container);
 
    function Has_Element
      (Iterator : Iterable_Map;
       Cursor   : Map) return Boolean
    is
-     (raise Program_Error);
+     (Valid_Submap (Iterator, Cursor) and then Length (Cursor) > 0);
 
    function Iterate (Container : Map) return Iterable_Map is
-     (raise Program_Error);
+     (Iterable_Map'(Container => Container));
 
    function Map_Logic_Equal (Left, Right : Map) return Boolean is
-     (raise Program_Error);
+     (Ptr_Eq (Left.Keys, Right.Keys)
+      and then Length (Left.Keys) = Length (Right.Keys)
+      and then Ptr_Eq (Left.Elements, Right.Elements));
 
    function Next (Iterator : Iterable_Map; Cursor : Map) return Map is
-     (raise Program_Error);
+     (Remove (Cursor, Choose (Cursor)));
 
    function Valid_Submap
      (Iterator : Iterable_Map;
       Cursor   : Map) return Boolean
    is
-     (raise Program_Error);
+     (Ptr_Eq (Cursor.Keys, Iterator.Container.Keys)
+      and then Length (Cursor.Keys) <= Length (Iterator.Container.Keys)
+      and then Ptr_Eq (Cursor.Elements, Iterator.Container.Elements));
 
 end SPARK.Containers.Functional.Maps;

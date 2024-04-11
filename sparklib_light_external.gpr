@@ -51,13 +51,7 @@ project SPARKlib_Light_External is
                                   "spark-containers-formal-unbounded_vectors.ads",
                                   "spark-containers-formal-vectors.adb",
                                   "spark-containers-formal-vectors.ads",
-                                  "spark-containers-functional-base.adb",
                                   "spark-containers-functional-base.ads",
-                                  "spark-containers-functional-infinite_sequences.adb",
-                                  "spark-containers-functional-maps.adb",
-                                  "spark-containers-functional-multisets.adb",
-                                  "spark-containers-functional-sets.adb",
-                                  "spark-containers-functional-vectors.adb",
                                   "spark-big_integers.ads",
                                   "spark-big_intervals.ads",
                                   "spark-big_reals.ads",
@@ -67,7 +61,7 @@ project SPARKlib_Light_External is
                                   "spark-containers-functional-sets.ads",
                                   "spark-containers-functional-vectors.ads",
                                   "spark-containers-types.ads",
-				  "spark-containers__exec.ads");
+				                    "spark-containers__exec.ads");
 
    package Naming is
       for Spec ("SPARK.Big_Integers") use "spark-big_integers__light.ads";
@@ -77,26 +71,18 @@ project SPARKlib_Light_External is
 
       for Spec ("SPARK.Containers.Types")
          use "spark-containers-types__light.ads";
+      for Spec ("SPARK.Containers.Functional.Base")
+         use "spark-containers-functional-base__light.ads";
       for Spec ("SPARK.Containers.Functional.Infinite_Sequences")
          use "spark-containers-functional-infinite_sequences__light.ads";
-      for Body ("SPARK.Containers.Functional.Infinite_Sequences")
-         use "spark-containers-functional-infinite_sequences__light.adb";
       for Spec ("SPARK.Containers.Functional.Maps")
          use "spark-containers-functional-maps__light.ads";
-      for Body ("SPARK.Containers.Functional.Maps")
-         use "spark-containers-functional-maps__light.adb";
       for Spec ("SPARK.Containers.Functional.Multisets")
          use "spark-containers-functional-multisets__light.ads";
-      for Body ("SPARK.Containers.Functional.Multisets")
-         use "spark-containers-functional-multisets__light.adb";
       for Spec ("SPARK.Containers.Functional.Sets")
          use "spark-containers-functional-sets__light.ads";
-      for Body ("SPARK.Containers.Functional.Sets")
-         use "spark-containers-functional-sets__light.adb";
       for Spec ("SPARK.Containers.Functional.Vectors")
          use "spark-containers-functional-vectors__light.ads";
-      for Body ("SPARK.Containers.Functional.Vectors")
-         use "spark-containers-functional-vectors__light.adb";
    end Naming;
 
 end SPARKlib_Light_External;
