@@ -27,6 +27,8 @@ project SPARKlib_Light_External is
 
    package Prove renames SPARKlib_common.Prove;
 
+   Common_Default_Switches := SPARKlib_Common.Common_Default_Switches;
+
    Common_Excluded_Source_Files :=
      ("spark-containers-formal-hashed_maps.adb",
       "spark-containers-formal-hashed_maps.ads",

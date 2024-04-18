@@ -19,14 +19,16 @@ abstract project SPARKlib_common is
    type SPARK_Body_Mode_T is ("Off", "On");
    SPARK_Body_Mode : SPARK_Body_Mode_T := External ("SPARKLIB_BODY_MODE", "Off");
 
+   Common_Default_Switches :=
+     ("-gnat2022", "-gnatygo-u",
+      "-gnatwI",  --  disable warnings about SPARKlib using GNAT internal units
+      "-gnateDSPARK_BODY_MODE=" & SPARK_Body_Mode);
+
    package Compiler is
       --  Enforce GNAT style checks, except for multiple blank lines which does
       --  not work for preprocessed files, and alphabetical ordering of
       --  subprogram bodies (although not applicable to null subprograms).
-      for Default_Switches ("Ada") use
-         ("-gnat2022", "-gnatygo-u",
-	  "-gnatwI",  --  disable warnings about SPARKlib using GNAT internal units
-          "-gnateDSPARK_BODY_MODE=" & SPARK_Body_Mode);
+      for Default_Switches ("Ada") use Common_Default_Switches;
    end Compiler;
 
    package Prove is
