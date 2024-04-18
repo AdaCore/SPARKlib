@@ -4,16 +4,10 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
---  This unit is provided as a replacement for the unit
---  SPARK.Containers.Functional.Infinite_Sequences when only proof with SPARK
---  is intended. It cannot be used for execution, as all subprograms are marked
---  imported with no definition.
-
---  Contrary to SPARK.Containers.Functional.Infinite_Sequences, this unit does
---  not depend on System or Ada.Finalization, which makes it more convenient
---  for use in run-time units.
-
 pragma Ada_2022;
+
+private with SPARK.Containers.Types;
+private with SPARK.Containers.Functional.Base;
 
 with SPARK.Big_Integers; use SPARK.Big_Integers;
 with SPARK.Containers.Parameter_Checks;
@@ -47,8 +41,8 @@ generic
      with Ghost;
 
 package SPARK.Containers.Functional.Infinite_Sequences with
-  SPARK_Mode,
   Ghost,
+  SPARK_Mode,
   Always_Terminates
 is
 
@@ -69,6 +63,7 @@ is
        (GNATprove, Container_Aggregates, "Predefined_Sequences");
    pragma Annotate (GNATcheck, Exempt_Off,
                     "Restrictions:No_Specification_Of_Aspect => Iterable");
+
    --  Sequences are empty when default initialized.
    --  Quantification over sequences can be done using the regular
    --  quantification over its range or directly on its elements with "for of".
@@ -336,7 +331,7 @@ is
       Position  : Big_Integer) return Boolean
    with
      Global => null,
-     Post   => Iter_Has_Element'Result =
+       Post   => Iter_Has_Element'Result =
                    In_Range (Position, 1, Length (Container));
    pragma Annotate (GNATprove, Inline_For_Proof, Iter_Has_Element);
 
@@ -348,12 +343,18 @@ is
      Pre    => Iter_Has_Element (Container, Position),
      Post   => Iter_Next'Result = Position + 1;
 
-   ----------------------------------------------------
-   -- Properties used only in internal specification --
-   ----------------------------------------------------
+   -------------------------------------------------------------------------
+   -- Ghost non-executable properties used only in internal specification --
+   -------------------------------------------------------------------------
+
+   --  Logical equality on elements cannot be safely executed on most element
+   --  types. Thus, this package should only be instantiated with ghost code
+   --  disabled. This is enforced by having a special imported procedure
+   --  Check_Or_Fail that will lead to link-time errors otherwise.
 
    function Element_Logic_Equal (Left, Right : Element_Type) return Boolean
    with
+     Ghost,
      Global => null,
      Annotate => (GNATprove, Logical_Equal);
 
@@ -366,6 +367,7 @@ is
    --  is equal to Item.
 
    with
+     Ghost,
      Global => null,
      Pre    => Lst <= Last (Container),
      Post   =>
@@ -380,13 +382,14 @@ is
    with
    --  Left is a subsequence of Right
 
+     Ghost,
      Global => null,
      Post   =>
        Equal_Prefix'Result =
          (Length (Left) <= Length (Right)
            and then
             (for all N in Left =>
-                     Element_Logic_Equal (Get (Left, N), Get (Right, N))));
+               Element_Logic_Equal (Get (Left, N), Get (Right, N))));
    pragma Annotate (GNATprove, Inline_For_Proof, Equal_Prefix);
 
    function Equal_Except
@@ -396,6 +399,7 @@ is
    --  Returns True is Left and Right are the same except at position Position
 
    with
+     Ghost,
      Global => null,
      Pre    => Position <= Last (Left),
      Post   =>
@@ -415,6 +419,7 @@ is
    --  Returns True is Left and Right are the same except at positions X and Y
 
    with
+     Ghost,
      Global => null,
      Pre    => X <= Last (Left) and Y <= Last (Left),
      Post   =>
@@ -435,6 +440,7 @@ is
    --  Left and Right.
 
    with
+     Ghost,
      Global => null,
      Pre    => Lst <= Last (Left) and Lst <= Last (Right),
      Post   =>
@@ -454,6 +460,7 @@ is
    --  elements as the range from Fst + Offset to Lst + Offset in Right.
 
    with
+     Ghost,
      Global => null,
      Pre    =>
        Lst <= Last (Left)
@@ -490,7 +497,17 @@ is
 private
    pragma SPARK_Mode (Off);
 
-   type Sequence is null record;
+   use SPARK.Containers.Types;
+
+   subtype Positive_Count_Type is Count_Type range 1 .. Count_Type'Last;
+
+   package Containers is new SPARK.Containers.Functional.Base
+     (Index_Type   => Positive_Count_Type,
+      Element_Type => Element_Type);
+
+   type Sequence is record
+      Content : Containers.Container;
+   end record;
 
    function Iter_First (Container : Sequence) return Big_Integer is (1);
 
@@ -498,12 +515,11 @@ private
      (Container : Sequence;
       Position  : Big_Integer) return Big_Integer
    is
-     (raise Program_Error);
+     (Position + 1);
 
    function Iter_Has_Element
      (Container : Sequence;
       Position  : Big_Integer) return Boolean
    is
-     (raise Program_Error);
-
+     (In_Range (Position, 1, Length (Container)));
 end SPARK.Containers.Functional.Infinite_Sequences;

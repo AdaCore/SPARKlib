@@ -4,16 +4,9 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
---  This unit is provided as a replacement for the unit
---  SPARK.Containers.Functional.Vectors when only proof with SPARK is
---  intended. It cannot be used for execution, as all subprograms are marked
---  imported with no definition.
-
---  Contrary to SPARK.Containers.Functional.Vectors, this unit does not
---  depend on System or Ada.Finalization, which makes it more convenient for
---  use in run-time units.
-
 pragma Ada_2022;
+
+private with SPARK.Containers.Functional.Base;
 
 with SPARK.Big_Integers; use SPARK.Big_Integers;
 with SPARK.Containers.Parameter_Checks;
@@ -51,8 +44,8 @@ generic
      with Ghost;
 
 package SPARK.Containers.Functional.Vectors with
-  SPARK_Mode,
   Ghost,
+  SPARK_Mode,
   Always_Terminates
 is
 
@@ -370,12 +363,18 @@ is
      Global => null,
      Pre    => Iter_Has_Element (Container, Position);
 
-   ----------------------------------------------------
-   -- Properties used only in internal specification --
-   ----------------------------------------------------
+   -------------------------------------------------------------------------
+   -- Ghost non-executable properties used only in internal specification --
+   -------------------------------------------------------------------------
+
+   --  Logical equality on elements cannot be safely executed on most element
+   --  types. Thus, this package should only be instantiated with ghost code
+   --  disabled. This is enforced by having a special imported procedure
+   --  Check_Or_Fail that will lead to link-time errors otherwise.
 
    function Element_Logic_Equal (Left, Right : Element_Type) return Boolean
    with
+     Ghost,
      Global => null,
      Annotate => (GNATprove, Logical_Equal);
 
@@ -388,6 +387,7 @@ is
    --  is equal to Item.
 
    with
+     Ghost,
      Global => null,
      Pre    => Lst <= Last (Container),
      Post   =>
@@ -402,12 +402,13 @@ is
    --  Returns True is Left and Right are the same except at position Position
 
    with
+     Ghost,
      Global => null,
      Post   =>
        Equal_Prefix'Result =
          (Length (Left) <= Length (Right)
            and then (for all N in Index_Type'First .. Last (Left) =>
-                      Element_Logic_Equal (Get (Left, N), Get (Right, N))));
+                       Element_Logic_Equal (Get (Left, N), Get (Right, N))));
    pragma Annotate (GNATprove, Inline_For_Proof, Equal_Prefix);
 
    function Equal_Except
@@ -417,6 +418,7 @@ is
    --  Returns True is Left and Right are the same except at position Position
 
    with
+     Ghost,
      Global => null,
      Pre    => Position <= Last (Left),
      Post   =>
@@ -436,6 +438,7 @@ is
    --  Returns True is Left and Right are the same except at positions X and Y
 
    with
+     Ghost,
      Global => null,
      Pre    => X <= Last (Left) and Y <= Last (Left),
      Post   =>
@@ -456,6 +459,7 @@ is
    --  Left and Right.
 
    with
+     Ghost,
      Global => null,
      Pre    => Lst <= Last (Left) and Lst <= Last (Right),
      Post   =>
@@ -474,6 +478,7 @@ is
    --  elements as the range from Fst + Offset to Lst + Offset in Right.
 
    with
+     Ghost,
      Global => null,
      Pre    =>
        Lst <= Last (Left)
@@ -514,21 +519,30 @@ private
 
    pragma SPARK_Mode (Off);
 
-   type Sequence is null record;
+   package Containers is new SPARK.Containers.Functional.Base
+     (Index_Type   => Index_Type,
+      Element_Type => Element_Type);
+
+   type Sequence is record
+      Content : Containers.Container;
+   end record;
 
    function Iter_First (Container : Sequence) return Extended_Index is
-     (raise Program_Error);
+     (Index_Type'First);
 
    function Iter_Next
      (Container : Sequence;
       Position  : Extended_Index) return Extended_Index
    is
-     (raise Program_Error);
+     (if Position = Extended_Index'Last then
+         Extended_Index'First
+      else
+         Extended_Index'Succ (Position));
 
    function Iter_Has_Element
      (Container : Sequence;
       Position  : Extended_Index) return Boolean
    is
-     (raise Program_Error);
+     (Position in Index_Type'First .. Last (Container));
 
 end SPARK.Containers.Functional.Vectors;

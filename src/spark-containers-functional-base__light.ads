@@ -4,12 +4,19 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
+--  This unit is provided as a replacement for the unit
+--  SPARK.Containers.Functional.Base when only proof with SPARK is intended.
+--  Memory is never reclaimed which makes it unfit for execution.
+--
+--  Contrary to SPARK.Containers.Functional.Base, this unit does not depend
+--  on System or Ada.Finalization, which makes it more convenient for use in
+--  run-time units.
+
 pragma Ada_2022;
 
 --  To allow reference counting on the base container
 
 with SPARK.Containers.Types; use SPARK.Containers.Types;
-private with Ada.Finalization;
 
 private generic
    type Index_Type is (<>);
@@ -19,7 +26,10 @@ private generic
    type Element_Type (<>) is private;
    with function "=" (Left, Right : Element_Type) return Boolean is <>;
 
-package SPARK.Containers.Functional.Base with SPARK_Mode => Off is
+package SPARK.Containers.Functional.Base with
+  SPARK_Mode => Off,
+  Ghost
+is
 
    subtype Extended_Index is Index_Type'Base range
      Index_Type'Pred (Index_Type'First) .. Index_Type'Last;
@@ -124,7 +134,7 @@ private
       E_Access        : Element_Access;
    end record;
 
-   type Base_Type is new Ada.Finalization.Controlled with null record;
+   type Base_Type is tagged null record;
 
    type Refcounted_Element_Access is access Refcounted_Element;
 

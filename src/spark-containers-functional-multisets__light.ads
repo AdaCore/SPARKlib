@@ -60,7 +60,12 @@ is
    --  "For in" quantification over multisets should not be used.
    --  "For of" quantification over multisets iterates over elements.
    --  Occurrences in a multiset are counted modulo equivalence, the whole
-   --  equivalence class is included/excluded at once.
+   --  equivalence class is included/excluded at once. As equivalence classes
+   --  might be infinite, quantification over elements of a finite multiset
+   --  could be infinite. Thus, quantified expressions cannot be executed and
+   --  should only be used in disabled ghost code. This is enforced by having a
+   --  special imported procedure Check_Or_Fail that will lead to link-time
+   --  errors otherwise.
 
    ----------------------
    -- Basic Operations --
@@ -123,9 +128,9 @@ is
 
    Global => null,
    Post   =>
-       ("<="'Result =
+       "<="'Result =
          (for all Item of Left =>
-            Nb_Occurence (Left, Item) <= Nb_Occurence (Right, Item)))
+            Nb_Occurence (Left, Item) <= Nb_Occurence (Right, Item))
          and then (if "<="'Result
                    then Cardinality (Left) <= Cardinality (Right));
 
@@ -151,9 +156,9 @@ is
 
      Global => null,
      Post   =>
-       (Is_Empty'Result =
-          (for all Element of Container => False))
-         and then (Is_Empty'Result = (Cardinality (Container) = 0));
+       Is_Empty'Result =
+          (for all Element of Container => False)
+         and then Is_Empty'Result = (Cardinality (Container) = 0);
    pragma Warnings (On, "unused variable ""Element""");
 
    function Equal_Except
@@ -323,6 +328,7 @@ is
    -- Lemmas --
    ------------
 
+   pragma Warnings (Off, "actuals for this call may be in wrong order");
    procedure Lemma_Sym_Intersection
      (Left  : Multiset;
       Right : Multiset) with
@@ -346,6 +352,7 @@ is
 
      Global => null,
      Post   => Sum (Left, Right) = Sum (Right, Left);
+   pragma Warnings (On, "actuals for this call may be in wrong order");
 
    ---------------------------------------
    -- Iteration on Functional Multisets --
@@ -523,8 +530,12 @@ is
                  Nb_Occurence (Container'Old, E)));
 
 private
+pragma Style_Checks (Off);
 
+#if SPARK_BODY_MODE="Off"
    pragma SPARK_Mode (Off);
+#end if;
+pragma Style_Checks (On);
 
    package Maps is new SPARK.Containers.Functional.Maps
      (Key_Type                   => Element_Type,

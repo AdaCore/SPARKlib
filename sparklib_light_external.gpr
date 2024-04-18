@@ -27,76 +27,83 @@ project SPARKlib_Light_External is
 
    package Prove renames SPARKlib_common.Prove;
 
-   for Excluded_Source_Files use ("spark-containers-formal-hashed_maps.adb",
-                                  "spark-containers-formal-hashed_maps.ads",
-                                  "spark-containers-formal-hashed_sets.adb",
-                                  "spark-containers-formal-hashed_sets.ads",
-                                  "spark-containers-formal-holders.adb",
-                                  "spark-containers-formal-holders.ads",
-                                  "spark-containers-formal-ordered_maps.adb",
-                                  "spark-containers-formal-ordered_maps.ads",
-                                  "spark-containers-formal-ordered_sets.adb",
-                                  "spark-containers-formal-ordered_sets.ads",
-                                  "spark-containers-formal-unbounded_doubly_linked_lists.adb",
-                                  "spark-containers-formal-unbounded_doubly_linked_lists.ads",
-                                  "spark-containers-formal-unbounded_hashed_maps.adb",
-                                  "spark-containers-formal-unbounded_hashed_maps.ads",
-                                  "spark-containers-formal-unbounded_hashed_sets.adb",
-                                  "spark-containers-formal-unbounded_hashed_sets.ads",
-                                  "spark-containers-formal-unbounded_ordered_maps.adb",
-                                  "spark-containers-formal-unbounded_ordered_maps.ads",
-                                  "spark-containers-formal-unbounded_ordered_sets.adb",
-                                  "spark-containers-formal-unbounded_ordered_sets.ads",
-                                  "spark-containers-formal-unbounded_vectors.adb",
-                                  "spark-containers-formal-unbounded_vectors.ads",
-                                  "spark-containers-formal-vectors.adb",
-                                  "spark-containers-formal-vectors.ads",
-                                  "spark-containers-functional-base.adb",
-                                  "spark-containers-functional-base.ads",
-                                  "spark-containers-functional-infinite_sequences.adb",
-                                  "spark-containers-functional-maps.adb",
-                                  "spark-containers-functional-multisets.adb",
-                                  "spark-containers-functional-sets.adb",
-                                  "spark-containers-functional-vectors.adb",
-                                  "spark-big_integers.ads",
-                                  "spark-big_intervals.ads",
-                                  "spark-big_reals.ads",
-                                  "spark-containers-functional-infinite_sequences.ads",
-                                  "spark-containers-functional-maps.ads",
-                                  "spark-containers-functional-multisets.ads",
-                                  "spark-containers-functional-sets.ads",
-                                  "spark-containers-functional-vectors.ads",
-                                  "spark-containers-types.ads",
-				  "spark-containers__exec.ads");
+   Common_Default_Switches := SPARKlib_Common.Common_Default_Switches;
+
+   Common_Excluded_Source_Files :=
+     ("spark-containers-formal-hashed_maps.adb",
+      "spark-containers-formal-hashed_maps.ads",
+      "spark-containers-formal-hashed_sets.adb",
+      "spark-containers-formal-hashed_sets.ads",
+      "spark-containers-formal-holders.adb",
+      "spark-containers-formal-holders.ads",
+      "spark-containers-formal-ordered_maps.adb",
+      "spark-containers-formal-ordered_maps.ads",
+      "spark-containers-formal-ordered_sets.adb",
+      "spark-containers-formal-ordered_sets.ads",
+      "spark-containers-formal-unbounded_doubly_linked_lists.adb",
+      "spark-containers-formal-unbounded_doubly_linked_lists.ads",
+      "spark-containers-formal-unbounded_hashed_maps.adb",
+      "spark-containers-formal-unbounded_hashed_maps.ads",
+      "spark-containers-formal-unbounded_hashed_sets.adb",
+      "spark-containers-formal-unbounded_hashed_sets.ads",
+      "spark-containers-formal-unbounded_ordered_maps.adb",
+      "spark-containers-formal-unbounded_ordered_maps.ads",
+      "spark-containers-formal-unbounded_ordered_sets.adb",
+      "spark-containers-formal-unbounded_ordered_sets.ads",
+      "spark-containers-formal-unbounded_vectors.adb",
+      "spark-containers-formal-unbounded_vectors.ads",
+      "spark-containers-formal-vectors.adb",
+      "spark-containers-formal-vectors.ads",
+      "spark-containers-functional-base.ads",
+      "spark-big_integers.ads",
+      "spark-big_intervals.ads",
+      "spark-big_reals.ads",
+      "spark-containers-functional-infinite_sequences.ads",
+      "spark-containers-functional-maps.ads",
+      "spark-containers-functional-multisets.ads",
+      "spark-containers-functional-sets.ads",
+      "spark-containers-functional-vectors.ads",
+      "spark-containers-types.ads");
+
+   case SPARK_Body_Mode is
+      when "On" =>
+         for Excluded_Source_Files use Common_Excluded_Source_Files
+           & ("spark-containers.ads",
+              "spark-big_integers__light.ads");
+      when "Off" =>
+         for Excluded_Source_Files use Common_Excluded_Source_Files
+           & ("spark-containers__exec.ads",
+              "spark-big_integers__exec.ads",
+              "spark-big_integers__exec.adb");
+   end case;
 
    package Naming is
-      for Spec ("SPARK.Big_Integers") use "spark-big_integers__light.ads";
       for Spec ("SPARK.Big_Intervals") use "spark-big_intervals__light.ads";
       for Spec ("SPARK.Big_Reals") use "spark-big_reals__light.ads";
       for Body ("SPARK.Big_Reals") use "spark-big_reals__light.adb";
 
       for Spec ("SPARK.Containers.Types")
          use "spark-containers-types__light.ads";
+      for Spec ("SPARK.Containers.Functional.Base")
+         use "spark-containers-functional-base__light.ads";
       for Spec ("SPARK.Containers.Functional.Infinite_Sequences")
          use "spark-containers-functional-infinite_sequences__light.ads";
-      for Body ("SPARK.Containers.Functional.Infinite_Sequences")
-         use "spark-containers-functional-infinite_sequences__light.adb";
       for Spec ("SPARK.Containers.Functional.Maps")
          use "spark-containers-functional-maps__light.ads";
-      for Body ("SPARK.Containers.Functional.Maps")
-         use "spark-containers-functional-maps__light.adb";
       for Spec ("SPARK.Containers.Functional.Multisets")
          use "spark-containers-functional-multisets__light.ads";
-      for Body ("SPARK.Containers.Functional.Multisets")
-         use "spark-containers-functional-multisets__light.adb";
       for Spec ("SPARK.Containers.Functional.Sets")
          use "spark-containers-functional-sets__light.ads";
-      for Body ("SPARK.Containers.Functional.Sets")
-         use "spark-containers-functional-sets__light.adb";
       for Spec ("SPARK.Containers.Functional.Vectors")
          use "spark-containers-functional-vectors__light.ads";
-      for Body ("SPARK.Containers.Functional.Vectors")
-         use "spark-containers-functional-vectors__light.adb";
+      case SPARK_Body_Mode is
+         when "On" =>
+            for Spec ("SPARK.Containers") use "spark-containers__exec.ads";
+            for Spec ("SPARK.Big_Integers") use "spark-big_integers__exec.ads";
+            for Body ("SPARK.Big_Integers") use "spark-big_integers__exec.adb";
+         when "Off" =>
+            for Spec ("SPARK.Big_Integers") use "spark-big_integers__light.ads";
+      end case;
    end Naming;
 
 end SPARKlib_Light_External;
