@@ -28,3 +28,7 @@ check:
     - cd $CI_PROJECT_DIR
     - . setup.sh
     - make check
+    - python -mvenv /tmp/venv
+    - . /tmp/venv/bin/activate
+    - python -mpip install pre-commit
+    - pre-commit run -a --show-diff-on-failure
