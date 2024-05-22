@@ -7,3 +7,28 @@ repos:
         language: system
         always_run: true
         pass_filenames: false
+  - repo: git@ssh.gitlab.adacore-it.com:eng/shared/mirrors/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+    -   id: check-json
+    -   id: check-merge-conflict
+    -   id: check-symlinks
+    -   id: check-yaml
+    -   id: end-of-file-fixer
+    -   id: mixed-line-ending
+    -   id: trailing-whitespace
+  - repo: git@ssh.gitlab.adacore-it.com:eng/spark/support
+    rev: "0.1"
+    hooks:
+    -   id: check-empty-testoutopt
+    -   id: check-testsuite-markers
+  - repo: git@ssh.gitlab.adacore-it.com:it/flake8.git
+    rev: 7.0.0
+    hooks:
+    - id: flake8
+      additional_dependencies:
+        - flake8-bugbear
+  - repo: git@ssh.gitlab.adacore-it.com:it/black.git
+    rev: 24.2.0
+    hooks:
+    - id: black
