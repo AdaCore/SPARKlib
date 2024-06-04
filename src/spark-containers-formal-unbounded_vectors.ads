@@ -232,7 +232,8 @@ is
 
         Ghost,
         Global => null,
-        Post   => M.Last (Model'Result) = Last_Index (Container);
+        Post   => M.Last (Model'Result) = Last_Index (Container)
+          and then M.Length (Model'Result) <= Big (Last_Count);
 
       function Element
         (S : M.Sequence;
