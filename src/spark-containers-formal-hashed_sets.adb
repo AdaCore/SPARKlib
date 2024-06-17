@@ -74,7 +74,7 @@ is
    pragma Inline (Set_Next);
 
    function Vet (Container : Set; Position : Cursor) return Boolean
-     with Inline;
+     with Ghost, Inline;
 
    --------------------------
    -- Local Instantiations --
