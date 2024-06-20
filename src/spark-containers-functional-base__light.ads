@@ -134,13 +134,17 @@ private
       E_Access        : Element_Access;
    end record;
 
-   type Base_Type is tagged null record;
-
    type Refcounted_Element_Access is access Refcounted_Element;
 
-   type Controlled_Element_Access is new Base_Type with record
+   type Controlled_Element_Access is record
       Ref : Refcounted_Element_Access := null;
    end record;
+
+   function Create
+     (R : Refcounted_Element_Access)
+      return Controlled_Element_Access
+   is
+     (Ref => R);
 
    function Element_Init (E : Element_Type) return Controlled_Element_Access;
    --  Use to initialize a refcounted element
@@ -160,9 +164,13 @@ private
 
    type Array_Base_Access is access Array_Base;
 
-   type Array_Base_Controlled_Access is new Base_Type with record
+   type Array_Base_Controlled_Access is record
       Base : Array_Base_Access;
    end record;
+
+   function Create (B :  Array_Base_Access) return Array_Base_Controlled_Access
+   is
+     (Base => B);
 
    procedure Adjust
      (Controlled_Base : in out Array_Base_Controlled_Access);
