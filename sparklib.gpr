@@ -1,4 +1,4 @@
-library project SPARKlib extends "sparklib_external" is
+library project SPARKlib extends "sparklib_internal" is
 
    for Library_Name use "sparklib";
    for Object_Dir use "obj";
@@ -10,7 +10,7 @@ library project SPARKlib extends "sparklib_external" is
 
    for Source_Dirs use SPARKlib_Internal'Source_Dirs;
 
-   for Excluded_Source_Files use SPARKlib_External'Excluded_Source_Files;
+   for Excluded_Source_Files use SPARKlib_Internal'Excluded_Source_Files;
 
    package Compiler is
       for Default_Switches ("Ada") use
