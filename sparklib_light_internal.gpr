@@ -3,22 +3,22 @@ with "sparklib_common";
 --  This project file is intended for use with reduced runtimes without
 --  Ada.Numerics.Big_Numbers or Ada.Finalization units.
 
-project SPARKlib_Light_External is
+project SPARKlib_Light_Internal is
 
    for Externally_Built use SPARKlib_common.SPARKlib_Installed;
 
    -- This project is not supposed to be used directly. Instead, copy
-   -- sparklib.gpr in your code and provide appropriate values for the object
-   -- directory Object_Dir (so that compilation and artifacts are generated in
-   -- directories under your control) and the list of excluded source files
-   -- Excluded_Source_Files (so that you only compile and analyse files from
-   -- the library that you need).
+   -- sparklib_light.gpr.templ as sparklib_light.gpr in your code and provide
+   -- appropriate values for the object directory Object_Dir (so that compilation
+   -- and artifacts are generated in directories under your control) and the list
+   -- of excluded source files Excluded_Source_Files (so that you only compile and
+   -- analyse files from the library that you need).
 
    case SPARKlib_common.SPARKlib_Installed is
       when "True" =>
-         for Source_Dirs use (SPARKlib_Light_External'Project_Dir & "/../../include/spark");
+         for Source_Dirs use (SPARKlib_Light_Internal'Project_Dir & "/../../include/spark");
       when others =>
-         for Source_Dirs use (SPARKlib_Light_External'Project_Dir & "/src");
+         for Source_Dirs use (SPARKlib_Light_Internal'Project_Dir & "/src");
    end case;
 
    SPARK_Body_Mode := SPARKlib_common.SPARK_Body_Mode;
@@ -108,4 +108,4 @@ project SPARKlib_Light_External is
       end case;
    end Naming;
 
-end SPARKlib_Light_External;
+end SPARKlib_Light_Internal;
