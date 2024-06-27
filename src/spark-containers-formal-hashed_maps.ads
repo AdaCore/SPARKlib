@@ -8,16 +8,7 @@
 --  Ada 2012 RM. The modifications are meant to facilitate formal proofs by
 --  making it easier to express properties, and by making the specification of
 --  this unit compatible with SPARK 2014. Note that the API of this unit may be
---  subject to incompatible changes as SPARK 2014 evolves.
-
---  The modifications are:
-
---    A parameter for the container is added to every function reading the
---    contents of a container: Key, Element, Next, Query_Element, Has_Element,
---    Iterate, Equivalent_Keys. This change is motivated by the need to have
---    cursors which are valid on different containers (typically a container C
---    and its previous version C'Old) for expressing properties, which is not
---    possible if cursors encapsulate an access to the underlying container.
+--  subject to incompatible changes as SPARK evolves.
 
 --  Iteration over maps is done using the Iterable aspect, which is SPARK
 --  compatible. "For of" iteration ranges over keys instead of elements.
