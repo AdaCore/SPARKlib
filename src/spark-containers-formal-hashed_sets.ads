@@ -7,18 +7,8 @@
 --  This spec is derived from package Ada.Containers.Bounded_Hashed_Sets in the
 --  Ada 2012 RM. The modifications are meant to facilitate formal proofs by
 --  making it easier to express properties, and by making the specification of
---  this unit compatible with SPARK 2014. Note that the API of this unit may be
---  subject to incompatible changes as SPARK 2014 evolves.
-
---  The modifications are:
-
---    A parameter for the container is added to every function reading the
---    content of a container: Element, Next, Query_Element, Has_Element, Key,
---    Iterate, Equivalent_Elements. This change is motivated by the need to
---    have cursors which are valid on different containers (typically a
---    container C and its previous version C'Old) for expressing properties,
---    which is not possible if cursors encapsulate an access to the underlying
---    container.
+--  this unit compatible with SPARK. Note that the API of this unit may be
+--  subject to incompatible changes as SPARK evolves.
 
 pragma Ada_2022;
 
