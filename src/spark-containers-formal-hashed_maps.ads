@@ -91,7 +91,8 @@ is
 
    function Empty_Map (Capacity : Count_Type := 10) return Map with
      Post => Is_Empty (Empty_Map'Result)
-       and then Empty_Map'Result.Capacity = Capacity;
+       and then Empty_Map'Result.Capacity = Capacity
+       and then Empty_Map'Result.Modulus = Default_Modulus (Capacity);
 
    type Cursor is record
       Node : Count_Type;
@@ -432,7 +433,8 @@ is
      Global => null,
      Pre    => Capacity = 0 or else Capacity >= Source.Capacity,
      Post   =>
-       Model (Copy'Result) = Model (Source)
+        Copy'Result.Modulus = Source.Modulus
+         and Model (Copy'Result) = Model (Source)
          and Keys (Copy'Result) = Keys (Source)
          and Positions (Copy'Result) = Positions (Source)
          and (if Capacity = 0 then

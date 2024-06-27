@@ -91,7 +91,8 @@ is
 
    function Empty_Set (Capacity : Count_Type := 10) return Set with
      Post => Is_Empty (Empty_Set'Result)
-       and then Empty_Set'Result.Capacity = Capacity;
+       and then Empty_Set'Result.Capacity = Capacity
+       and then Empty_Set'Result.Modulus = Default_Modulus (Capacity);
 
    type Cursor is record
       Node : Count_Type;
@@ -550,21 +551,20 @@ is
      Global => null,
      Pre    => Capacity = 0 or else Capacity >= Source.Capacity,
      Post   =>
-       Model (Copy'Result) = Model (Source)
+       Copy'Result.Modulus = Source.Modulus
+         and Model (Copy'Result) = Model (Source)
          and Elements (Copy'Result) = Elements (Source)
          and Positions (Copy'Result) = Positions (Source)
          and (if Capacity = 0 then
                  Copy'Result.Capacity = Source.Capacity
               else
                  Copy'Result.Capacity = Capacity);
-   --  Constructs a new set object whose elements correspond to Source.  If the
+   --  Constructs a new set object whose elements correspond to Source. If the
    --  Capacity parameter is 0, then the capacity of the result is the same as
    --  the length of Source. If the Capacity parameter is equal or greater than
    --  the length of Source, then the capacity of the result is the specified
-   --  value. Otherwise, Copy raises Capacity_Error. If the Modulus parameter
-   --  is 0, then the modulus of the result is the value returned by a call to
-   --  Default_Modulus with the capacity parameter determined as above;
-   --  otherwise the modulus of the result is the specified value.
+   --  value. Otherwise, Copy raises Capacity_Error. The Modulus of the result
+   --  is the Modulus of Source.
 
    function Element
      (Container : Set;
@@ -1475,6 +1475,7 @@ is
 
       function Key (Container : Set; Position : Cursor) return Key_Type with
         Global => null,
+        Pre    => Has_Element (Container, Position),
         Post   => Key'Result = Key (Element (Container, Position));
       pragma Annotate (GNATprove, Inline_For_Proof, Key);
 
