@@ -1698,6 +1698,7 @@ is
 
       function Key (Container : Set; Position : Cursor) return Key_Type with
         Global => null,
+        Pre    => Has_Element (Container, Position),
         Post   => Key'Result = Key (Element (Container, Position));
       pragma Annotate (GNATprove, Inline_For_Proof, Key);
 
