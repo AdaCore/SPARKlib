@@ -8,16 +8,7 @@
 --  Ada 2012 RM. The modifications are meant to facilitate formal proofs by
 --  making it easier to express properties, and by making the specification of
 --  this unit compatible with SPARK 2014. Note that the API of this unit may be
---  subject to incompatible changes as SPARK 2014 evolves.
-
---  The modifications are:
-
---    A parameter for the container is added to every function reading the
---    contents of a container: Key, Element, Next, Query_Element, Has_Element,
---    Iterate, Equivalent_Keys. This change is motivated by the need to have
---    cursors which are valid on different containers (typically a container C
---    and its previous version C'Old) for expressing properties, which is not
---    possible if cursors encapsulate an access to the underlying container.
+--  subject to incompatible changes as SPARK evolves.
 
 --  Iteration over maps is done using the Iterable aspect, which is SPARK
 --  compatible. "For of" iteration ranges over keys instead of elements.
@@ -100,7 +91,8 @@ is
 
    function Empty_Map (Capacity : Count_Type := 10) return Map with
      Post => Is_Empty (Empty_Map'Result)
-       and then Empty_Map'Result.Capacity = Capacity;
+       and then Empty_Map'Result.Capacity = Capacity
+       and then Empty_Map'Result.Modulus = Default_Modulus (Capacity);
 
    type Cursor is record
       Node : Count_Type;
@@ -441,7 +433,8 @@ is
      Global => null,
      Pre    => Capacity = 0 or else Capacity >= Source.Capacity,
      Post   =>
-       Model (Copy'Result) = Model (Source)
+        Copy'Result.Modulus = Source.Modulus
+         and Model (Copy'Result) = Model (Source)
          and Keys (Copy'Result) = Keys (Source)
          and Positions (Copy'Result) = Positions (Source)
          and (if Capacity = 0 then

@@ -7,18 +7,8 @@
 --  This spec is derived from package Ada.Containers.Bounded_Hashed_Sets in the
 --  Ada 2012 RM. The modifications are meant to facilitate formal proofs by
 --  making it easier to express properties, and by making the specification of
---  this unit compatible with SPARK 2014. Note that the API of this unit may be
---  subject to incompatible changes as SPARK 2014 evolves.
-
---  The modifications are:
-
---    A parameter for the container is added to every function reading the
---    content of a container: Element, Next, Query_Element, Has_Element, Key,
---    Iterate, Equivalent_Elements. This change is motivated by the need to
---    have cursors which are valid on different containers (typically a
---    container C and its previous version C'Old) for expressing properties,
---    which is not possible if cursors encapsulate an access to the underlying
---    container.
+--  this unit compatible with SPARK. Note that the API of this unit may be
+--  subject to incompatible changes as SPARK evolves.
 
 pragma Ada_2022;
 
@@ -101,7 +91,8 @@ is
 
    function Empty_Set (Capacity : Count_Type := 10) return Set with
      Post => Is_Empty (Empty_Set'Result)
-       and then Empty_Set'Result.Capacity = Capacity;
+       and then Empty_Set'Result.Capacity = Capacity
+       and then Empty_Set'Result.Modulus = Default_Modulus (Capacity);
 
    type Cursor is record
       Node : Count_Type;
@@ -560,21 +551,20 @@ is
      Global => null,
      Pre    => Capacity = 0 or else Capacity >= Source.Capacity,
      Post   =>
-       Model (Copy'Result) = Model (Source)
+       Copy'Result.Modulus = Source.Modulus
+         and Model (Copy'Result) = Model (Source)
          and Elements (Copy'Result) = Elements (Source)
          and Positions (Copy'Result) = Positions (Source)
          and (if Capacity = 0 then
                  Copy'Result.Capacity = Source.Capacity
               else
                  Copy'Result.Capacity = Capacity);
-   --  Constructs a new set object whose elements correspond to Source.  If the
+   --  Constructs a new set object whose elements correspond to Source. If the
    --  Capacity parameter is 0, then the capacity of the result is the same as
    --  the length of Source. If the Capacity parameter is equal or greater than
    --  the length of Source, then the capacity of the result is the specified
-   --  value. Otherwise, Copy raises Capacity_Error. If the Modulus parameter
-   --  is 0, then the modulus of the result is the value returned by a call to
-   --  Default_Modulus with the capacity parameter determined as above;
-   --  otherwise the modulus of the result is the specified value.
+   --  value. Otherwise, Copy raises Capacity_Error. The Modulus of the result
+   --  is the Modulus of Source.
 
    function Element
      (Container : Set;
@@ -1485,6 +1475,7 @@ is
 
       function Key (Container : Set; Position : Cursor) return Key_Type with
         Global => null,
+        Pre    => Has_Element (Container, Position),
         Post   => Key'Result = Key (Element (Container, Position));
       pragma Annotate (GNATprove, Inline_For_Proof, Key);
 
