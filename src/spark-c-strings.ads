@@ -126,8 +126,9 @@ is
      Global => null;
 
    procedure Free (Item : in out chars_ptr) with
-     Post   => Item = Null_Ptr,
-     Global => null;
+     Post    => Item = Null_Ptr,
+     Global  => null,
+     Depends => (Item => null, null => Item);
    --  When deallocation is prohibited (eg: cert runtimes) this routine
    --  will raise Program_Error.
 
