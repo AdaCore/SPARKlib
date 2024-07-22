@@ -123,7 +123,7 @@ package body SPARK.Containers.Functional.Sets with SPARK_Mode => Off is
       New_Item  : Element_Type) return Boolean
    is
      (Length (Container.Content) = 1
-        and New_Item = Get (Container.Content, 1));
+        and then New_Item = Get (Container.Content, 1));
 
    ------------------
    -- Iter_Element --
