@@ -197,7 +197,9 @@ is
      Global => null,
      Post   =>
        Is_Singleton'Result =
-         (for all Item of Container => Equivalent_Elements (Item, New_Item));
+         (Contains (Container, New_Item)
+          and then (for all Item of Container =>
+                       Equivalent_Elements (Item, New_Item)));
 
    function Not_In_Both
      (Container : Set;
