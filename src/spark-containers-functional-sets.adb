@@ -73,8 +73,17 @@ package body SPARK.Containers.Functional.Sets with SPARK_Mode => Off is
       Right : Set;
       Item  : Element_Type) return Boolean
    is
-     (for all E of Left =>
-       Equivalent_Elements (E, Item) or Contains (Right, E));
+   begin
+      for I in 1 .. Length (Left.Content) loop
+         if not Equivalent_Elements (Get (Left.Content, I), Item)
+           and then Find (Right.Content, Get (Left.Content, I)) = 0
+         then
+            return False;
+         end if;
+      end loop;
+
+      return True;
+   end Included_Except;
 
    -----------------------
    -- Included_In_Union --
@@ -85,8 +94,17 @@ package body SPARK.Containers.Functional.Sets with SPARK_Mode => Off is
       Left      : Set;
       Right     : Set) return Boolean
    is
-     (for all Item of Container =>
-       Contains (Left, Item) or Contains (Right, Item));
+   begin
+      for I in 1 .. Length (Container.Content) loop
+         if Find (Left.Content, Get (Container.Content, I)) = 0
+           and then Find (Right.Content, Get (Container.Content, I)) = 0
+         then
+            return False;
+         end if;
+      end loop;
+
+      return True;
+   end Included_In_Union;
 
    ---------------------------
    -- Includes_Intersection --
@@ -97,8 +115,17 @@ package body SPARK.Containers.Functional.Sets with SPARK_Mode => Off is
       Left      : Set;
       Right     : Set) return Boolean
    is
-     (for all Item of Left =>
-       (if Contains (Right, Item) then Contains (Container, Item)));
+   begin
+      for I in 1 .. Length (Left.Content) loop
+         if Find (Right.Content, Get (Left.Content, I)) /= 0
+           and then Find (Container.Content, Get (Left.Content, I)) = 0
+         then
+            return False;
+         end if;
+      end loop;
+
+      return True;
+   end Includes_Intersection;
 
    ------------------
    -- Intersection --
@@ -201,8 +228,17 @@ package body SPARK.Containers.Functional.Sets with SPARK_Mode => Off is
       Left      : Set;
       Right     : Set) return Boolean
    is
-     (for all Item of Container =>
-       not Contains (Right, Item) or not Contains (Left, Item));
+   begin
+      for I in 1 .. Length (Container.Content) loop
+         if Find (Left.Content, Get (Container.Content, I)) /= 0
+           and then Find (Right.Content, Get (Container.Content, I)) /= 0
+         then
+            return False;
+         end if;
+      end loop;
+
+      return True;
+   end Not_In_Both;
 
    ----------------
    -- No_Overlap --
