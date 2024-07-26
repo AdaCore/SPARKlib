@@ -471,17 +471,20 @@ is
    type Private_Key is private;
 
    function Iter_First (Container : Multiset) return Private_Key with
+     Ghost,
      Global => null;
 
    function Iter_Has_Element
      (Container : Multiset;
       Key       : Private_Key) return Boolean
    with
+     Ghost,
      Global => null;
 
    function Iter_Next (Container : Multiset; Key : Private_Key)
                        return Private_Key
    with
+     Ghost,
      Global => null,
      Pre    => Iter_Has_Element (Container, Key);
 
@@ -489,6 +492,7 @@ is
      (Container : Multiset;
       Key       : Private_Key) return Element_Type
    with
+     Ghost,
      Global => null,
      Pre    => Iter_Has_Element (Container, Key);
 
