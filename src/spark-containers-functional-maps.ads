@@ -542,21 +542,25 @@ is
    type Private_Key is private;
 
    function Iter_First (Container : Map) return Private_Key with
+     Ghost,
      Global => null;
 
    function Iter_Has_Element
      (Container : Map;
       Key       : Private_Key) return Boolean
    with
+     Ghost,
      Global => null;
 
    function Iter_Next (Container : Map; Key : Private_Key) return Private_Key
    with
+     Ghost,
      Global => null,
      Pre    => Iter_Has_Element (Container, Key);
 
    function Iter_Element (Container : Map; Key : Private_Key) return Key_Type
    with
+     Ghost,
      Global => null,
      Pre    => Iter_Has_Element (Container, Key);
 
