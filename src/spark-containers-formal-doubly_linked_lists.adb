@@ -1255,7 +1255,8 @@ is
 
    begin
       if Target'Address = Source'Address then
-         return;
+         raise Program_Error with
+           "Source and Target are aliases";
       end if;
 
       if Target.Capacity < Source.Length then
