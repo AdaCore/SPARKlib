@@ -1375,7 +1375,7 @@ is
                    Fst   =>
                      Count_Type'Max
                        (P.Get (Positions (Container)'Old, Position) + 1,
-                        P.Get (Positions (Container)'Old, Before) + 1),
+                        P.Get (Positions (Container)'Old, Before)),
                    Lst   => Length (Container))
 
             --  The elements located after Before and before Position are
@@ -1384,7 +1384,7 @@ is
             and M.Range_Shifted
                   (Left   => Model (Container)'Old,
                    Right  => Model (Container),
-                   Fst    => P.Get (Positions (Container)'Old, Before) + 1,
+                   Fst    => P.Get (Positions (Container)'Old, Before),
                    Lst    => P.Get (Positions (Container)'Old, Position) - 1,
                    Offset => 1)
 

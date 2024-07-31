@@ -1557,6 +1557,10 @@ is
          pragma Assert (Vet (Target, Before), "bad cursor in Splice");
       end if;
 
+      if Source.Length = 0 then
+         return;
+      end if;
+
       pragma Assert (SN (Source.First).Prev = 0);
       pragma Assert (SN (Source.Last).Next  = 0);
 
