@@ -1573,8 +1573,8 @@ is
       end if;
 
       loop
-         Insert (Target, Before, SN (Source.Last).Element);
-         Delete_Last (Source);
+         Insert (Target, Before, SN (Source.First).Element);
+         Delete_First (Source);
          exit when Is_Empty (Source);
       end loop;
    end Splice;
