@@ -1050,7 +1050,7 @@ is
 
          and P.Keys_Included_Except
                (Left    => Positions (Container)'Old,
-                Right   => Positions (Container)'Old,
+                Right   => Positions (Container),
                 New_Key => Last (Container)'Old)
 
          --  The positions of other cursors are preserved
