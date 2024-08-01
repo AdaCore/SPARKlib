@@ -1704,16 +1704,16 @@ is
          while not Is_Empty (Source) loop
             Allocate (Target, X);
 
-            TN (X).Element := SN (Source.Last).Element;
+            TN (X).Element := SN (Source.First).Element;
 
             --  Insert the new node in Target
 
             Insert_Internal (Target, Before.Node, X);
 
-            --  Free the last node of Source
+            --  Free the first node of Source
 
-            SN (Source.Last).Element := null;
-            Delete_Last (Source);
+            SN (Source.First).Element := null;
+            Delete_First (Source);
          end loop;
       end;
 
