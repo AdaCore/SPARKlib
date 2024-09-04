@@ -566,8 +566,7 @@ is
                  E_Right  => Elements (Container),
                  P_Left   => Positions (Container)'Old,
                  P_Right  => Positions (Container),
-                 Position => Position)
-          and Positions (Container) = Positions (Container)'Old;
+                 Position => Position);
 
    function Constant_Reference
      (Container : Set;
