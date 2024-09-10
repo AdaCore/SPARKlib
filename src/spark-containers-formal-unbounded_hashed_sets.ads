@@ -575,8 +575,10 @@ is
      Global => null,
      Pre    => Has_Element (Container, Position),
      Post   =>
-       Constant_Reference'Result.all =
-         E.Get (Elements (Container), P.Get (Positions (Container), Position));
+       Element_Logic_Equal
+         (Constant_Reference'Result.all,
+          E.Get (Elements (Container),
+                 P.Get (Positions (Container), Position)));
 
    procedure Move (Target : in out Set; Source : in out Set) with
      Global => null,
@@ -1444,7 +1446,8 @@ is
 
              --  Key now maps to New_Item
 
-             and Element (Container, Key) = New_Item
+             and Element_Logic_Equal
+                   (Element (Container, Key), E.Copy_Element (New_Item))
 
              --  New_Item is contained in Container
 
