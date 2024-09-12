@@ -257,24 +257,24 @@ test.adb:266:39: info: precondition proved (Z3: 1 VC)
 test.adb:270:07: info: initialization of "X" proved
 test.adb:271:07: info: initialization of "P21" proved
 test.adb:271:12: info: initialization of "P2" proved
-test.adb:273:07: info: precondition proved (CVC5: 2 VC)
+test.adb:273:07: info: precondition proved (CVC5: 1 VC)
 test.adb:274:07: info: precondition proved (CVC5: 1 VC)
 test.adb:275:07: info: precondition proved (CVC5: 1 VC)
-test.adb:277:07: info: precondition proved (CVC5: 2 VC)
-test.adb:278:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
-test.adb:279:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
-test.adb:280:07: info: precondition proved (CVC5: 1 VC)
+test.adb:277:07: info: precondition proved (CVC5: 1 VC)
+test.adb:278:07: info: precondition proved (CVC5: 1 VC)
+test.adb:279:07: info: precondition proved (CVC5: 1 VC)
+test.adb:280:07: medium: precondition might fail
 test.adb:281:07: info: precondition proved (Z3: 1 VC)
-test.adb:283:07: medium: precondition might fail, cannot prove not Contains (Container, New_Item)
-test.adb:284:07: info: precondition proved (CVC5: 1 VC)
+test.adb:283:07: info: precondition proved (CVC5: 1 VC)
+test.adb:284:07: medium: precondition might fail
 test.adb:285:07: info: precondition proved (CVC5: 1 VC)
 test.adb:286:07: info: precondition proved (Z3: 1 VC)
-test.adb:290:07: info: precondition proved (Z3: 1 VC)
-test.adb:290:15: info: precondition proved (CVC5: 1 VC)
+test.adb:290:07: medium: precondition might fail
+test.adb:290:15: info: precondition proved (Z3: 1 VC)
 test.adb:290:39: info: precondition proved (Z3: 1 VC)
-test.adb:292:07: info: precondition proved (CVC5: 1 VC)
+test.adb:292:07: info: precondition proved (Z3: 1 VC)
 test.adb:293:07: info: precondition proved (Z3: 1 VC)
-test.adb:294:07: info: precondition proved (Z3: 1 VC)
+test.adb:294:07: medium: precondition might fail
 test.adb:295:07: medium: precondition might fail
 test.adb:295:15: info: precondition proved (Z3: 1 VC)
 test.adb:295:42: info: precondition proved (Z3: 1 VC)
@@ -650,13 +650,13 @@ test.adb:822:07: info: precondition proved (Z3: 1 VC)
 test.adb:823:07: info: precondition proved (CVC5: 1 VC)
 test.adb:824:07: medium: precondition might fail
 test.adb:824:15: info: precondition proved (Z3: 1 VC)
+test.adb:828:07: info: initialization of "X" proved
 inst.ads:10:04: warning: in instantiation at spark-containers-functional-maps.ads:134 [-gnatw.a]
 inst.ads:10:04: warning: in instantiation at spark-containers-formal-unbounded_hashed_sets.ads:278 [-gnatw.a]
 inst.ads:10:04: warning: check will fail at run time [-gnatw.a]
 inst.ads:10:04: warning: in instantiation at spark-containers-functional-maps.ads:153 [-gnatw.a]
 inst.ads:10:04: warning: in instantiation at spark-containers-formal-unbounded_hashed_sets.ads:278 [-gnatw.a]
 inst.ads:10:04: warning: check will fail at run time [-gnatw.a]
-test.adb:828:07: info: initialization of "X" proved
 test.adb:828:10: info: initialization of "Y" proved
 test.adb:830:07: info: precondition proved (CVC5: 1 VC)
 test.adb:832:07: info: analyzing call to "Create_Non_Empty_Set" in context
