@@ -302,24 +302,24 @@ test.adb:274:22: info: range check proved (CVC5: 2 VC)
 test.adb:274:28: info: range check proved (CVC5: 2 VC)
 test.adb:275:07: info: initialization of "P21" proved
 test.adb:275:12: info: initialization of "P2" proved
-test.adb:277:07: info: precondition proved (CVC5: 2 VC)
+test.adb:277:07: info: precondition proved (CVC5: 1 VC)
 test.adb:278:07: info: precondition proved (CVC5: 1 VC)
 test.adb:279:07: info: precondition proved (CVC5: 1 VC)
-test.adb:281:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
-test.adb:282:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
-test.adb:283:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
-test.adb:284:07: info: precondition proved (CVC5: 1 VC)
+test.adb:281:07: info: precondition proved (CVC5: 1 VC)
+test.adb:282:07: info: precondition proved (CVC5: 1 VC)
+test.adb:283:07: info: precondition proved (CVC5: 1 VC)
+test.adb:284:07: medium: precondition might fail
 test.adb:285:07: info: precondition proved (Z3: 1 VC)
-test.adb:287:07: medium: precondition might fail, cannot prove not Contains (Container, New_Item)
-test.adb:288:07: info: precondition proved (CVC5: 1 VC)
+test.adb:287:07: info: precondition proved (CVC5: 1 VC)
+test.adb:288:07: medium: precondition might fail
 test.adb:289:07: info: precondition proved (CVC5: 1 VC)
 test.adb:290:07: info: precondition proved (Z3: 1 VC)
-test.adb:294:07: info: precondition proved (Z3: 1 VC)
+test.adb:294:07: medium: precondition might fail
 test.adb:294:15: info: precondition proved (Z3: 1 VC)
 test.adb:294:39: info: precondition proved (Z3: 1 VC)
 test.adb:296:07: info: precondition proved (Z3: 1 VC)
 test.adb:297:07: info: precondition proved (Z3: 1 VC)
-test.adb:298:07: info: precondition proved (Z3: 1 VC)
+test.adb:298:07: medium: precondition might fail
 test.adb:299:07: medium: precondition might fail
 test.adb:299:15: info: precondition proved (Z3: 1 VC)
 test.adb:299:42: info: precondition proved (Z3: 1 VC)
@@ -797,6 +797,7 @@ test.adb:882:07: medium: precondition might fail
 test.adb:882:34: info: precondition proved (CVC5: 1 VC)
 test.adb:883:07: info: precondition proved (Z3: 1 VC)
 test.adb:887:18: info: elements shall be distinct and shall fit in "Count_Type" for set aggregates at spark-containers-formal-hashed_sets.ads:87, in instantiation at inst.ads:10
+test.adb:887:18: info: precondition proved (CVC5: 11 VC)
 test.adb:96:07: warning: variable "X" is read but never assigned [-gnatwv]
 inst.ads:10:04: warning: in instantiation at spark-containers-functional-maps.ads:134 [-gnatw.a]
 inst.ads:10:04: warning: in instantiation at spark-containers-formal-hashed_sets.ads:291 [-gnatw.a]
@@ -804,7 +805,6 @@ inst.ads:10:04: warning: check will fail at run time [-gnatw.a]
 inst.ads:10:04: warning: in instantiation at spark-containers-functional-maps.ads:153 [-gnatw.a]
 inst.ads:10:04: warning: in instantiation at spark-containers-formal-hashed_sets.ads:291 [-gnatw.a]
 inst.ads:10:04: warning: check will fail at run time [-gnatw.a]
-test.adb:887:18: info: precondition proved (CVC5: 11 VC)
 test.adb:889:07: info: precondition proved (CVC5: 1 VC)
 test.adb:890:07: info: precondition proved (CVC5: 1 VC)
 test.adb:894:04: info: precondition proved (Trivial: 1 VC)

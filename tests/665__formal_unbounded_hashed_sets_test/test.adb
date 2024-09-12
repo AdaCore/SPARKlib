@@ -270,17 +270,17 @@ procedure Test with SPARK_Mode is
       X       : Set;
       P21, P2 : Cursor;
    begin
-      Insert (X, 1);
+      Include (X, 1);
       Assert (Length (X) = 1, "Include in empty set, length is incremented");
       Assert (Contains (X, 1), "Include in empty set, New_Item is in X");
 
-      Insert (X, 101);
-      Insert (X, 201);
-      Insert (X, 301);
+      Include (X, 101);
+      Include (X, 201);
+      Include (X, 301);
       Assert (Length (X) = 4, "Include in existing bucket, length is incremented");
       Assert (Contains (X, 101) and Contains (X, 201) and Contains (X, 301), "Include in existing bucket, New_Item is in X");
 
-      Insert (X, 2);
+      Include (X, 2);
       Assert (Length (X) = 5, "Include in new bucket, length is incremented");
       Assert (Contains (X, 2), "Include in new bucket, New_Item is in X");
       Assert (Contains (X, 1), "Include in new bucket, existing elements are preserved");
