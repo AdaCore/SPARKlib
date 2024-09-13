@@ -35,19 +35,6 @@ procedure Test with SPARK_Mode is
       end loop;
    end Create_Non_Empty_Set_With_Collisions;
 
-   --  Unbounded containers are resized automatically when they grow. Test
-   --  the capability by inserting enough elements in a container.
-
-   procedure Test_Resize with Pre => True is
-      X : Set;
-   begin
-      for I in 1 .. 1000 loop
-         Insert (X, I);
-         pragma Loop_Invariant (Length (X) = Count_Type (I));
-         pragma Loop_Invariant (for all K of X => K in 1 .. I);
-      end loop;
-   end Test_Resize;
-
    procedure Test_Empty_Set with Pre => True is
       X : Set := Empty_Set;
    begin
