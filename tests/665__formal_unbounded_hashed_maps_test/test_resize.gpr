@@ -1,0 +1,16 @@
+--  Contracts are too slow to execute Insert too many times for now.
+--  This could be improved by using ghost fields.
+
+with "sparklib";
+project Test_Resize is
+
+   for Main use ("test_resize.adb");
+
+   for Object_Dir use "r_obj";
+
+   package Compiler is
+      for Default_Switches ("Ada") use
+         ("-gnat2022");
+   end Compiler;
+
+end Test_Resize;
