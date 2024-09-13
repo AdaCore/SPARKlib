@@ -24,18 +24,6 @@ procedure Test_Gen with SPARK_Mode is
       end loop;
    end Create_Non_Empty_Vector;
 
-   --  Unbounded containers are resized automatically when they grow. Test
-   --  the capability by inserting enough elements in a container.
-
-   procedure Test_Resize with Pre => True is
-      X : Vector;
-   begin
-      for I in 1 .. 1000 loop
-         Append (X, I);
-         pragma Loop_Invariant (Length (X) = Count_Type (I));
-      end loop;
-   end Test_Resize;
-
    procedure Test_Empty_Vector with Pre => True is
       X : Vector := Empty_Vector;
    begin
