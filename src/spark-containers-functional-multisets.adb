@@ -521,7 +521,8 @@ is
    ---------------
 
    function Invariant (Container : Map; Card : Big_Natural) return Boolean is
-      (Card = Cardinality_Rec (Container));
+      (if Length (Container) = 0 then Card = 0
+       else Card = Cardinality_Rec (Container));
 
    --------------
    -- Is_Empty --
