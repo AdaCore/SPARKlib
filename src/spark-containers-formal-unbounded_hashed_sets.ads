@@ -13,7 +13,7 @@ with SPARK.Containers.Functional.Vectors;
 with SPARK.Containers.Parameter_Checks;
 with SPARK.Containers.Types; use SPARK.Containers.Types;
 
-private with Ada.Containers.Hash_Tables;
+private with SPARK.Containers.Formal.Hash_Tables;
 private with Ada.Finalization;
 private with SPARK.Containers.Formal.Holders;
 
@@ -1618,7 +1618,7 @@ private
       end record;
 
    package HT_Types is new
-     Ada.Containers.Hash_Tables.Generic_Formal_Hash_Table_Types (Node_Type);
+     SPARK.Containers.Formal.Hash_Tables.Generic_Hash_Table_Types (Node_Type);
 
    type HT_Access is access all HT_Types.Hash_Table_Type;
 
