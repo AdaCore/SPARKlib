@@ -4,9 +4,10 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
-with Ada.Containers.Hash_Tables.Generic_Formal_Operations;
-with Ada.Containers.Hash_Tables.Generic_Formal_Keys;
-with Ada.Containers.Prime_Numbers; use Ada.Containers.Prime_Numbers;
+with SPARK.Containers.Formal.Hash_Tables.Generic_Operations;
+with SPARK.Containers.Formal.Hash_Tables.Generic_Keys;
+with SPARK.Containers.Formal.Hash_Tables.Prime_Numbers;
+use SPARK.Containers.Formal.Hash_Tables.Prime_Numbers;
 with System; use type System.Address;
 
 package body SPARK.Containers.Formal.Hashed_Maps with
@@ -54,15 +55,13 @@ is
    -- Local Instantiations --
    --------------------------
 
-   package HT_Ops is
-     new Hash_Tables.Generic_Formal_Operations
+   package HT_Ops is new Hash_Tables.Generic_Operations
        (HT_Types  => HT_Types,
         Hash_Node => Hash_Node,
         Next      => Next,
         Set_Next  => Set_Next);
 
-   package Key_Ops is
-     new Hash_Tables.Generic_Formal_Keys
+   package Key_Ops is new Hash_Tables.Generic_Keys
        (HT_Types        => HT_Types,
         Next            => Next,
         Set_Next        => Set_Next,
