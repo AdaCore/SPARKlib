@@ -19,7 +19,7 @@ with SPARK.Containers.Functional.Vectors;
 with SPARK.Containers.Parameter_Checks;
 with SPARK.Containers.Types; use SPARK.Containers.Types;
 
-private with Ada.Containers.Hash_Tables;
+private with SPARK.Containers.Formal.Hash_Tables;
 
 generic
    type Element_Type is private;
@@ -1663,7 +1663,8 @@ private
       end record;
 
    package HT_Types is new
-     Ada.Containers.Hash_Tables.Generic_Formal_Hash_Table_Types (Node_Type);
+     SPARK.Containers.Formal.Hash_Tables.Generic_Hash_Table_Types
+       (Node_Type);
 
    type Set (Capacity : Count_Type; Modulus : Pos_Hash_Type) is record
      Content : HT_Types.Hash_Table_Type (Capacity, Modulus);
