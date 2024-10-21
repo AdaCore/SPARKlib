@@ -368,7 +368,7 @@ is
                 Right    => Model (At_End (Container).all),
                 Position => Index);
 
-   procedure Insert
+   procedure Insert_Vector
      (Container : in out Vector;
       Before    : Extended_Index;
       New_Item  : Vector)
@@ -484,7 +484,7 @@ is
                 Lst    => Last_Index (Container)'Old,
                 Offset => Big (Count));
 
-   procedure Prepend (Container : in out Vector; New_Item : Vector) with
+   procedure Prepend_Vector (Container : in out Vector; New_Item : Vector) with
      Global => null,
      Pre    => Length (Container) <= Last_Count - Length (New_Item),
      Post   =>
@@ -555,7 +555,7 @@ is
                 Lst    => Last_Index (Container)'Old,
                 Offset => Big (Count));
 
-   procedure Append (Container : in out Vector; New_Item : Vector) with
+   procedure Append_Vector (Container : in out Vector; New_Item : Vector) with
      Global => null,
      Pre    => Length (Container) <= Last_Count - Length (New_Item),
      Post   =>
