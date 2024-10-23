@@ -200,7 +200,7 @@ procedure Test_Gen with SPARK_Mode is
    end Test_Reference;
 
    --  Insert vector
-   procedure Test_Insert_1 with Pre => True is
+   procedure Test_Insert_Vector with Pre => True is
       procedure Test_Insert_In_The_Middle with Pre => True is
          X, Y : Vector (1000);
       begin
@@ -209,11 +209,11 @@ procedure Test_Gen with SPARK_Mode is
          Append (Y, 7);
          Append (Y, 8);
 
-         Insert (X, 3, Y);
-         Assert (Length (X) = 8, "Insert vector, length is incremented");
-         Assert (Element (X, 3) = 6 and Element (X, 4) = 7 and Element (X, 5) = 8, "Insert vector, a new vector has been inserted before Before");
-         Assert (Element (X, 2) = 2, "Insert vector, previous elements are preserved");
-         Assert (Element (X, 7) = 4, "Insert vector, following elements are shifted");
+         Insert_Vector (X, 3, Y);
+         Assert (Length (X) = 8, "Insert_Vector, length is incremented");
+         Assert (Element (X, 3) = 6 and Element (X, 4) = 7 and Element (X, 5) = 8, "Insert_Vector, a new vector has been inserted before Before");
+         Assert (Element (X, 2) = 2, "Insert_Vector, previous elements are preserved");
+         Assert (Element (X, 7) = 4, "Insert_Vector, following elements are shifted");
       end Test_Insert_In_The_Middle;
 
       procedure Test_Insert_At_The_End with Pre => True is
@@ -224,18 +224,18 @@ procedure Test_Gen with SPARK_Mode is
          Append (Y, 7);
          Append (Y, 8);
 
-         Insert (X, 6, Y);
-         Assert (Length (X) = 8, "Insert vector at the end, length is incremented");
-         Assert (Element (X, 6) = 6 and Element (X, 7) = 7 and Element (X, 8) = 8, "Insert vector at the end, new vector is inserted at the end");
-         Assert (Element (X, 2) = 2, "Insert vector at the end, other elements are preserved");
+         Insert_Vector (X, 6, Y);
+         Assert (Length (X) = 8, "Insert_Vector at the end, length is incremented");
+         Assert (Element (X, 6) = 6 and Element (X, 7) = 7 and Element (X, 8) = 8, "Insert_Vector at the end, new vector is inserted at the end");
+         Assert (Element (X, 2) = 2, "Insert_Vector at the end, other elements are preserved");
       end Test_Insert_At_The_End;
    begin
       Test_Insert_In_The_Middle;
       Test_Insert_At_The_End;
-   end Test_Insert_1;
+   end Test_Insert_Vector;
 
    --  Insert element with no Count parameter
-   procedure Test_Insert_2 with Pre => True is
+   procedure Test_Insert_1 with Pre => True is
       procedure Test_Insert_In_The_Middle with Pre => True is
          X  : Vector (1000);
       begin
@@ -261,10 +261,10 @@ procedure Test_Gen with SPARK_Mode is
    begin
       Test_Insert_In_The_Middle;
       Test_Insert_At_The_End;
-   end Test_Insert_2;
+   end Test_Insert_1;
 
    --  Insert elements with a Count parameter
-   procedure Test_Insert_3 with Pre => True is
+   procedure Test_Insert_2 with Pre => True is
       procedure Test_Insert_No_Element with Pre => True is
          X : Vector (1000);
       begin
@@ -304,10 +304,10 @@ procedure Test_Gen with SPARK_Mode is
       Test_Insert_No_Element;
       Test_Insert_In_The_Middle;
       Test_Insert_At_The_End;
-   end Test_Insert_3;
+   end Test_Insert_2;
 
    --  Prepend vector
-   procedure Test_Prepend_1 with Pre => True is
+   procedure Test_Prepend_Vector with Pre => True is
       X, Y : Vector (1000);
    begin
       Create_Non_Empty_Vector (X);
@@ -315,14 +315,14 @@ procedure Test_Gen with SPARK_Mode is
       Append (Y, 7);
       Append (Y, 8);
 
-      Prepend (X, Y);
-      Assert (Length (X) = 8, "Prepend vector, length is incremented");
-      Assert (Element (X, 1) = 6 and Element (X, 2) = 7 and Element (X, 3) = 8, "Prepend vector, New_Item has been inserted at the beginning");
-      Assert (Element (X, 5) = 2, "Prepend vector, other elements are shifted");
-   end Test_Prepend_1;
+      Prepend_Vector (X, Y);
+      Assert (Length (X) = 8, "Prepend_Vector, length is incremented");
+      Assert (Element (X, 1) = 6 and Element (X, 2) = 7 and Element (X, 3) = 8, "Prepend_Vector, New_Item has been inserted at the beginning");
+      Assert (Element (X, 5) = 2, "Prepend_Vector, other elements are shifted");
+   end Test_Prepend_Vector;
 
    --  Prepend element with no Count parameter
-   procedure Test_Prepend_2 with Pre => True is
+   procedure Test_Prepend_1 with Pre => True is
       X : Vector (1000);
    begin
       Create_Non_Empty_Vector (X);
@@ -331,10 +331,10 @@ procedure Test_Gen with SPARK_Mode is
       Assert (Length (X) = 6, "Prepend 1 element, length is incremented");
       Assert (Element (X, 1) = 7, "Prepend 1 element, New_Item has been inserted at the beginning");
       Assert (Element (X, 3) = 2, "Prepend 1 element, other elements are shifted");
-   end Test_Prepend_2;
+   end Test_Prepend_1;
 
    --  Prepend element with a Count parameter
-   procedure Test_Prepend_3 with Pre => True is
+   procedure Test_Prepend_2 with Pre => True is
       X : Vector (1000);
    begin
       Create_Non_Empty_Vector (X);
@@ -347,10 +347,10 @@ procedure Test_Gen with SPARK_Mode is
       Assert (Element (X, 1) = 7 and Element (X, 2) = 7 and Element (X, 3) = 7,
               "Prepend more than 1 elements, Count times New_Item have been inserted at the beginning");
       Assert (Element (X, 5) = 2, "Prepend more than 1 elements, other elements are shifted");
-   end Test_Prepend_3;
+   end Test_Prepend_2;
 
    --  Append vector
-   procedure Test_Append_1 with Pre => True is
+   procedure Test_Append_Vector with Pre => True is
       X, Y : Vector (1000);
    begin
       Create_Non_Empty_Vector (X);
@@ -358,14 +358,14 @@ procedure Test_Gen with SPARK_Mode is
       Append (Y, 7);
       Append (Y, 8);
 
-      Append (X, Y);
-      Assert (Length (X) = 8, "Append vector, length is incremented");
-      Assert (Element (X, 6) = 6 and Element (X, 7) = 7 and Element (X, 8) = 8, "Append vector, New_Item has been inserted at the end");
-      Assert (Element (X, 2) = 2, "Append vector, other elements are preserved");
-   end Test_Append_1;
+      Append_Vector (X, Y);
+      Assert (Length (X) = 8, "Append_Vector, length is incremented");
+      Assert (Element (X, 6) = 6 and Element (X, 7) = 7 and Element (X, 8) = 8, "Append_Vector, New_Item has been inserted at the end");
+      Assert (Element (X, 2) = 2, "Append_Vector, other elements are preserved");
+   end Test_Append_Vector;
 
    --  Append with no Count parameter
-   procedure Test_Append_2 with Pre => True is
+   procedure Test_Append_1 with Pre => True is
       X : Vector (1000);
    begin
       Create_Non_Empty_Vector (X);
@@ -374,10 +374,10 @@ procedure Test_Gen with SPARK_Mode is
       Assert (Length (X) = 6, "Append 1 element, length is incremented");
       Assert (Element (X, 6) = 8, "Append 1 element, New_Item has been inserted at the end");
       Assert (Element (X, 2) = 2, "Append 1 element, other elements are preserved");
-   end Test_Append_2;
+   end Test_Append_1;
 
    --  Append with a Count parameter
-   procedure Test_Append_3 with Pre => True is
+   procedure Test_Append_2 with Pre => True is
       X : Vector (1000);
    begin
       Create_Non_Empty_Vector (X);
@@ -389,7 +389,7 @@ procedure Test_Gen with SPARK_Mode is
       Assert (Length (X) = 8, "Append more than 1 elements, length is incremented");
       Assert (Element (X, 6) = 8 and Element (X, 7) = 8 and Element (X, 8) = 8, "Append more than 1 elements, Count times New_Item have been inserted at the end");
       Assert (Element (X, 2) = 2, "Append more than 1 element, other elements are preserved");
-   end Test_Append_3;
+   end Test_Append_2;
 
    --  Delete with no Count parameter
 
@@ -713,15 +713,15 @@ begin
    Test_Replace_Element;
    Test_Constant_Reference;
    Test_Reference;
+   Test_Insert_Vector;
    Test_Insert_1;
    Test_Insert_2;
-   Test_Insert_3;
+   Test_Prepend_Vector;
    Test_Prepend_1;
    Test_Prepend_2;
-   Test_Prepend_3;
+   Test_Append_Vector;
    Test_Append_1;
    Test_Append_2;
-   Test_Append_3;
    Test_Delete_1;
    Test_Delete_2;
    Test_Delete_First_1;

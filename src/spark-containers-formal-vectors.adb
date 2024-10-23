@@ -55,19 +55,6 @@ is
    -- Append --
    ------------
 
-   procedure Append (Container : in out Vector; New_Item : Vector) is
-   begin
-      if Is_Empty (New_Item) then
-         return;
-      end if;
-
-      if Container.Last >= Index_Type'Last then
-         raise Constraint_Error with "vector is already at its maximum length";
-      end if;
-
-      Insert (Container, Container.Last + 1, New_Item);
-   end Append;
-
    procedure Append (Container : in out Vector; New_Item : Element_Type) is
    begin
       Append (Container, New_Item, 1);
@@ -90,6 +77,23 @@ is
       Insert (Container, Container.Last + 1, New_Item, Count);
    end Append;
 
+   -------------------
+   -- Append_Vector --
+   -------------------
+
+   procedure Append_Vector (Container : in out Vector; New_Item : Vector) is
+   begin
+      if Is_Empty (New_Item) then
+         return;
+      end if;
+
+      if Container.Last >= Index_Type'Last then
+         raise Constraint_Error with "vector is already at its maximum length";
+      end if;
+
+      Insert_Vector (Container, Container.Last + 1, New_Item);
+   end Append_Vector;
+
    ------------
    -- Assign --
    ------------
@@ -107,7 +111,7 @@ is
       end if;
 
       Clear (Target);
-      Append (Target, Source);
+      Append_Vector (Target, Source);
    end Assign;
 
    --------------
@@ -791,38 +795,6 @@ is
       Container.Elements (J .. J - 1 + Count) := [others => New_Item];
    end Insert;
 
-   procedure Insert
-     (Container : in out Vector;
-      Before    : Extended_Index;
-      New_Item  : Vector)
-   is
-      N : constant Count_Type := Length (New_Item);
-      B : Count_Type;  -- index Before converted to Count_Type
-
-   begin
-      if Container'Address = New_Item'Address then
-         raise Program_Error with
-           "Container and New_Item denote same container";
-      end if;
-
-      --  Use Insert_Space to create the "hole" (the destination slice) into
-      --  which we copy the source items.
-
-      Insert_Space (Container, Before, Count => N);
-
-      if N = 0 then
-
-         --  There's nothing else to do here (vetting of parameters was
-         --  performed already in Insert_Space), so we simply return.
-
-         return;
-      end if;
-
-      B := To_Array_Index (Before);
-
-      Container.Elements (B .. B + N - 1) := New_Item.Elements (1 .. N);
-   end Insert;
-
    ------------------
    -- Insert_Space --
    ------------------
@@ -1026,6 +998,42 @@ is
       end if;
    end Insert_Space;
 
+   -------------------
+   -- Insert_Vector --
+   -------------------
+
+   procedure Insert_Vector
+     (Container : in out Vector;
+      Before    : Extended_Index;
+      New_Item  : Vector)
+   is
+      N : constant Count_Type := Length (New_Item);
+      B : Count_Type;  -- index Before converted to Count_Type
+
+   begin
+      if Container'Address = New_Item'Address then
+         raise Program_Error with
+           "Container and New_Item denote same container";
+      end if;
+
+      --  Use Insert_Space to create the "hole" (the destination slice) into
+      --  which we copy the source items.
+
+      Insert_Space (Container, Before, Count => N);
+
+      if N = 0 then
+
+         --  There's nothing else to do here (vetting of parameters was
+         --  performed already in Insert_Space), so we simply return.
+
+         return;
+      end if;
+
+      B := To_Array_Index (Before);
+
+      Container.Elements (B .. B + N - 1) := New_Item.Elements (1 .. N);
+   end Insert_Vector;
+
    --------------
    -- Is_Empty --
    --------------
@@ -1096,18 +1104,13 @@ is
       end if;
 
       Clear (Target);
-      Append (Target, Source);
+      Append_Vector (Target, Source);
       Clear (Source);
    end Move;
 
-   ------------
+   -------------
    -- Prepend --
-   ------------
-
-   procedure Prepend (Container : in out Vector; New_Item : Vector) is
-   begin
-      Insert (Container, Index_Type'First, New_Item);
-   end Prepend;
+   -------------
 
    procedure Prepend (Container : in out Vector; New_Item : Element_Type) is
    begin
@@ -1122,6 +1125,15 @@ is
    begin
       Insert (Container, Index_Type'First, New_Item, Count);
    end Prepend;
+
+   --------------------
+   -- Prepend_Vector --
+   --------------------
+
+   procedure Prepend_Vector (Container : in out Vector; New_Item : Vector) is
+   begin
+      Insert_Vector (Container, Index_Type'First, New_Item);
+   end Prepend_Vector;
 
    ---------------
    -- Reference --
