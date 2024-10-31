@@ -66,16 +66,15 @@ project SPARKlib_Light_Internal is
    case SPARK_Body_Mode is
       when "On" =>
          for Excluded_Source_Files use Common_Excluded_Source_Files
-           & ("spark-containers.ads",
-              "spark-big_integers__light.ads");
+           & ("spark.ads");
       when "Off" =>
          for Excluded_Source_Files use Common_Excluded_Source_Files
-           & ("spark-containers__exec.ads",
-              "spark-big_integers__exec.ads",
-              "spark-big_integers__exec.adb");
+           & ("spark__exec.ads");
    end case;
 
    package Naming is
+      for Spec ("SPARK.Big_Integers") use "spark-big_integers__light.ads";
+      for Body ("SPARK.Big_Integers") use "spark-big_integers__light.adb";
       for Spec ("SPARK.Big_Intervals") use "spark-big_intervals__light.ads";
       for Spec ("SPARK.Big_Reals") use "spark-big_reals__light.ads";
       for Body ("SPARK.Big_Reals") use "spark-big_reals__light.adb";
@@ -96,11 +95,8 @@ project SPARKlib_Light_Internal is
          use "spark-containers-functional-vectors__light.ads";
       case SPARK_Body_Mode is
          when "On" =>
-            for Spec ("SPARK.Containers") use "spark-containers__exec.ads";
-            for Spec ("SPARK.Big_Integers") use "spark-big_integers__exec.ads";
-            for Body ("SPARK.Big_Integers") use "spark-big_integers__exec.adb";
-         when "Off" =>
-            for Spec ("SPARK.Big_Integers") use "spark-big_integers__light.ads";
+            for Spec ("SPARK") use "spark__exec.ads";
+         when "Off" => null;
       end case;
    end Naming;
 
