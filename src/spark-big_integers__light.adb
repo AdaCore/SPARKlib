@@ -12,7 +12,9 @@ is
    -- Signed_Conversions --
    ------------------------
 
-   package body Signed_Conversions is
+   package body Signed_Conversions with
+     SPARK_Mode => Off
+   is
 
       ----------------------
       -- From_Big_Integer --
@@ -40,7 +42,9 @@ is
    -- Unsigned_Conversions --
    --------------------------
 
-   package body Unsigned_Conversions is
+   package body Unsigned_Conversions with
+     SPARK_Mode => Off
+   is
 
       ----------------------
       -- From_Big_Integer --
