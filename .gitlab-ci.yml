@@ -1,19 +1,13 @@
+include:
+  - component: $CI_SERVER_FQDN/eng/gitlab-templates/check-issue@~latest
+    inputs:
+      stage: check
 stages:
   - check
 
-issue_present:
-  services:
-     - image:e3
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-  stage: check
-  needs: [] # Execute regardless of the other stages
-  script:
-    - require_issue
-
 check:
   services:
-     - image:e3
+     - image:pe-base
   rules:
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   stage: check
