@@ -288,12 +288,6 @@ test.adb:424:07: medium: precondition might fail
 test.adb:425:07: info: precondition proved (Z3: 1 VC)
 test.adb:426:07: medium: precondition might fail
 test.adb:426:15: info: precondition proved (Z3: 1 VC)
-inst.ads:10:04: warning: in instantiation at spark-containers-functional-maps.ads:134 [-gnatw.a]
-inst.ads:10:04: warning: in instantiation at spark-containers-formal-unbounded_hashed_maps.ads:236 [-gnatw.a]
-inst.ads:10:04: warning: check will fail at run time [-gnatw.a]
-inst.ads:10:04: warning: in instantiation at spark-containers-functional-maps.ads:153 [-gnatw.a]
-inst.ads:10:04: warning: in instantiation at spark-containers-formal-unbounded_hashed_maps.ads:236 [-gnatw.a]
-inst.ads:10:04: warning: check will fail at run time [-gnatw.a]
 test.adb:427:07: medium: precondition might fail
 test.adb:427:15: info: precondition proved (Z3: 1 VC)
 test.adb:432:07: info: precondition proved (Z3: 1 VC)
@@ -437,3 +431,9 @@ test_resize.adb:14:30: info: loop invariant initialization proved (CVC5: 1 VC)
 test_resize.adb:14:30: info: loop invariant preservation proved (CVC5: 1 VC)
 test_resize.adb:15:30: info: loop invariant initialization proved (CVC5: 2 VC)
 test_resize.adb:15:48: medium: loop invariant might not be preserved by an arbitrary iteration, cannot prove K in 1 .. I
+inst.ads:10:04: warning: check will fail at run time [-gnatw.a]
+inst.ads:10:04: warning: check will fail at run time [-gnatw.a]
+inst.ads:10:04: warning: in instantiation at spark-containers-formal-unbounded_hashed_maps.ads:236 [-gnatw.a]
+inst.ads:10:04: warning: in instantiation at spark-containers-formal-unbounded_hashed_maps.ads:236 [-gnatw.a]
+inst.ads:10:04: warning: in instantiation at spark-containers-functional-maps.ads:134 [-gnatw.a]
+inst.ads:10:04: warning: in instantiation at spark-containers-functional-maps.ads:153 [-gnatw.a]
