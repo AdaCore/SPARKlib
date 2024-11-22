@@ -798,13 +798,6 @@ test.adb:882:34: info: precondition proved (CVC5: 1 VC)
 test.adb:883:07: info: precondition proved (Z3: 1 VC)
 test.adb:887:18: info: elements shall be distinct and shall fit in "Count_Type" for set aggregates at spark-containers-formal-hashed_sets.ads:87, in instantiation at inst.ads:10
 test.adb:887:18: info: precondition proved (CVC5: 11 VC)
-test.adb:96:07: warning: variable "X" is read but never assigned [-gnatwv]
-inst.ads:10:04: warning: in instantiation at spark-containers-functional-maps.ads:134 [-gnatw.a]
-inst.ads:10:04: warning: in instantiation at spark-containers-formal-hashed_sets.ads:291 [-gnatw.a]
-inst.ads:10:04: warning: check will fail at run time [-gnatw.a]
-inst.ads:10:04: warning: in instantiation at spark-containers-functional-maps.ads:153 [-gnatw.a]
-inst.ads:10:04: warning: in instantiation at spark-containers-formal-hashed_sets.ads:291 [-gnatw.a]
-inst.ads:10:04: warning: check will fail at run time [-gnatw.a]
 test.adb:889:07: info: precondition proved (CVC5: 1 VC)
 test.adb:890:07: info: precondition proved (CVC5: 1 VC)
 test.adb:894:04: info: precondition proved (Trivial: 1 VC)
@@ -854,3 +847,10 @@ test.adb:937:04: info: precondition proved (Trivial: 1 VC)
 test.adb:938:04: info: precondition proved (Trivial: 1 VC)
 test.adb:939:04: info: precondition proved (Trivial: 1 VC)
 test.adb:940:04: info: precondition proved (Trivial: 1 VC)
+inst.ads:10:04: warning: check will fail at run time [-gnatw.a]
+inst.ads:10:04: warning: check will fail at run time [-gnatw.a]
+inst.ads:10:04: warning: in instantiation at spark-containers-formal-hashed_sets.ads:291 [-gnatw.a]
+inst.ads:10:04: warning: in instantiation at spark-containers-formal-hashed_sets.ads:291 [-gnatw.a]
+inst.ads:10:04: warning: in instantiation at spark-containers-functional-maps.ads:134 [-gnatw.a]
+inst.ads:10:04: warning: in instantiation at spark-containers-functional-maps.ads:153 [-gnatw.a]
+test.adb:96:07: warning: variable "X" is read but never assigned [-gnatwv]
