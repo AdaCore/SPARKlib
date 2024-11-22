@@ -1,5 +1,4 @@
-from test_support import prove_all
-from subprocess import call
+from test_support import prove_all, gprbuild
 
 prove_all(steps=600, opt=["-U"])
-call(["gprbuild", "-q", "-P", "test.gpr"])
+gprbuild(opt=["-P", "test.gpr"])
