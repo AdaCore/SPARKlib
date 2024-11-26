@@ -2,17 +2,16 @@ include:
   - component: $CI_SERVER_FQDN/eng/gitlab-templates/check-issue@~latest
     inputs:
       stage: check
+  - component: $CI_SERVER_FQDN/eng/gitlab-templates/pre-commit@~latest
+    inputs:
+      stage: check
+
 stages:
   - check
 
-check:
-  services:
-     - image:pe-base
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-  stage: check
-  needs: [] # Execute regardless of the other stages
-  script:
+
+pre-commit:
+  before_script:
     - generic_anod_ci $GENERIC_ANOD_CI_OPTIONS
     - cat /tmp/ci_env.sh
     - . /tmp/ci_env.sh
@@ -21,8 +20,3 @@ check:
     - eval $(anod printenv gnat)
     - cd $CI_PROJECT_DIR
     - . setup.sh
-    - make check
-    - python -mvenv /tmp/venv
-    - . /tmp/venv/bin/activate
-    - python -mpip install pre-commit
-    - pre-commit run -a --show-diff-on-failure
