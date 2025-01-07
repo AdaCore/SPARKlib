@@ -179,7 +179,7 @@ test.adb:308:07: medium: precondition might fail
 test.adb:308:15: info: precondition proved (CVC5: 1 VC)
 test.adb:309:07: medium: precondition might fail
 test.adb:309:15: info: precondition proved (CVC5: 1 VC)
-test.adb:310:07: info: precondition proved (Z3: 1 VC)
+test.adb:310:07: medium: precondition might fail
 test.adb:310:15: info: precondition proved (Z3: 1 VC)
 test.adb:311:07: medium: precondition might fail
 test.adb:311:15: medium: precondition might fail
@@ -322,7 +322,7 @@ test.adb:471:10: info: initialization of "Q" proved
 test.adb:476:07: medium: precondition might fail
 test.adb:478:07: info: precondition proved (CVC5: 1 VC)
 test.adb:479:07: info: precondition proved (Z3: 1 VC)
-test.adb:480:07: info: precondition proved (Z3: 1 VC)
+test.adb:480:07: medium: precondition might fail
 test.adb:480:15: info: precondition proved (Z3: 1 VC)
 test.adb:481:07: medium: precondition might fail
 test.adb:481:15: info: precondition proved (Z3: 1 VC)
@@ -430,7 +430,7 @@ test_resize.adb:13:07: info: precondition proved (CVC5: 4 VC)
 test_resize.adb:14:30: info: loop invariant initialization proved (CVC5: 1 VC)
 test_resize.adb:14:30: info: loop invariant preservation proved (CVC5: 1 VC)
 test_resize.adb:15:30: info: loop invariant initialization proved (CVC5: 2 VC)
-test_resize.adb:15:48: medium: loop invariant might not be preserved by an arbitrary iteration, cannot prove K in 1 .. I
+test_resize.adb:15:30: info: loop invariant preservation proved (Z3: 2 VC)
 inst.ads:10:04: warning: check will fail at run time [-gnatw.a]
 inst.ads:10:04: warning: check will fail at run time [-gnatw.a]
 inst.ads:10:04: warning: in instantiation at spark-containers-formal-unbounded_hashed_maps.ads:236 [-gnatw.a]
