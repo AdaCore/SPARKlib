@@ -1396,7 +1396,7 @@ is
    function Overlap (Left, Right : Set) return Boolean with
      Global => null,
      Post   =>
-       Overlap'Result = not (M.No_Overlap (Model (Left), Model (Right)));
+       Overlap'Result = not M.No_Overlap (Model (Left), Model (Right));
 
    function Is_Subset (Subset : Set; Of_Set : Set) return Boolean with
      Global => null,

@@ -103,7 +103,7 @@ is
      Global => null,
      Pre  => Scale_Num <= Scale_Denom and then
              Big (Res) = (Big (Val) * Big (Scale_Num)) / Big (Scale_Denom),
-     Post => abs (Big (Res)) <= abs (Big (Val)) and then
+     Post => abs Big (Res) <= abs Big (Val) and then
              (if Val >= 0 then Res >= 0 else Res <= 0);
 
    procedure Lemma_Mult_Then_Div_Is_Ident
