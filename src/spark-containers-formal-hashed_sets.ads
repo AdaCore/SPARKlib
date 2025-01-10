@@ -1289,7 +1289,7 @@ is
    function Overlap (Left, Right : Set) return Boolean with
      Global => null,
      Post   =>
-       Overlap'Result = not (M.No_Overlap (Model (Left), Model (Right)));
+       Overlap'Result = not M.No_Overlap (Model (Left), Model (Right));
    --  Iterates over the Left set (calling First and Next), calling Find to
    --  determine whether the element is in the Right set. If an equivalent
    --  element is found, the operation immediately returns True. The operation
