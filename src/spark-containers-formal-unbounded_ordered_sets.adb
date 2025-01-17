@@ -4,6 +4,8 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
+pragma Ada_2022;
+
 with Ada.Containers.Red_Black_Trees.Generic_Bounded_Operations;
 pragma Elaborate_All
   (Ada.Containers.Red_Black_Trees.Generic_Bounded_Operations);

@@ -6,6 +6,7 @@
 --  This package declares the hash-table type used to implement hashed
 --  containers.
 
+pragma Ada_2022;
 with SPARK.Containers.Types; use SPARK.Containers.Types;
 
 private package SPARK.Containers.Formal.Hash_Tables is

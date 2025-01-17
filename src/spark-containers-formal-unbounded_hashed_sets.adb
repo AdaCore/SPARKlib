@@ -4,6 +4,8 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
+pragma Ada_2022;
+
 with SPARK.Containers.Formal.Hash_Tables.Generic_Operations;
 pragma Elaborate_All (SPARK.Containers.Formal.Hash_Tables.Generic_Operations);
 

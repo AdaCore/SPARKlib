@@ -4,6 +4,8 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
+pragma Ada_2022;
+
 pragma Style_Checks (Off);
 package body SPARK.Containers.Functional.Infinite_Sequences.Higher_Order
   with SPARK_Mode =>

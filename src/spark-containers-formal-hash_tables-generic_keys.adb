@@ -3,6 +3,8 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
+pragma Ada_2022;
+
 package body SPARK.Containers.Formal.Hash_Tables.Generic_Keys is
 
    Checks : constant Boolean := Container_Checks'Enabled;
