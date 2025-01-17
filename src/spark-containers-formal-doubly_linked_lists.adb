@@ -4,6 +4,8 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
+pragma Ada_2022;
+
 with SPARK.Containers.Stable_Sorting; use SPARK.Containers.Stable_Sorting;
 with System; use type System.Address;
 
