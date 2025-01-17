@@ -7,6 +7,8 @@
 --  Hash_Table_Type is used to implement hashed containers. This package
 --  declares hash-table operations that do not depend on keys.
 
+pragma Ada_2022;
+
 generic
    with package HT_Types is new Generic_Hash_Table_Types (<>);
 
