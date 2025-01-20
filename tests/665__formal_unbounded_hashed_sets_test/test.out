@@ -10,25 +10,12 @@ inst.ads:9:13: info: implicit aspect Always_Terminates on "Equivalent" has been 
 inst.ads:13:13: info: implicit aspect Always_Terminates on "Hash_Key" has been proved, subprogram will terminate
 inst.ads:13:71: info: division check proved (CVC5: 1 VC)
 inst.ads:13:71: info: range check proved (CVC5: 1 VC)
+spark-containers-parameter_checks.ads:246:19: medium: postcondition might fail, in instantiation at spark-containers-formal-unbounded_hashed_sets.ads:140, in instantiation at inst.ads:10
 test.adb:24:14: info: add a contract to analyze it separately from calling contexts
 test.adb:24:14: info: local subprogram "Create_Non_Empty_Set" only analyzed in the context of calls
 test.adb:27:10: info: precondition proved (CVC5: 5 VC; Z3: 5 VC), in call inlined at test.adb:119
 test.adb:27:10: info: precondition proved (CVC5: 5 VC; Z3: 5 VC), in call inlined at test.adb:192
-test.adb:27:10: info: precondition proved (CVC5: 7 VC; Z3: 3 VC), in call inlined at test.adb:393
-test.adb:27:10: info: precondition proved (CVC5: 7 VC; Z3: 3 VC), in call inlined at test.adb:418
-test.adb:27:10: info: precondition proved (CVC5: 7 VC; Z3: 3 VC), in call inlined at test.adb:449
-test.adb:27:10: info: precondition proved (CVC5: 7 VC; Z3: 3 VC), in call inlined at test.adb:507
-test.adb:27:10: info: precondition proved (CVC5: 7 VC; Z3: 3 VC), in call inlined at test.adb:533
-test.adb:27:10: info: precondition proved (CVC5: 7 VC; Z3: 3 VC), in call inlined at test.adb:56
-test.adb:27:10: info: precondition proved (CVC5: 7 VC; Z3: 3 VC), in call inlined at test.adb:564
-test.adb:27:10: info: precondition proved (CVC5: 7 VC; Z3: 3 VC), in call inlined at test.adb:589
-test.adb:27:10: info: precondition proved (CVC5: 7 VC; Z3: 3 VC), in call inlined at test.adb:649
-test.adb:27:10: info: precondition proved (CVC5: 7 VC; Z3: 3 VC), in call inlined at test.adb:681
-test.adb:27:10: info: precondition proved (CVC5: 7 VC; Z3: 3 VC), in call inlined at test.adb:74
 test.adb:27:10: info: precondition proved (CVC5: 7 VC; Z3: 3 VC), in call inlined at test.adb:768
-test.adb:27:10: info: precondition proved (CVC5: 7 VC; Z3: 3 VC), in call inlined at test.adb:819
-test.adb:27:10: info: precondition proved (CVC5: 7 VC; Z3: 3 VC), in call inlined at test.adb:835
-test.adb:27:10: info: precondition proved (CVC5: 7 VC; Z3: 3 VC), in call inlined at test.adb:852
 test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:108
 test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:116
 test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:135
@@ -38,14 +25,28 @@ test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inline
 test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:289
 test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:345
 test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:367
+test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:393
+test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:418
+test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:449
 test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:48
+test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:507
+test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:533
+test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:56
+test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:564
+test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:589
 test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:616
 test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:632
+test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:649
 test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:657
+test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:681
 test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:699
 test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:716
+test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:74
 test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:742
 test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:797
+test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:819
+test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:835
+test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:852
 test.adb:27:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in call inlined at test.adb:99
 test.adb:27:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in call inlined at test.adb:146
 test.adb:27:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in call inlined at test.adb:315
@@ -132,7 +133,7 @@ test.adb:119:07: info: in inlined body at line 26
 test.adb:119:07: info: unrolling loop
 test.adb:120:23: info: unrolling loop
 test.adb:121:10: info: precondition proved (CVC5: 3 VC; Z3: 3 VC)
-test.adb:124:07: info: precondition proved (CVC5: 1 VC)
+test.adb:124:07: info: precondition proved (Z3: 1 VC)
 test.adb:128:07: info: initialization of "X" proved
 test.adb:133:10: info: precondition proved (CVC5: 1 VC)
 test.adb:135:07: info: analyzing call to "Create_Non_Empty_Set" in context
@@ -160,7 +161,7 @@ test.adb:161:07: info: precondition proved (CVC5: 1 VC)
 test.adb:161:34: info: overflow check proved (CVC5: 1 VC; Z3: 1 VC)
 test.adb:161:34: info: range check proved (CVC5: 2 VC)
 test.adb:163:07: info: precondition proved (CVC5: 1 VC)
-test.adb:163:15: info: precondition proved (Z3: 1 VC)
+test.adb:163:15: info: precondition proved (CVC5: 1 VC)
 test.adb:163:36: info: overflow check proved (CVC5: 2 VC)
 test.adb:164:07: info: precondition proved (CVC5: 1 VC)
 test.adb:165:07: info: precondition proved (Z3: 1 VC)
@@ -168,7 +169,7 @@ test.adb:165:15: info: precondition proved (Z3: 1 VC)
 test.adb:167:07: info: precondition proved (Z3: 1 VC)
 test.adb:169:07: info: precondition proved (CVC5: 1 VC)
 test.adb:169:15: info: precondition proved (Z3: 1 VC)
-test.adb:170:07: info: precondition proved (CVC5: 1 VC)
+test.adb:170:07: info: precondition proved (Z3: 1 VC)
 test.adb:171:07: info: precondition proved (Z3: 1 VC)
 test.adb:171:15: info: precondition proved (Z3: 1 VC)
 test.adb:175:07: info: initialization of "X" proved
@@ -236,7 +237,7 @@ test.adb:236:07: info: precondition proved (CVC5: 2 VC)
 test.adb:237:07: info: precondition proved (CVC5: 1 VC)
 test.adb:238:07: info: precondition proved (CVC5: 1 VC)
 test.adb:240:07: info: precondition proved (CVC5: 2 VC)
-test.adb:241:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
+test.adb:241:07: info: precondition proved (CVC5: 2 VC)
 test.adb:242:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
 test.adb:243:07: info: precondition proved (CVC5: 1 VC)
 test.adb:244:07: info: precondition proved (Z3: 1 VC)
@@ -263,7 +264,7 @@ test.adb:271:07: medium: precondition might fail
 test.adb:272:07: info: precondition proved (CVC5: 1 VC)
 test.adb:273:07: info: precondition proved (Z3: 1 VC)
 test.adb:277:07: medium: precondition might fail
-test.adb:277:15: info: precondition proved (Z3: 1 VC)
+test.adb:277:15: info: precondition proved (CVC5: 1 VC)
 test.adb:277:39: info: precondition proved (Z3: 1 VC)
 test.adb:279:07: info: precondition proved (Z3: 1 VC)
 test.adb:280:07: info: precondition proved (Z3: 1 VC)
@@ -288,7 +289,7 @@ test.adb:298:07: info: analyzing call to "Create_Non_Empty_Set_With_Collisions" 
 test.adb:298:07: info: in inlined body at line 33
 test.adb:298:07: info: unrolling loop
 test.adb:301:07: info: precondition proved (Z3: 1 VC)
-test.adb:303:07: info: precondition proved (CVC5: 1 VC)
+test.adb:303:07: info: precondition proved (Z3: 1 VC)
 test.adb:304:07: medium: precondition might fail
 test.adb:304:15: info: precondition proved (Z3: 1 VC)
 test.adb:305:07: medium: precondition might fail
@@ -328,7 +329,7 @@ test.adb:353:07: info: analyzing call to "Create_Non_Empty_Set_With_Collisions" 
 test.adb:353:07: info: in inlined body at line 33
 test.adb:353:07: info: unrolling loop
 test.adb:355:07: info: precondition proved (Z3: 1 VC)
-test.adb:357:07: info: precondition proved (CVC5: 1 VC)
+test.adb:357:07: info: precondition proved (Z3: 1 VC)
 test.adb:358:07: info: precondition proved (Z3: 1 VC)
 test.adb:359:07: info: precondition proved (Z3: 1 VC)
 test.adb:359:15: info: precondition proved (Z3: 1 VC)
@@ -362,14 +363,14 @@ test.adb:393:07: info: in inlined body at line 26
 test.adb:393:07: info: unrolling loop
 test.adb:394:07: info: precondition proved (CVC5: 1 VC)
 test.adb:395:07: medium: precondition might fail
-test.adb:396:07: info: precondition proved (Z3: 1 VC)
+test.adb:396:07: info: precondition proved (CVC5: 1 VC)
 test.adb:397:07: medium: precondition might fail
 test.adb:399:23: info: unrolling loop
 test.adb:400:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item)
 test.adb:402:07: info: precondition proved (Z3: 1 VC)
 test.adb:403:07: info: precondition proved (Z3: 1 VC)
 test.adb:404:07: info: precondition proved (Z3: 1 VC)
-test.adb:405:07: info: precondition proved (Z3: 1 VC)
+test.adb:405:07: info: precondition proved (CVC5: 1 VC)
 test.adb:410:07: info: initialization of "X" proved
 test.adb:410:10: info: initialization of "Y" proved
 test.adb:413:21: info: precondition proved (CVC5: 1 VC)
@@ -383,10 +384,10 @@ test.adb:425:21: info: precondition proved (CVC5: 1 VC)
 test.adb:427:10: medium: precondition might fail
 test.adb:430:23: info: unrolling loop
 test.adb:431:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item)
-test.adb:434:21: info: precondition proved (CVC5: 1 VC)
+test.adb:434:21: info: precondition proved (Z3: 1 VC)
 test.adb:436:10: info: precondition proved (Z3: 1 VC)
-test.adb:437:10: info: precondition proved (Z3: 1 VC)
-test.adb:438:10: info: precondition proved (Z3: 1 VC)
+test.adb:437:10: info: precondition proved (CVC5: 1 VC)
+test.adb:438:10: info: precondition proved (CVC5: 1 VC)
 test.adb:444:07: info: initialization of "X" proved
 test.adb:444:10: info: initialization of "Y" proved
 test.adb:444:13: info: initialization of "Z" proved
@@ -396,12 +397,12 @@ test.adb:449:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:449:07: info: in inlined body at line 26
 test.adb:449:07: info: unrolling loop
 test.adb:451:07: info: precondition proved (CVC5: 1 VC)
-test.adb:454:07: info: precondition proved (Z3: 1 VC)
+test.adb:454:07: info: precondition proved (CVC5: 1 VC)
 test.adb:456:23: info: unrolling loop
 test.adb:457:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item)
 test.adb:461:07: info: precondition proved (Z3: 1 VC)
 test.adb:462:07: info: precondition proved (CVC5: 1 VC)
-test.adb:463:07: info: precondition proved (Z3: 1 VC)
+test.adb:463:07: info: precondition proved (CVC5: 1 VC)
 test.adb:468:07: info: initialization of "X" proved
 test.adb:468:10: info: initialization of "Y" proved
 test.adb:473:10: info: precondition proved (CVC5: 1 VC)
@@ -409,12 +410,12 @@ test.adb:476:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:476:07: info: in inlined body at line 26
 test.adb:476:07: info: unrolling loop
 test.adb:480:10: info: precondition proved (CVC5: 1 VC)
-test.adb:485:10: info: precondition proved (Z3: 1 VC)
+test.adb:485:10: info: precondition proved (CVC5: 1 VC)
 test.adb:488:23: info: unrolling loop
 test.adb:489:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item)
 test.adb:494:10: info: precondition proved (Z3: 1 VC)
 test.adb:495:10: info: precondition proved (CVC5: 1 VC)
-test.adb:496:10: info: precondition proved (altergo: 1 VC)
+test.adb:496:10: info: precondition proved (CVC5: 1 VC)
 test.adb:502:07: info: initialization of "X" proved
 test.adb:502:10: info: initialization of "Y" proved
 test.adb:502:13: info: initialization of "Z" proved
@@ -429,7 +430,7 @@ test.adb:514:23: info: unrolling loop
 test.adb:515:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item)
 test.adb:518:07: info: precondition proved (Trivial: 1 VC; Z3: 1 VC)
 test.adb:519:07: info: precondition proved (Z3: 1 VC)
-test.adb:520:07: info: precondition proved (Z3: 1 VC)
+test.adb:520:07: info: precondition proved (CVC5: 1 VC)
 test.adb:525:07: info: initialization of "X" proved
 test.adb:525:10: info: initialization of "Y" proved
 test.adb:530:10: info: precondition proved (CVC5: 1 VC)
@@ -441,7 +442,7 @@ test.adb:542:10: info: precondition proved (Z3: 1 VC)
 test.adb:545:23: info: unrolling loop
 test.adb:546:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item)
 test.adb:551:10: info: precondition proved (Trivial: 1 VC; Z3: 1 VC)
-test.adb:552:10: info: precondition proved (altergo: 1 VC)
+test.adb:552:10: info: precondition proved (CVC5: 1 VC)
 test.adb:553:10: info: precondition proved (Z3: 1 VC)
 test.adb:559:07: info: initialization of "X" proved
 test.adb:559:10: info: initialization of "Y" proved
@@ -453,7 +454,7 @@ test.adb:564:07: info: in inlined body at line 26
 test.adb:564:07: info: unrolling loop
 test.adb:565:07: info: precondition proved (CVC5: 1 VC)
 test.adb:566:07: info: precondition proved (Z3: 1 VC)
-test.adb:567:07: info: precondition proved (Z3: 1 VC)
+test.adb:567:07: info: precondition proved (CVC5: 1 VC)
 test.adb:568:07: medium: precondition might fail
 test.adb:570:23: info: unrolling loop
 test.adb:571:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item)
@@ -475,7 +476,7 @@ test.adb:596:21: info: precondition proved (CVC5: 1 VC)
 test.adb:598:10: medium: precondition might fail
 test.adb:601:23: info: unrolling loop
 test.adb:602:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item)
-test.adb:605:21: info: precondition proved (CVC5: 1 VC)
+test.adb:605:21: info: precondition proved (Z3: 1 VC)
 test.adb:607:10: info: precondition proved (Trivial: 1 VC; Z3: 1 VC)
 test.adb:608:10: info: precondition proved (Trivial: 1 VC; Z3: 1 VC)
 test.adb:609:10: info: precondition proved (Z3: 1 VC)
@@ -520,7 +521,7 @@ test.adb:659:07: info: precondition proved (CVC5: 1 VC)
 test.adb:659:15: info: precondition proved (CVC5: 1 VC)
 test.adb:660:07: info: precondition proved (CVC5: 1 VC)
 test.adb:661:07: info: precondition proved (CVC5: 1 VC)
-test.adb:664:07: info: precondition proved (Z3: 1 VC)
+test.adb:664:07: info: precondition proved (CVC5: 1 VC)
 test.adb:664:31: info: precondition proved (CVC5: 1 VC)
 test.adb:665:07: info: precondition proved (CVC5: 1 VC)
 test.adb:666:07: info: precondition proved (Z3: 1 VC)
