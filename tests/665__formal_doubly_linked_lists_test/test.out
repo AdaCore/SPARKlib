@@ -6,8 +6,6 @@ inst.ads:6:54: info: division check proved (CVC5: 1 VC)
 inst.ads:6:67: info: division check proved (CVC5: 1 VC)
 test.adb:21:14: info: add a contract to analyze it separately from calling contexts
 test.adb:21:14: info: local subprogram "Create_Non_Empty_List" only analyzed in the context of calls
-test.adb:24:10: info: precondition proved (CVC5: 3 VC; Z3: 2 VC), in call inlined at test.adb:114
-test.adb:24:10: info: precondition proved (CVC5: 3 VC; Z3: 2 VC), in call inlined at test.adb:222
 test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.adb:1002
 test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.adb:1033
 test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.adb:1040
@@ -18,6 +16,7 @@ test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.
 test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.adb:1107
 test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.adb:111
 test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.adb:1133
+test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.adb:114
 test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.adb:1158
 test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.adb:1169
 test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.adb:1183
@@ -30,6 +29,7 @@ test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.
 test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.adb:187
 test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.adb:196
 test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.adb:219
+test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.adb:222
 test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.adb:239
 test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.adb:259
 test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.adb:281
@@ -83,17 +83,17 @@ test.adb:40:10: info: precondition proved (Z3: 1 VC), in call inlined at test.ad
 test.adb:40:10: info: precondition proved (Z3: 1 VC), in call inlined at test.adb:228
 test.adb:40:10: info: precondition proved (Z3: 1 VC), in call inlined at test.adb:98
 test.adb:41:15: info: precondition proved (CVC5: 1 VC), in call inlined at test.adb:150
+test.adb:41:15: info: precondition proved (CVC5: 1 VC), in call inlined at test.adb:228
 test.adb:41:15: info: precondition proved (CVC5: 1 VC), in call inlined at test.adb:98
 test.adb:41:15: info: precondition proved (Z3: 1 VC), in call inlined at test.adb:126
-test.adb:41:15: info: precondition proved (Z3: 1 VC), in call inlined at test.adb:228
 test.adb:41:24: info: precondition proved (CVC5: 1 VC), in call inlined at test.adb:150
+test.adb:41:24: info: precondition proved (CVC5: 1 VC), in call inlined at test.adb:228
 test.adb:41:24: info: precondition proved (CVC5: 1 VC), in call inlined at test.adb:98
 test.adb:41:24: info: precondition proved (Z3: 1 VC), in call inlined at test.adb:126
-test.adb:41:24: info: precondition proved (Z3: 1 VC), in call inlined at test.adb:228
 test.adb:41:33: info: precondition proved (CVC5: 1 VC), in call inlined at test.adb:150
+test.adb:41:33: info: precondition proved (CVC5: 1 VC), in call inlined at test.adb:228
 test.adb:41:33: info: precondition proved (CVC5: 1 VC), in call inlined at test.adb:98
 test.adb:41:33: info: precondition proved (Z3: 1 VC), in call inlined at test.adb:126
-test.adb:41:33: info: precondition proved (Z3: 1 VC), in call inlined at test.adb:228
 test.adb:43:10: info: precondition proved (Z3: 1 VC), in call inlined at test.adb:126
 test.adb:43:10: info: precondition proved (Z3: 1 VC), in call inlined at test.adb:150
 test.adb:43:10: info: precondition proved (Z3: 1 VC), in call inlined at test.adb:228
@@ -117,8 +117,8 @@ test.adb:66:07: info: unrolling loop
 test.adb:67:07: info: precondition proved (CVC5: 1 VC)
 test.adb:68:07: info: precondition proved (CVC5: 1 VC)
 test.adb:69:12: info: discriminant check proved (CVC5: 1 VC)
-test.adb:70:07: info: precondition proved (Z3: 1 VC)
-test.adb:71:07: info: precondition proved (Z3: 1 VC)
+test.adb:70:07: info: precondition proved (CVC5: 1 VC)
+test.adb:71:07: info: precondition proved (CVC5: 1 VC)
 test.adb:72:07: info: precondition proved (CVC5: 1 VC)
 test.adb:73:07: info: precondition proved (CVC5: 1 VC)
 test.adb:74:07: info: precondition proved (Z3: 1 VC)
@@ -248,7 +248,7 @@ test.adb:211:07: info: precondition proved (Z3: 1 VC)
 test.adb:212:07: info: precondition proved (Z3: 1 VC)
 test.adb:212:44: info: precondition proved (CVC5: 1 VC)
 test.adb:213:07: info: precondition proved (Z3: 1 VC)
-test.adb:213:20: info: precondition proved (Z3: 1 VC)
+test.adb:213:20: info: precondition proved (CVC5: 1 VC)
 test.adb:213:49: info: precondition proved (CVC5: 1 VC)
 test.adb:213:58: info: precondition proved (Z3: 1 VC)
 test.adb:217:07: info: initialization of "X" proved
@@ -318,7 +318,7 @@ test.adb:266:18: info: precondition proved (CVC5: 1 VC)
 test.adb:267:10: info: precondition proved (Z3: 1 VC)
 test.adb:267:47: info: precondition proved (CVC5: 1 VC)
 test.adb:268:10: info: precondition proved (Z3: 1 VC)
-test.adb:268:23: info: precondition proved (Z3: 1 VC)
+test.adb:268:23: info: precondition proved (CVC5: 1 VC)
 test.adb:271:07: info: precondition proved (Trivial: 1 VC)
 test.adb:272:07: info: precondition proved (Trivial: 1 VC)
 test.adb:278:10: info: initialization of "X" proved
@@ -373,7 +373,7 @@ test.adb:307:47: info: precondition proved (CVC5: 1 VC)
 test.adb:308:10: info: precondition proved (Z3: 1 VC)
 test.adb:308:47: info: precondition proved (CVC5: 1 VC)
 test.adb:309:10: info: precondition proved (Z3: 1 VC)
-test.adb:309:23: info: precondition proved (Z3: 1 VC)
+test.adb:309:23: info: precondition proved (CVC5: 1 VC)
 test.adb:310:10: info: precondition proved (Z3: 1 VC)
 test.adb:310:23: info: precondition proved (Z3: 1 VC)
 test.adb:314:10: info: initialization of "X" proved
@@ -422,7 +422,7 @@ test.adb:346:47: info: precondition proved (CVC5: 1 VC)
 test.adb:347:10: info: precondition proved (Z3: 1 VC)
 test.adb:347:47: info: precondition proved (CVC5: 1 VC)
 test.adb:348:10: info: precondition proved (Z3: 1 VC)
-test.adb:348:23: info: precondition proved (Z3: 1 VC)
+test.adb:348:23: info: precondition proved (CVC5: 1 VC)
 test.adb:349:10: info: precondition proved (Z3: 1 VC)
 test.adb:349:23: info: precondition proved (Z3: 1 VC)
 test.adb:353:10: info: initialization of "X" proved
@@ -488,7 +488,7 @@ test.adb:400:47: info: precondition proved (CVC5: 1 VC)
 test.adb:401:10: info: precondition proved (Z3: 1 VC)
 test.adb:401:47: info: precondition proved (CVC5: 1 VC)
 test.adb:402:10: info: precondition proved (Z3: 1 VC)
-test.adb:402:23: info: precondition proved (Z3: 1 VC)
+test.adb:402:23: info: precondition proved (CVC5: 1 VC)
 test.adb:403:10: info: precondition proved (Z3: 1 VC)
 test.adb:403:23: info: precondition proved (Z3: 1 VC)
 test.adb:407:10: info: initialization of "X" proved
@@ -756,7 +756,7 @@ test.adb:645:07: info: precondition proved (Z3: 1 VC)
 test.adb:645:44: info: precondition proved (CVC5: 1 VC)
 test.adb:646:07: info: precondition proved (Z3: 1 VC)
 test.adb:646:20: info: precondition proved (Z3: 1 VC)
-test.adb:649:07: info: precondition proved (Z3: 1 VC)
+test.adb:649:07: info: precondition proved (CVC5: 1 VC)
 test.adb:654:07: info: initialization of "X" proved
 test.adb:654:34: info: range check proved (CVC5: 2 VC)
 test.adb:655:07: info: initialization of "P1" proved
@@ -793,7 +793,7 @@ test.adb:686:07: info: precondition proved (Z3: 1 VC)
 test.adb:686:44: info: precondition proved (CVC5: 1 VC)
 test.adb:687:07: info: precondition proved (Z3: 1 VC)
 test.adb:687:20: info: precondition proved (Z3: 1 VC)
-test.adb:690:07: info: precondition proved (Z3: 1 VC)
+test.adb:690:07: info: precondition proved (CVC5: 1 VC)
 test.adb:694:07: info: initialization of "X" proved
 test.adb:694:18: info: range check proved (CVC5: 2 VC)
 test.adb:695:07: info: initialization of "EF" proved
@@ -826,9 +826,9 @@ test.adb:722:15: info: precondition proved (CVC5: 1 VC)
 test.adb:723:07: info: precondition proved (Z3: 1 VC)
 test.adb:723:44: info: precondition proved (CVC5: 1 VC)
 test.adb:724:07: info: precondition proved (Z3: 1 VC)
-test.adb:724:20: info: precondition proved (Z3: 1 VC)
+test.adb:724:20: info: precondition proved (CVC5: 1 VC)
 test.adb:726:07: info: precondition proved (Z3: 2 VC)
-test.adb:727:07: info: precondition proved (Z3: 1 VC)
+test.adb:727:07: info: precondition proved (CVC5: 1 VC)
 test.adb:728:07: info: precondition proved (Z3: 1 VC)
 test.adb:728:44: info: precondition proved (CVC5: 1 VC)
 test.adb:728:102: info: precondition proved (CVC5: 1 VC)
@@ -838,7 +838,7 @@ test.adb:729:37: info: precondition proved (Z3: 1 VC)
 test.adb:730:07: info: precondition proved (Z3: 1 VC)
 test.adb:730:44: info: precondition proved (CVC5: 1 VC)
 test.adb:731:07: info: precondition proved (Z3: 1 VC)
-test.adb:731:20: info: precondition proved (Z3: 1 VC)
+test.adb:731:20: info: precondition proved (CVC5: 1 VC)
 test.adb:731:29: info: precondition proved (Z3: 1 VC)
 test.adb:736:10: info: initialization of "X" proved
 test.adb:736:33: info: range check proved (CVC5: 2 VC)
@@ -885,7 +885,7 @@ test.adb:766:40: info: precondition proved (Z3: 1 VC)
 test.adb:767:10: info: precondition proved (Z3: 1 VC)
 test.adb:767:47: info: precondition proved (CVC5: 1 VC)
 test.adb:768:10: info: precondition proved (Z3: 1 VC)
-test.adb:768:23: info: precondition proved (Z3: 1 VC)
+test.adb:768:23: info: precondition proved (CVC5: 1 VC)
 test.adb:768:32: info: precondition proved (Z3: 1 VC)
 test.adb:772:10: info: initialization of "X" proved
 test.adb:772:33: info: range check proved (CVC5: 2 VC)
@@ -972,7 +972,7 @@ test.adb:834:47: info: precondition proved (CVC5: 1 VC)
 test.adb:835:10: medium: precondition might fail
 test.adb:835:47: info: precondition proved (CVC5: 1 VC)
 test.adb:836:10: info: precondition proved (Z3: 1 VC)
-test.adb:836:23: info: precondition proved (Z3: 1 VC)
+test.adb:836:23: info: precondition proved (CVC5: 1 VC)
 test.adb:837:10: info: precondition proved (Z3: 1 VC)
 test.adb:837:23: info: precondition proved (Z3: 1 VC)
 test.adb:838:10: info: precondition proved (CVC5: 1 VC)
@@ -1062,7 +1062,7 @@ test.adb:912:10: info: precondition proved (Z3: 1 VC)
 test.adb:912:36: info: precondition proved (CVC5: 1 VC)
 test.adb:913:10: info: precondition proved (Z3: 1 VC)
 test.adb:913:18: info: precondition proved (CVC5: 1 VC)
-test.adb:914:10: info: precondition proved (Z3: 1 VC)
+test.adb:914:10: info: precondition proved (CVC5: 1 VC)
 test.adb:917:07: info: precondition proved (Trivial: 1 VC)
 test.adb:918:07: info: precondition proved (Trivial: 1 VC)
 test.adb:924:10: info: initialization of "X" proved
@@ -1080,7 +1080,7 @@ test.adb:933:10: info: precondition proved (CVC5: 1 VC)
 test.adb:934:10: info: precondition proved (Z3: 1 VC)
 test.adb:934:23: info: precondition proved (CVC5: 1 VC)
 test.adb:935:10: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
-test.adb:936:10: info: precondition proved (Z3: 1 VC)
+test.adb:936:10: info: precondition proved (CVC5: 1 VC)
 test.adb:937:10: info: precondition proved (Z3: 1 VC)
 test.adb:937:23: info: precondition proved (Z3: 1 VC)
 test.adb:938:10: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
@@ -1288,10 +1288,10 @@ test.adb:1116:15: info: precondition proved (CVC5: 1 VC)
 test.adb:1117:07: medium: precondition might fail
 test.adb:1117:15: info: precondition proved (CVC5: 1 VC)
 test.adb:1119:07: medium: precondition might fail
-test.adb:1119:15: info: precondition proved (Z3: 1 VC)
-test.adb:1119:40: info: precondition proved (Z3: 1 VC)
+test.adb:1119:15: info: precondition proved (CVC5: 1 VC)
+test.adb:1119:40: info: precondition proved (CVC5: 1 VC)
 test.adb:1120:07: medium: precondition might fail
-test.adb:1120:15: info: precondition proved (Z3: 1 VC)
+test.adb:1120:15: info: precondition proved (CVC5: 1 VC)
 test.adb:1121:07: medium: precondition might fail
 test.adb:1121:15: info: precondition proved (Z3: 1 VC)
 test.adb:1122:07: medium: precondition might fail
@@ -1326,10 +1326,10 @@ test.adb:1142:15: info: precondition proved (CVC5: 1 VC)
 test.adb:1143:07: medium: precondition might fail
 test.adb:1143:15: info: precondition proved (CVC5: 1 VC)
 test.adb:1145:07: medium: precondition might fail
-test.adb:1145:15: info: precondition proved (Z3: 1 VC)
-test.adb:1145:48: info: precondition proved (Z3: 1 VC)
+test.adb:1145:15: info: precondition proved (CVC5: 1 VC)
+test.adb:1145:48: info: precondition proved (CVC5: 1 VC)
 test.adb:1146:07: medium: precondition might fail
-test.adb:1146:15: info: precondition proved (Z3: 1 VC)
+test.adb:1146:15: info: precondition proved (CVC5: 1 VC)
 test.adb:1147:07: medium: precondition might fail
 test.adb:1147:15: info: precondition proved (Z3: 1 VC)
 test.adb:1148:07: medium: precondition might fail
@@ -1367,7 +1367,7 @@ test.adb:1183:07: info: unrolling loop
 test.adb:1184:13: info: precondition proved (CVC5: 1 VC)
 test.adb:1184:22: info: precondition proved (CVC5: 1 VC)
 test.adb:1186:07: info: precondition proved (Z3: 1 VC)
-test.adb:1188:07: info: precondition proved (CVC5: 1 VC)
+test.adb:1188:07: info: precondition proved (Z3: 1 VC)
 test.adb:1190:07: info: precondition proved (Z3: 1 VC)
 test.adb:1192:07: info: precondition proved (Z3: 1 VC)
 test.adb:1194:07: info: precondition proved (Z3: 1 VC)
@@ -1412,8 +1412,8 @@ test.adb:1231:07: info: precondition proved (CVC5: 1 VC)
 test.adb:1232:07: info: precondition proved (CVC5: 1 VC)
 test.adb:1233:07: medium: precondition might fail
 test.adb:1234:07: medium: precondition might fail
-test.adb:1234:54: info: precondition proved (Z3: 1 VC)
-test.adb:1234:80: info: precondition proved (Z3: 1 VC)
+test.adb:1234:54: info: precondition proved (CVC5: 1 VC)
+test.adb:1234:80: info: precondition proved (CVC5: 1 VC)
 test.adb:1238:07: info: initialization of "X" proved
 test.adb:1238:17: info: range check proved (CVC5: 2 VC)
 test.adb:1240:07: info: precondition proved (CVC5: 1 VC)
@@ -1478,3 +1478,9 @@ test.adb:1299:04: info: precondition proved (Trivial: 1 VC)
 test.adb:1300:04: info: precondition proved (Trivial: 1 VC)
 test.adb:1301:04: info: precondition proved (Trivial: 1 VC)
 test.adb:1302:04: info: precondition proved (Trivial: 1 VC)
+inst.ads:7:04: warning: check will fail at run time [-gnatw.a]
+inst.ads:7:04: warning: check will fail at run time [-gnatw.a]
+inst.ads:7:04: warning: in instantiation at spark-containers-formal-doubly_linked_lists.ads:205 [-gnatw.a]
+inst.ads:7:04: warning: in instantiation at spark-containers-formal-doubly_linked_lists.ads:205 [-gnatw.a]
+inst.ads:7:04: warning: in instantiation at spark-containers-functional-maps.ads:134 [-gnatw.a]
+inst.ads:7:04: warning: in instantiation at spark-containers-functional-maps.ads:153 [-gnatw.a]
