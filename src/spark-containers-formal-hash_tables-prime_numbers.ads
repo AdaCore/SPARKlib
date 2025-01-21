@@ -8,6 +8,8 @@
 --  length (computed using To_Prime below), as this produces better scatter
 --  when hash values are folded.
 
+pragma Ada_2022;
+
 package SPARK.Containers.Formal.Hash_Tables.Prime_Numbers is
    pragma Pure;
 
