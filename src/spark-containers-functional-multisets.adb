@@ -4,6 +4,8 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
+pragma Ada_2022;
+
 pragma Style_Checks (Off);
 package body SPARK.Containers.Functional.Multisets
   with SPARK_Mode =>
