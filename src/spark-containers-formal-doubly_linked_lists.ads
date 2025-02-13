@@ -437,8 +437,7 @@ is
                 Model (Container),
                 P.Get (Positions (Container), Position));
 
-   function At_End (E : access constant List) return access constant List
-   is (E)
+   function At_End (E : List) return List is (E)
    with Ghost,
      Annotate => (GNATprove, At_End_Borrow);
 
@@ -461,31 +460,31 @@ is
                    P.Get (Positions (Container), Position)));
 
    function Reference
-     (Container : not null access List;
+     (Container : aliased in out List;
       Position  : Cursor) return not null access Element_Type
    with
      Global => null,
-     Pre    => Has_Element (Container.all, Position),
+     Pre    => Has_Element (Container, Position),
      Post   =>
-      Length (Container.all) = Length (At_End (Container).all)
+      Length (Container) = Length (At_End (Container))
 
          --  Cursors are preserved
 
-         and Positions (Container.all) = Positions (At_End (Container).all)
+         and Positions (Container) = Positions (At_End (Container))
 
          --  Container will have Result.all at position Position
 
          and Element_Logic_Equal
                (At_End (Reference'Result).all,
-                Element (Model (At_End (Container).all),
-                         P.Get (Positions (At_End (Container).all), Position)))
+                Element (Model (At_End (Container)),
+                         P.Get (Positions (At_End (Container)), Position)))
 
          --  All other elements are preserved
 
          and M.Equal_Except
-               (Model (Container.all),
-                Model (At_End (Container).all),
-                P.Get (Positions (At_End (Container).all), Position));
+               (Model (Container),
+                Model (At_End (Container)),
+                P.Get (Positions (At_End (Container)), Position));
 
    procedure Move (Target : in out List; Source : in out List) with
      Global => null,

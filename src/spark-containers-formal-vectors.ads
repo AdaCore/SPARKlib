@@ -357,8 +357,7 @@ is
                 Right    => Model (Container),
                 Position => Index);
 
-   function At_End (E : access constant Vector) return access constant Vector
-   is (E)
+   function At_End (E : Vector) return Vector is (E)
    with Ghost,
      Annotate => (GNATprove, At_End_Borrow);
 
@@ -379,26 +378,26 @@ is
          (Constant_Reference'Result.all, Element (Model (Container), Index));
 
    function Reference
-     (Container : not null access Vector;
+     (Container : aliased in out Vector;
       Index     : Index_Type) return not null access Element_Type
    with
      Global => null,
      Pre    =>
-      Index in First_Index (Container.all) .. Last_Index (Container.all),
+      Index in First_Index (Container) .. Last_Index (Container),
      Post   =>
-      Length (Container.all) = Length (At_End (Container).all)
+      Length (Container) = Length (At_End (Container))
 
          --  Container will have Result.all at index Index
 
          and Element_Logic_Equal
                (At_End (Reference'Result).all,
-                Element (Model (At_End (Container).all), Index))
+                Element (Model (At_End (Container)), Index))
 
          --  All other elements are preserved
 
          and M.Equal_Except
-               (Left     => Model (Container.all),
-                Right    => Model (At_End (Container).all),
+               (Left     => Model (Container),
+                Right    => Model (At_End (Container)),
                 Position => Index);
 
    procedure Insert_Vector

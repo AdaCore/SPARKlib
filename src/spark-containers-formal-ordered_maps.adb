@@ -1118,11 +1118,11 @@ is
    --------------
 
    function Reference
-     (Container : not null access Map;
+     (Container : aliased in out Map;
       Position  : Cursor) return not null access Element_Type
    is
    begin
-      if not Has_Element (Container.all, Position) then
+      if not Has_Element (Container, Position) then
          raise Constraint_Error with "Position cursor has no element";
       end if;
 
@@ -1134,10 +1134,10 @@ is
    end Reference;
 
    function Reference
-     (Container : not null access Map;
+     (Container : aliased in out Map;
       Key       : Key_Type) return not null access Element_Type
    is
-      Node : constant Count_Type := Find (Container.all, Key).Node;
+      Node : constant Count_Type := Find (Container, Key).Node;
 
    begin
       if Node = 0 then

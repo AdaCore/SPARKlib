@@ -1224,7 +1224,7 @@ is
    ---------------
 
    function Reference
-     (Container : not null access Vector;
+     (Container : Vector;
       Index     : Index_Type) return not null access Element_Type
    is
    begin

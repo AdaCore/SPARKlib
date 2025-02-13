@@ -169,26 +169,25 @@ is
      Ghost,
      Annotate => (GNATprove, At_End_Borrow);
 
-   function At_End (X :    access constant Memory_Type)
-                    return access constant Memory_Type
+   function At_End (X :  Memory_Type) return Memory_Type
    is
      (X)
    with
      Ghost,
      Annotate => (GNATprove, At_End_Borrow);
 
-   function Reference (Memory : not null access Memory_Type; P : Pointer)
-                       return   not null access Object
+   function Reference (Memory : Memory_Type; P : Pointer)
+                       return not null access Object
    with
      Global => null,
-     Pre    => Valid (Memory.all, Address (P)),
+     Pre    => Valid (Memory, Address (P)),
      Post   =>
        Object_Logic_Equal
          (At_End (Reference'Result).all,
-          Get (At_End (Memory).all, Address (P)))
-         and then Allocates (Memory.all, At_End (Memory).all, None)
-         and then Deallocates (Memory.all, At_End (Memory).all, None)
-         and then Writes (Memory.all, At_End (Memory).all, Only (Address (P)));
+          Get (At_End (Memory), Address (P)))
+         and then Allocates (Memory, At_End (Memory), None)
+         and then Deallocates (Memory, At_End (Memory), None)
+         and then Writes (Memory, At_End (Memory), Only (Address (P)));
 
 private
    pragma SPARK_Mode (Off);

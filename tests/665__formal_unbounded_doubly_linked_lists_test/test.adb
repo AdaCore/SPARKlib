@@ -181,14 +181,14 @@ procedure Test with SPARK_Mode is
    end Test_Replace_Element;
 
    procedure Test_Constant_Reference with Pre => True is
-      X : aliased List;
+      X : List;
    begin
       Create_Non_Empty_List (X);
       Assert (Constant_Reference (X, First (X)).all = 1 and Constant_Reference (X, Last (X)).all = 5, "Constant_Reference on non-empty list");
    end Test_Constant_Reference;
 
    procedure Test_Reference with Pre => True is
-      X : aliased List;
+      X : List;
       P2 : Cursor;
       P4 : Cursor;
    begin
@@ -197,8 +197,7 @@ procedure Test with SPARK_Mode is
       P4 := Next (X, Next (X, P2));
 
       declare
-         X_Acc : access List := X'Access;
-         R     : access Integer := Reference (X_Acc, P2);
+         R : access Integer := Reference (X, P2);
       begin
          Assert (R.all = 2, "Reference on non-empty list");
          R.all := 20;
