@@ -1142,7 +1142,7 @@ is
    ---------------
 
    function Reference
-     (Container : not null access Vector;
+     (Container : aliased in out Vector;
       Index     : Index_Type) return not null access Element_Type
    is
    begin

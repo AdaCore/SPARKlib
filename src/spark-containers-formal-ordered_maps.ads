@@ -477,9 +477,7 @@ is
                 Model (Container)'Old,
                 Key (Container, Position));
 
-   function At_End
-     (E : not null access constant Map) return not null access constant Map
-   is (E)
+   function At_End (E : Map) return Map is (E)
    with Ghost,
      Annotate => (GNATprove, At_End_Borrow);
 
@@ -501,34 +499,34 @@ is
           Element (Model (Container), Key (Container, Position)));
 
    function Reference
-     (Container : not null access Map;
+     (Container : aliased in out Map;
       Position  : Cursor) return not null access Element_Type
    with
      Global => null,
-     Pre    => Has_Element (Container.all, Position),
+     Pre    => Has_Element (Container, Position),
      Post   =>
 
        --  Order of keys and cursors is preserved
 
-       Keys (At_End (Container).all) = Keys (Container.all)
-         and Positions (At_End (Container).all) = Positions (Container.all)
+       Keys (At_End (Container)) = Keys (Container)
+         and Positions (At_End (Container)) = Positions (Container)
 
          --  The value designated by the result of Reference is now associated
          --  with the key at position Position in Container.
 
          and Element_Logic_Equal
-               (Element (At_End (Container).all, Position),
+               (Element (At_End (Container), Position),
                 At_End (Reference'Result).all)
 
          --  Elements associated with other keys are preserved
 
          and M.Same_Keys
-               (Model (At_End (Container).all),
-                Model (Container.all))
+               (Model (At_End (Container)),
+                Model (Container))
          and M.Elements_Equal_Except
-               (Model (At_End (Container).all),
-                Model (Container.all),
-                Key (At_End (Container).all, Position));
+               (Model (At_End (Container)),
+                Model (Container),
+                Key (At_End (Container), Position));
 
    function Constant_Reference
      (Container : aliased Map;
@@ -541,33 +539,33 @@ is
          (Constant_Reference'Result.all, Element (Model (Container), Key));
 
    function Reference
-     (Container : not null access Map;
+     (Container : aliased in out Map;
       Key       : Key_Type) return not null access Element_Type
    with
      Global => null,
-     Pre    => Contains (Container.all, Key),
+     Pre    => Contains (Container, Key),
      Post   =>
 
        --  Order of keys and cursors is preserved
 
-       Keys (At_End (Container).all) = Keys (Container.all)
-         and Positions (At_End (Container).all) = Positions (Container.all)
+       Keys (At_End (Container)) = Keys (Container)
+         and Positions (At_End (Container)) = Positions (Container)
 
          --  The value designated by the result of Reference is now associated
          --  with Key in Container.
 
          and Element_Logic_Equal
-               (Element (Model (At_End (Container).all), Key),
+               (Element (Model (At_End (Container)), Key),
                 At_End (Reference'Result).all)
 
          --  Elements associated with other keys are preserved
 
          and M.Same_Keys
-               (Model (At_End (Container).all),
-                Model (Container.all))
+               (Model (At_End (Container)),
+                Model (Container))
          and M.Elements_Equal_Except
-               (Model (At_End (Container).all),
-                Model (Container.all),
+               (Model (At_End (Container)),
+                Model (Container),
                 Key);
 
    procedure Move (Target : in out Map; Source : in out Map) with

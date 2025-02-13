@@ -1393,11 +1393,11 @@ is
    ---------------
 
    function Reference
-     (Container : not null access List;
+     (Container : aliased in out List;
       Position  : Cursor) return not null access Element_Type
    is
    begin
-      if not Has_Element (Container.all, Position) then
+      if not Has_Element (Container, Position) then
          raise Constraint_Error with "Position cursor has no element";
       end if;
 

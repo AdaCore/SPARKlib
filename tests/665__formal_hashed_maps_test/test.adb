@@ -249,8 +249,7 @@ procedure Test with SPARK_Mode is
       E4 := Element (X, P4);
 
       declare
-         X_Acc : access Map := X'Access;
-         R     : access Integer := Reference (X_Acc, P2);
+         R : access Integer := Reference (X, P2);
       begin
          Assert (R.all = E2, "Reference on a cursor, designated value");
          R.all := 0;
@@ -272,8 +271,7 @@ procedure Test with SPARK_Mode is
       Create_Non_Empty_Map (X);
 
       declare
-         X_Acc : access Map := X'Access;
-         R     : access Integer := Reference (X_Acc, 2);
+         R : access Integer := Reference (X, 2);
       begin
          Assert (R.all = 2, "Reference on non-empty map");
          R.all := 0;
