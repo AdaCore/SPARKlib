@@ -256,7 +256,7 @@ test.adb:242:16: info: precondition proved (CVC5: 1 VC)
 test.adb:244:10: info: precondition proved (CVC5: 2 VC)
 test.adb:245:10: info: precondition proved (CVC5: 1 VC)
 test.adb:246:10: medium: precondition might fail
-test.adb:246:34: info: precondition proved (Z3: 1 VC)
+test.adb:246:34: medium: precondition might fail
 test.adb:246:61: info: precondition proved (CVC5: 1 VC)
 test.adb:246:74: info: precondition proved (Z3: 1 VC)
 test.adb:247:10: medium: precondition might fail
@@ -269,7 +269,7 @@ test.adb:249:47: info: precondition proved (CVC5: 1 VC)
 test.adb:250:10: medium: precondition might fail
 test.adb:250:23: medium: precondition might fail
 test.adb:251:10: medium: precondition might fail
-test.adb:251:23: medium: precondition might fail
+test.adb:251:23: info: precondition proved (Z3: 1 VC)
 test.adb:255:10: info: initialization of "X" proved
 test.adb:256:10: info: initialization of "P1" proved
 test.adb:256:14: info: initialization of "P2" proved
@@ -334,7 +334,7 @@ test.adb:304:81: medium: precondition might fail
 test.adb:304:108: medium: precondition might fail
 test.adb:304:120: info: precondition proved (CVC5: 1 VC)
 test.adb:304:133: info: precondition proved (CVC5: 1 VC)
-test.adb:304:146: info: precondition proved (Z3: 1 VC)
+test.adb:304:146: medium: precondition might fail
 test.adb:306:10: medium: precondition might fail
 test.adb:306:47: info: precondition proved (CVC5: 1 VC)
 test.adb:307:10: medium: precondition might fail
@@ -377,7 +377,7 @@ test.adb:338:16: info: precondition proved (CVC5: 1 VC)
 test.adb:339:16: info: precondition proved (CVC5: 1 VC)
 test.adb:341:10: info: precondition proved (CVC5: 2 VC)
 test.adb:342:10: info: precondition proved (CVC5: 1 VC)
-test.adb:343:10: info: precondition proved (Z3: 1 VC)
+test.adb:343:10: medium: precondition might fail
 test.adb:343:46: info: precondition proved (CVC5: 1 VC)
 test.adb:343:72: info: precondition proved (CVC5: 1 VC)
 test.adb:344:10: info: precondition proved (CVC5: 1 VC)
@@ -484,14 +484,14 @@ test.adb:428:07: info: unrolling loop
 test.adb:430:13: info: precondition proved (CVC5: 1 VC)
 test.adb:432:07: info: precondition proved (CVC5: 1 VC)
 test.adb:433:07: info: precondition proved (CVC5: 1 VC)
-test.adb:434:07: medium: precondition might fail
+test.adb:434:07: info: precondition proved (Z3: 1 VC)
 test.adb:434:15: info: precondition proved (CVC5: 1 VC)
 test.adb:435:07: info: precondition proved (CVC5: 1 VC)
 test.adb:435:15: info: precondition proved (CVC5: 1 VC)
 test.adb:436:07: medium: precondition might fail
 test.adb:436:44: info: precondition proved (CVC5: 1 VC)
-test.adb:437:07: info: precondition proved (Z3: 1 VC)
-test.adb:437:20: info: precondition proved (Z3: 1 VC)
+test.adb:437:07: medium: precondition might fail
+test.adb:437:20: medium: precondition might fail
 test.adb:442:07: info: initialization of "X" proved
 test.adb:443:07: info: initialization of "P1" proved
 test.adb:443:11: info: initialization of "P2" proved
@@ -576,14 +576,14 @@ test.adb:511:16: info: precondition proved (CVC5: 1 VC)
 test.adb:514:10: info: precondition proved (Z3: 1 VC)
 test.adb:515:10: info: precondition proved (CVC5: 1 VC)
 test.adb:516:10: info: precondition proved (CVC5: 1 VC)
-test.adb:517:10: info: precondition proved (Z3: 1 VC)
+test.adb:517:10: medium: precondition might fail
 test.adb:517:18: medium: precondition might fail
 test.adb:518:10: info: precondition proved (Z3: 1 VC)
 test.adb:518:47: info: precondition proved (CVC5: 1 VC)
 test.adb:519:10: medium: precondition might fail
 test.adb:519:47: info: precondition proved (CVC5: 1 VC)
 test.adb:520:10: medium: precondition might fail
-test.adb:520:23: info: precondition proved (Z3: 1 VC)
+test.adb:520:23: medium: precondition might fail
 test.adb:521:10: medium: precondition might fail
 test.adb:521:23: medium: precondition might fail
 test.adb:525:10: info: initialization of "X" proved
@@ -666,7 +666,7 @@ test.adb:597:10: info: precondition proved (Z3: 1 VC)
 test.adb:598:10: info: precondition proved (Z3: 1 VC)
 test.adb:599:10: info: precondition proved (CVC5: 1 VC)
 test.adb:600:10: medium: precondition might fail
-test.adb:601:10: medium: precondition might fail
+test.adb:601:10: info: precondition proved (Z3: 1 VC)
 test.adb:601:47: info: precondition proved (CVC5: 1 VC)
 test.adb:602:10: medium: precondition might fail
 test.adb:602:23: medium: precondition might fail
