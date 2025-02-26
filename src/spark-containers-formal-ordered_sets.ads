@@ -553,7 +553,7 @@ is
      Pre => Target.Capacity >= Length (Source),
      Post   =>
        Model (Target) = Model (Source)
-         and Elements (Target) = Elements (Source)
+         and E.Equal (Elements (Target), Elements (Source))
          and Length (Target) = Length (Source);
 
    function Copy (Source : Set; Capacity : Count_Type := 0) return Set with
@@ -561,7 +561,7 @@ is
      Pre    => Capacity = 0 or else Capacity >= Source.Capacity,
      Post   =>
        Model (Copy'Result) = Model (Source)
-         and Elements (Copy'Result) = Elements (Source)
+         and E.Equal (Elements (Copy'Result), Elements (Source))
          and Positions (Copy'Result) = Positions (Source)
          and (if Capacity = 0 then
                  Copy'Result.Capacity = Source.Capacity
@@ -636,7 +636,7 @@ is
      Pre    => Target.Capacity >= Length (Source),
      Post   =>
        Model (Target) = Model (Source)'Old
-         and Elements (Target) = Elements (Source)'Old
+         and E.Equal (Elements (Target), Elements (Source)'Old)
          and Length (Source)'Old = Length (Target)
          and Length (Source) = 0;
 
@@ -666,7 +666,7 @@ is
        (Contains (Container, New_Item) =>
           not Inserted
             and Model (Container) = Model (Container)'Old
-            and Elements (Container) = Elements (Container)'Old
+            and E.Equal (Elements (Container), Elements (Container)'Old)
             and Positions (Container) = Positions (Container)'Old,
 
         --  Otherwise, New_Item is inserted in Container and Inserted is set to
@@ -886,7 +886,7 @@ is
 
        (not Contains (Container, Item) =>
           Model (Container) = Model (Container)'Old
-            and Elements (Container) = Elements (Container)'Old
+            and E.Equal (Elements (Container), Elements (Container)'Old)
             and Positions (Container) = Positions (Container)'Old,
 
         --  Otherwise, Item is removed from Container
@@ -1761,7 +1761,7 @@ is
 
           (not Contains (Container, Key) =>
              Model (Container) = Model (Container)'Old
-               and Elements (Container) = Elements (Container)'Old
+               and E.Equal (Elements (Container), Elements (Container)'Old)
                and Positions (Container) = Positions (Container)'Old,
 
            --  Otherwise, Key is removed from Container

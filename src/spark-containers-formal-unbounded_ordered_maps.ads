@@ -409,14 +409,14 @@ is
      Global => null,
      Post   =>
        Model (Target) = Model (Source)
-         and Keys (Target) = Keys (Source)
+         and K.Equal (Keys (Target), Keys (Source))
          and Length (Source) = Length (Target);
 
    function Copy (Source : Map) return Map with
      Global => null,
      Post   =>
        Model (Copy'Result) = Model (Source)
-         and Keys (Copy'Result) = Keys (Source)
+         and K.Equal (Keys (Copy'Result), Keys (Source))
          and Positions (Copy'Result) = Positions (Source);
 
    function Key (Container : Map; Position : Cursor) return Key_Type with
@@ -448,7 +448,7 @@ is
 
        --  Order of keys and cursors is preserved
 
-       Keys (Container) = Keys (Container)'Old
+       K.Equal (Keys (Container), Keys (Container)'Old)
          and Positions (Container) = Positions (Container)'Old
 
          --  New_Item is now associated with the key at position Position in
@@ -496,7 +496,7 @@ is
 
        --  Order of keys and cursors is preserved
 
-       Keys (At_End (Container)) = Keys (Container)
+       K.Equal (Keys (At_End (Container)), Keys (Container))
          and Positions (At_End (Container)) = Positions (Container)
 
          --  The value designated by the result of Reference is now associated
@@ -536,7 +536,7 @@ is
 
        --  Order of keys and cursors is preserved
 
-       Keys (At_End (Container)) = Keys (Container)
+       K.Equal (Keys (At_End (Container)), Keys (Container))
          and Positions (At_End (Container)) = Positions (Container)
 
          --  The value designated by the result of Reference is now associated
@@ -560,7 +560,7 @@ is
      Global => null,
      Post   =>
        Model (Target) = Model (Source)'Old
-         and Keys (Target) = Keys (Source)'Old
+         and K.Equal (Keys (Target), Keys (Source)'Old)
          and Length (Source)'Old = Length (Target)
          and Length (Source) = 0;
 
@@ -592,7 +592,7 @@ is
        (Contains (Container, Key) =>
           not Inserted
             and Model (Container) = Model (Container)'Old
-            and Keys (Container) = Keys (Container)'Old
+            and K.Equal (Keys (Container), Keys (Container)'Old)
             and Positions (Container) = Positions (Container)'Old,
 
         --  Otherwise, Key is inserted in Container and Inserted is set to True
@@ -824,7 +824,7 @@ is
 
        (not Contains (Container, Key) =>
           Model (Container) = Model (Container)'Old
-            and Keys (Container) = Keys (Container)'Old
+            and K.Equal (Keys (Container), Keys (Container)'Old)
             and Positions (Container) = Positions (Container)'Old,
 
         --  Otherwise, Key is removed from Container

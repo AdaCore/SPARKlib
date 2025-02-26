@@ -50,7 +50,7 @@ is
      --  Widen the sub array of the Vector
 
      Global => null,
-     Post   => Model (Container) = Model (Container)'Old;
+     Post   => M.Equal (Model (Container), Model (Container)'Old);
 
    ---------
    -- "=" --
