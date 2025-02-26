@@ -179,6 +179,36 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
    function Empty_Map return Map is
       ((others =>  <>));
 
+   -----------
+   -- Equal --
+   -----------
+
+   function Equal (Left, Right : Map) return Boolean is
+   begin
+      if Length (Left.Keys) /= Length (Right.Keys) then
+         return False;
+      elsif Ptr_Eq (Left.Keys, Right.Keys)
+        and then Ptr_Eq (Left.Elements, Right.Elements)
+      then
+         return True;
+      end if;
+
+      for J in 1 .. Length (Left.Keys) loop
+         declare
+            K : constant Key_Type := Get (Left.Keys, J);
+         begin
+            if Find (Right.Keys, K) = 0
+              or else not Element_Logic_Equal
+                (Get (Right.Elements, Find (Right.Keys, K)),
+                 Get (Left.Elements, J))
+            then
+               return False;
+            end if;
+         end;
+      end loop;
+      return True;
+   end Equal;
+
    ---------------------
    -- Equivalent_Maps --
    ---------------------
