@@ -46,7 +46,7 @@ is
      Global => null,
      Pre    => Container.Nodes = null
                  or else Length (Container) = Container.Nodes'Length,
-     Post   => Model (Container) = Model (Container)'Old
+     Post   => M.Equal (Model (Container), Model (Container)'Old)
                  and Positions (Container) = Positions (Container)'Old;
 
    procedure Finalize_Element is new Ada.Unchecked_Deallocation

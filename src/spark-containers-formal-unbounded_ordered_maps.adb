@@ -91,7 +91,7 @@ is
      Global => null,
      Post   => Model (Container) = Model (Container)'Old
                  and Positions (Container) = Positions (Container)'Old
-                 and Keys (Container) = Keys (Container)'Old;
+                 and K.Equal (Keys (Container), Keys (Container)'Old);
 
    --------------------------
    -- Local Instantiations --

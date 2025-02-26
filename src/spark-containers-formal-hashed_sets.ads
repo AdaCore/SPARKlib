@@ -553,7 +553,7 @@ is
      Post   =>
        Copy'Result.Modulus = Source.Modulus
          and Model (Copy'Result) = Model (Source)
-         and Elements (Copy'Result) = Elements (Source)
+         and E.Equal (Elements (Copy'Result), Elements (Source))
          and Positions (Copy'Result) = Positions (Source)
          and (if Capacity = 0 then
                  Copy'Result.Capacity = Source.Capacity
@@ -665,7 +665,7 @@ is
        (Contains (Container, New_Item) =>
           not Inserted
             and Model (Container) = Model (Container)'Old
-            and Elements (Container) = Elements (Container)'Old
+            and E.Equal (Elements (Container), Elements (Container)'Old)
             and Positions (Container) = Positions (Container)'Old,
 
         --  Otherwise, New_Item is inserted in Container and Inserted is set to
@@ -854,7 +854,7 @@ is
 
        (not Contains (Container, Item) =>
           Model (Container) = Model (Container)'Old
-            and Elements (Container) = Elements (Container)'Old
+            and E.Equal (Elements (Container), Elements (Container)'Old)
             and Positions (Container) = Positions (Container)'Old,
 
         --  Otherwise, Item is removed from Container
@@ -1535,7 +1535,7 @@ is
 
           (not Contains (Container, Key) =>
              Model (Container) = Model (Container)'Old
-               and Elements (Container) = Elements (Container)'Old
+               and E.Equal (Elements (Container), Elements (Container)'Old)
                and Positions (Container) = Positions (Container)'Old,
 
            --  Otherwise, Key is removed from Container

@@ -435,7 +435,7 @@ is
      Post   =>
         Copy'Result.Modulus = Source.Modulus
          and Model (Copy'Result) = Model (Source)
-         and Keys (Copy'Result) = Keys (Source)
+         and K.Equal (Keys (Copy'Result), Keys (Source))
          and Positions (Copy'Result) = Positions (Source)
          and (if Capacity = 0 then
                  Copy'Result.Capacity = Source.Capacity
@@ -475,7 +475,7 @@ is
 
        --  Order of keys and cursors is preserved
 
-       Keys (Container) = Keys (Container)'Old
+       K.Equal (Keys (Container), Keys (Container)'Old)
          and Positions (Container) = Positions (Container)'Old
 
          --  New_Item is now associated with the key at position Position in
@@ -523,7 +523,7 @@ is
 
        --  Order of keys and cursors is preserved
 
-       Keys (At_End (Container)) = Keys (Container)
+       K.Equal (Keys (At_End (Container)), Keys (Container))
          and Positions (At_End (Container)) = Positions (Container)
 
          --  The value designated by the result of Reference is now associated
@@ -563,7 +563,7 @@ is
 
        --  Order of keys and cursors is preserved
 
-       Keys (At_End (Container)) = Keys (Container)
+       K.Equal (Keys (At_End (Container)), Keys (Container))
          and Positions (At_End (Container)) = Positions (Container)
 
          --  The value designated by the result of Reference is now associated
@@ -619,7 +619,7 @@ is
        (Contains (Container, Key) =>
           not Inserted
             and Model (Container) = Model (Container)'Old
-            and Keys (Container) = Keys (Container)'Old
+            and K.Equal (Keys (Container), Keys (Container)'Old)
             and Positions (Container) = Positions (Container)'Old,
 
         --  Otherwise, Key is inserted in Container and Inserted is set to True
@@ -818,7 +818,7 @@ is
 
        (not Contains (Container, Key) =>
           Model (Container) = Model (Container)'Old
-            and Keys (Container) = Keys (Container)'Old
+            and K.Equal (Keys (Container), Keys (Container)'Old)
             and Positions (Container) = Positions (Container)'Old,
 
         --  Otherwise, Key is removed from Container

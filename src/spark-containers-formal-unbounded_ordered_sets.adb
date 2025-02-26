@@ -128,7 +128,7 @@ is
 
      Global => null,
      Post   => Model (Container) = Model (Container)'Old
-                 and Elements (Container) = Elements (Container)'Old
+                 and E.Equal (Elements (Container), Elements (Container)'Old)
                  and Positions (Container) = Positions (Container)'Old;
 
    procedure Finalize_Content is new Ada.Unchecked_Deallocation
