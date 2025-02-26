@@ -108,20 +108,6 @@ is
 
    package Formal_Model with Ghost is
 
-      --  Logical equality cannot be safely executed on most element or key
-      --  types. Thus, this package should only be instantiated with ghost code
-      --  disabled. This is enforced by having a special imported procedure
-      --  Check_Or_Fail that will lead to link-time errors otherwise.
-
-      function Key_Logic_Equal (Left, Right : Key_Type) return Boolean with
-        Global => null,
-        Annotate => (GNATprove, Logical_Equal);
-
-      function Element_Logic_Equal (Left, Right : Element_Type) return Boolean
-      with
-        Global => null,
-        Annotate => (GNATprove, Logical_Equal);
-
       --------------------------
       -- Instantiation Checks --
       --------------------------
@@ -138,7 +124,7 @@ is
       package Lift_Eq is new
         SPARK.Containers.Parameter_Checks.Lift_Eq_Reflexive
           (T                  => Element_Type,
-           "="                => Element_Logic_Equal,
+           "="                => "=",
            Eq                 => "=",
            Param_Eq_Reflexive => Eq_Checks.Eq_Reflexive);
 
@@ -155,7 +141,7 @@ is
       package Lift_Equivalent_Keys is new
         SPARK.Containers.Parameter_Checks.Lift_Eq_Reflexive
           (T                  => Key_Type,
-           "="                => Key_Logic_Equal,
+           "="                => Equivalent_Keys,
            Eq                 => Equivalent_Keys,
            Param_Eq_Reflexive => Eq_Keys_Checks.Eq_Reflexive);
 
@@ -178,7 +164,10 @@ is
         (Element_Type                   => Element_Type,
          Key_Type                       => Key_Type,
          Equivalent_Keys                => Equivalent_Keys,
-         "="                            => Element_Logic_Equal,
+         "="                            => "=",
+         Eq_Reflexive                   => Eq_Checks.Eq_Reflexive,
+         Eq_Symmetric                   => Eq_Checks.Eq_Symmetric,
+         Eq_Transitive                  => Eq_Checks.Eq_Transitive,
          Equivalent_Elements            => "=",
          Equivalent_Elements_Reflexive  => Lift_Eq.Eq_Reflexive,
          Equivalent_Elements_Symmetric  => Eq_Checks.Eq_Symmetric,
@@ -186,6 +175,10 @@ is
          Equivalent_Keys_Reflexive      => Eq_Keys_Checks.Eq_Reflexive,
          Equivalent_Keys_Symmetric      => Eq_Keys_Checks.Eq_Symmetric,
          Equivalent_Keys_Transitive     => Eq_Keys_Checks.Eq_Transitive);
+
+      function Element_Logic_Equal
+        (Left, Right : Element_Type) return Boolean
+         renames M.Element_Logic_Equal;
 
       function "="
         (Left  : M.Map;
@@ -198,11 +191,18 @@ is
       package K is new SPARK.Containers.Functional.Vectors
         (Element_Type                   => Key_Type,
          Index_Type                     => Positive_Count_Type,
-         "="                            => Key_Logic_Equal,
+         "="                            => Equivalent_Keys,
+         Eq_Reflexive                   => Eq_Keys_Checks.Eq_Reflexive,
+         Eq_Symmetric                   => Eq_Keys_Checks.Eq_Symmetric,
+         Eq_Transitive                  => Eq_Keys_Checks.Eq_Transitive,
          Equivalent_Elements            => Equivalent_Keys,
          Equivalent_Elements_Reflexive  => Lift_Equivalent_Keys.Eq_Reflexive,
          Equivalent_Elements_Symmetric  => Eq_Keys_Checks.Eq_Symmetric,
          Equivalent_Elements_Transitive => Eq_Keys_Checks.Eq_Transitive);
+
+      function Key_Logic_Equal
+        (Left, Right : Key_Type) return Boolean
+         renames K.Element_Logic_Equal;
 
       function "="
         (Left  : K.Sequence;
