@@ -415,7 +415,7 @@ is
      Global => null,
      Pre    => Target.Capacity >= Length (Source),
      Post   =>
-       Model (Target) = Model (Source)
+       M.Equal (Model (Target), Model (Source))
          and K.Equal (Keys (Target), Keys (Source))
          and Length (Source) = Length (Target);
 
@@ -423,7 +423,7 @@ is
      Global => null,
      Pre    => Capacity = 0 or else Capacity >= Source.Capacity,
      Post   =>
-       Model (Copy'Result) = Model (Source)
+       M.Equal (Model (Copy'Result), Model (Source))
          and K.Equal (Keys (Copy'Result), Keys (Source))
          and Positions (Copy'Result) = Positions (Source)
          and (if Capacity = 0 then
@@ -572,7 +572,7 @@ is
      Global => null,
      Pre    => Target.Capacity >= Length (Source),
      Post   =>
-       Model (Target) = Model (Source)'Old
+       M.Equal (Model (Target), Model (Source)'Old)
          and K.Equal (Keys (Target), Keys (Source)'Old)
          and Length (Source)'Old = Length (Target)
          and Length (Source) = 0;
@@ -603,7 +603,7 @@ is
 
        (Contains (Container, Key) =>
           not Inserted
-            and Model (Container) = Model (Container)'Old
+            and M.Equal (Model (Container), Model (Container)'Old)
             and K.Equal (Keys (Container), Keys (Container)'Old)
             and Positions (Container) = Positions (Container)'Old,
 
@@ -623,7 +623,7 @@ is
 
             --  Other mappings are preserved
 
-            and Model (Container)'Old <= Model (Container)
+            and M.Elements_Equal (Model (Container)'Old, Model (Container))
             and M.Keys_Included_Except
                   (Model (Container),
                    Model (Container)'Old,
@@ -677,7 +677,7 @@ is
 
          --  Other mappings are preserved
 
-         and Model (Container)'Old <= Model (Container)
+         and M.Elements_Equal (Model (Container)'Old, Model (Container))
          and M.Keys_Included_Except
                (Model (Container),
                 Model (Container)'Old,
@@ -755,7 +755,7 @@ is
 
             --  Other mappings are preserved
 
-            and Model (Container)'Old <= Model (Container)
+            and M.Elements_Equal (Model (Container)'Old, Model (Container))
             and M.Keys_Included_Except
                   (Model (Container),
                    Model (Container)'Old,
@@ -835,7 +835,7 @@ is
        --  If Key is not in Container, nothing is changed
 
        (not Contains (Container, Key) =>
-          Model (Container) = Model (Container)'Old
+          M.Equal (Model (Container), Model (Container)'Old)
             and K.Equal (Keys (Container), Keys (Container)'Old)
             and Positions (Container) = Positions (Container)'Old,
 
@@ -846,7 +846,7 @@ is
 
             --  Other mappings are preserved
 
-            and Model (Container) <= Model (Container)'Old
+            and M.Elements_Equal (Model (Container), Model (Container)'Old)
             and M.Keys_Included_Except
                   (Model (Container)'Old,
                    Model (Container),
@@ -888,7 +888,7 @@ is
 
          --  Other mappings are preserved
 
-         and Model (Container) <= Model (Container)'Old
+         and M.Elements_Equal (Model (Container), Model (Container)'Old)
          and M.Keys_Included_Except
                (Model (Container)'Old,
                 Model (Container),
@@ -933,7 +933,7 @@ is
 
          --  Other mappings are preserved
 
-         and Model (Container) <= Model (Container)'Old
+         and M.Elements_Equal (Model (Container), Model (Container)'Old)
          and M.Keys_Included_Except
                (Model (Container)'Old,
                 Model (Container),
@@ -976,7 +976,7 @@ is
 
             --  Other mappings are preserved
 
-            and Model (Container) <= Model (Container)'Old
+            and M.Elements_Equal (Model (Container), Model (Container)'Old)
             and M.Keys_Included_Except
                   (Model (Container)'Old,
                    Model (Container),
@@ -1011,7 +1011,7 @@ is
 
             --  Other mappings are preserved
 
-            and Model (Container) <= Model (Container)'Old
+            and M.Elements_Equal (Model (Container), Model (Container)'Old)
             and M.Keys_Included_Except
                   (Model (Container)'Old,
                    Model (Container),

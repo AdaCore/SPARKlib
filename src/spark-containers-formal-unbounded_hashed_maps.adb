@@ -76,7 +76,7 @@ is
 
      Global => null,
      Post   =>
-       Model (Container) = Model (Container)'Old
+       M.Equal (Model (Container), Model (Container)'Old)
          and Mapping_Preserved
            (K_Left  => Keys (Container)'Old,
             K_Right => Keys (Container),

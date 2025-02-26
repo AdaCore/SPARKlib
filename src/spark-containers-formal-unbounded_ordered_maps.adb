@@ -89,7 +89,7 @@ is
    --  Allocate a new larger Tree
 
      Global => null,
-     Post   => Model (Container) = Model (Container)'Old
+     Post   => M.Equal (Model (Container), Model (Container)'Old)
                  and Positions (Container) = Positions (Container)'Old
                  and K.Equal (Keys (Container), Keys (Container)'Old);
 
