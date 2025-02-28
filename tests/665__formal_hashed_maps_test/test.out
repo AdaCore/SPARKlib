@@ -7,12 +7,12 @@ inst.ads:8:13: info: implicit aspect Always_Terminates on "Eq" has been proved, 
 inst.ads:8:55: info: division check proved (CVC5: 1 VC)
 inst.ads:8:70: info: division check proved (CVC5: 1 VC)
 inst.ads:9:13: info: implicit aspect Always_Terminates on "Equivalent" has been proved, subprogram will terminate
-spark-containers-parameter_checks.ads:246:19: medium: postcondition might fail, in instantiation at spark-containers-formal-hashed_maps.ads:162, in instantiation at inst.ads:10
+spark-containers-parameter_checks.ads:246:19: medium: postcondition might fail, in instantiation at spark-containers-formal-hashed_maps.ads:148, in instantiation at inst.ads:10
 test.adb:26:14: info: postcondition proved (CVC5: 1 VC; Z3: 4 VC)
 test.adb:29:29: info: precondition proved (CVC5: 1 VC)
 test.adb:32:23: info: unrolling loop
 test.adb:33:10: info: precondition proved (CVC5: 7 VC; Z3: 3 VC)
-test.adb:40:29: medium: postcondition might fail, cannot prove K in 100 | 200 | 300 | 400 | 500
+test.adb:39:14: info: postcondition proved (CVC5: 2 VC; Z3: 6 VC)
 test.adb:42:29: info: precondition proved (CVC5: 1 VC)
 test.adb:45:23: info: unrolling loop
 test.adb:46:10: info: precondition proved (CVC5: 7 VC; Z3: 3 VC)
@@ -37,7 +37,7 @@ test.adb:75:12: info: discriminant check proved (CVC5: 1 VC)
 test.adb:76:07: info: precondition proved (Z3: 1 VC)
 test.adb:77:07: info: precondition proved (Z3: 1 VC)
 test.adb:79:12: info: discriminant check proved (CVC5: 1 VC)
-test.adb:80:07: medium: precondition might fail, cannot prove not Contains (Container, Key)
+test.adb:80:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
 test.adb:81:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
 test.adb:82:07: info: precondition proved (Z3: 1 VC)
 test.adb:84:12: info: discriminant check proved (CVC5: 1 VC)
@@ -482,7 +482,7 @@ test.adb:568:07: info: precondition proved (CVC5: 1 VC)
 test.adb:569:07: medium: precondition might fail
 test.adb:571:07: info: precondition proved (CVC5: 1 VC)
 test.adb:573:07: info: precondition proved (CVC5: 1 VC)
-test.adb:574:07: medium: precondition might fail
+test.adb:574:07: info: precondition proved (Z3: 1 VC)
 test.adb:575:07: info: precondition proved (Z3: 1 VC)
 test.adb:579:07: info: initialization of "X" proved
 test.adb:579:16: info: range check proved (CVC5: 2 VC)
