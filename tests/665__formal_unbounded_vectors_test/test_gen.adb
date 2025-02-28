@@ -162,8 +162,7 @@ procedure Test_Gen with SPARK_Mode is
       Create_Non_Empty_Vector (X);
 
       declare
-         X_Acc : access Vector := X'Access;
-         R     : access Integer := Reference (X_Acc, 2);
+         R : access Integer := Reference (X, 2);
       begin
          Assert (R.all = 2, "Reference on non-empty vector");
          R.all := 20;

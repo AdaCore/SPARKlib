@@ -198,8 +198,7 @@ procedure Test with SPARK_Mode is
       P4 := Next (X, Next (X, P2));
 
       declare
-         X_Acc : access List := X'Access;
-         R     : access Integer := Reference (X_Acc, P2);
+         R : access Integer := Reference (X, P2);
       begin
          Assert (R.all = 2, "Reference on non-empty list");
          R.all := 20;

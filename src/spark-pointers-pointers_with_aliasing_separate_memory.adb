@@ -90,7 +90,7 @@ is
    -- Reference --
    ---------------
 
-   function Reference (Memory : not null access Memory_Type; P : Pointer)
+   function Reference (Memory : Memory_Type; P : Pointer)
                        return   not null access Object
    is
      (P);
