@@ -46,7 +46,7 @@ is
      Global => null,
      Pre    => Container.Nodes = null
                  or else Length (Container) = Container.Nodes'Length,
-     Post   => Model (Container) = Model (Container)'Old
+     Post   => M.Equal (Model (Container), Model (Container)'Old)
                  and Positions (Container) = Positions (Container)'Old;
 
    procedure Finalize_Element is new Ada.Unchecked_Deallocation
@@ -569,17 +569,6 @@ is
    ------------------
 
    package body Formal_Model is
-
-      -------------------------
-      -- Element_Logic_Equal --
-      -------------------------
-
-      function Element_Logic_Equal (Left, Right : Element_Type) return Boolean
-      is
-      begin
-         Check_Or_Fail;
-         return Left = Right;
-      end Element_Logic_Equal;
 
       ----------------------------
       -- Lift_Abstraction_Level --

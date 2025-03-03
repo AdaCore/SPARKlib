@@ -395,10 +395,27 @@ is
             Element_Logic_Equal (Get (Container, I), Copy_Element (Item)));
    pragma Annotate (GNATprove, Inline_For_Proof, Constant_Range);
 
+   function Equal
+     (Left  : Sequence;
+      Right : Sequence) return Boolean
+   --  Returns True is Left and Right have the same elements using logical
+   --  equality to compare elements.
+
+   with
+     Ghost,
+     Global => null,
+     Post   =>
+       Equal'Result =
+         (Length (Left) = Length (Right)
+           and then (for all N in Index_Type'First .. Last (Left) =>
+                       Element_Logic_Equal (Get (Left, N), Get (Right, N))));
+   pragma Annotate (GNATprove, Inline_For_Proof, Equal);
+
    function Equal_Prefix
-     (Left     : Sequence;
-      Right    : Sequence) return Boolean
-   --  Returns True is Left and Right are the same except at position Position
+     (Left  : Sequence;
+      Right : Sequence) return Boolean
+   --  Returns True is Left is a subsequence of Right using logical equality to
+   --  compare elements.
 
    with
      Ghost,

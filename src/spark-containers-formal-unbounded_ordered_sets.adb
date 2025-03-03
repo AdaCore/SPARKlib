@@ -128,7 +128,7 @@ is
 
      Global => null,
      Post   => Model (Container) = Model (Container)'Old
-                 and Elements (Container) = Elements (Container)'Old
+                 and E.Equal (Elements (Container), Elements (Container)'Old)
                  and Positions (Container) = Positions (Container)'Old;
 
    procedure Finalize_Content is new Ada.Unchecked_Deallocation
@@ -828,17 +828,6 @@ is
 
          return True;
       end E_Smaller_Than_Range;
-
-      -------------------------
-      -- Element_Logic_Equal --
-      -------------------------
-
-      function Element_Logic_Equal (Left, Right : Element_Type) return Boolean
-      is
-      begin
-         Check_Or_Fail;
-         return Left = Right;
-      end Element_Logic_Equal;
 
       --------------
       -- Elements --

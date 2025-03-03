@@ -72,16 +72,6 @@ is
 
    package Formal_Model with Ghost is
 
-      --  Logical equality cannot be safely executed on most element types.
-      --  Thus, this package should only be instantiated with ghost code
-      --  disabled. This is enforced by having a special imported procedure
-      --  Check_Or_Fail that will lead to link-time errors otherwise.
-
-      function Element_Logic_Equal (Left, Right : Element_Type) return Boolean
-      with
-        Global => null,
-        Annotate => (GNATprove, Logical_Equal);
-
       --------------------------
       -- Instantiation Checks --
       --------------------------
@@ -98,7 +88,7 @@ is
       package Lift_Eq is new
         SPARK.Containers.Parameter_Checks.Lift_Eq_Reflexive
           (T                  => Element_Type,
-           "="                => Element_Logic_Equal,
+           "="                => "=",
            Eq                 => "=",
            Param_Eq_Reflexive => Eq_Checks.Eq_Reflexive);
 
@@ -111,11 +101,18 @@ is
       package M is new SPARK.Containers.Functional.Vectors
         (Index_Type                     => Positive_Count_Type,
          Element_Type                   => Element_Type,
-         "="                            => Element_Logic_Equal,
+         "="                            => "=",
+         Eq_Reflexive                   => Eq_Checks.Eq_Reflexive,
+         Eq_Symmetric                   => Eq_Checks.Eq_Symmetric,
+         Eq_Transitive                  => Eq_Checks.Eq_Transitive,
          Equivalent_Elements            => "=",
          Equivalent_Elements_Reflexive  => Lift_Eq.Eq_Reflexive,
          Equivalent_Elements_Symmetric  => Eq_Checks.Eq_Symmetric,
          Equivalent_Elements_Transitive => Eq_Checks.Eq_Transitive);
+
+      function Element_Logic_Equal
+        (Left, Right : Element_Type) return Boolean
+         renames M.Element_Logic_Equal;
 
       function "="
         (Left  : M.Sequence;
@@ -384,13 +381,13 @@ is
    procedure Assign (Target : in out List; Source : List) with
      Global => null,
      Pre    => Target.Capacity >= Length (Source),
-     Post   => Model (Target) = Model (Source);
+     Post   => M.Equal (Model (Target), Model (Source));
 
    function Copy (Source : List; Capacity : Count_Type := 0) return List with
      Global => null,
      Pre    => Capacity = 0 or else Capacity >= Source.Capacity,
      Post   =>
-       Model (Copy'Result) = Model (Source)
+       M.Equal (Model (Copy'Result), Model (Source))
          and Positions (Copy'Result) = Positions (Source)
          and (if Capacity = 0 then
                  Copy'Result.Capacity = Source.Capacity
@@ -489,7 +486,8 @@ is
    procedure Move (Target : in out List; Source : in out List) with
      Global => null,
      Pre    => Target.Capacity >= Length (Source),
-     Post   => Model (Target) = Model (Source'Old) and Length (Source) = 0;
+     Post   =>
+       M.Equal (Model (Target), Model (Source'Old)) and Length (Source) = 0;
 
    procedure Insert
      (Container : in out List;
@@ -529,7 +527,7 @@ is
 
             --  Elements of Container'Old are preserved
 
-            and Model (Container)'Old <= Model (Container),
+            and M.Equal_Prefix (Model (Container)'Old, Model (Container)),
 
         others =>
 
@@ -716,7 +714,7 @@ is
      Contract_Cases =>
        (Count = 0 =>
          Position = Before
-           and Model (Container) = Model (Container)'Old
+           and M.Equal (Model (Container), Model (Container)'Old)
            and Positions (Container) = Positions (Container)'Old,
 
         others =>
@@ -860,7 +858,7 @@ is
 
          --  Elements of Container'Old are preserved
 
-         and Model (Container)'Old <= Model (Container);
+         and M.Equal_Prefix (Model (Container)'Old, Model (Container));
 
    procedure Append
      (Container : in out List;
@@ -874,7 +872,7 @@ is
 
          --  The elements of Container are preserved
 
-         and Model (Container)'Old <= Model (Container)
+         and M.Equal_Prefix (Model (Container)'Old, Model (Container))
 
          --  Container contains Count times New_Item at the end
 
@@ -1046,7 +1044,7 @@ is
 
          --  The elements of Container are preserved
 
-         and Model (Container) <= Model (Container)'Old
+         and M.Equal_Prefix (Model (Container), Model (Container)'Old)
 
          --  The last cursor of Container has been removed
 
@@ -1077,7 +1075,7 @@ is
 
             --  The elements of Container are preserved
 
-            and Model (Container) <= Model (Container)'Old
+            and M.Equal_Prefix (Model (Container), Model (Container)'Old)
 
             --  At most Count cursors have been removed at the end of Container
 
@@ -1315,7 +1313,7 @@ is
      Post           => Length (Container) = Length (Container)'Old,
      Contract_Cases =>
        (Before = Position =>
-          Model (Container) = Model (Container)'Old
+          M.Equal (Model (Container), Model (Container)'Old)
             and Positions (Container) = Positions (Container)'Old,
 
         Before = No_Element =>

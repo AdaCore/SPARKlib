@@ -93,16 +93,6 @@ is
 
    package Formal_Model with Ghost is
 
-      --  Logical equality cannot be safely executed on most element types.
-      --  Thus, this package should only be instantiated with ghost code
-      --  disabled. This is enforced by having a special imported procedure
-      --  Check_Or_Fail that will lead to link-time errors otherwise.
-
-      function Element_Logic_Equal (Left, Right : Element_Type) return Boolean
-      with
-        Global => null,
-        Annotate => (GNATprove, Logical_Equal);
-
       --------------------------
       -- Instantiation Checks --
       --------------------------
@@ -119,7 +109,7 @@ is
       package Lift_Eq is new
         SPARK.Containers.Parameter_Checks.Lift_Eq_Reflexive
           (T                  => Element_Type,
-           "="                => Element_Logic_Equal,
+           "="                => "=",
            Eq                 => "=",
            Param_Eq_Reflexive => Eq_Checks.Eq_Reflexive);
 
@@ -161,11 +151,18 @@ is
       package E is new SPARK.Containers.Functional.Vectors
         (Element_Type                   => Element_Type,
          Index_Type                     => Positive_Count_Type,
-         "="                            => Element_Logic_Equal,
+         "="                            => "=",
+         Eq_Reflexive                   => Eq_Checks.Eq_Reflexive,
+         Eq_Symmetric                   => Eq_Checks.Eq_Symmetric,
+         Eq_Transitive                  => Eq_Checks.Eq_Transitive,
          Equivalent_Elements            => "=",
          Equivalent_Elements_Reflexive  => Lift_Eq.Eq_Reflexive,
          Equivalent_Elements_Symmetric  => Eq_Checks.Eq_Symmetric,
          Equivalent_Elements_Transitive => Eq_Checks.Eq_Transitive);
+
+      function Element_Logic_Equal
+        (Left, Right : Element_Type) return Boolean
+         renames E.Element_Logic_Equal;
 
       function "="
         (Left  : E.Sequence;
@@ -548,14 +545,14 @@ is
      Global => null,
      Post   =>
        Model (Target) = Model (Source)
-         and Elements (Target) = Elements (Source)
+         and E.Equal (Elements (Target), Elements (Source))
          and Length (Target) = Length (Source);
 
    function Copy (Source : Set) return Set with
      Global => null,
      Post   =>
        Model (Copy'Result) = Model (Source)
-         and Elements (Copy'Result) = Elements (Source)
+         and E.Equal (Elements (Copy'Result), Elements (Source))
          and Positions (Copy'Result) = Positions (Source);
 
    function Element
@@ -624,7 +621,7 @@ is
      Global => null,
      Post   =>
        Model (Target) = Model (Source)'Old
-         and Elements (Target) = Elements (Source)'Old
+         and E.Equal (Elements (Target), Elements (Source)'Old)
          and Length (Source)'Old = Length (Target)
          and Length (Source) = 0;
 
@@ -654,7 +651,7 @@ is
        (Contains (Container, New_Item) =>
           not Inserted
             and Model (Container) = Model (Container)'Old
-            and Elements (Container) = Elements (Container)'Old
+            and E.Equal (Elements (Container), Elements (Container)'Old)
             and Positions (Container) = Positions (Container)'Old,
 
         --  Otherwise, New_Item is inserted in Container and Inserted is set to
@@ -874,7 +871,7 @@ is
 
        (not Contains (Container, Item) =>
           Model (Container) = Model (Container)'Old
-            and Elements (Container) = Elements (Container)'Old
+            and E.Equal (Elements (Container), Elements (Container)'Old)
             and Positions (Container) = Positions (Container)'Old,
 
         --  Otherwise, Item is removed from Container
@@ -1749,7 +1746,7 @@ is
 
           (not Contains (Container, Key) =>
              Model (Container) = Model (Container)'Old
-               and Elements (Container) = Elements (Container)'Old
+               and E.Equal (Elements (Container), Elements (Container)'Old)
                and Positions (Container) = Positions (Container)'Old,
 
            --  Otherwise, Key is removed from Container

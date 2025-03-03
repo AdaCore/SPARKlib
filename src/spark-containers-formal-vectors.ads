@@ -105,16 +105,6 @@ is
       function Of_Big (J : Big_Integer) return Count_Type renames
         Conversions.From_Big_Integer;
 
-      --  Logical equality cannot be safely executed on most element types.
-      --  Thus, this package should only be instantiated with ghost code
-      --  disabled. This is enforced by having a special imported procedure
-      --  Check_Or_Fail that will lead to link-time errors otherwise.
-
-      function Element_Logic_Equal (Left, Right : Element_Type) return Boolean
-      with
-        Global => null,
-        Annotate => (GNATprove, Logical_Equal);
-
       --------------------------
       -- Instantiation Checks --
       --------------------------
@@ -131,7 +121,7 @@ is
       package Lift_Eq is new
         SPARK.Containers.Parameter_Checks.Lift_Eq_Reflexive
           (T                  => Element_Type,
-           "="                => Element_Logic_Equal,
+           "="                => "=",
            Eq                 => "=",
            Param_Eq_Reflexive => Eq_Checks.Eq_Reflexive);
 
@@ -142,11 +132,18 @@ is
       package M is new SPARK.Containers.Functional.Vectors
         (Index_Type                     => Index_Type,
          Element_Type                   => Element_Type,
-         "="                            => Element_Logic_Equal,
+         "="                            => "=",
+         Eq_Reflexive                   => Eq_Checks.Eq_Reflexive,
+         Eq_Symmetric                   => Eq_Checks.Eq_Symmetric,
+         Eq_Transitive                  => Eq_Checks.Eq_Transitive,
          Equivalent_Elements            => "=",
          Equivalent_Elements_Reflexive  => Lift_Eq.Eq_Reflexive,
          Equivalent_Elements_Symmetric  => Eq_Checks.Eq_Symmetric,
          Equivalent_Elements_Transitive => Eq_Checks.Eq_Transitive);
+
+      function Element_Logic_Equal
+        (Left, Right : Element_Type) return Boolean
+         renames M.Element_Logic_Equal;
 
       function "="
         (Left  : M.Sequence;
@@ -292,7 +289,7 @@ is
    with
      Global => null,
      Pre    => Capacity <= Container.Capacity,
-     Post   => Model (Container) = Model (Container)'Old;
+     Post   => M.Equal (Model (Container), Model (Container)'Old);
 
    function Is_Empty (Container : Vector) return Boolean with
      Global => null,
@@ -305,7 +302,7 @@ is
    procedure Assign (Target : in out Vector; Source : Vector) with
      Global => null,
      Pre    => Length (Source) <= Target.Capacity,
-     Post   => Model (Target) = Model (Source);
+     Post   => M.Equal (Model (Target), Model (Source));
 
    function Copy
      (Source   : Vector;
@@ -314,7 +311,7 @@ is
      Global => null,
      Pre    => (Capacity = 0 or Length (Source) <= Capacity),
      Post   =>
-       Model (Copy'Result) = Model (Source)
+       M.Equal (Model (Copy'Result), Model (Source))
          and (if Capacity = 0 then
                  Copy'Result.Capacity = Length (Source)
               else
@@ -324,7 +321,8 @@ is
    with
      Global => null,
      Pre    => Length (Source) <= Capacity (Target),
-     Post   => Model (Target) = Model (Source)'Old and Length (Source) = 0;
+     Post   =>
+       M.Equal (Model (Target), Model (Source)'Old) and Length (Source) = 0;
 
    function Element
      (Container : Vector;
@@ -596,7 +594,7 @@ is
 
          --  The elements of Container are preserved
 
-         and Model (Container)'Old <= Model (Container)
+         and M.Equal_Prefix (Model (Container)'Old, Model (Container))
 
          --  Elements of New_Item are inserted at the end of Container
 
@@ -616,7 +614,7 @@ is
 
          --  Elements of Container are preserved
 
-         and Model (Container)'Old < Model (Container)
+         and M.Equal_Prefix (Model (Container)'Old, Model (Container))
 
          --  Container now has New_Item at the end of Container
 
@@ -636,7 +634,7 @@ is
 
          --  Elements of Container are preserved
 
-         and Model (Container)'Old <= Model (Container)
+         and M.Equal_Prefix (Model (Container)'Old, Model (Container))
 
          --  New_Item is inserted Count times at the end of Container
 
@@ -753,7 +751,7 @@ is
 
          --  Elements of Container are preserved
 
-         and Model (Container) < Model (Container)'Old;
+         and M.Equal_Prefix (Model (Container), Model (Container)'Old);
 
    procedure Delete_Last (Container : in out Vector; Count : Count_Type) with
      Global         => null,
@@ -768,7 +766,7 @@ is
 
             --  The elements of Container are preserved
 
-            and Model (Container) <= Model (Container)'Old);
+            and M.Equal_Prefix (Model (Container), Model (Container)'Old));
 
    procedure Reverse_Elements (Container : in out Vector) with
      Global => null,

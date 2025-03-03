@@ -50,7 +50,7 @@ is
      --  Widen the sub array of the Vector
 
      Global => null,
-     Post   => Model (Container) = Model (Container)'Old;
+     Post   => M.Equal (Model (Container), Model (Container)'Old);
 
    ---------
    -- "=" --
@@ -485,17 +485,6 @@ is
    ------------------
 
    package body Formal_Model is
-
-      -------------------------
-      -- Element_Logic_Equal --
-      -------------------------
-
-      function Element_Logic_Equal (Left, Right : Element_Type) return Boolean
-      is
-      begin
-         Check_Or_Fail;
-         return Left = Right;
-      end Element_Logic_Equal;
 
       -------------------------
       -- M_Elements_In_Union --

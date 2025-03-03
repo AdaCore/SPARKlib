@@ -485,6 +485,21 @@ is
                  and then Element_Logic_Equal
                     (Get (Left, Key), Get (Right, Key))));
 
+   function Equal (Left, Right : Map) return Boolean
+   --  Returns True if Left and Right have the same keys and these keys are
+   --  mapped to the same elements in Left and Right.
+
+   with
+     Ghost,
+     Global => null,
+     Post   =>
+       Equal'Result =
+         ((for all Key of Left =>
+             Has_Key (Right, Key)
+             and then Element_Logic_Equal
+                (Get (Left, Key), Get (Right, Key)))
+          and (for all Key of Right => Has_Key (Left, Key)));
+
    --------------------------
    -- Instantiation Checks --
    --------------------------

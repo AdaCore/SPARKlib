@@ -104,20 +104,6 @@ is
 
    package Formal_Model with Ghost is
 
-      --  Logical equality cannot be safely executed on most element or key
-      --  types. Thus, this package should only be instantiated with ghost code
-      --  disabled. This is enforced by having a special imported procedure
-      --  Check_Or_Fail that will lead to link-time errors otherwise.
-
-      function Key_Logic_Equal (Left, Right : Key_Type) return Boolean with
-        Global => null,
-        Annotate => (GNATprove, Logical_Equal);
-
-      function Element_Logic_Equal (Left, Right : Element_Type) return Boolean
-      with
-        Global => null,
-        Annotate => (GNATprove, Logical_Equal);
-
       --------------------------
       -- Instantiation Checks --
       --------------------------
@@ -134,7 +120,7 @@ is
       package Lift_Eq is new
         SPARK.Containers.Parameter_Checks.Lift_Eq_Reflexive
           (T                  => Element_Type,
-           "="                => Element_Logic_Equal,
+           "="                => "=",
            Eq                 => "=",
            Param_Eq_Reflexive => Eq_Checks.Eq_Reflexive);
 
@@ -151,7 +137,7 @@ is
       package Lift_Equivalent_Keys is new
         SPARK.Containers.Parameter_Checks.Lift_Eq_Reflexive
           (T                  => Key_Type,
-           "="                => Key_Logic_Equal,
+           "="                => Equivalent_Keys,
            Eq                 => Equivalent_Keys,
            Param_Eq_Reflexive => Lt_Checks.Eq_Reflexive);
 
@@ -165,7 +151,10 @@ is
         (Element_Type                   => Element_Type,
          Key_Type                       => Key_Type,
          Equivalent_Keys                => Equivalent_Keys,
-         "="                            => Element_Logic_Equal,
+         "="                            => "=",
+         Eq_Reflexive                   => Eq_Checks.Eq_Reflexive,
+         Eq_Symmetric                   => Eq_Checks.Eq_Symmetric,
+         Eq_Transitive                  => Eq_Checks.Eq_Transitive,
          Equivalent_Elements            => "=",
          Equivalent_Elements_Reflexive  => Lift_Eq.Eq_Reflexive,
          Equivalent_Elements_Symmetric  => Eq_Checks.Eq_Symmetric,
@@ -173,6 +162,10 @@ is
          Equivalent_Keys_Reflexive      => Lt_Checks.Eq_Reflexive,
          Equivalent_Keys_Symmetric      => Lt_Checks.Eq_Symmetric,
          Equivalent_Keys_Transitive     => Lt_Checks.Eq_Transitive);
+
+      function Element_Logic_Equal
+        (Left, Right : Element_Type) return Boolean
+         renames M.Element_Logic_Equal;
 
       function "="
         (Left  : M.Map;
@@ -185,11 +178,18 @@ is
       package K is new SPARK.Containers.Functional.Vectors
         (Element_Type                   => Key_Type,
          Index_Type                     => Positive_Count_Type,
-         "="                            => Key_Logic_Equal,
+         "="                            => Equivalent_Keys,
+         Eq_Reflexive                   => Lt_Checks.Eq_Reflexive,
+         Eq_Symmetric                   => Lt_Checks.Eq_Symmetric,
+         Eq_Transitive                  => Lt_Checks.Eq_Transitive,
          Equivalent_Elements            => Equivalent_Keys,
          Equivalent_Elements_Reflexive  => Lift_Equivalent_Keys.Eq_Reflexive,
          Equivalent_Elements_Symmetric  => Lt_Checks.Eq_Symmetric,
          Equivalent_Elements_Transitive => Lt_Checks.Eq_Transitive);
+
+      function Key_Logic_Equal
+        (Left, Right : Key_Type) return Boolean
+         renames K.Element_Logic_Equal;
 
       function "="
         (Left  : K.Sequence;
@@ -415,16 +415,16 @@ is
      Global => null,
      Pre    => Target.Capacity >= Length (Source),
      Post   =>
-       Model (Target) = Model (Source)
-         and Keys (Target) = Keys (Source)
+       M.Equal (Model (Target), Model (Source))
+         and K.Equal (Keys (Target), Keys (Source))
          and Length (Source) = Length (Target);
 
    function Copy (Source : Map; Capacity : Count_Type := 0) return Map with
      Global => null,
      Pre    => Capacity = 0 or else Capacity >= Source.Capacity,
      Post   =>
-       Model (Copy'Result) = Model (Source)
-         and Keys (Copy'Result) = Keys (Source)
+       M.Equal (Model (Copy'Result), Model (Source))
+         and K.Equal (Keys (Copy'Result), Keys (Source))
          and Positions (Copy'Result) = Positions (Source)
          and (if Capacity = 0 then
                  Copy'Result.Capacity = Source.Capacity
@@ -460,7 +460,7 @@ is
 
        --  Order of keys and cursors is preserved
 
-       Keys (Container) = Keys (Container)'Old
+       K.Equal (Keys (Container), Keys (Container)'Old)
          and Positions (Container) = Positions (Container)'Old
 
          --  New_Item is now associated with the key at position Position in
@@ -508,7 +508,7 @@ is
 
        --  Order of keys and cursors is preserved
 
-       Keys (At_End (Container)) = Keys (Container)
+       K.Equal (Keys (At_End (Container)), Keys (Container))
          and Positions (At_End (Container)) = Positions (Container)
 
          --  The value designated by the result of Reference is now associated
@@ -548,7 +548,7 @@ is
 
        --  Order of keys and cursors is preserved
 
-       Keys (At_End (Container)) = Keys (Container)
+       K.Equal (Keys (At_End (Container)), Keys (Container))
          and Positions (At_End (Container)) = Positions (Container)
 
          --  The value designated by the result of Reference is now associated
@@ -572,8 +572,8 @@ is
      Global => null,
      Pre    => Target.Capacity >= Length (Source),
      Post   =>
-       Model (Target) = Model (Source)'Old
-         and Keys (Target) = Keys (Source)'Old
+       M.Equal (Model (Target), Model (Source)'Old)
+         and K.Equal (Keys (Target), Keys (Source)'Old)
          and Length (Source)'Old = Length (Target)
          and Length (Source) = 0;
 
@@ -603,8 +603,8 @@ is
 
        (Contains (Container, Key) =>
           not Inserted
-            and Model (Container) = Model (Container)'Old
-            and Keys (Container) = Keys (Container)'Old
+            and M.Equal (Model (Container), Model (Container)'Old)
+            and K.Equal (Keys (Container), Keys (Container)'Old)
             and Positions (Container) = Positions (Container)'Old,
 
         --  Otherwise, Key is inserted in Container and Inserted is set to True
@@ -623,7 +623,7 @@ is
 
             --  Other mappings are preserved
 
-            and Model (Container)'Old <= Model (Container)
+            and M.Elements_Equal (Model (Container)'Old, Model (Container))
             and M.Keys_Included_Except
                   (Model (Container),
                    Model (Container)'Old,
@@ -677,7 +677,7 @@ is
 
          --  Other mappings are preserved
 
-         and Model (Container)'Old <= Model (Container)
+         and M.Elements_Equal (Model (Container)'Old, Model (Container))
          and M.Keys_Included_Except
                (Model (Container),
                 Model (Container)'Old,
@@ -755,7 +755,7 @@ is
 
             --  Other mappings are preserved
 
-            and Model (Container)'Old <= Model (Container)
+            and M.Elements_Equal (Model (Container)'Old, Model (Container))
             and M.Keys_Included_Except
                   (Model (Container),
                    Model (Container)'Old,
@@ -835,8 +835,8 @@ is
        --  If Key is not in Container, nothing is changed
 
        (not Contains (Container, Key) =>
-          Model (Container) = Model (Container)'Old
-            and Keys (Container) = Keys (Container)'Old
+          M.Equal (Model (Container), Model (Container)'Old)
+            and K.Equal (Keys (Container), Keys (Container)'Old)
             and Positions (Container) = Positions (Container)'Old,
 
         --  Otherwise, Key is removed from Container
@@ -846,7 +846,7 @@ is
 
             --  Other mappings are preserved
 
-            and Model (Container) <= Model (Container)'Old
+            and M.Elements_Equal (Model (Container), Model (Container)'Old)
             and M.Keys_Included_Except
                   (Model (Container)'Old,
                    Model (Container),
@@ -888,7 +888,7 @@ is
 
          --  Other mappings are preserved
 
-         and Model (Container) <= Model (Container)'Old
+         and M.Elements_Equal (Model (Container), Model (Container)'Old)
          and M.Keys_Included_Except
                (Model (Container)'Old,
                 Model (Container),
@@ -933,7 +933,7 @@ is
 
          --  Other mappings are preserved
 
-         and Model (Container) <= Model (Container)'Old
+         and M.Elements_Equal (Model (Container), Model (Container)'Old)
          and M.Keys_Included_Except
                (Model (Container)'Old,
                 Model (Container),
@@ -976,7 +976,7 @@ is
 
             --  Other mappings are preserved
 
-            and Model (Container) <= Model (Container)'Old
+            and M.Elements_Equal (Model (Container), Model (Container)'Old)
             and M.Keys_Included_Except
                   (Model (Container)'Old,
                    Model (Container),
@@ -1011,7 +1011,7 @@ is
 
             --  Other mappings are preserved
 
-            and Model (Container) <= Model (Container)'Old
+            and M.Elements_Equal (Model (Container), Model (Container)'Old)
             and M.Keys_Included_Except
                   (Model (Container)'Old,
                    Model (Container),
