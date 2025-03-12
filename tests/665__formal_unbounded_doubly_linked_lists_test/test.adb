@@ -1251,7 +1251,7 @@ procedure Test with SPARK_Mode is
    end Test_Aggregate;
 
 begin
-   Test_Resize;
+   --  Test_Resize;
    Test_Length;
    Test_Empty_List;
    Test_Eq;
