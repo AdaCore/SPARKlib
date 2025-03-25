@@ -146,6 +146,7 @@ package body C_Strings with SPARK_Mode is
             pragma Assert
               (for all I in 0 .. C_Length_Ghost (Chars) =>
                    Res (I) = Chars (Chars'First + I));
+            pragma Assert (Find_Nul (Res) = (if Is_Nul_Terminated (Chars) then C_Length_Ghost (Chars) else Chars'Length));
             return new Char_Array'(Res);
          end;
       elsif Chars'Length = 0 then
@@ -153,6 +154,7 @@ package body C_Strings with SPARK_Mode is
             Res : constant Char_Array := (0 => Nul);
          begin
             pragma Assert (Find_Nul (Res) = 0);
+            pragma Assert (Find_Nul (Res) = (if Is_Nul_Terminated (Chars) then C_Length_Ghost (Chars) else Chars'Length));
             return new Char_Array'(Res);
          end;
       else
@@ -177,6 +179,7 @@ package body C_Strings with SPARK_Mode is
                      Chars'First + I in Chars'Range)));
             pragma Assert (Res (Res'Last) = Nul);
             Lemma_Is_Find_Nul (Res, Chars'Length);
+            pragma Assert (Find_Nul (Res) = (if Is_Nul_Terminated (Chars) then C_Length_Ghost (Chars) else Chars'Length));
             return new Char_Array'(Res);
          end;
       end if;
