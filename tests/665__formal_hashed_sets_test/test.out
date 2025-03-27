@@ -12,7 +12,7 @@ inst.ads:13:71: info: division check proved (CVC5: 1 VC)
 inst.ads:13:71: info: range check proved (CVC5: 1 VC)
 spark-containers-parameter_checks.ads:246:19: medium: postcondition might fail, in instantiation at spark-containers-formal-hashed_sets.ads:143, in instantiation at inst.ads:10
 test.adb:24:14: info: add a contract to analyze it separately from calling contexts
-test.adb:24:14: info: local subprogram "Create_Non_Empty_Set" only analyzed in the context of calls
+test.adb:24:14: info: local subprogram "Create_Non_Empty_Set" only analyzed in the context of calls [info-unrolling-inlining]
 test.adb:27:10: info: precondition proved (CVC5: 1 VC; Z3: 9 VC), in call inlined at test.adb:136
 test.adb:27:10: info: precondition proved (CVC5: 2 VC; Z3: 8 VC), in call inlined at test.adb:581
 test.adb:27:10: info: precondition proved (CVC5: 4 VC; Z3: 6 VC), in call inlined at test.adb:410
@@ -55,7 +55,7 @@ test.adb:27:10: medium: precondition might fail, cannot prove not Contains (Cont
 test.adb:27:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in call inlined at test.adb:606
 test.adb:27:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in call inlined at test.adb:793
 test.adb:31:14: info: add a contract to analyze it separately from calling contexts
-test.adb:31:14: info: local subprogram "Create_Non_Empty_Set_With_Collisions" only analyzed in the context of calls
+test.adb:31:14: info: local subprogram "Create_Non_Empty_Set_With_Collisions" only analyzed in the context of calls [info-unrolling-inlining]
 test.adb:34:10: info: precondition proved (Z3: 10 VC), in call inlined at test.adb:685
 test.adb:34:10: info: precondition proved (Z3: 10 VC), in call inlined at test.adb:722
 test.adb:34:10: info: precondition proved (Z3: 10 VC), in call inlined at test.adb:881
@@ -76,7 +76,7 @@ test.adb:45:22: info: range check proved (CVC5: 2 VC)
 test.adb:47:07: info: precondition proved (CVC5: 1 VC)
 test.adb:48:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:48:07: info: in inlined body at line 26
-test.adb:48:07: info: unrolling loop
+test.adb:48:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:49:07: info: precondition proved (Z3: 1 VC)
 test.adb:53:07: info: initialization of "X" proved
 test.adb:53:10: info: initialization of "Y" proved
@@ -85,7 +85,7 @@ test.adb:53:25: info: range check proved (CVC5: 2 VC)
 test.adb:55:07: info: precondition proved (CVC5: 1 VC)
 test.adb:56:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:56:07: info: in inlined body at line 26
-test.adb:56:07: info: unrolling loop
+test.adb:56:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:57:07: info: precondition proved (Z3: 2 VC)
 test.adb:58:07: info: precondition proved (Z3: 1 VC)
 test.adb:59:12: info: discriminant check proved (CVC5: 1 VC)
@@ -104,7 +104,7 @@ test.adb:71:25: info: range check proved (CVC5: 2 VC)
 test.adb:73:07: info: precondition proved (CVC5: 1 VC)
 test.adb:74:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:74:07: info: in inlined body at line 26
-test.adb:74:07: info: unrolling loop
+test.adb:74:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:75:07: info: precondition proved (Z3: 2 VC)
 test.adb:76:07: info: precondition proved (Z3: 1 VC)
 test.adb:77:12: info: discriminant check proved (CVC5: 1 VC)
@@ -130,7 +130,7 @@ test.adb:104:07: info: precondition proved (CVC5: 1 VC)
 test.adb:105:07: info: precondition proved (CVC5: 1 VC)
 test.adb:106:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:106:07: info: in inlined body at line 26
-test.adb:106:07: info: unrolling loop
+test.adb:106:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:107:07: info: precondition proved (CVC5: 1 VC)
 test.adb:108:07: info: precondition proved (CVC5: 1 VC)
 test.adb:109:07: info: precondition proved (CVC5: 1 VC)
@@ -140,7 +140,7 @@ test.adb:113:22: info: range check proved (CVC5: 2 VC)
 test.adb:115:07: info: precondition proved (CVC5: 1 VC)
 test.adb:116:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:116:07: info: in inlined body at line 26
-test.adb:116:07: info: unrolling loop
+test.adb:116:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:117:07: info: precondition proved (CVC5: 1 VC)
 test.adb:121:07: info: initialization of "X" proved
 test.adb:121:16: info: range check proved (CVC5: 2 VC)
@@ -148,7 +148,7 @@ test.adb:121:22: info: range check proved (CVC5: 2 VC)
 test.adb:124:07: info: precondition proved (CVC5: 1 VC)
 test.adb:125:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:125:07: info: in inlined body at line 26
-test.adb:125:07: info: unrolling loop
+test.adb:125:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:127:07: info: precondition proved (CVC5: 1 VC)
 test.adb:131:07: info: initialization of "X" proved
 test.adb:131:10: info: initialization of "Y" proved
@@ -156,13 +156,13 @@ test.adb:131:19: info: range check proved (CVC5: 2 VC)
 test.adb:131:25: info: range check proved (CVC5: 2 VC)
 test.adb:133:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:133:07: info: in inlined body at line 26
-test.adb:133:07: info: unrolling loop
+test.adb:133:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:134:07: info: precondition proved (Z3: 1 VC)
 test.adb:135:07: info: precondition proved (CVC5: 1 VC)
 test.adb:136:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:136:07: info: in inlined body at line 26
-test.adb:136:07: info: unrolling loop
-test.adb:137:23: info: unrolling loop
+test.adb:136:07: info: unrolling loop [info-unrolling-inlining]
+test.adb:137:23: info: unrolling loop [info-unrolling-inlining]
 test.adb:138:10: info: precondition proved (Z3: 6 VC)
 test.adb:140:07: info: precondition proved (Z3: 1 VC)
 test.adb:141:07: info: precondition proved (Z3: 1 VC)
@@ -173,7 +173,7 @@ test.adb:148:30: info: precondition proved (CVC5: 1 VC)
 test.adb:150:10: info: precondition proved (CVC5: 1 VC)
 test.adb:152:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:152:07: info: in inlined body at line 26
-test.adb:152:07: info: unrolling loop
+test.adb:152:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:154:30: info: precondition proved (CVC5: 1 VC)
 test.adb:156:10: info: precondition proved (Z3: 1 VC)
 test.adb:161:07: info: initialization of "X" proved
@@ -181,7 +181,7 @@ test.adb:161:16: info: range check proved (CVC5: 2 VC)
 test.adb:161:22: info: range check proved (CVC5: 2 VC)
 test.adb:163:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:163:07: info: in inlined body at line 26
-test.adb:163:07: info: unrolling loop
+test.adb:163:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:164:07: info: precondition proved (Z3: 1 VC)
 test.adb:164:15: info: precondition proved (Z3: 1 VC)
 test.adb:168:07: info: initialization of "X" proved
@@ -193,7 +193,7 @@ test.adb:170:07: info: initialization of "E1" proved
 test.adb:170:11: info: initialization of "E2" proved
 test.adb:172:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:172:07: info: in inlined body at line 26
-test.adb:172:07: info: unrolling loop
+test.adb:172:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:174:13: info: precondition proved (CVC5: 1 VC)
 test.adb:175:13: info: precondition proved (Z3: 1 VC)
 test.adb:176:13: info: precondition proved (Z3: 1 VC)
@@ -219,7 +219,7 @@ test.adb:193:07: info: initialization of "P1" proved
 test.adb:194:07: info: initialization of "E1" proved
 test.adb:196:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:196:07: info: in inlined body at line 26
-test.adb:196:07: info: unrolling loop
+test.adb:196:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:198:13: info: precondition proved (Z3: 1 VC)
 test.adb:200:07: info: precondition proved (CVC5: 1 VC)
 test.adb:200:15: info: precondition proved (Z3: 1 VC)
@@ -229,13 +229,13 @@ test.adb:204:19: info: range check proved (CVC5: 2 VC)
 test.adb:204:25: info: range check proved (CVC5: 2 VC)
 test.adb:206:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:206:07: info: in inlined body at line 26
-test.adb:206:07: info: unrolling loop
+test.adb:206:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:207:07: info: precondition proved (Z3: 1 VC)
 test.adb:208:07: info: precondition proved (CVC5: 1 VC)
 test.adb:209:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:209:07: info: in inlined body at line 26
-test.adb:209:07: info: unrolling loop
-test.adb:210:23: info: unrolling loop
+test.adb:209:07: info: unrolling loop [info-unrolling-inlining]
+test.adb:210:23: info: unrolling loop [info-unrolling-inlining]
 test.adb:211:10: info: precondition proved (CVC5: 3 VC; Z3: 3 VC)
 test.adb:213:07: info: precondition proved (CVC5: 1 VC)
 test.adb:214:07: info: precondition proved (CVC5: 1 VC)
@@ -332,7 +332,7 @@ test.adb:304:07: info: initialization of "P" proved
 test.adb:304:10: info: initialization of "Q" proved
 test.adb:306:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:306:07: info: in inlined body at line 26
-test.adb:306:07: info: unrolling loop
+test.adb:306:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:309:07: info: precondition proved (Z3: 1 VC)
 test.adb:311:07: info: precondition proved (Z3: 1 VC)
 test.adb:312:07: info: precondition proved (Z3: 1 VC)
@@ -341,7 +341,7 @@ test.adb:313:07: info: precondition proved (Z3: 1 VC)
 test.adb:313:15: info: precondition proved (Z3: 1 VC)
 test.adb:315:07: info: analyzing call to "Create_Non_Empty_Set_With_Collisions" in context
 test.adb:315:07: info: in inlined body at line 33
-test.adb:315:07: info: unrolling loop
+test.adb:315:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:318:07: info: precondition proved (Z3: 1 VC)
 test.adb:320:07: info: precondition proved (Z3: 1 VC)
 test.adb:321:07: medium: precondition might fail
@@ -356,7 +356,7 @@ test.adb:327:07: info: initialization of "Q" proved
 test.adb:330:07: info: precondition proved (CVC5: 1 VC)
 test.adb:332:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:332:07: info: in inlined body at line 26
-test.adb:332:07: info: unrolling loop
+test.adb:332:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:335:07: info: precondition proved (Z3: 1 VC)
 test.adb:340:07: info: precondition proved (Z3: 1 VC)
 test.adb:341:07: info: precondition proved (Z3: 1 VC)
@@ -364,7 +364,7 @@ test.adb:342:07: info: precondition proved (Z3: 1 VC)
 test.adb:342:15: info: precondition proved (Z3: 1 VC)
 test.adb:344:07: info: analyzing call to "Create_Non_Empty_Set_With_Collisions" in context
 test.adb:344:07: info: in inlined body at line 33
-test.adb:344:07: info: unrolling loop
+test.adb:344:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:347:07: medium: precondition might fail
 test.adb:352:07: medium: precondition might fail
 test.adb:353:07: info: precondition proved (Z3: 1 VC)
@@ -377,7 +377,7 @@ test.adb:359:25: info: range check proved (CVC5: 2 VC)
 test.adb:360:07: info: initialization of "Q" proved
 test.adb:362:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:362:07: info: in inlined body at line 26
-test.adb:362:07: info: unrolling loop
+test.adb:362:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:364:07: info: precondition proved (Z3: 1 VC)
 test.adb:366:07: info: precondition proved (Z3: 1 VC)
 test.adb:367:07: info: precondition proved (Z3: 1 VC)
@@ -385,7 +385,7 @@ test.adb:368:07: info: precondition proved (Z3: 1 VC)
 test.adb:368:15: info: precondition proved (Z3: 1 VC)
 test.adb:370:07: info: analyzing call to "Create_Non_Empty_Set_With_Collisions" in context
 test.adb:370:07: info: in inlined body at line 33
-test.adb:370:07: info: unrolling loop
+test.adb:370:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:372:07: info: precondition proved (Z3: 1 VC)
 test.adb:374:07: info: precondition proved (Z3: 1 VC)
 test.adb:375:07: info: precondition proved (Z3: 1 VC)
@@ -399,7 +399,7 @@ test.adb:382:07: info: initialization of "P" proved
 test.adb:382:10: info: initialization of "Q" proved
 test.adb:384:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:384:07: info: in inlined body at line 26
-test.adb:384:07: info: unrolling loop
+test.adb:384:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:387:07: info: precondition proved (Z3: 1 VC)
 test.adb:389:07: info: precondition proved (Z3: 1 VC)
 test.adb:390:07: info: precondition proved (Z3: 1 VC)
@@ -407,7 +407,7 @@ test.adb:391:07: info: precondition proved (Z3: 1 VC)
 test.adb:391:15: info: precondition proved (Z3: 1 VC)
 test.adb:393:07: info: analyzing call to "Create_Non_Empty_Set_With_Collisions" in context
 test.adb:393:07: info: in inlined body at line 33
-test.adb:393:07: info: unrolling loop
+test.adb:393:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:396:07: info: precondition proved (Z3: 1 VC)
 test.adb:398:07: info: precondition proved (Z3: 1 VC)
 test.adb:399:07: info: precondition proved (Z3: 1 VC)
@@ -422,12 +422,12 @@ test.adb:407:07: info: precondition proved (CVC5: 1 VC)
 test.adb:408:07: info: precondition proved (CVC5: 1 VC)
 test.adb:410:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:410:07: info: in inlined body at line 26
-test.adb:410:07: info: unrolling loop
+test.adb:410:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:411:07: info: precondition proved (Z3: 1 VC)
 test.adb:412:07: medium: precondition might fail
 test.adb:413:07: info: precondition proved (Z3: 1 VC)
 test.adb:414:07: medium: precondition might fail
-test.adb:416:23: info: unrolling loop
+test.adb:416:23: info: unrolling loop [info-unrolling-inlining]
 test.adb:417:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item)
 test.adb:419:07: info: precondition proved (Z3: 1 VC)
 test.adb:420:07: info: precondition proved (Z3: 1 VC)
@@ -441,12 +441,12 @@ test.adb:430:21: info: precondition proved (CVC5: 1 VC)
 test.adb:432:10: info: precondition proved (CVC5: 1 VC)
 test.adb:435:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:435:07: info: in inlined body at line 26
-test.adb:435:07: info: unrolling loop
+test.adb:435:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:437:21: info: precondition proved (Z3: 1 VC)
 test.adb:439:10: medium: precondition might fail
 test.adb:442:21: info: precondition proved (Z3: 1 VC)
 test.adb:444:10: medium: precondition might fail
-test.adb:447:23: info: unrolling loop
+test.adb:447:23: info: unrolling loop [info-unrolling-inlining]
 test.adb:448:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item)
 test.adb:451:21: info: precondition proved (Z3: 1 VC)
 test.adb:453:10: info: precondition proved (Z3: 1 VC)
@@ -461,11 +461,11 @@ test.adb:463:07: info: precondition proved (CVC5: 1 VC)
 test.adb:464:07: info: precondition proved (CVC5: 1 VC)
 test.adb:466:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:466:07: info: in inlined body at line 26
-test.adb:466:07: info: unrolling loop
+test.adb:466:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:468:07: info: precondition proved (Z3: 1 VC)
 test.adb:469:12: info: discriminant check proved (CVC5: 1 VC)
 test.adb:471:07: info: precondition proved (Z3: 1 VC)
-test.adb:473:23: info: unrolling loop
+test.adb:473:23: info: unrolling loop [info-unrolling-inlining]
 test.adb:474:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item)
 test.adb:476:12: info: discriminant check proved (CVC5: 1 VC)
 test.adb:478:07: info: precondition proved (Z3: 1 VC)
@@ -478,10 +478,10 @@ test.adb:485:25: info: range check proved (CVC5: 2 VC)
 test.adb:490:10: info: precondition proved (CVC5: 1 VC)
 test.adb:493:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:493:07: info: in inlined body at line 26
-test.adb:493:07: info: unrolling loop
+test.adb:493:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:497:10: info: precondition proved (Z3: 1 VC)
 test.adb:502:10: info: precondition proved (Z3: 1 VC)
-test.adb:505:23: info: unrolling loop
+test.adb:505:23: info: unrolling loop [info-unrolling-inlining]
 test.adb:506:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item)
 test.adb:511:10: info: precondition proved (Z3: 1 VC)
 test.adb:512:10: info: precondition proved (Z3: 1 VC)
@@ -495,11 +495,11 @@ test.adb:521:07: info: precondition proved (CVC5: 1 VC)
 test.adb:522:07: info: precondition proved (CVC5: 1 VC)
 test.adb:524:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:524:07: info: in inlined body at line 26
-test.adb:524:07: info: unrolling loop
+test.adb:524:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:526:07: info: precondition proved (Z3: 1 VC)
 test.adb:527:12: info: discriminant check proved (CVC5: 1 VC)
 test.adb:529:07: info: precondition proved (Z3: 1 VC)
-test.adb:531:23: info: unrolling loop
+test.adb:531:23: info: unrolling loop [info-unrolling-inlining]
 test.adb:532:10: info: precondition proved (Z3: 10 VC)
 test.adb:535:07: info: precondition proved (Trivial: 1 VC; Z3: 1 VC)
 test.adb:536:07: info: precondition proved (Z3: 1 VC)
@@ -511,10 +511,10 @@ test.adb:542:25: info: range check proved (CVC5: 2 VC)
 test.adb:547:10: info: precondition proved (CVC5: 1 VC)
 test.adb:550:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:550:07: info: in inlined body at line 26
-test.adb:550:07: info: unrolling loop
+test.adb:550:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:554:10: info: precondition proved (Z3: 1 VC)
 test.adb:559:10: info: precondition proved (Z3: 1 VC)
-test.adb:562:23: info: unrolling loop
+test.adb:562:23: info: unrolling loop [info-unrolling-inlining]
 test.adb:563:10: info: precondition proved (Z3: 10 VC)
 test.adb:568:10: info: precondition proved (Trivial: 1 VC; Z3: 1 VC)
 test.adb:569:10: info: precondition proved (Z3: 1 VC)
@@ -528,12 +528,12 @@ test.adb:578:07: info: precondition proved (CVC5: 1 VC)
 test.adb:579:07: info: precondition proved (CVC5: 1 VC)
 test.adb:581:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:581:07: info: in inlined body at line 26
-test.adb:581:07: info: unrolling loop
+test.adb:581:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:582:07: info: precondition proved (Z3: 1 VC)
 test.adb:583:07: info: precondition proved (Z3: 1 VC)
 test.adb:584:07: info: precondition proved (Z3: 1 VC)
 test.adb:585:07: medium: precondition might fail
-test.adb:587:23: info: unrolling loop
+test.adb:587:23: info: unrolling loop [info-unrolling-inlining]
 test.adb:588:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item)
 test.adb:590:07: info: precondition proved (Z3: 1 VC)
 test.adb:591:07: info: precondition proved (Trivial: 1 VC; Z3: 1 VC)
@@ -548,12 +548,12 @@ test.adb:601:21: info: precondition proved (CVC5: 1 VC)
 test.adb:603:10: info: precondition proved (CVC5: 1 VC)
 test.adb:606:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:606:07: info: in inlined body at line 26
-test.adb:606:07: info: unrolling loop
+test.adb:606:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:608:21: info: precondition proved (Z3: 1 VC)
 test.adb:610:10: info: precondition proved (Z3: 1 VC)
 test.adb:613:21: info: precondition proved (Z3: 1 VC)
 test.adb:615:10: medium: precondition might fail
-test.adb:618:23: info: unrolling loop
+test.adb:618:23: info: unrolling loop [info-unrolling-inlining]
 test.adb:619:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item)
 test.adb:622:21: info: precondition proved (Z3: 1 VC)
 test.adb:624:10: info: precondition proved (Trivial: 1 VC; Z3: 1 VC)
@@ -566,10 +566,10 @@ test.adb:631:19: info: range check proved (CVC5: 2 VC)
 test.adb:631:25: info: range check proved (CVC5: 2 VC)
 test.adb:633:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:633:07: info: in inlined body at line 26
-test.adb:633:07: info: unrolling loop
+test.adb:633:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:634:07: info: precondition proved (Z3: 1 VC)
 test.adb:635:07: info: precondition proved (Z3: 1 VC)
-test.adb:637:23: info: unrolling loop
+test.adb:637:23: info: unrolling loop [info-unrolling-inlining]
 test.adb:638:10: info: precondition proved (Z3: 6 VC)
 test.adb:640:07: info: precondition proved (Z3: 1 VC)
 test.adb:642:07: info: precondition proved (Z3: 2 VC)
@@ -580,10 +580,10 @@ test.adb:647:19: info: range check proved (CVC5: 2 VC)
 test.adb:647:25: info: range check proved (CVC5: 2 VC)
 test.adb:649:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:649:07: info: in inlined body at line 26
-test.adb:649:07: info: unrolling loop
+test.adb:649:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:650:07: info: precondition proved (Z3: 1 VC)
 test.adb:651:07: info: precondition proved (Z3: 1 VC)
-test.adb:653:29: info: unrolling loop
+test.adb:653:29: info: unrolling loop [info-unrolling-inlining]
 test.adb:654:10: info: precondition proved (Z3: 6 VC)
 test.adb:656:07: info: precondition proved (Z3: 1 VC)
 test.adb:658:07: medium: precondition might fail, cannot prove not Contains (Container, New_Item)
@@ -594,7 +594,7 @@ test.adb:663:22: info: range check proved (CVC5: 2 VC)
 test.adb:665:07: info: precondition proved (CVC5: 1 VC)
 test.adb:666:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:666:07: info: in inlined body at line 26
-test.adb:666:07: info: unrolling loop
+test.adb:666:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:667:07: info: precondition proved (Z3: 1 VC)
 test.adb:667:46: info: precondition proved (CVC5: 1 VC)
 test.adb:671:07: info: initialization of "X" proved
@@ -603,7 +603,7 @@ test.adb:671:19: info: range check proved (CVC5: 2 VC)
 test.adb:671:25: info: range check proved (CVC5: 2 VC)
 test.adb:674:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:674:07: info: in inlined body at line 26
-test.adb:674:07: info: unrolling loop
+test.adb:674:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:676:07: info: precondition proved (CVC5: 1 VC)
 test.adb:676:15: info: precondition proved (CVC5: 1 VC)
 test.adb:677:07: info: precondition proved (CVC5: 1 VC)
@@ -614,7 +614,7 @@ test.adb:682:07: info: precondition proved (CVC5: 1 VC)
 test.adb:683:07: info: precondition proved (Z3: 1 VC)
 test.adb:685:07: info: analyzing call to "Create_Non_Empty_Set_With_Collisions" in context
 test.adb:685:07: info: in inlined body at line 33
-test.adb:685:07: info: unrolling loop
+test.adb:685:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:688:07: info: precondition proved (Z3: 1 VC)
 test.adb:688:31: info: precondition proved (CVC5: 1 VC)
 test.adb:689:07: info: precondition proved (CVC5: 1 VC)
@@ -626,13 +626,13 @@ test.adb:694:25: info: range check proved (CVC5: 2 VC)
 test.adb:696:07: info: precondition proved (CVC5: 1 VC)
 test.adb:698:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:698:07: info: in inlined body at line 26
-test.adb:698:07: info: unrolling loop
+test.adb:698:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:700:07: info: precondition proved (Z3: 1 VC)
 test.adb:701:07: info: precondition proved (Z3: 1 VC)
 test.adb:702:07: info: precondition proved (Z3: 1 VC)
 test.adb:704:07: info: analyzing call to "Create_Non_Empty_Set_With_Collisions" in context
 test.adb:704:07: info: in inlined body at line 33
-test.adb:704:07: info: unrolling loop
+test.adb:704:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:706:07: info: precondition proved (Z3: 1 VC)
 test.adb:707:07: medium: precondition might fail
 test.adb:708:07: info: precondition proved (Z3: 1 VC)
@@ -643,13 +643,13 @@ test.adb:712:25: info: range check proved (CVC5: 2 VC)
 test.adb:714:07: info: precondition proved (CVC5: 1 VC)
 test.adb:716:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:716:07: info: in inlined body at line 26
-test.adb:716:07: info: unrolling loop
+test.adb:716:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:718:07: info: precondition proved (Z3: 1 VC)
 test.adb:719:07: medium: precondition might fail
 test.adb:720:07: info: precondition proved (Z3: 1 VC)
 test.adb:722:07: info: analyzing call to "Create_Non_Empty_Set_With_Collisions" in context
 test.adb:722:07: info: in inlined body at line 33
-test.adb:722:07: info: unrolling loop
+test.adb:722:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:724:07: info: precondition proved (Z3: 1 VC)
 test.adb:725:07: medium: precondition might fail
 test.adb:726:07: info: precondition proved (Z3: 1 VC)
@@ -659,7 +659,7 @@ test.adb:730:22: info: range check proved (CVC5: 2 VC)
 test.adb:731:07: info: initialization of "P" proved
 test.adb:733:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:733:07: info: in inlined body at line 26
-test.adb:733:07: info: unrolling loop
+test.adb:733:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:734:07: info: precondition proved (Z3: 1 VC)
 test.adb:736:07: info: precondition proved (Z3: 1 VC)
 test.adb:737:07: info: precondition proved (Z3: 1 VC)
@@ -670,7 +670,7 @@ test.adb:750:16: info: range check proved (CVC5: 2 VC)
 test.adb:750:22: info: range check proved (CVC5: 2 VC)
 test.adb:752:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:752:07: info: in inlined body at line 26
-test.adb:752:07: info: unrolling loop
+test.adb:752:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:753:07: info: precondition proved (Z3: 1 VC)
 test.adb:753:28: info: precondition proved (Z3: 1 VC)
 test.adb:757:07: info: initialization of "X" proved
@@ -678,7 +678,7 @@ test.adb:757:16: info: range check proved (CVC5: 2 VC)
 test.adb:757:22: info: range check proved (CVC5: 2 VC)
 test.adb:759:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:759:07: info: in inlined body at line 26
-test.adb:759:07: info: unrolling loop
+test.adb:759:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:760:07: info: precondition proved (Z3: 1 VC)
 test.adb:760:28: info: precondition proved (Z3: 1 VC)
 test.adb:764:07: info: initialization of "X" proved
@@ -689,7 +689,7 @@ test.adb:765:07: info: initialization of "P" proved
 test.adb:765:10: info: initialization of "Q" proved
 test.adb:767:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:767:07: info: in inlined body at line 26
-test.adb:767:07: info: unrolling loop
+test.adb:767:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:770:20: info: precondition proved (Z3: 1 VC)
 test.adb:772:07: info: precondition proved (Z3: 1 VC)
 test.adb:773:07: info: precondition proved (Z3: 1 VC)
@@ -698,7 +698,7 @@ test.adb:774:07: info: precondition proved (Z3: 1 VC)
 test.adb:774:15: info: precondition proved (Z3: 1 VC)
 test.adb:776:07: info: analyzing call to "Create_Non_Empty_Set_With_Collisions" in context
 test.adb:776:07: info: in inlined body at line 33
-test.adb:776:07: info: unrolling loop
+test.adb:776:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:779:20: info: precondition proved (Z3: 1 VC)
 test.adb:781:07: info: precondition proved (Z3: 1 VC)
 test.adb:782:07: medium: precondition might fail
@@ -713,7 +713,7 @@ test.adb:788:07: info: initialization of "Q" proved
 test.adb:791:07: info: precondition proved (CVC5: 1 VC)
 test.adb:793:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:793:07: info: in inlined body at line 26
-test.adb:793:07: info: unrolling loop
+test.adb:793:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:796:07: info: precondition proved (Z3: 1 VC)
 test.adb:801:07: medium: precondition might fail
 test.adb:802:07: info: precondition proved (CVC5: 1 VC)
@@ -721,7 +721,7 @@ test.adb:803:07: medium: precondition might fail
 test.adb:803:15: info: precondition proved (Z3: 1 VC)
 test.adb:805:07: info: analyzing call to "Create_Non_Empty_Set_With_Collisions" in context
 test.adb:805:07: info: in inlined body at line 33
-test.adb:805:07: info: unrolling loop
+test.adb:805:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:808:07: medium: precondition might fail
 test.adb:813:07: medium: precondition might fail
 test.adb:814:07: info: precondition proved (CVC5: 1 VC)
@@ -734,7 +734,7 @@ test.adb:819:25: info: range check proved (CVC5: 2 VC)
 test.adb:820:07: info: initialization of "Q" proved
 test.adb:822:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:822:07: info: in inlined body at line 26
-test.adb:822:07: info: unrolling loop
+test.adb:822:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:824:20: info: precondition proved (Z3: 1 VC)
 test.adb:826:07: info: precondition proved (Z3: 1 VC)
 test.adb:827:07: info: precondition proved (CVC5: 1 VC)
@@ -742,7 +742,7 @@ test.adb:828:07: info: precondition proved (Z3: 1 VC)
 test.adb:828:15: info: precondition proved (Z3: 1 VC)
 test.adb:830:07: info: analyzing call to "Create_Non_Empty_Set_With_Collisions" in context
 test.adb:830:07: info: in inlined body at line 33
-test.adb:830:07: info: unrolling loop
+test.adb:830:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:832:20: info: precondition proved (Z3: 1 VC)
 test.adb:834:07: info: precondition proved (Z3: 1 VC)
 test.adb:835:07: info: precondition proved (CVC5: 1 VC)
@@ -755,12 +755,12 @@ test.adb:840:25: info: range check proved (CVC5: 2 VC)
 test.adb:842:07: info: precondition proved (CVC5: 1 VC)
 test.adb:844:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:844:07: info: in inlined body at line 26
-test.adb:844:07: info: unrolling loop
+test.adb:844:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:846:07: info: precondition proved (Z3: 1 VC)
 test.adb:847:07: medium: precondition might fail
 test.adb:849:07: info: analyzing call to "Create_Non_Empty_Set_With_Collisions" in context
 test.adb:849:07: info: in inlined body at line 33
-test.adb:849:07: info: unrolling loop
+test.adb:849:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:851:07: info: precondition proved (Z3: 1 VC)
 test.adb:852:07: medium: precondition might fail
 test.adb:856:07: info: initialization of "X" proved
@@ -770,12 +770,12 @@ test.adb:856:25: info: range check proved (CVC5: 2 VC)
 test.adb:858:07: info: precondition proved (CVC5: 1 VC)
 test.adb:860:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:860:07: info: in inlined body at line 26
-test.adb:860:07: info: unrolling loop
+test.adb:860:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:862:07: info: precondition proved (Z3: 1 VC)
 test.adb:863:07: info: precondition proved (Z3: 1 VC)
 test.adb:865:07: info: analyzing call to "Create_Non_Empty_Set_With_Collisions" in context
 test.adb:865:07: info: in inlined body at line 33
-test.adb:865:07: info: unrolling loop
+test.adb:865:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:867:07: info: precondition proved (Z3: 1 VC)
 test.adb:868:07: medium: precondition might fail
 test.adb:872:07: info: initialization of "X" proved
@@ -787,13 +787,13 @@ test.adb:874:34: info: precondition proved (CVC5: 1 VC)
 test.adb:875:07: info: precondition proved (CVC5: 1 VC)
 test.adb:877:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:877:07: info: in inlined body at line 26
-test.adb:877:07: info: unrolling loop
+test.adb:877:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:878:07: info: precondition proved (Z3: 1 VC)
 test.adb:878:34: info: precondition proved (CVC5: 1 VC)
 test.adb:879:07: info: precondition proved (Z3: 1 VC)
 test.adb:881:07: info: analyzing call to "Create_Non_Empty_Set_With_Collisions" in context
 test.adb:881:07: info: in inlined body at line 33
-test.adb:881:07: info: unrolling loop
+test.adb:881:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:882:07: info: precondition proved (Z3: 1 VC)
 test.adb:882:34: info: precondition proved (CVC5: 1 VC)
 test.adb:883:07: info: precondition proved (Z3: 1 VC)
