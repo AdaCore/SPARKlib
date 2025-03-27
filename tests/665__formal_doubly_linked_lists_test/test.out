@@ -5,7 +5,7 @@ inst.ads:6:13: info: implicit aspect Always_Terminates on "Lt" has been proved, 
 inst.ads:6:54: info: division check proved (CVC5: 1 VC)
 inst.ads:6:67: info: division check proved (CVC5: 1 VC)
 test.adb:21:14: info: add a contract to analyze it separately from calling contexts
-test.adb:21:14: info: local subprogram "Create_Non_Empty_List" only analyzed in the context of calls
+test.adb:21:14: info: local subprogram "Create_Non_Empty_List" only analyzed in the context of calls [info-unrolling-inlining]
 test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.adb:1001
 test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.adb:1032
 test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.adb:1039
@@ -69,7 +69,7 @@ test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.
 test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.adb:95
 test.adb:24:10: info: precondition proved (CVC5: 5 VC), in call inlined at test.adb:976
 test.adb:31:14: info: add a contract to analyze it separately from calling contexts
-test.adb:31:14: info: local subprogram "Create_Non_Empty_List_With_Holes" only analyzed in the context of calls
+test.adb:31:14: info: local subprogram "Create_Non_Empty_List_With_Holes" only analyzed in the context of calls [info-unrolling-inlining]
 test.adb:34:10: info: precondition proved (CVC5: 7 VC), in call inlined at test.adb:126
 test.adb:34:10: info: precondition proved (CVC5: 7 VC), in call inlined at test.adb:150
 test.adb:34:10: info: precondition proved (CVC5: 7 VC), in call inlined at test.adb:227
@@ -105,7 +105,7 @@ test.adb:55:17: info: range check proved (CVC5: 2 VC)
 test.adb:57:07: info: precondition proved (CVC5: 1 VC)
 test.adb:58:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:58:07: info: in inlined body at line 23
-test.adb:58:07: info: unrolling loop
+test.adb:58:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:59:07: info: precondition proved (CVC5: 1 VC)
 test.adb:63:07: info: initialization of "X" proved
 test.adb:63:10: info: initialization of "Y" proved
@@ -113,7 +113,7 @@ test.adb:63:20: info: range check proved (CVC5: 2 VC)
 test.adb:65:07: info: precondition proved (CVC5: 1 VC)
 test.adb:66:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:66:07: info: in inlined body at line 23
-test.adb:66:07: info: unrolling loop
+test.adb:66:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:67:07: info: precondition proved (CVC5: 1 VC)
 test.adb:68:07: info: precondition proved (CVC5: 1 VC)
 test.adb:69:12: info: discriminant check proved (CVC5: 1 VC)
@@ -128,7 +128,7 @@ test.adb:77:07: info: precondition proved (Z3: 1 VC)
 test.adb:81:07: info: initialization of "X" proved
 test.adb:81:17: info: range check proved (CVC5: 2 VC)
 test.adb:83:07: info: precondition proved (CVC5: 1 VC)
-test.adb:84:23: info: unrolling loop
+test.adb:84:23: info: unrolling loop [info-unrolling-inlining]
 test.adb:85:10: info: precondition proved (CVC5: 5 VC)
 test.adb:87:07: info: precondition proved (CVC5: 1 VC)
 test.adb:91:07: info: initialization of "X" proved
@@ -136,11 +136,11 @@ test.adb:91:17: info: range check proved (CVC5: 2 VC)
 test.adb:94:07: info: precondition proved (CVC5: 1 VC)
 test.adb:95:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:95:07: info: in inlined body at line 23
-test.adb:95:07: info: unrolling loop
+test.adb:95:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:97:07: info: precondition proved (CVC5: 1 VC)
 test.adb:98:07: info: analyzing call to "Create_Non_Empty_List_With_Holes" in context
 test.adb:98:07: info: in inlined body at line 33
-test.adb:98:07: info: unrolling loop
+test.adb:98:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:100:07: info: precondition proved (CVC5: 1 VC)
 test.adb:102:10: info: precondition proved (CVC5: 2 VC)
 test.adb:103:33: info: loop invariant initialization proved (CVC5: 1 VC)
@@ -151,22 +151,22 @@ test.adb:109:10: info: initialization of "Y" proved
 test.adb:109:20: info: range check proved (CVC5: 2 VC)
 test.adb:111:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:111:07: info: in inlined body at line 23
-test.adb:111:07: info: unrolling loop
+test.adb:111:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:112:07: info: precondition proved (CVC5: 1 VC)
 test.adb:113:07: info: precondition proved (CVC5: 1 VC)
 test.adb:114:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:114:07: info: in inlined body at line 23
-test.adb:114:07: info: unrolling loop
+test.adb:114:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:118:07: info: precondition proved (Z3: 1 VC)
 test.adb:118:15: high: formal parameters "Target" and "Source" are aliased (SPARK RM 6.4.2)
 test.adb:119:07: info: precondition proved (Z3: 1 VC)
-test.adb:120:23: info: unrolling loop
+test.adb:120:23: info: unrolling loop [info-unrolling-inlining]
 test.adb:121:10: info: precondition proved (CVC5: 3 VC)
 test.adb:123:07: info: precondition proved (CVC5: 1 VC)
 test.adb:124:07: info: precondition proved (CVC5: 1 VC)
 test.adb:126:07: info: analyzing call to "Create_Non_Empty_List_With_Holes" in context
 test.adb:126:07: info: in inlined body at line 33
-test.adb:126:07: info: unrolling loop
+test.adb:126:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:127:07: info: precondition proved (Z3: 1 VC)
 test.adb:128:07: info: precondition proved (Z3: 1 VC)
 test.adb:132:07: info: initialization of "X" proved
@@ -179,14 +179,14 @@ test.adb:139:10: info: precondition proved (CVC5: 1 VC)
 test.adb:140:10: info: precondition proved (CVC5: 1 VC)
 test.adb:142:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:142:07: info: in inlined body at line 23
-test.adb:142:07: info: unrolling loop
+test.adb:142:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:144:31: info: precondition proved (CVC5: 1 VC)
 test.adb:145:31: info: precondition proved (CVC5: 1 VC)
 test.adb:147:10: info: precondition proved (Z3: 1 VC)
 test.adb:148:10: info: precondition proved (Z3: 1 VC)
 test.adb:150:07: info: analyzing call to "Create_Non_Empty_List_With_Holes" in context
 test.adb:150:07: info: in inlined body at line 33
-test.adb:150:07: info: unrolling loop
+test.adb:150:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:152:31: info: precondition proved (CVC5: 1 VC)
 test.adb:153:31: info: precondition proved (CVC5: 1 VC)
 test.adb:155:10: info: precondition proved (Z3: 1 VC)
@@ -195,7 +195,7 @@ test.adb:161:07: info: initialization of "X" proved
 test.adb:161:17: info: range check proved (CVC5: 2 VC)
 test.adb:163:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:163:07: info: in inlined body at line 23
-test.adb:163:07: info: unrolling loop
+test.adb:163:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:164:07: info: precondition proved (Z3: 1 VC)
 test.adb:164:15: info: precondition proved (CVC5: 1 VC)
 test.adb:164:46: info: precondition proved (CVC5: 1 VC)
@@ -205,7 +205,7 @@ test.adb:169:07: info: initialization of "P2" proved
 test.adb:170:07: info: initialization of "P4" proved
 test.adb:172:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:172:07: info: in inlined body at line 23
-test.adb:172:07: info: unrolling loop
+test.adb:172:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:173:13: info: precondition proved (CVC5: 1 VC)
 test.adb:174:13: info: precondition proved (CVC5: 1 VC)
 test.adb:174:22: info: precondition proved (CVC5: 1 VC)
@@ -223,7 +223,7 @@ test.adb:185:07: info: initialization of "X" proved
 test.adb:185:25: info: range check proved (CVC5: 2 VC)
 test.adb:187:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:187:07: info: in inlined body at line 23
-test.adb:187:07: info: unrolling loop
+test.adb:187:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:188:07: info: precondition proved (Z3: 1 VC)
 test.adb:188:15: info: precondition proved (CVC5: 1 VC)
 test.adb:188:61: info: precondition proved (CVC5: 1 VC)
@@ -233,7 +233,7 @@ test.adb:193:07: info: initialization of "P2" proved
 test.adb:194:07: info: initialization of "P4" proved
 test.adb:196:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:196:07: info: in inlined body at line 23
-test.adb:196:07: info: unrolling loop
+test.adb:196:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:197:13: info: precondition proved (CVC5: 1 VC)
 test.adb:198:13: info: precondition proved (CVC5: 1 VC)
 test.adb:198:22: info: precondition proved (CVC5: 1 VC)
@@ -257,19 +257,19 @@ test.adb:216:10: info: initialization of "Y" proved
 test.adb:216:20: info: range check proved (CVC5: 2 VC)
 test.adb:218:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:218:07: info: in inlined body at line 23
-test.adb:218:07: info: unrolling loop
+test.adb:218:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:219:07: info: precondition proved (CVC5: 1 VC)
 test.adb:220:07: info: precondition proved (CVC5: 1 VC)
 test.adb:221:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:221:07: info: in inlined body at line 23
-test.adb:221:07: info: unrolling loop
-test.adb:222:23: info: unrolling loop
+test.adb:221:07: info: unrolling loop [info-unrolling-inlining]
+test.adb:222:23: info: unrolling loop [info-unrolling-inlining]
 test.adb:223:10: info: precondition proved (CVC5: 3 VC)
 test.adb:225:07: info: precondition proved (CVC5: 1 VC)
 test.adb:226:07: info: precondition proved (CVC5: 1 VC)
 test.adb:227:07: info: analyzing call to "Create_Non_Empty_List_With_Holes" in context
 test.adb:227:07: info: in inlined body at line 33
-test.adb:227:07: info: unrolling loop
+test.adb:227:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:228:07: info: precondition proved (Z3: 1 VC)
 test.adb:229:07: info: precondition proved (Z3: 1 VC)
 test.adb:235:10: info: initialization of "X" proved
@@ -280,7 +280,7 @@ test.adb:236:18: info: initialization of "P3" proved
 test.adb:236:22: info: initialization of "P4" proved
 test.adb:238:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:238:10: info: in inlined body at line 23
-test.adb:238:10: info: unrolling loop
+test.adb:238:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:240:16: info: precondition proved (CVC5: 1 VC)
 test.adb:241:16: info: precondition proved (CVC5: 1 VC)
 test.adb:242:16: info: precondition proved (CVC5: 1 VC)
@@ -308,7 +308,7 @@ test.adb:256:14: info: initialization of "P2" proved
 test.adb:256:18: info: initialization of "P5" proved
 test.adb:258:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:258:10: info: in inlined body at line 23
-test.adb:258:10: info: unrolling loop
+test.adb:258:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:260:16: info: precondition proved (CVC5: 1 VC)
 test.adb:262:10: info: precondition proved (CVC5: 2 VC)
 test.adb:263:10: info: precondition proved (CVC5: 1 VC)
@@ -328,7 +328,7 @@ test.adb:278:14: info: initialization of "P2" proved
 test.adb:278:18: info: initialization of "P3" proved
 test.adb:280:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:280:10: info: in inlined body at line 23
-test.adb:280:10: info: unrolling loop
+test.adb:280:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:281:16: info: precondition proved (CVC5: 1 VC)
 test.adb:282:16: info: precondition proved (CVC5: 1 VC)
 test.adb:284:10: info: precondition proved (CVC5: 2 VC)
@@ -342,7 +342,7 @@ test.adb:292:18: info: initialization of "P3" proved
 test.adb:292:22: info: initialization of "P4" proved
 test.adb:294:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:294:10: info: in inlined body at line 23
-test.adb:294:10: info: unrolling loop
+test.adb:294:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:295:16: info: precondition proved (CVC5: 1 VC)
 test.adb:296:16: info: precondition proved (CVC5: 1 VC)
 test.adb:297:16: info: precondition proved (CVC5: 1 VC)
@@ -382,7 +382,7 @@ test.adb:313:21: info: range check proved (CVC5: 2 VC)
 test.adb:314:10: info: initialization of "P5" proved
 test.adb:316:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:316:10: info: in inlined body at line 23
-test.adb:316:10: info: unrolling loop
+test.adb:316:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:318:10: info: precondition proved (CVC5: 2 VC)
 test.adb:319:10: info: precondition proved (CVC5: 1 VC)
 test.adb:320:10: info: precondition proved (Z3: 1 VC)
@@ -407,7 +407,7 @@ test.adb:334:22: info: initialization of "P4" proved
 test.adb:334:26: info: initialization of "P" proved
 test.adb:336:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:336:10: info: in inlined body at line 23
-test.adb:336:10: info: unrolling loop
+test.adb:336:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:337:16: info: precondition proved (CVC5: 1 VC)
 test.adb:338:16: info: precondition proved (CVC5: 1 VC)
 test.adb:339:16: info: precondition proved (CVC5: 1 VC)
@@ -432,7 +432,7 @@ test.adb:353:10: info: initialization of "P5" proved
 test.adb:353:14: info: initialization of "P" proved
 test.adb:355:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:355:10: info: in inlined body at line 23
-test.adb:355:10: info: unrolling loop
+test.adb:355:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:357:10: info: precondition proved (CVC5: 2 VC)
 test.adb:358:10: info: precondition proved (CVC5: 1 VC)
 test.adb:359:10: info: precondition proved (Z3: 1 VC)
@@ -448,7 +448,7 @@ test.adb:371:18: info: initialization of "P3" proved
 test.adb:371:22: info: initialization of "P" proved
 test.adb:373:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:373:10: info: in inlined body at line 23
-test.adb:373:10: info: unrolling loop
+test.adb:373:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:374:16: info: precondition proved (CVC5: 1 VC)
 test.adb:375:16: info: precondition proved (CVC5: 1 VC)
 test.adb:377:10: info: precondition proved (CVC5: 2 VC)
@@ -463,7 +463,7 @@ test.adb:385:22: info: initialization of "P4" proved
 test.adb:385:26: info: initialization of "P" proved
 test.adb:387:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:387:10: info: in inlined body at line 23
-test.adb:387:10: info: unrolling loop
+test.adb:387:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:388:16: info: precondition proved (CVC5: 1 VC)
 test.adb:389:16: info: precondition proved (CVC5: 1 VC)
 test.adb:390:16: info: precondition proved (CVC5: 1 VC)
@@ -498,7 +498,7 @@ test.adb:407:10: info: initialization of "P5" proved
 test.adb:407:14: info: initialization of "P" proved
 test.adb:409:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:409:10: info: in inlined body at line 23
-test.adb:409:10: info: unrolling loop
+test.adb:409:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:411:10: info: precondition proved (CVC5: 2 VC)
 test.adb:412:10: info: precondition proved (CVC5: 1 VC)
 test.adb:413:10: info: precondition proved (Z3: 1 VC)
@@ -521,7 +521,7 @@ test.adb:426:07: info: initialization of "P1" proved
 test.adb:426:11: info: initialization of "P2" proved
 test.adb:428:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:428:07: info: in inlined body at line 23
-test.adb:428:07: info: unrolling loop
+test.adb:428:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:430:13: info: precondition proved (CVC5: 1 VC)
 test.adb:432:07: info: precondition proved (CVC5: 1 VC)
 test.adb:433:07: info: precondition proved (CVC5: 1 VC)
@@ -539,7 +539,7 @@ test.adb:443:07: info: initialization of "P1" proved
 test.adb:443:11: info: initialization of "P2" proved
 test.adb:445:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:445:07: info: in inlined body at line 23
-test.adb:445:07: info: unrolling loop
+test.adb:445:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:447:13: info: precondition proved (CVC5: 1 VC)
 test.adb:449:07: info: precondition proved (CVC5: 1 VC)
 test.adb:450:07: info: precondition proved (CVC5: 1 VC)
@@ -566,7 +566,7 @@ test.adb:465:07: info: initialization of "P4" proved
 test.adb:465:11: info: initialization of "P5" proved
 test.adb:467:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:467:07: info: in inlined body at line 23
-test.adb:467:07: info: unrolling loop
+test.adb:467:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:469:13: info: precondition proved (CVC5: 1 VC)
 test.adb:471:07: info: precondition proved (CVC5: 1 VC)
 test.adb:472:07: info: precondition proved (CVC5: 1 VC)
@@ -584,7 +584,7 @@ test.adb:483:07: info: initialization of "P4" proved
 test.adb:483:11: info: initialization of "P5" proved
 test.adb:485:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:485:07: info: in inlined body at line 23
-test.adb:485:07: info: unrolling loop
+test.adb:485:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:487:13: info: precondition proved (CVC5: 1 VC)
 test.adb:489:07: info: precondition proved (CVC5: 1 VC)
 test.adb:490:07: info: precondition proved (CVC5: 1 VC)
@@ -614,7 +614,7 @@ test.adb:505:22: info: initialization of "P4" proved
 test.adb:505:26: info: initialization of "P5" proved
 test.adb:507:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:507:10: info: in inlined body at line 23
-test.adb:507:10: info: unrolling loop
+test.adb:507:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:509:16: info: precondition proved (CVC5: 1 VC)
 test.adb:510:16: info: precondition proved (CVC5: 1 VC)
 test.adb:511:16: info: precondition proved (CVC5: 1 VC)
@@ -640,7 +640,7 @@ test.adb:526:22: info: initialization of "P4" proved
 test.adb:526:26: info: initialization of "P5" proved
 test.adb:528:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:528:10: info: in inlined body at line 23
-test.adb:528:10: info: unrolling loop
+test.adb:528:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:530:16: info: precondition proved (CVC5: 1 VC)
 test.adb:531:16: info: precondition proved (CVC5: 1 VC)
 test.adb:532:16: info: precondition proved (CVC5: 1 VC)
@@ -661,7 +661,7 @@ test.adb:551:14: info: initialization of "P2" proved
 test.adb:551:18: info: initialization of "P3" proved
 test.adb:553:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:553:10: info: in inlined body at line 23
-test.adb:553:10: info: unrolling loop
+test.adb:553:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:555:16: info: precondition proved (CVC5: 1 VC)
 test.adb:556:16: info: precondition proved (CVC5: 1 VC)
 test.adb:558:10: info: precondition proved (Z3: 1 VC)
@@ -676,7 +676,7 @@ test.adb:565:22: info: initialization of "P6" proved
 test.adb:565:26: info: initialization of "P7" proved
 test.adb:567:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:567:10: info: in inlined body at line 23
-test.adb:567:10: info: unrolling loop
+test.adb:567:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:568:10: info: precondition proved (CVC5: 1 VC)
 test.adb:569:10: info: precondition proved (CVC5: 1 VC)
 test.adb:570:10: info: precondition proved (CVC5: 1 VC)
@@ -707,7 +707,7 @@ test.adb:589:18: info: initialization of "P3" proved
 test.adb:589:22: info: initialization of "P4" proved
 test.adb:591:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:591:10: info: in inlined body at line 23
-test.adb:591:10: info: unrolling loop
+test.adb:591:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:593:16: info: precondition proved (CVC5: 1 VC)
 test.adb:594:16: info: precondition proved (CVC5: 1 VC)
 test.adb:595:16: info: precondition proved (CVC5: 1 VC)
@@ -731,7 +731,7 @@ test.adb:614:19: info: initialization of "P4" proved
 test.adb:614:23: info: initialization of "P5" proved
 test.adb:616:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:616:07: info: in inlined body at line 23
-test.adb:616:07: info: unrolling loop
+test.adb:616:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:618:13: info: precondition proved (CVC5: 1 VC)
 test.adb:619:13: info: precondition proved (CVC5: 1 VC)
 test.adb:620:13: info: precondition proved (CVC5: 1 VC)
@@ -748,7 +748,7 @@ test.adb:633:07: info: initialization of "P4" proved
 test.adb:633:11: info: initialization of "P5" proved
 test.adb:635:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:635:07: info: in inlined body at line 23
-test.adb:635:07: info: unrolling loop
+test.adb:635:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:637:13: info: precondition proved (CVC5: 1 VC)
 test.adb:639:07: info: precondition proved (CVC5: 1 VC)
 test.adb:642:07: info: precondition proved (CVC5: 1 VC)
@@ -767,7 +767,7 @@ test.adb:654:19: info: initialization of "P4" proved
 test.adb:654:23: info: initialization of "P5" proved
 test.adb:656:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:656:07: info: in inlined body at line 23
-test.adb:656:07: info: unrolling loop
+test.adb:656:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:658:13: info: precondition proved (CVC5: 1 VC)
 test.adb:659:13: info: precondition proved (CVC5: 1 VC)
 test.adb:660:13: info: precondition proved (CVC5: 1 VC)
@@ -785,7 +785,7 @@ test.adb:674:07: info: initialization of "P1" proved
 test.adb:674:11: info: initialization of "P2" proved
 test.adb:676:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:676:07: info: in inlined body at line 23
-test.adb:676:07: info: unrolling loop
+test.adb:676:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:678:13: info: precondition proved (CVC5: 1 VC)
 test.adb:680:07: info: precondition proved (CVC5: 1 VC)
 test.adb:683:07: info: precondition proved (CVC5: 1 VC)
@@ -814,7 +814,7 @@ test.adb:710:15: info: initialization of "P3" proved
 test.adb:710:19: info: initialization of "P4" proved
 test.adb:712:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:712:07: info: in inlined body at line 23
-test.adb:712:07: info: unrolling loop
+test.adb:712:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:714:13: info: precondition proved (CVC5: 1 VC)
 test.adb:715:13: info: precondition proved (CVC5: 1 VC)
 test.adb:716:13: info: precondition proved (CVC5: 1 VC)
@@ -849,7 +849,7 @@ test.adb:736:18: info: initialization of "P3" proved
 test.adb:736:22: info: initialization of "P4" proved
 test.adb:738:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:738:10: info: in inlined body at line 23
-test.adb:738:10: info: unrolling loop
+test.adb:738:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:740:16: info: precondition proved (CVC5: 1 VC)
 test.adb:741:16: info: precondition proved (CVC5: 1 VC)
 test.adb:742:16: info: precondition proved (CVC5: 1 VC)
@@ -871,7 +871,7 @@ test.adb:754:18: info: initialization of "P3" proved
 test.adb:754:22: info: initialization of "P4" proved
 test.adb:756:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:756:10: info: in inlined body at line 23
-test.adb:756:10: info: unrolling loop
+test.adb:756:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:758:16: info: precondition proved (CVC5: 1 VC)
 test.adb:759:16: info: precondition proved (CVC5: 1 VC)
 test.adb:760:16: info: precondition proved (CVC5: 1 VC)
@@ -896,7 +896,7 @@ test.adb:772:18: info: initialization of "P3" proved
 test.adb:772:22: info: initialization of "P4" proved
 test.adb:774:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:774:10: info: in inlined body at line 23
-test.adb:774:10: info: unrolling loop
+test.adb:774:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:776:16: info: precondition proved (CVC5: 1 VC)
 test.adb:777:16: info: precondition proved (CVC5: 1 VC)
 test.adb:778:16: info: precondition proved (CVC5: 1 VC)
@@ -928,7 +928,7 @@ test.adb:801:14: info: initialization of "P2" proved
 test.adb:801:18: info: initialization of "P3" proved
 test.adb:803:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:803:10: info: in inlined body at line 23
-test.adb:803:10: info: unrolling loop
+test.adb:803:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:804:16: info: precondition proved (CVC5: 1 VC)
 test.adb:805:16: info: precondition proved (CVC5: 1 VC)
 test.adb:807:10: info: precondition proved (CVC5: 2 VC)
@@ -945,7 +945,7 @@ test.adb:817:18: info: initialization of "P3" proved
 test.adb:817:22: info: initialization of "P4" proved
 test.adb:819:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:819:10: info: in inlined body at line 23
-test.adb:819:10: info: unrolling loop
+test.adb:819:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:820:10: info: precondition proved (CVC5: 1 VC)
 test.adb:821:10: info: precondition proved (CVC5: 1 VC)
 test.adb:822:16: info: precondition proved (CVC5: 1 VC)
@@ -983,7 +983,7 @@ test.adb:841:23: info: range check proved (CVC5: 2 VC)
 test.adb:842:10: info: initialization of "P5" proved
 test.adb:844:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:844:10: info: in inlined body at line 23
-test.adb:844:10: info: unrolling loop
+test.adb:844:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:845:10: info: precondition proved (CVC5: 1 VC)
 test.adb:846:10: info: precondition proved (CVC5: 1 VC)
 test.adb:849:10: info: precondition proved (CVC5: 2 VC)
@@ -1012,7 +1012,7 @@ test.adb:867:30: info: initialization of "P7" proved
 test.adb:867:34: info: initialization of "P8" proved
 test.adb:869:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:869:10: info: in inlined body at line 23
-test.adb:869:10: info: unrolling loop
+test.adb:869:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:870:10: info: precondition proved (CVC5: 1 VC)
 test.adb:871:10: info: precondition proved (CVC5: 1 VC)
 test.adb:872:10: info: precondition proved (CVC5: 1 VC)
@@ -1052,7 +1052,7 @@ test.adb:899:14: info: initialization of "P6" proved
 test.adb:899:18: info: initialization of "P7" proved
 test.adb:901:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:901:10: info: in inlined body at line 23
-test.adb:901:10: info: unrolling loop
+test.adb:901:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:902:10: info: precondition proved (CVC5: 1 VC)
 test.adb:903:10: info: precondition proved (CVC5: 1 VC)
 test.adb:904:10: info: precondition proved (CVC5: 1 VC)
@@ -1073,7 +1073,7 @@ test.adb:924:14: info: initialization of "P3" proved
 test.adb:924:18: info: initialization of "P5" proved
 test.adb:926:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:926:10: info: in inlined body at line 23
-test.adb:926:10: info: unrolling loop
+test.adb:926:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:927:16: info: precondition proved (CVC5: 1 VC)
 test.adb:928:16: info: precondition proved (CVC5: 1 VC)
 test.adb:931:10: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
@@ -1095,7 +1095,7 @@ test.adb:943:22: info: initialization of "P4" proved
 test.adb:943:26: info: initialization of "P5" proved
 test.adb:945:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:945:10: info: in inlined body at line 23
-test.adb:945:10: info: unrolling loop
+test.adb:945:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:947:16: info: precondition proved (CVC5: 1 VC)
 test.adb:948:16: info: precondition proved (CVC5: 1 VC)
 test.adb:949:16: info: precondition proved (CVC5: 1 VC)
@@ -1137,7 +1137,7 @@ test.adb:974:22: info: initialization of "P4" proved
 test.adb:974:26: info: initialization of "P5" proved
 test.adb:976:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:976:10: info: in inlined body at line 23
-test.adb:976:10: info: unrolling loop
+test.adb:976:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:978:16: info: precondition proved (CVC5: 1 VC)
 test.adb:979:16: info: precondition proved (CVC5: 1 VC)
 test.adb:980:16: info: precondition proved (CVC5: 1 VC)
@@ -1168,7 +1168,7 @@ test.adb:999:22: info: initialization of "P4" proved
 test.adb:999:26: info: initialization of "P5" proved
 test.adb:1001:10: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:1001:10: info: in inlined body at line 23
-test.adb:1001:10: info: unrolling loop
+test.adb:1001:10: info: unrolling loop [info-unrolling-inlining]
 test.adb:1003:16: info: precondition proved (CVC5: 1 VC)
 test.adb:1004:16: info: precondition proved (CVC5: 1 VC)
 test.adb:1005:16: info: precondition proved (CVC5: 1 VC)
@@ -1199,14 +1199,14 @@ test.adb:1029:17: info: range check proved (CVC5: 2 VC)
 test.adb:1031:07: info: precondition proved (CVC5: 1 VC)
 test.adb:1032:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:1032:07: info: in inlined body at line 23
-test.adb:1032:07: info: unrolling loop
+test.adb:1032:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:1033:07: info: precondition proved (Z3: 1 VC)
 test.adb:1033:46: info: precondition proved (CVC5: 1 VC)
 test.adb:1037:07: info: initialization of "X" proved
 test.adb:1037:17: info: range check proved (CVC5: 2 VC)
 test.adb:1039:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:1039:07: info: in inlined body at line 23
-test.adb:1039:07: info: unrolling loop
+test.adb:1039:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:1040:07: info: precondition proved (Z3: 1 VC)
 test.adb:1040:15: info: precondition proved (CVC5: 1 VC)
 test.adb:1044:07: info: initialization of "X" proved
@@ -1214,21 +1214,21 @@ test.adb:1044:17: info: range check proved (CVC5: 2 VC)
 test.adb:1046:07: info: precondition proved (CVC5: 1 VC)
 test.adb:1047:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:1047:07: info: in inlined body at line 23
-test.adb:1047:07: info: unrolling loop
+test.adb:1047:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:1048:07: info: precondition proved (CVC5: 1 VC)
 test.adb:1048:45: info: precondition proved (CVC5: 1 VC)
 test.adb:1052:07: info: initialization of "X" proved
 test.adb:1052:17: info: range check proved (CVC5: 2 VC)
 test.adb:1054:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:1054:07: info: in inlined body at line 23
-test.adb:1054:07: info: unrolling loop
+test.adb:1054:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:1055:07: info: precondition proved (CVC5: 1 VC)
 test.adb:1055:15: info: precondition proved (CVC5: 1 VC)
 test.adb:1059:07: info: initialization of "X" proved
 test.adb:1059:17: info: range check proved (CVC5: 2 VC)
 test.adb:1062:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:1062:07: info: in inlined body at line 23
-test.adb:1062:07: info: unrolling loop
+test.adb:1062:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:1064:07: info: precondition proved (CVC5: 1 VC)
 test.adb:1064:15: info: precondition proved (CVC5: 1 VC)
 test.adb:1065:07: info: precondition proved (CVC5: 1 VC)
@@ -1248,7 +1248,7 @@ test.adb:1080:07: info: initialization of "X" proved
 test.adb:1080:17: info: range check proved (CVC5: 2 VC)
 test.adb:1083:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:1083:07: info: in inlined body at line 23
-test.adb:1083:07: info: unrolling loop
+test.adb:1083:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:1085:07: info: precondition proved (CVC5: 1 VC)
 test.adb:1085:15: info: precondition proved (CVC5: 1 VC)
 test.adb:1086:07: info: precondition proved (CVC5: 1 VC)
@@ -1274,7 +1274,7 @@ test.adb:1104:07: info: precondition proved (CVC5: 1 VC)
 test.adb:1104:15: info: precondition proved (CVC5: 1 VC)
 test.adb:1106:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:1106:07: info: in inlined body at line 23
-test.adb:1106:07: info: unrolling loop
+test.adb:1106:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:1107:13: info: precondition proved (CVC5: 1 VC)
 test.adb:1108:13: info: precondition proved (CVC5: 1 VC)
 test.adb:1109:13: info: precondition proved (CVC5: 1 VC)
@@ -1311,7 +1311,7 @@ test.adb:1130:07: info: precondition proved (CVC5: 1 VC)
 test.adb:1130:15: info: precondition proved (CVC5: 1 VC)
 test.adb:1132:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:1132:07: info: in inlined body at line 23
-test.adb:1132:07: info: unrolling loop
+test.adb:1132:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:1133:07: info: precondition proved (CVC5: 1 VC)
 test.adb:1134:13: info: precondition proved (CVC5: 1 VC)
 test.adb:1135:13: info: precondition proved (CVC5: 1 VC)
@@ -1344,7 +1344,7 @@ test.adb:1153:17: info: range check proved (CVC5: 2 VC)
 test.adb:1155:07: info: precondition proved (CVC5: 1 VC)
 test.adb:1157:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:1157:07: info: in inlined body at line 23
-test.adb:1157:07: info: unrolling loop
+test.adb:1157:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:1159:07: info: precondition proved (Z3: 1 VC)
 test.adb:1160:07: info: precondition proved (Z3: 1 VC)
 test.adb:1161:07: info: precondition proved (Z3: 1 VC)
@@ -1353,7 +1353,7 @@ test.adb:1165:17: info: range check proved (CVC5: 2 VC)
 test.adb:1166:07: info: initialization of "P" proved
 test.adb:1168:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:1168:07: info: in inlined body at line 23
-test.adb:1168:07: info: unrolling loop
+test.adb:1168:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:1169:07: info: precondition proved (CVC5: 1 VC)
 test.adb:1171:07: info: precondition proved (CVC5: 1 VC)
 test.adb:1172:07: info: precondition proved (CVC5: 1 VC)
@@ -1364,7 +1364,7 @@ test.adb:1178:07: info: initialization of "P3" proved
 test.adb:1180:07: info: precondition proved (CVC5: 1 VC)
 test.adb:1182:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:1182:07: info: in inlined body at line 23
-test.adb:1182:07: info: unrolling loop
+test.adb:1182:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:1183:13: info: precondition proved (CVC5: 1 VC)
 test.adb:1183:22: info: precondition proved (CVC5: 1 VC)
 test.adb:1185:07: info: precondition proved (Z3: 1 VC)
@@ -1377,7 +1377,7 @@ test.adb:1197:17: info: range check proved (CVC5: 2 VC)
 test.adb:1200:07: info: precondition proved (CVC5: 1 VC)
 test.adb:1202:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:1202:07: info: in inlined body at line 23
-test.adb:1202:07: info: unrolling loop
+test.adb:1202:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:1203:07: info: precondition proved (CVC5: 1 VC)
 test.adb:1204:07: info: precondition proved (CVC5: 1 VC)
 test.adb:1205:07: info: precondition proved (CVC5: 1 VC)
@@ -1396,7 +1396,7 @@ test.adb:1218:07: info: precondition proved (CVC5: 1 VC)
 test.adb:1219:07: info: precondition proved (CVC5: 1 VC)
 test.adb:1220:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:1220:07: info: in inlined body at line 23
-test.adb:1220:07: info: unrolling loop
+test.adb:1220:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:1221:07: info: precondition proved (CVC5: 1 VC)
 test.adb:1222:07: medium: precondition might fail
 test.adb:1222:53: info: precondition proved (CVC5: 1 VC)
@@ -1422,7 +1422,7 @@ test.adb:1239:34: info: precondition proved (CVC5: 1 VC)
 test.adb:1240:07: info: precondition proved (CVC5: 1 VC)
 test.adb:1242:07: info: analyzing call to "Create_Non_Empty_List" in context
 test.adb:1242:07: info: in inlined body at line 23
-test.adb:1242:07: info: unrolling loop
+test.adb:1242:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:1243:07: info: precondition proved (Z3: 1 VC)
 test.adb:1243:34: info: precondition proved (CVC5: 1 VC)
 test.adb:1244:07: info: precondition proved (Z3: 1 VC)

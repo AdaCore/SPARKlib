@@ -43,7 +43,7 @@ test_constant_string.adb:103:24: info: precondition proved (CVC5: 3 VC)
 test_constant_string.adb:105:10: info: precondition proved (CVC5: 1 VC)
 test_constant_string.adb:106:10: medium: precondition might fail
 test_constant_string.adb:110:14: info: add a contract to analyze it separately from calling contexts
-test_constant_string.adb:110:14: info: local subprogram "Test_Strlen" only analyzed in the context of calls
+test_constant_string.adb:110:14: info: local subprogram "Test_Strlen" only analyzed in the context of calls [info-unrolling-inlining]
 test_constant_string.adb:112:38: medium: resource or memory leak might occur, in call inlined at test_constant_string.adb:124 [possible explanation: allocator for an access-to-constant type leaks memory]
 test_constant_string.adb:113:24: info: precondition proved (CVC5: 1 VC), in call inlined at test_constant_string.adb:124
 test_constant_string.adb:115:07: info: precondition proved (CVC5: 1 VC), in call inlined at test_constant_string.adb:124
