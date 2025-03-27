@@ -10,11 +10,11 @@ inst.ads:9:13: info: implicit aspect Always_Terminates on "Equivalent" has been 
 spark-containers-parameter_checks.ads:246:19: medium: postcondition might fail, in instantiation at spark-containers-formal-unbounded_hashed_maps.ads:140, in instantiation at inst.ads:10
 test.adb:25:14: info: postcondition proved (CVC5: 1 VC; Z3: 4 VC)
 test.adb:28:29: info: precondition proved (CVC5: 1 VC)
-test.adb:31:23: info: unrolling loop
+test.adb:31:23: info: unrolling loop [info-unrolling-inlining]
 test.adb:32:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC)
 test.adb:37:14: info: postcondition proved (CVC5: 2 VC; Z3: 6 VC)
 test.adb:40:29: info: precondition proved (CVC5: 1 VC)
-test.adb:43:23: info: unrolling loop
+test.adb:43:23: info: unrolling loop [info-unrolling-inlining]
 test.adb:44:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC)
 test.adb:51:07: info: precondition proved (CVC5: 1 VC)
 test.adb:55:07: info: initialization of "X" proved
@@ -50,7 +50,7 @@ test.adb:116:07: info: precondition proved (CVC5: 1 VC)
 test.adb:120:07: info: initialization of "X" proved
 test.adb:120:10: info: initialization of "Y" proved
 test.adb:124:07: info: precondition proved (CVC5: 1 VC)
-test.adb:126:23: info: unrolling loop
+test.adb:126:23: info: unrolling loop [info-unrolling-inlining]
 test.adb:127:10: info: precondition proved (CVC5: 5 VC; Z3: 1 VC)
 test.adb:130:07: info: precondition proved (CVC5: 1 VC)
 test.adb:134:07: info: initialization of "X" proved
@@ -138,7 +138,7 @@ test.adb:265:15: info: precondition proved (CVC5: 1 VC)
 test.adb:269:07: info: initialization of "X" proved
 test.adb:269:10: info: initialization of "Y" proved
 test.adb:273:07: info: precondition proved (CVC5: 1 VC)
-test.adb:275:23: info: unrolling loop
+test.adb:275:23: info: unrolling loop [info-unrolling-inlining]
 test.adb:276:10: info: precondition proved (CVC5: 6 VC)
 test.adb:279:07: info: precondition proved (CVC5: 1 VC)
 test.adb:284:07: info: initialization of "X" proved
