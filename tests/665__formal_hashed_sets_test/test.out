@@ -14,7 +14,7 @@ spark-containers-parameter_checks.ads:246:19: medium: postcondition might fail, 
 test.adb:24:14: info: add a contract to analyze it separately from calling contexts
 test.adb:24:14: info: local subprogram "Create_Non_Empty_Set" only analyzed in the context of calls [info-unrolling-inlining]
 test.adb:27:10: info: precondition proved (CVC5: 1 VC; Z3: 9 VC), in call inlined at test.adb:136
-test.adb:27:10: info: precondition proved (CVC5: 2 VC; Z3: 8 VC), in call inlined at test.adb:581
+test.adb:27:10: info: precondition proved (CVC5: 3 VC; Z3: 7 VC), in call inlined at test.adb:581
 test.adb:27:10: info: precondition proved (CVC5: 4 VC; Z3: 6 VC), in call inlined at test.adb:410
 test.adb:27:10: info: precondition proved (CVC5: 4 VC; Z3: 6 VC), in call inlined at test.adb:435
 test.adb:27:10: info: precondition proved (CVC5: 4 VC; Z3: 6 VC), in call inlined at test.adb:524
@@ -157,7 +157,7 @@ test.adb:131:25: info: range check proved (CVC5: 2 VC)
 test.adb:133:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:133:07: info: in inlined body at line 26
 test.adb:133:07: info: unrolling loop [info-unrolling-inlining]
-test.adb:134:07: info: precondition proved (Z3: 1 VC)
+test.adb:134:07: info: precondition proved (altergo: 1 VC)
 test.adb:135:07: info: precondition proved (CVC5: 1 VC)
 test.adb:136:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:136:07: info: in inlined body at line 26
@@ -230,7 +230,7 @@ test.adb:204:25: info: range check proved (CVC5: 2 VC)
 test.adb:206:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:206:07: info: in inlined body at line 26
 test.adb:206:07: info: unrolling loop [info-unrolling-inlining]
-test.adb:207:07: info: precondition proved (Z3: 1 VC)
+test.adb:207:07: info: precondition proved (altergo: 1 VC)
 test.adb:208:07: info: precondition proved (CVC5: 1 VC)
 test.adb:209:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:209:07: info: in inlined body at line 26
@@ -660,7 +660,7 @@ test.adb:731:07: info: initialization of "P" proved
 test.adb:733:07: info: analyzing call to "Create_Non_Empty_Set" in context
 test.adb:733:07: info: in inlined body at line 26
 test.adb:733:07: info: unrolling loop [info-unrolling-inlining]
-test.adb:734:07: info: precondition proved (Z3: 1 VC)
+test.adb:734:07: info: precondition proved (altergo: 1 VC)
 test.adb:736:07: info: precondition proved (Z3: 1 VC)
 test.adb:737:07: info: precondition proved (Z3: 1 VC)
 test.adb:738:07: info: precondition proved (Z3: 1 VC)
