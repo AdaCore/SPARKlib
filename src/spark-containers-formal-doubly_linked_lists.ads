@@ -1400,7 +1400,7 @@ is
             and Element_Logic_Equal
                   (Element
                      (Model (Container),
-                      P.Get (Positions (Container)'Old, Before)),
+                      P.Get (Positions (Container), Before) - 1),
                    Element
                      (Model (Container)'Old,
                       P.Get (Positions (Container)'Old, Position)))
