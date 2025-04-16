@@ -503,17 +503,19 @@ is
          and then Big (Lst) + Offset <= Big (Last (Right)),
      Post   =>
        Range_Shifted'Result =
-         ((for all I in Fst .. Lst =>
-            Element_Logic_Equal
-              (Get (Left, I),
-               Get (Right, Of_Big (Big (I) + Offset))))
-          and
-            (for all I in Of_Big (Big (Fst) + Offset) ..
-               Of_Big (Big (Lst) + Offset)
-             =>
+         (Fst > Lst
+          or else
+            ((for all I in Fst .. Lst =>
                Element_Logic_Equal
-                 (Get (Left, Of_Big (Big (I) - Offset)),
-                  Get (Right, I))));
+                 (Get (Left, I),
+                  Get (Right, Of_Big (Big (I) + Offset))))
+             and
+               (for all I in Of_Big (Big (Fst) + Offset) ..
+                  Of_Big (Big (Lst) + Offset)
+                =>
+                  Element_Logic_Equal
+                    (Get (Left, Of_Big (Big (I) - Offset)),
+                     Get (Right, I)))));
    pragma Annotate (GNATprove, Inline_For_Proof, Range_Shifted);
 
    ------------------------------------------
