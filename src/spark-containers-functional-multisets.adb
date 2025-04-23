@@ -425,7 +425,7 @@ is
 
    function Empty_Multiset return Multiset is
    begin
-      return (others => <>);
+      return (Map => Empty_Map, Card => 0);
    end Empty_Multiset;
 
    ------------------
