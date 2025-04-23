@@ -31,6 +31,21 @@ is
      (Container : in out List;
       New_Node  : out Count_Type);
 
+   procedure Delete_First_Internal
+     (Container : in out List;
+      Count     : Count_Type);
+   --  Delete the first element of container. Variant of Delete_First without
+   --  a contract to avoid errors when evaluating Model if the first element
+   --  of Container is null.
+
+   procedure Delete_Internal
+     (Container : in out List;
+      Position  : in out Cursor;
+      Count     : Count_Type);
+   --  Delete element at position in container. Variant of Delete without a
+   --  contract to avoid errors when evaluating Model if the element at
+   --  Position in Container is null.
+
    procedure Free (Container : in out List; X : Count_Type);
 
    procedure Insert_Internal
@@ -311,13 +326,76 @@ is
 
    procedure Delete (Container : in out List; Position : in out Cursor) is
    begin
-      Delete
+      Delete_Internal
         (Container => Container,
          Position  => Position,
          Count     => 1);
    end Delete;
 
    procedure Delete
+     (Container : in out List;
+      Position  : in out Cursor;
+      Count     : Count_Type)
+   is
+   begin
+      Delete_Internal (Container, Position, Count);
+   end Delete;
+
+   ------------------
+   -- Delete_First --
+   ------------------
+
+   procedure Delete_First (Container : in out List) is
+   begin
+      Delete_First_Internal
+        (Container => Container,
+         Count     => 1);
+   end Delete_First;
+
+   procedure Delete_First (Container : in out List; Count : Count_Type) is
+   begin
+      Delete_First_Internal (Container, Count);
+   end Delete_First;
+
+   ---------------------------
+   -- Delete_First_Internal --
+   ---------------------------
+
+   procedure Delete_First_Internal
+     (Container : in out List;
+      Count     : Count_Type)
+   is
+      N : Node_Array_Access renames Container.Nodes;
+      X : Count_Type;
+
+   begin
+      if Count >= Container.Length then
+         Clear (Container);
+         return;
+      end if;
+
+      if Count = 0 then
+         return;
+      end if;
+
+      for J in 1 .. Count loop
+         X := Container.First;
+         pragma Assert (N (N (X).Next).Prev = Container.First);
+
+         Container.First := N (X).Next;
+         N (Container.First).Prev := 0;
+
+         Container.Length := Container.Length - 1;
+
+         Free (Container, X);
+      end loop;
+   end Delete_First_Internal;
+
+   ---------------------
+   -- Delete_Internal --
+   ---------------------
+
+   procedure Delete_Internal
      (Container : in out List;
       Position  : in out Cursor;
       Count     : Count_Type)
@@ -339,7 +417,7 @@ is
       pragma Assert (N (Container.Last).Next  = 0);
 
       if Position.Node = Container.First then
-         Delete_First (Container, Count);
+         Delete_First_Internal (Container, Count);
          Position := No_Element;
          return;
       end if;
@@ -375,45 +453,7 @@ is
       end loop;
 
       Position := No_Element;
-   end Delete;
-
-   ------------------
-   -- Delete_First --
-   ------------------
-
-   procedure Delete_First (Container : in out List) is
-   begin
-      Delete_First
-        (Container => Container,
-         Count     => 1);
-   end Delete_First;
-
-   procedure Delete_First (Container : in out List; Count : Count_Type) is
-      N : Node_Array_Access renames Container.Nodes;
-      X : Count_Type;
-
-   begin
-      if Count >= Container.Length then
-         Clear (Container);
-         return;
-      end if;
-
-      if Count = 0 then
-         return;
-      end if;
-
-      for J in 1 .. Count loop
-         X := Container.First;
-         pragma Assert (N (N (X).Next).Prev = Container.First);
-
-         Container.First := N (X).Next;
-         N (Container.First).Prev := 0;
-
-         Container.Length := Container.Length - 1;
-
-         Free (Container, X);
-      end loop;
-   end Delete_First;
+   end Delete_Internal;
 
    -----------------
    -- Delete_Last --
@@ -1704,7 +1744,7 @@ is
             --  Free the first node of Source
 
             SN (Source.First).Element := null;
-            Delete_First (Source);
+            Delete_First_Internal (Source, 1);
          end loop;
       end;
 
@@ -1742,7 +1782,7 @@ is
          --  Free the node at position Position in Source
 
          Source.Nodes (Position.Node).Element := null;
-         Delete (Source, Position);
+         Delete_Internal (Source, Position, 1);
 
          Position := (Node => X);
       end;
