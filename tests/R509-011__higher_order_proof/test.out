@@ -2243,15 +2243,15 @@ spark-higher_order-fold.ads:808:31: info: range check proved, in instantiation a
 spark-higher_order-fold.ads:808:46: info: range check proved, in instantiation at test_higher_order3.ads:89
 spark-higher_order-fold.ads:810:54: info: index check proved, in instantiation at test_higher_order3.ads:89
 spark-higher_order-fold.ads:810:57: info: index check proved, in instantiation at test_higher_order3.ads:89
-test_higher_order.ads:34:04: warning: in instantiation at spark-higher_order-fold.adb:702
+test_higher_order.ads:34:04: warning: in instantiation at spark-higher_order-fold.adb:704
 test_higher_order.ads:34:04: warning: in instantiation at spark-higher_order-fold.ads:277
 test_higher_order.ads:34:04: warning: initialization of an array in FOR loop is handled imprecisely [array-initialization]
-test_higher_order.ads:43:04: warning: in instantiation at spark-higher_order-fold.adb:510
+test_higher_order.ads:43:04: warning: in instantiation at spark-higher_order-fold.adb:512
 test_higher_order.ads:43:04: warning: in instantiation at spark-higher_order-fold.ads:87
 test_higher_order.ads:43:04: warning: initialization of an array in FOR loop is handled imprecisely [array-initialization]
-test_higher_order1.ads:28:04: warning: in instantiation at spark-higher_order-fold.adb:360
+test_higher_order1.ads:28:04: warning: in instantiation at spark-higher_order-fold.adb:409
 test_higher_order1.ads:28:04: warning: in instantiation at spark-higher_order-fold.ads:579
-test_higher_order1.ads:28:04: warning: initialization of an array in FOR loop is handled imprecisely [array-initialization]
+test_higher_order1.ads:28:04: warning: initialization of a multi-dimensional array in nested FOR loops is handled imprecisely [multidimensional-array-init]
 test_higher_order2.adb:8:13: info: loop invariant initialization proved
 test_higher_order2.adb:8:13: info: loop invariant preservation proved
 test_higher_order2.adb:8:26: info: precondition proved
@@ -2269,7 +2269,7 @@ test_higher_order2.adb:20:24: info: precondition proved
 test_higher_order2.ads:38:13: info: implicit aspect Always_Terminates on "Valid_Integer" has been proved, subprogram will terminate
 test_higher_order2.ads:39:17: info: predicate check proved
 test_higher_order2.ads:43:04: warning: expression function body of subprograms with a numeric variant might not be available on recursive calls [numeric-variant]
-test_higher_order2.ads:43:04: warning: in instantiation at spark-higher_order-fold.adb:510
+test_higher_order2.ads:43:04: warning: in instantiation at spark-higher_order-fold.adb:512
 test_higher_order2.ads:43:04: warning: in instantiation at spark-higher_order-fold.ads:352
 test_higher_order2.ads:43:04: warning: in instantiation at spark-higher_order-fold.ads:383
 test_higher_order2.ads:43:04: warning: in instantiation at spark-higher_order-fold.ads:87
@@ -2280,12 +2280,12 @@ test_higher_order2.ads:59:13: info: implicit aspect Always_Terminates on "Sum_In
 test_higher_order2.ads:60:14: info: postcondition proved
 test_higher_order2.ads:61:34: info: predicate check proved
 test_higher_order2.ads:86:04: warning: expression function body of subprograms with a numeric variant might not be available on recursive calls [numeric-variant]
-test_higher_order2.ads:86:04: warning: in instantiation at spark-higher_order-fold.adb:510
+test_higher_order2.ads:86:04: warning: in instantiation at spark-higher_order-fold.adb:512
 test_higher_order2.ads:86:04: warning: in instantiation at spark-higher_order-fold.ads:352
 test_higher_order2.ads:86:04: warning: in instantiation at spark-higher_order-fold.ads:383
 test_higher_order2.ads:86:04: warning: in instantiation at spark-higher_order-fold.ads:87
 test_higher_order2.ads:86:04: warning: initialization of an array in FOR loop is handled imprecisely [array-initialization]
-test_higher_order2.ads:104:04: warning: in instantiation at spark-higher_order-fold.adb:606
+test_higher_order2.ads:104:04: warning: in instantiation at spark-higher_order-fold.adb:608
 test_higher_order2.ads:104:04: warning: in instantiation at spark-higher_order-fold.ads:185
 test_higher_order2.ads:104:04: warning: initialization of an array in FOR loop is handled imprecisely [array-initialization]
 test_higher_order3.adb:11:13: info: loop invariant initialization proved
@@ -2330,30 +2330,30 @@ test_higher_order3.adb:23:55: info: overflow check proved
 test_higher_order3.adb:24:19: info: overflow check proved
 test_higher_order3.adb:25:20: info: overflow check proved
 test_higher_order3.adb:33:24: info: precondition proved
-test_higher_order3.ads:22:04: warning: in instantiation at spark-higher_order-fold.adb:510
+test_higher_order3.ads:22:04: warning: in instantiation at spark-higher_order-fold.adb:512
 test_higher_order3.ads:22:04: warning: in instantiation at spark-higher_order-fold.ads:433
 test_higher_order3.ads:22:04: warning: in instantiation at spark-higher_order-fold.ads:87
 test_higher_order3.ads:22:04: warning: initialization of an array in FOR loop is handled imprecisely [array-initialization]
 test_higher_order3.ads:28:13: info: implicit aspect Always_Terminates on "Valid_Integer" has been proved, subprogram will terminate
 test_higher_order3.ads:29:17: info: predicate check proved
 test_higher_order3.ads:33:04: warning: expression function body of subprograms with a numeric variant might not be available on recursive calls [numeric-variant]
-test_higher_order3.ads:33:04: warning: in instantiation at spark-higher_order-fold.adb:360
+test_higher_order3.ads:33:04: warning: in instantiation at spark-higher_order-fold.adb:409
 test_higher_order3.ads:33:04: warning: in instantiation at spark-higher_order-fold.ads:579
 test_higher_order3.ads:33:04: warning: in instantiation at spark-higher_order-fold.ads:663
 test_higher_order3.ads:33:04: warning: in instantiation at spark-higher_order-fold.ads:706
-test_higher_order3.ads:33:04: warning: initialization of an array in FOR loop is handled imprecisely [array-initialization]
+test_higher_order3.ads:33:04: warning: initialization of a multi-dimensional array in nested FOR loops is handled imprecisely [multidimensional-array-init]
 test_higher_order3.ads:47:06: info: data dependencies proved
 test_higher_order3.ads:48:14: info: postcondition proved
 test_higher_order3.ads:50:13: info: implicit aspect Always_Terminates on "Sum_Int" has been proved, subprogram will terminate
 test_higher_order3.ads:51:14: info: postcondition proved
 test_higher_order3.ads:52:34: info: predicate check proved
 test_higher_order3.ads:77:04: warning: expression function body of subprograms with a numeric variant might not be available on recursive calls [numeric-variant]
-test_higher_order3.ads:77:04: warning: in instantiation at spark-higher_order-fold.adb:360
+test_higher_order3.ads:77:04: warning: in instantiation at spark-higher_order-fold.adb:409
 test_higher_order3.ads:77:04: warning: in instantiation at spark-higher_order-fold.ads:579
 test_higher_order3.ads:77:04: warning: in instantiation at spark-higher_order-fold.ads:663
 test_higher_order3.ads:77:04: warning: in instantiation at spark-higher_order-fold.ads:706
-test_higher_order3.ads:77:04: warning: initialization of an array in FOR loop is handled imprecisely [array-initialization]
-test_higher_order3.ads:89:04: warning: in instantiation at spark-higher_order-fold.adb:360
+test_higher_order3.ads:77:04: warning: initialization of a multi-dimensional array in nested FOR loops is handled imprecisely [multidimensional-array-init]
+test_higher_order3.ads:89:04: warning: in instantiation at spark-higher_order-fold.adb:409
 test_higher_order3.ads:89:04: warning: in instantiation at spark-higher_order-fold.ads:579
 test_higher_order3.ads:89:04: warning: in instantiation at spark-higher_order-fold.ads:768
-test_higher_order3.ads:89:04: warning: initialization of an array in FOR loop is handled imprecisely [array-initialization]
+test_higher_order3.ads:89:04: warning: initialization of a multi-dimensional array in nested FOR loops is handled imprecisely [multidimensional-array-init]
