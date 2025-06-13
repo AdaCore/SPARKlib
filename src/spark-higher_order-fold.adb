@@ -16,15 +16,9 @@ package body SPARK.Higher_Order.Fold with SPARK_Mode is
       -- Count_Length --
       ------------------
 
-      pragma Style_Checks (Off);
-      procedure Count_Length (A : Array_Type) with SPARK_Mode =>
-#if SPARK_BODY_MODE="On"
-          On
-#else
-          Off
-#end if;
+      procedure Count_Length (A : Array_Type)
+        with SPARK_Mode => Off --  #BODYMODE
       is
-         pragma Style_Checks (On);
       begin
          for I in A'Range loop
             pragma Loop_Invariant
@@ -38,15 +32,9 @@ package body SPARK.Higher_Order.Fold with SPARK_Mode is
       -- Count_Zero --
       ----------------
 
-      pragma Style_Checks (Off);
-      procedure Count_Zero (A : Array_Type) with SPARK_Mode =>
-#if SPARK_BODY_MODE="On"
-          On
-#else
-          Off
-#end if;
+      procedure Count_Zero (A : Array_Type)
+        with SPARK_Mode => Off --  #BODYMODE
       is
-         pragma Style_Checks (On);
       begin
          for I in A'Range loop
             pragma Loop_Invariant
@@ -60,16 +48,9 @@ package body SPARK.Higher_Order.Fold with SPARK_Mode is
       -- Update_Count --
       ------------------
 
-      pragma Style_Checks (Off);
-      procedure Update_Count (A1, A2 : Array_Type; I : Index_Type) with
-        SPARK_Mode =>
-#if SPARK_BODY_MODE="On"
-          On
-#else
-          Off
-#end if;
+      procedure Update_Count (A1, A2 : Array_Type; I : Index_Type)
+        with SPARK_Mode => Off --  #BODYMODE
       is
-         pragma Style_Checks (On);
          C : constant Integer :=
            (if (Choose (A1 (I)) and Choose (A2 (I)))
             or (not Choose (A1 (I)) and not Choose (A2 (I))) then 0
@@ -102,15 +83,9 @@ package body SPARK.Higher_Order.Fold with SPARK_Mode is
       -- Count_Length --
       ------------------
 
-      pragma Style_Checks (Off);
-      procedure Count_Length (A : Array_Type) with SPARK_Mode =>
-#if SPARK_BODY_MODE="On"
-          On
-#else
-          Off
-#end if;
+      procedure Count_Length (A : Array_Type)
+        with SPARK_Mode => Off --  #BODYMODE
       is
-         pragma Style_Checks (On);
 
          function Count_Length (I : Index_1; J : Index_2) return Boolean is
          --  Count_Length up to the position I, J
@@ -182,15 +157,9 @@ package body SPARK.Higher_Order.Fold with SPARK_Mode is
       -- Count_Zero --
       ----------------
 
-      pragma Style_Checks (Off);
-      procedure Count_Zero (A : Array_Type) with SPARK_Mode =>
-#if SPARK_BODY_MODE="On"
-          On
-#else
-          Off
-#end if;
+      procedure Count_Zero (A : Array_Type)
+        with SPARK_Mode => Off --  #BODYMODE
       is
-         pragma Style_Checks (On);
       begin
          if A'Length (2) > 0 then
             for I in A'Range (1) loop
@@ -217,16 +186,9 @@ package body SPARK.Higher_Order.Fold with SPARK_Mode is
       -- Update_Count --
       ------------------
 
-      pragma Style_Checks (Off);
       procedure Update_Count (A1, A2 : Array_Type; I : Index_1; J : Index_2)
-      with SPARK_Mode =>
-#if SPARK_BODY_MODE="On"
-          On
-#else
-          Off
-#end if;
+      with SPARK_Mode => Off --  #BODYMODE
       is
-         pragma Style_Checks (On);
          C : constant Integer :=
            (if Choose (A1 (I, J)) = Choose (A2 (I, J)) then 0
             elsif  Choose (A1 (I, J)) then 1
@@ -296,16 +258,9 @@ package body SPARK.Higher_Order.Fold with SPARK_Mode is
       -- Fold --
       ----------
 
-      pragma Style_Checks (Off);
       function Fold (A : Array_Type; Init : Element_Out) return Element_Out
-      with SPARK_Mode =>
-#if SPARK_BODY_MODE="On"
-          On
-#else
-          Off
-#end if;
+      with SPARK_Mode => Off --  #BODYMODE
       is
-         pragma Style_Checks (On);
       begin
          return R : Element_Out := Init do
             if A'Length (2) > 0 then
@@ -342,16 +297,9 @@ package body SPARK.Higher_Order.Fold with SPARK_Mode is
       -- Fold --
       ----------
 
-      pragma Style_Checks (Off);
       function Fold (A : Array_Type; Init : Element_Out) return Acc_Array with
-        SPARK_Mode =>
-#if SPARK_BODY_MODE="On"
-          On
-#else
-          Off
-#end if;
+        SPARK_Mode => Off --  #BODYMODE
       is
-         pragma Style_Checks (On);
          Acc : Element_Out := Init;
       begin
          return R : Acc_Array (A'Range (1), A'Range (2)) :=
@@ -459,16 +407,9 @@ package body SPARK.Higher_Order.Fold with SPARK_Mode is
       -- Fold --
       ----------
 
-      pragma Style_Checks (Off);
       function Fold (A : Array_Type; Init : Element_Out) return Element_Out
-        with SPARK_Mode =>
-#if SPARK_BODY_MODE="On"
-          On
-#else
-          Off
-#end if;
+        with SPARK_Mode => Off --  #BODYMODE
       is
-         pragma Style_Checks (On);
       begin
          return R : Element_Out := Init do
             for I in A'Range loop
@@ -494,16 +435,9 @@ package body SPARK.Higher_Order.Fold with SPARK_Mode is
       -- Fold --
       ----------
 
-      pragma Style_Checks (Off);
       function Fold (A : Array_Type; Init : Element_Out) return Acc_Array
-        with SPARK_Mode =>
-#if SPARK_BODY_MODE="On"
-          On
-#else
-          Off
-#end if;
+        with SPARK_Mode => Off --  #BODYMODE
       is
-         pragma Style_Checks (On);
          Acc : Element_Out := Init;
       begin
          return R : Acc_Array (A'First .. A'Last) := (others => Init) do
@@ -555,16 +489,9 @@ package body SPARK.Higher_Order.Fold with SPARK_Mode is
       -- Fold --
       ----------
 
-      pragma Style_Checks (Off);
       function Fold (A : Array_Type; Init : Element_Out) return Element_Out
-        with SPARK_Mode =>
-#if SPARK_BODY_MODE="On"
-          On
-#else
-          Off
-#end if;
+        with SPARK_Mode => Off --  #BODYMODE
       is
-         pragma Style_Checks (On);
       begin
          return R : Element_Out := Init do
             for I in A'Range loop
@@ -590,16 +517,9 @@ package body SPARK.Higher_Order.Fold with SPARK_Mode is
       -- Fold --
       ----------
 
-      pragma Style_Checks (Off);
       function Fold (A : Array_Type; Init : Element_Out) return Acc_Array
-        with SPARK_Mode =>
-#if SPARK_BODY_MODE="On"
-          On
-#else
-          Off
-#end if;
+        with SPARK_Mode => Off --  #BODYMODE
       is
-         pragma Style_Checks (On);
          Acc : Element_Out := Init;
       begin
          return R : Acc_Array (A'First .. A'Last) := (others => Init) do
@@ -651,16 +571,9 @@ package body SPARK.Higher_Order.Fold with SPARK_Mode is
       -- Fold --
       ----------
 
-      pragma Style_Checks (Off);
       function Fold (A : Array_Type; Init : Element_Out) return Element_Out
-        with SPARK_Mode =>
-#if SPARK_BODY_MODE="On"
-          On
-#else
-          Off
-#end if;
+        with SPARK_Mode => Off --  #BODYMODE
       is
-         pragma Style_Checks (On);
       begin
          return R : Element_Out := Init do
             for I in reverse A'Range loop
@@ -686,16 +599,9 @@ package body SPARK.Higher_Order.Fold with SPARK_Mode is
       -- Fold --
       ----------
 
-      pragma Style_Checks (Off);
       function Fold (A : Array_Type; Init : Element_Out) return Acc_Array
-        with SPARK_Mode =>
-#if SPARK_BODY_MODE="On"
-          On
-#else
-          Off
-#end if;
+        with SPARK_Mode => Off --  #BODYMODE
       is
-         pragma Style_Checks (On);
          Acc : Element_Out := Init;
       begin
          return R : Acc_Array (A'First .. A'Last) := (others => Init) do
@@ -753,15 +659,9 @@ package body SPARK.Higher_Order.Fold with SPARK_Mode is
          -- Sum_Cst --
          -------------
 
-         pragma Style_Checks (Off);
-         procedure Sum_Cst (A : Array_Type; C : Element_Out) with SPARK_Mode =>
-#if SPARK_BODY_MODE="On"
-             On
-#else
-             Off
-#end if;
+         procedure Sum_Cst (A : Array_Type; C : Element_Out)
+           with SPARK_Mode => Off --  #BODYMODE
          is
-            pragma Style_Checks (On);
          begin
             for I in A'Range loop
                if Value (A (I)) /= C then
@@ -780,16 +680,9 @@ package body SPARK.Higher_Order.Fold with SPARK_Mode is
          -- Update_Sum --
          ----------------
 
-         pragma Style_Checks (Off);
          procedure Update_Sum (A1, A2 : Array_Type; I : Index_Type) with
-           SPARK_Mode =>
-#if SPARK_BODY_MODE="On"
-               On
-#else
-               Off
-#end if;
+           SPARK_Mode => Off --  #BODYMODE
          is
-            pragma Style_Checks (On);
 
          begin
             for K in A1'Range loop
@@ -825,16 +718,9 @@ package body SPARK.Higher_Order.Fold with SPARK_Mode is
       -- Sum --
       ---------
 
-      pragma Style_Checks (Off);
       function Sum (A : Array_Type) return Element_Out with
-        SPARK_Mode =>
-#if SPARK_BODY_MODE="On"
-             On
-#else
-             Off
-#end if;
+        SPARK_Mode => Off --  #BODYMODE
       is
-         pragma Style_Checks (On);
          R : Element_Out := Zero;
       begin
          Prove_Zero;
@@ -868,15 +754,9 @@ package body SPARK.Higher_Order.Fold with SPARK_Mode is
          -- Sum_Cst --
          -------------
 
-         pragma Style_Checks (Off);
-         procedure Sum_Cst (A : Array_Type; C : Element_Out) with SPARK_Mode =>
-#if SPARK_BODY_MODE="On"
-             On
-#else
-             Off
-#end if;
+         procedure Sum_Cst (A : Array_Type; C : Element_Out)
+           with SPARK_Mode => Off --  #BODYMODE
          is
-            pragma Style_Checks (On);
             function Sum_Cst (I : Index_1; J : Index_2) return Boolean is
               (Fold_Sum.Acc.Fold (A, 0) (I, J) =
                    To_Big (C) *
@@ -911,17 +791,10 @@ package body SPARK.Higher_Order.Fold with SPARK_Mode is
          -- Update_Sum --
          ----------------
 
-         pragma Style_Checks (Off);
          procedure Update_Sum (A1, A2 : Array_Type; I : Index_1; J : Index_2)
          with
-           SPARK_Mode =>
-#if SPARK_BODY_MODE="On"
-               On
-#else
-               Off
-#end if;
+           SPARK_Mode => Off --  #BODYMODE
          is
-            pragma Style_Checks (On);
          begin
             for K in A1'Range (1) loop
                pragma Loop_Invariant
@@ -974,16 +847,9 @@ package body SPARK.Higher_Order.Fold with SPARK_Mode is
       -- Sum --
       ---------
 
-      pragma Style_Checks (Off);
       function Sum (A : Array_Type) return Element_Out with
-        SPARK_Mode =>
-#if SPARK_BODY_MODE="On"
-             On
-#else
-             Off
-#end if;
+        SPARK_Mode => Off --  #BODYMODE
       is
-         pragma Style_Checks (On);
          R : Element_Out := Zero;
       begin
          Prove_Zero;
