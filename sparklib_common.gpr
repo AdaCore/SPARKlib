@@ -24,6 +24,15 @@ abstract project SPARKlib_common is
       "-gnatwI",  --  disable warnings about SPARKlib using GNAT internal units
       "-gnateDSPARK_BODY_MODE=" & SPARK_Body_Mode);
 
+   Root := "";
+
+   case SPARKlib_Installed is
+      when "True" =>
+         Root := SPARKlib_common'Project_Dir & "/../../include/spark";
+      when others =>
+         Root := SPARKlib_common'Project_Dir & "/src";
+   end case;
+
    package Compiler is
       --  Enforce GNAT style checks, except for multiple blank lines which does
       --  not work for preprocessed files, and alphabetical ordering of
