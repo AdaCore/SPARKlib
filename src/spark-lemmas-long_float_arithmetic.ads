@@ -5,10 +5,6 @@
 --
 
 pragma SPARK_Mode;
-with SPARK.Big_Integers;
-use  SPARK.Big_Integers;
-with SPARK.Big_Reals;
-use  SPARK.Big_Reals;
 with SPARK.Conversions.Long_Float_Conversions;
 use SPARK.Conversions.Long_Float_Conversions;
 with SPARK.Lemmas.Floating_Point_Arithmetic;
@@ -19,7 +15,7 @@ package SPARK.Lemmas.Long_Float_Arithmetic is new
     (Fl           => Long_Float,
      Int          => Long_Integer,
      Fl_Last_Sqrt => 2.0 ** 511,
-     Max_Int      => 2 ** 53,
-     Epsilon      => 2.0 ** (-53),
-     Eta          => 2.0 ** (-1075),
+     Max_Int      => Long_Float_Max_Int,
+     Epsilon      => Long_Float_Epsilon,
+     Eta          => Long_Float_Eta,
      Real         => To_Big_Real);
