@@ -228,6 +228,7 @@ is
    function Greatest_Common_Divisor
      (L, R : Valid_Big_Integer) return Big_Positive
    is
+      pragma Unreferenced (L, R);
    begin
       Check_Or_Fail;
       return (raise Program_Error);
