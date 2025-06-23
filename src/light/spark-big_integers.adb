@@ -22,7 +22,6 @@ is
 
       function From_Big_Integer (Arg : Valid_Big_Integer) return Int is
       begin
-         Check_Or_Fail;
          return Int (Arg.V);
       end From_Big_Integer;
 
@@ -32,7 +31,6 @@ is
 
       function To_Big_Integer (Arg : Int) return Valid_Big_Integer is
       begin
-         Check_Or_Fail;
          return (V => Long_Long_Long_Integer (Arg));
       end To_Big_Integer;
 
@@ -52,7 +50,6 @@ is
 
       function From_Big_Integer (Arg : Valid_Big_Integer) return Int is
       begin
-         Check_Or_Fail;
          return Int (Arg.V);
       end From_Big_Integer;
 
@@ -62,7 +59,6 @@ is
 
       function To_Big_Integer (Arg : Int) return Valid_Big_Integer is
       begin
-         Check_Or_Fail;
          return (V => Long_Long_Long_Integer (Arg));
       end To_Big_Integer;
 
@@ -74,7 +70,6 @@ is
 
    function "*" (L, R : Valid_Big_Integer) return Valid_Big_Integer is
    begin
-      Check_Or_Fail;
       return (V => L.V * R.V);
    end "*";
 
@@ -85,7 +80,6 @@ is
    function "**"
      (L : Valid_Big_Integer; R : Natural) return Valid_Big_Integer is
    begin
-      Check_Or_Fail;
       return (V => L.V ** R);
    end "**";
 
@@ -95,13 +89,11 @@ is
 
    function "+" (L : Valid_Big_Integer) return Valid_Big_Integer is
    begin
-      Check_Or_Fail;
       return L;
    end "+";
 
    function "+" (L, R : Valid_Big_Integer) return Valid_Big_Integer is
    begin
-      Check_Or_Fail;
       return (V => L.V + R.V);
    end "+";
 
@@ -111,13 +103,11 @@ is
 
    function "-" (L : Valid_Big_Integer) return Valid_Big_Integer is
    begin
-      Check_Or_Fail;
       return (V => -L.V);
    end "-";
 
    function "-" (L, R : Valid_Big_Integer) return Valid_Big_Integer is
    begin
-      Check_Or_Fail;
       return (V => L.V - R.V);
    end "-";
 
@@ -127,7 +117,6 @@ is
 
    function "/" (L, R : Valid_Big_Integer) return Valid_Big_Integer is
    begin
-      Check_Or_Fail;
       return (V => L.V / R.V);
    end "/";
 
@@ -137,7 +126,6 @@ is
 
    function "<" (L, R : Valid_Big_Integer) return Boolean is
    begin
-      Check_Or_Fail;
       return L.V < R.V;
    end "<";
 
@@ -147,7 +135,6 @@ is
 
    function "<=" (L, R : Valid_Big_Integer) return Boolean is
    begin
-      Check_Or_Fail;
       return L.V <= R.V;
    end "<=";
 
@@ -157,7 +144,6 @@ is
 
    function "=" (L, R : Valid_Big_Integer) return Boolean is
    begin
-      Check_Or_Fail;
       return L.V = R.V;
    end "=";
 
@@ -167,7 +153,6 @@ is
 
    function ">" (L, R : Valid_Big_Integer) return Boolean is
    begin
-      Check_Or_Fail;
       return L.V > R.V;
    end ">";
 
@@ -177,7 +162,6 @@ is
 
    function ">=" (L, R : Valid_Big_Integer) return Boolean is
    begin
-      Check_Or_Fail;
       return L.V >= R.V;
    end ">=";
 
@@ -187,7 +171,6 @@ is
 
    function "abs" (L : Valid_Big_Integer) return Valid_Big_Integer is
    begin
-      Check_Or_Fail;
       return (V => abs L.V);
    end "abs";
 
@@ -197,7 +180,6 @@ is
 
    function "mod" (L, R : Valid_Big_Integer) return Valid_Big_Integer is
    begin
-      Check_Or_Fail;
       return (V => L.V mod R.V);
    end "mod";
 
@@ -207,7 +189,6 @@ is
 
    function "rem" (L, R : Valid_Big_Integer) return Valid_Big_Integer is
    begin
-      Check_Or_Fail;
       return (V => L.V rem R.V);
    end "rem";
 
@@ -217,7 +198,6 @@ is
 
    function From_String (Arg : String) return Valid_Big_Integer is
    begin
-      Check_Or_Fail;
       return (V => Long_Long_Long_Integer'Value (Arg));
    end From_String;
 
@@ -230,7 +210,6 @@ is
    is
       pragma Unreferenced (L, R);
    begin
-      Check_Or_Fail;
       return (raise Program_Error);
    end Greatest_Common_Divisor;
 
@@ -261,7 +240,6 @@ is
 
    function To_Big_Integer (Arg : Integer) return Valid_Big_Integer is
    begin
-      Check_Or_Fail;
       return (V => Long_Long_Long_Integer (Arg));
    end To_Big_Integer;
 
@@ -271,7 +249,6 @@ is
 
    function To_Integer (Arg : Valid_Big_Integer) return Integer is
    begin
-      Check_Or_Fail;
       return Integer (Arg.V);
    end To_Integer;
 

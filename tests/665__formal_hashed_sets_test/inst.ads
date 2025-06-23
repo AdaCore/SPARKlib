@@ -1,4 +1,3 @@
-pragma Ignore_Pragma (Assertion_Policy);
 with SPARK.Containers.Types; use SPARK.Containers.Types;
 with SPARK.Containers.Formal.Hashed_Sets;
 

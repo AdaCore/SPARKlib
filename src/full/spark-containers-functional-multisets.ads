@@ -27,12 +27,12 @@ generic
    --  relation.
 
    with procedure Equivalent_Elements_Reflexive (X : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
    with procedure Equivalent_Elements_Symmetric (X, Y : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
    with procedure Equivalent_Elements_Transitive
         (X, Y, Z : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
 
 package SPARK.Containers.Functional.Multisets with
   SPARK_Mode => On,
@@ -44,7 +44,7 @@ is
                     & "for compliance with GNATprove assumption"
                     & " [SPARK_ITERABLE]");
    type Multiset is private with
-     Default_Initial_Condition => Is_Empty (Multiset),
+     Default_Initial_Condition => (SPARKlib_Full => Is_Empty (Multiset)),
      Iterable                  => (First       => Iter_First,
                                    Next        => Iter_Next,
                                    Has_Element => Iter_Has_Element,
@@ -62,9 +62,8 @@ is
    --  equivalence class is included/excluded at once. As equivalence classes
    --  might be infinite, quantification over elements of a finite multiset
    --  could be infinite. Thus, quantified expressions cannot be executed and
-   --  should only be used in disabled ghost code. This is enforced by having a
-   --  special imported procedure Check_Or_Fail that will lead to link-time
-   --  errors otherwise.
+   --  should only be used in disabled ghost code. This is enforced by using
+   --  the SPARKlib_Full assertion level.
 
    ----------------------
    -- Basic Operations --
@@ -83,7 +82,7 @@ is
       Element_1, Element_2 : Element_Type)
    --  Nb_Occurence returns the same result on all equivalent elements
    with
-     Ghost,
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Automatic_Instantiation),
      Pre      => Enable_Handling_Of_Equivalence
@@ -97,7 +96,9 @@ is
    --  Returns True iff Element occurs at least one in Container
 
      Global   => null,
-     Post     => Contains'Result = (Nb_Occurence (Container, Element) > 0),
+     Post     =>
+       (SPARKlib_Full => Contains'Result =
+          (Nb_Occurence (Container, Element) > 0)),
      Annotate => (GNATprove, Inline_For_Proof),
      Annotate => (GNATprove, Iterable_For_Proof, "Contains");
 
@@ -105,8 +106,8 @@ is
    --  Returns an element of the Multiset
 
      Global => null,
-     Pre    => not Is_Empty (Container),
-     Post   => Contains (Container, Choose'Result);
+     Pre    => (SPARKlib_Defensive => not Is_Empty (Container)),
+     Post   => (SPARKlib_Full => Contains (Container, Choose'Result));
 
    function Cardinality (Container : Multiset) return Big_Natural with
    --  The Cardinality of a Multiset is the number of equivalence classes in
@@ -115,8 +116,9 @@ is
 
      Global => null,
      Post   =>
-       (for all Element of Container =>
-          Nb_Occurence (Container, Element) <= Cardinality'Result);
+       (SPARKlib_Full =>
+          (for all Element of Container =>
+             Nb_Occurence (Container, Element) <= Cardinality'Result));
 
    ------------------------
    -- Property Functions --
@@ -127,11 +129,11 @@ is
 
    Global => null,
    Post   =>
-       "<="'Result =
+       (SPARKlib_Full => "<="'Result =
          (for all Item of Left =>
             Nb_Occurence (Left, Item) <= Nb_Occurence (Right, Item))
          and then (if "<="'Result
-                   then Cardinality (Left) <= Cardinality (Right));
+                   then Cardinality (Left) <= Cardinality (Right)));
 
    function "=" (Left, Right : Multiset) return Boolean with
    --  Two Multiset are equal if and only if all the Element_Type have the same
@@ -139,14 +141,16 @@ is
 
      Global => null,
      Post   =>
-       "="'Result =
-         ((for all Element of Left =>
-              Nb_Occurence (Left, Element) = Nb_Occurence (Right, Element))
-          and then
-            (for all Element of Right =>
-                Nb_Occurence (Left, Element) = Nb_Occurence (Right, Element)))
-       and then (if "="'Result
-                 then (Cardinality (Left) = Cardinality (Right)));
+       (SPARKlib_Full =>
+          "="'Result =
+            ((for all Element of Left =>
+                 Nb_Occurence (Left, Element) = Nb_Occurence (Right, Element))
+             and then
+               (for all Element of Right =>
+                   Nb_Occurence (Left, Element) =
+                   Nb_Occurence (Right, Element)))
+          and then (if "="'Result
+                    then (Cardinality (Left) = Cardinality (Right))));
 
    pragma Warnings (Off, "unused variable ""Element""");
    function Is_Empty (Container : Multiset) return Boolean with
@@ -155,9 +159,9 @@ is
 
      Global => null,
      Post   =>
-       Is_Empty'Result =
-          (for all Element of Container => False)
-         and then Is_Empty'Result = (Cardinality (Container) = 0);
+       (SPARKlib_Full =>
+          Is_Empty'Result = (for all Element of Container => False)
+          and then Is_Empty'Result = (Cardinality (Container) = 0));
    pragma Warnings (On, "unused variable ""Element""");
 
    function Equal_Except
@@ -168,17 +172,16 @@ is
    --  Element have the same number of occurences in Left and in Right and
    --  conversely.
 
-   Ghost,
    Global => null,
    Post   =>
-     Equal_Except'Result =
+     (SPARKlib_Full => Equal_Except'Result =
        ((for all E of Left =>
           (if not Equivalent_Elements (E, Element)
            then Nb_Occurence (Left, E) = Nb_Occurence (Right, E)))
           and then
             (for all E of Right =>
                (if not Equivalent_Elements (E, Element)
-                then Nb_Occurence (Left, E) = Nb_Occurence (Right, E))));
+                then Nb_Occurence (Left, E) = Nb_Occurence (Right, E)))));
 
    ----------------------------
    -- Construction Functions --
@@ -191,7 +194,7 @@ is
    --  Returns an empty Multiset
 
      Global => null,
-     Post   => Is_Empty (Empty_Multiset'Result);
+     Post   => (SPARKlib_Full => Is_Empty (Empty_Multiset'Result));
 
    function Add
      (Container : Multiset;
@@ -201,11 +204,12 @@ is
 
      Global => null,
      Post   =>
-       Contains (Add'Result, Element)
-         and then Cardinality (Add'Result) = Cardinality (Container) + 1
-         and then Nb_Occurence (Add'Result, Element) =
-                    Nb_Occurence (Container, Element) + 1
-         and then Equal_Except (Container, Add'Result, Element);
+       (SPARKlib_Full =>
+          Contains (Add'Result, Element)
+          and then Cardinality (Add'Result) = Cardinality (Container) + 1
+          and then Nb_Occurence (Add'Result, Element) =
+                     Nb_Occurence (Container, Element) + 1
+          and then Equal_Except (Container, Add'Result, Element));
 
    function Add
      (Container : Multiset;
@@ -216,11 +220,12 @@ is
 
      Global => null,
      Post   =>
-       Contains (Add'Result, Element)
-         and then Cardinality (Add'Result) = Cardinality (Container) + Count
-         and then Nb_Occurence (Add'Result, Element) =
-           Nb_Occurence (Container, Element) + Count
-         and then Equal_Except (Container, Add'Result, Element);
+       (SPARKlib_Full =>
+          Contains (Add'Result, Element)
+          and then Cardinality (Add'Result) = Cardinality (Container) + Count
+          and then Nb_Occurence (Add'Result, Element) =
+            Nb_Occurence (Container, Element) + Count
+          and then Equal_Except (Container, Add'Result, Element));
 
    function Remove_All
      (Container : Multiset;
@@ -228,12 +233,13 @@ is
    --  Returns Container with no occurences of the equivalence class of Element
 
      Global => null,
-     Pre    => Contains (Container, Element),
-     Post   => not Contains (Remove_All'Result, Element)
-                 and then Cardinality (Remove_All'Result) =
-                            Cardinality (Container)
-                            - Nb_Occurence (Container, Element)
-                 and then Equal_Except (Container, Remove_All'Result, Element);
+     Pre    => (SPARKlib_Defensive => Contains (Container, Element)),
+     Post   =>
+       (SPARKlib_Full =>
+          not Contains (Remove_All'Result, Element)
+          and then Cardinality (Remove_All'Result) =
+             Cardinality (Container) - Nb_Occurence (Container, Element)
+          and then Equal_Except (Container, Remove_All'Result, Element));
 
    function Remove
      (Container : Multiset;
@@ -243,13 +249,15 @@ is
    --  of Element decremented by Count.
 
      Global => null,
-     Pre    => Count <= Nb_Occurence (Container, Element),
+     Pre    =>
+       (SPARKlib_Defensive => Count <= Nb_Occurence (Container, Element)),
      Post   =>
-       Nb_Occurence (Remove'Result, Element) =
-         Nb_Occurence (Container, Element) - Count
-         and then Cardinality (Remove'Result) =
-                    Cardinality (Container) - Count
-         and then Equal_Except (Container, Remove'Result, Element);
+       (SPARKlib_Full =>
+          Nb_Occurence (Remove'Result, Element) =
+            Nb_Occurence (Container, Element) - Count
+          and then Cardinality (Remove'Result) =
+                     Cardinality (Container) - Count
+          and then Equal_Except (Container, Remove'Result, Element));
 
    function Sum (Left : Multiset; Right : Multiset) return Multiset with
    --  Returns the sum of Left and Right, in which the number of occurences of
@@ -258,13 +266,14 @@ is
 
      Global => null,
      Post   =>
-       Cardinality (Sum'Result) = Cardinality (Left) + Cardinality (Right)
-         and Left <= Sum'Result
-         and Right <= Sum'Result
-         and (for all Element of Sum'Result =>
-                Nb_Occurence (Sum'Result, Element) =
-                  Nb_Occurence (Left, Element)
-                    + Nb_Occurence (Right, Element));
+       (SPARKlib_Full =>
+          Cardinality (Sum'Result) = Cardinality (Left) + Cardinality (Right)
+          and Left <= Sum'Result
+          and Right <= Sum'Result
+          and (for all Element of Sum'Result =>
+                 Nb_Occurence (Sum'Result, Element) =
+                   Nb_Occurence (Left, Element)
+                     + Nb_Occurence (Right, Element)));
 
    function "+"
      (Left  : Multiset;
@@ -279,13 +288,14 @@ is
 
      Global => null,
      Post   =>
-       (for all E of Left =>
-          (if Nb_Occurence (Left, E) > Nb_Occurence (Right, E)
-           then Contains (Difference'Result, E)))
-       and then
-         (for all E of Difference'Result =>
-            Nb_Occurence (Difference'Result, E) =
-            Max (0, Nb_Occurence (Left, E) - Nb_Occurence (Right, E)));
+       (SPARKlib_Full =>
+          (for all E of Left =>
+             (if Nb_Occurence (Left, E) > Nb_Occurence (Right, E)
+              then Contains (Difference'Result, E)))
+          and then
+            (for all E of Difference'Result =>
+               Nb_Occurence (Difference'Result, E) =
+               Max (0, Nb_Occurence (Left, E) - Nb_Occurence (Right, E))));
 
    function "-"
      (Left  : Multiset;
@@ -298,14 +308,15 @@ is
 
    Global => null,
    Post   =>
-       (for all Element of Left =>
-         (if Contains (Right, Element)
-          then Contains (Intersection'Result, Element)))
-        and then
-          (for all Element of Intersection'Result =>
-             Nb_Occurence (Intersection'Result, Element) =
-             Min (Nb_Occurence (Left, Element),
-                  Nb_Occurence (Right, Element)));
+     (SPARKlib_Full =>
+        (for all Element of Left =>
+          (if Contains (Right, Element)
+           then Contains (Intersection'Result, Element)))
+         and then
+           (for all Element of Intersection'Result =>
+              Nb_Occurence (Intersection'Result, Element) =
+              Min (Nb_Occurence (Left, Element),
+                   Nb_Occurence (Right, Element))));
 
    function Union
      (Left  : Multiset;
@@ -315,13 +326,14 @@ is
 
    Global => null,
    Post   =>
-     (Left <= Union'Result
-      and then Right <= Union'Result
-      and then
-        (for all Element of Union'Result =>
-           Nb_Occurence (Union'Result, Element) =
-           Max (Nb_Occurence (Left, Element),
-                Nb_Occurence (Right, Element))));
+     (SPARKlib_Full =>
+        Left <= Union'Result
+        and then Right <= Union'Result
+        and then
+          (for all Element of Union'Result =>
+             Nb_Occurence (Union'Result, Element) =
+             Max (Nb_Occurence (Left, Element),
+                  Nb_Occurence (Right, Element))));
 
    ------------
    -- Lemmas --
@@ -333,6 +345,7 @@ is
       Right : Multiset) with
    --  State that the Intersection is symmetrical
 
+     Ghost  => SPARKlib_Full,
      Global => null,
      Post   => Intersection (Left, Right) = Intersection (Right, Left);
 
@@ -341,14 +354,16 @@ is
       Right : Multiset) with
    --  State that the Union is symmetrical
 
-   Global => null,
-   Post   => Union (Left, Right) = Union (Right, Left);
+     Ghost  => SPARKlib_Full,
+     Global => null,
+     Post   => Union (Left, Right) = Union (Right, Left);
 
    procedure Lemma_Sym_Sum
      (Left  : Multiset;
       Right : Multiset) with
    --  State that the Sum is symmetrical.
 
+     Ghost  => SPARKlib_Full,
      Global => null,
      Post   => Sum (Left, Right) = Sum (Right, Left);
    pragma Warnings (On, "actuals for this call may be in wrong order");
@@ -381,13 +396,15 @@ is
                     "Restrictions:No_Specification_Of_Aspect => Iterable");
 
    function Multiset_Logic_Equal (Left, Right : Multiset) return Boolean with
-     Ghost,
+     Ghost    => SPARKlib_Full,
      Annotate => (GNATprove, Logical_Equal);
    --  Logical equality on multisets
 
    function Iterate (Container : Multiset) return Iterable_Multiset with
      Global => null,
-     Post   => Multiset_Logic_Equal (Get_Multiset (Iterate'Result), Container);
+     Post   =>
+       (SPARKlib_Full =>
+          Multiset_Logic_Equal (Get_Multiset (Iterate'Result), Container));
    --  Return an iterator over a functional multiset
 
    function Get_Multiset (Iterator : Iterable_Multiset) return Multiset with
@@ -399,7 +416,9 @@ is
       Cursor   : Multiset) return Boolean
    with
      Global => null,
-     Post   => (if Valid_Subset'Result then Cursor <= Get_Multiset (Iterator));
+     Post   =>
+       (SPARKlib_Full =>
+          (if Valid_Subset'Result then Cursor <= Get_Multiset (Iterator)));
    --  Returns True on all multisets which can be reached by iterating over
    --  Container.
 
@@ -407,16 +426,18 @@ is
      (Iterator : Iterable_Multiset; Cursor : Multiset) return Element_Type
    with
      Global   => null,
-     Pre      => not Is_Empty (Cursor),
-     Post     => Element'Result = Choose (Cursor),
+     Pre      => (SPARKlib_Defensive => not Is_Empty (Cursor)),
+     Post     => (SPARKlib_Full => Element'Result = Choose (Cursor)),
      Annotate => (GNATprove, Inline_For_Proof);
    --  The next element to be considered for the iteration is the result of
    --  choose on Cursor.
 
    function First (Iterator : Iterable_Multiset) return Multiset with
      Global => null,
-     Post   => Multiset_Logic_Equal (First'Result, Get_Multiset (Iterator))
-       and then Valid_Subset (Iterator, First'Result);
+     Post   =>
+       (SPARKlib_Full =>
+          Multiset_Logic_Equal (First'Result, Get_Multiset (Iterator))
+          and then Valid_Subset (Iterator, First'Result));
    --  In the first iteration, the cursor is the multiset associated with
    --  Iterator.
 
@@ -424,10 +445,14 @@ is
      (Iterator : Iterable_Multiset; Cursor : Multiset) return Multiset
    with
      Global => null,
-     Pre    => Valid_Subset (Iterator, Cursor) and then not Is_Empty (Cursor),
-     Post   => Valid_Subset (Iterator, Next'Result)
-       and then Multiset_Logic_Equal
-         (Next'Result, Remove_All (Cursor, Choose (Cursor)));
+     Pre    =>
+       (SPARKlib_Defensive =>
+          Valid_Subset (Iterator, Cursor) and then not Is_Empty (Cursor)),
+     Post   =>
+       (SPARKlib_Full =>
+          Valid_Subset (Iterator, Next'Result)
+          and then Multiset_Logic_Equal
+            (Next'Result, Remove_All (Cursor, Choose (Cursor))));
    --  At each iteration, remove the equivalence class of considered element
    --  from the Cursor set.
 
@@ -436,8 +461,9 @@ is
       Cursor   : Multiset) return Boolean
    with
      Global => null,
-     Post   => Has_Element'Result =
-       (Valid_Subset (Iterator, Cursor) and then not Is_Empty (Cursor));
+     Post   =>
+       (SPARKlib_Full => Has_Element'Result =
+          (Valid_Subset (Iterator, Cursor) and then not Is_Empty (Cursor)));
    --  Return True on non-empty sets which can be reached by iterating over
    --  Container.
 
@@ -471,20 +497,20 @@ is
    type Private_Key is private;
 
    function Iter_First (Container : Multiset) return Private_Key with
-     Ghost,
+     Ghost  => SPARKlib_Full,
      Global => null;
 
    function Iter_Has_Element
      (Container : Multiset;
       Key       : Private_Key) return Boolean
    with
-     Ghost,
+     Ghost  => SPARKlib_Full,
      Global => null;
 
    function Iter_Next (Container : Multiset; Key : Private_Key)
                        return Private_Key
    with
-     Ghost,
+     Ghost  => SPARKlib_Full,
      Global => null,
      Pre    => Iter_Has_Element (Container, Key);
 
@@ -492,7 +518,7 @@ is
      (Container : Multiset;
       Key       : Private_Key) return Element_Type
    with
-     Ghost,
+     Ghost  => SPARKlib_Full,
      Global => null,
      Pre    => Iter_Has_Element (Container, Key);
 
@@ -519,18 +545,19 @@ is
       Count     : Big_Natural)
    with
      Global => null,
-     Pre    => Nb_Occurence (Container, Element) = 0,
-     Post   => Nb_Occurence (Container, Element) = Count
-       and then
-         (for all E of Container =>
-            (if not Equivalent_Elements (E, Element)
-             then Nb_Occurence (Container, E) =
-                 Nb_Occurence (Container'Old, E)))
-         and then
-         (for all E of Container'Old =>
-            (if not Equivalent_Elements (E, Element)
-             then Nb_Occurence (Container, E) =
-                 Nb_Occurence (Container'Old, E)));
+     Pre    => (SPARKlib_Defensive => Nb_Occurence (Container, Element) = 0),
+     Post   =>
+       (SPARKlib_Full => Nb_Occurence (Container, Element) = Count
+          and then
+            (for all E of Container =>
+               (if not Equivalent_Elements (E, Element)
+                then Nb_Occurence (Container, E) =
+                    Nb_Occurence (Container'Old, E)))
+          and then
+            (for all E of Container'Old =>
+               (if not Equivalent_Elements (E, Element)
+                then Nb_Occurence (Container, E) =
+                    Nb_Occurence (Container'Old, E))));
 
 private
 pragma Style_Checks (Off);
@@ -553,10 +580,10 @@ pragma Style_Checks (On);
       Map  : Maps.Map;
       Card : Big_Natural := 0;
    end record with
-     Type_Invariant => Invariant (Map, Card);
+     Type_Invariant => (SPARKlib_Full => Invariant (Map, Card));
 
    function Invariant (Container : Map; Card : Big_Natural) return Boolean
-     with Ghost;
+     with Ghost => SPARKlib_Full;
 
    ---------------------------------------
    -- Iteration on Functional Multisets --
@@ -566,7 +593,7 @@ pragma Style_Checks (On);
       Map  : Maps.Iterable_Map := Iterate (Empty_Map);
       Card : Big_Natural := 0;
    end record with
-     Type_Invariant => Invariant (Get_Map (Map), Card);
+     Type_Invariant => (SPARKlib_Full => Invariant (Get_Map (Map), Card));
 
    function Element
      (Iterator : Iterable_Multiset;

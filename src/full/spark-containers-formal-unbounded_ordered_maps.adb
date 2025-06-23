@@ -17,10 +17,6 @@ with System; use type System.Address;
 package body SPARK.Containers.Formal.Unbounded_Ordered_Maps with
   SPARK_Mode => Off
 is
-   --  Contracts in this unit are meant for analysis only, not for run-time
-   --  checking.
-
-   pragma Assertion_Policy (Ignore);
 
    -----------------------------
    -- Node Access Subprograms --
@@ -89,9 +85,11 @@ is
    --  Allocate a new larger Tree
 
      Global => null,
-     Post   => M.Equal (Model (Container), Model (Container)'Old)
-                 and Positions (Container) = Positions (Container)'Old
-                 and K.Equal (Keys (Container), Keys (Container)'Old);
+     Post   =>
+       (SPARKlib_Full =>
+          M.Equal (Model (Container), Model (Container)'Old)
+            and Positions (Container) = Positions (Container)'Old
+            and K.Equal (Keys (Container), Keys (Container)'Old));
 
    --------------------------
    -- Local Instantiations --
@@ -741,13 +739,13 @@ is
          Count : Count_Type := 1) return Boolean
       is
       begin
-         for Cu of Small loop
+         for Cu of P.Iterate (Small) loop
             if not P.Has_Key (Big, Cu) then
                return False;
             end if;
          end loop;
 
-         for Cu of Big loop
+         for Cu of P.Iterate (Big) loop
             declare
                Pos : constant Positive_Count_Type := P.Get (Big, Cu);
 

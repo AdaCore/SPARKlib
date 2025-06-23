@@ -15,10 +15,6 @@ with System; use type System.Address;
 package body SPARK.Containers.Formal.Hashed_Maps with
   SPARK_Mode => Off
 is
-   --  Contracts in this unit are meant for analysis only, not for run-time
-   --  checking.
-
-   pragma Assertion_Policy (Ignore);
 
    -----------------------
    -- Local Subprograms --
@@ -473,8 +469,9 @@ is
             if not P.Has_Key (P_Right, C)
               or else P.Get (P_Left,  C) > K.Last (K_Left)
               or else P.Get (P_Right, C) > K.Last (K_Right)
-              or else K.Get (K_Left,  P.Get (P_Left,  C)) /=
-                      K.Get (K_Right, P.Get (P_Right, C))
+              or else not Key_Logic_Equal
+                (K.Get (K_Left,  P.Get (P_Left,  C)),
+                 K.Get (K_Right, P.Get (P_Right, C)))
             then
                return False;
             end if;

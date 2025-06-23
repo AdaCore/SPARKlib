@@ -17,11 +17,6 @@ with System; use type System.Address;
 package body SPARK.Containers.Formal.Hashed_Sets with
   SPARK_Mode => Off
 is
-   --  Contracts in this unit are meant for analysis only, not for run-time
-   --  checking.
-
-   pragma Assertion_Policy (Ignore);
-
    use HT_Types;
 
    -----------------------
@@ -843,11 +838,6 @@ is
 
    package body Generic_Keys with SPARK_Mode => Off is
 
-      --  Contracts in this unit are meant for analysis only, not for run-time
-      --  checking.
-
-      pragma Assertion_Policy (Ignore);
-
       -----------------------
       -- Local Subprograms --
       -----------------------
@@ -968,7 +958,7 @@ is
             Key   : Key_Type) return Boolean
          is
          begin
-            for E of Left loop
+            for E of M.Iterate (Left) loop
                if not Contains (Right, E)
                  and not Equivalent_Keys (Generic_Keys.Key (E), Key)
                then

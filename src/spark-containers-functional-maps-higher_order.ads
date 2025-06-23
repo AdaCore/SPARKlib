@@ -22,7 +22,8 @@ is
       return Boolean
    --  Test returns the same value on equivalent keys
 
-     with Ghost,
+     with
+       Ghost    => SPARKlib_Full,
        Global   => null,
        Post     => Eq_Compatible'Result =
          (for all K1 of M =>
@@ -39,7 +40,8 @@ is
       return Boolean
    --  Value returns the same value on equivalent keys
 
-     with Ghost,
+     with
+       Ghost    => SPARKlib_Full,
        Global   => null,
        Post     => Eq_Compatible'Result =
          (for all K1 of M =>
@@ -62,21 +64,24 @@ is
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Pre      =>
-       (for all I1 in Interval'(1, New_Length) =>
-          (for all I2 in Interval'(I1 + 1, New_Length) =>
-             not Equivalent_Keys (New_Key (I1), New_Key (I2)))),
-     Post     => Length (Create'Result) = New_Length
-       and then
-          (for all I in Interval'(1, New_Length) =>
-             Has_Key (Create'Result, New_Key (I)))
-       and then
-          (for all K of Create'Result =>
-             (for some I in Interval'(1, New_Length) =>
-                  Equivalent_Keys (K, New_Key (I))))
-       and then
-          (for all I in Interval'(1, New_Length) =>
-             Element_Logic_Equal
-               (Get (Create'Result, New_Key (I)), New_Item (I)));
+       (SPARKlib_Defensive =>
+          (for all I1 in Interval'(1, New_Length) =>
+             (for all I2 in Interval'(I1 + 1, New_Length) =>
+                not Equivalent_Keys (New_Key (I1), New_Key (I2))))),
+     Post     =>
+       (SPARKlib_Full =>
+          Length (Create'Result) = New_Length
+          and then
+             (for all I in Interval'(1, New_Length) =>
+                Has_Key (Create'Result, New_Key (I)))
+          and then
+             (for all K of Create'Result =>
+                (for some I in Interval'(1, New_Length) =>
+                     Equivalent_Keys (K, New_Key (I))))
+          and then
+             (for all I in Interval'(1, New_Length) =>
+                Element_Logic_Equal
+                  (Get (Create'Result, New_Key (I)), New_Item (I))));
 
    function Transform
      (M              : Map;
@@ -92,21 +97,24 @@ is
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Pre      =>
-       (for all K1 of M =>
-          (for all K2 of M =>
-             Equivalent_Keys (Transform_Key (K1), Transform_Key (K2)) =
-             Equivalent_Keys (K1, K2))),
-     Post     => Length (Transform'Result) = Length (M)
-       and then (for all K of M =>
-                   Has_Key (Transform'Result, Transform_Key (K)))
-       and then
-           (for all K of Transform'Result =>
-              (for some L of M => Equivalent_Keys (K, Transform_Key (L))))
-       and then
-           (for all K of M =>
-              Element_Logic_Equal
-                (Get (Transform'Result, Transform_Key (K)),
-                 Transform_Item (Get (M, K))));
+       (SPARKlib_Full =>
+          (for all K1 of M =>
+             (for all K2 of M =>
+                Equivalent_Keys (Transform_Key (K1), Transform_Key (K2)) =
+                Equivalent_Keys (K1, K2)))),
+     Post     =>
+       (SPARKlib_Full =>
+          Length (Transform'Result) = Length (M)
+          and then (for all K of M =>
+                      Has_Key (Transform'Result, Transform_Key (K)))
+          and then
+              (for all K of Transform'Result =>
+                 (for some L of M => Equivalent_Keys (K, Transform_Key (L))))
+          and then
+              (for all K of M =>
+                 Element_Logic_Equal
+                   (Get (Transform'Result, Transform_Key (K)),
+                    Transform_Item (Get (M, K)))));
 
    function Transform_Element
      (M              : Map;
@@ -119,13 +127,15 @@ is
    with
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
-     Post     => Length (Transform_Element'Result) = Length (M)
-       and then Same_Keys (M, Transform_Element'Result)
-       and then
-           (for all K of M =>
-              Element_Logic_Equal
-                (Get (Transform_Element'Result, K),
-                 Transform_Item (Get (M, K))));
+     Post     =>
+       (SPARKlib_Full =>
+          Length (Transform_Element'Result) = Length (M)
+          and then Same_Keys (M, Transform_Element'Result)
+          and then
+              (for all K of M =>
+                 Element_Logic_Equal
+                   (Get (Transform_Element'Result, K),
+                    Transform_Item (Get (M, K)))));
 
    function Count
      (M    : Map;
@@ -139,8 +149,8 @@ is
    with
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
-     Pre      => Eq_Compatible (M, Test),
-     Post     => Count'Result <= Length (M);
+     Pre      => (SPARKlib_Full => Eq_Compatible (M, Test)),
+     Post     => (SPARKlib_Full => Count'Result <= Length (M));
 
    procedure Lemma_Count_Eq
      (M1, M2 : Map;
@@ -149,7 +159,8 @@ is
    --  Automatically instantiated lemma:
    --  Count returns the same value on maps containing the same mappings.
 
-   with Ghost,
+   with
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Annotate => (GNATprove, Automatic_Instantiation),
@@ -165,7 +176,8 @@ is
    --  Automatically instantiated lemma:
    --  Recursive definition of Count on for any mapping in M.
 
-   with Ghost,
+   with
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Annotate => (GNATprove, Automatic_Instantiation),
@@ -181,7 +193,8 @@ is
    --  Additional lemma:
    --  Count returns Length (M) if Test returns True on all elements of M.
 
-   with Ghost,
+   with
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Pre      => (for all K of M => Test (K, Get (M, K))),
@@ -194,7 +207,8 @@ is
    --  Additional lemma:
    --  Count returns 0 if Test returns False on all elements of M.
 
-   with Ghost,
+   with
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Pre      => (for all K of M => not Test (K, Get (M, K))),
@@ -212,13 +226,15 @@ is
    with
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
-     Pre      => Eq_Compatible (M, Test),
-     Post     => Length (Filter'Result) = Count (M, Test)
-       and then Elements_Equal (Filter'Result, M)
-       and then (for all K of Filter'Result => Test (K, Get (M, K)))
-       and then
-         (for all K of M =>
-            (if Test (K, Get (M, K)) then Has_Key (Filter'Result, K)));
+     Pre      => (SPARKlib_Full => Eq_Compatible (M, Test)),
+     Post     =>
+       (SPARKlib_Full =>
+          Length (Filter'Result) = Count (M, Test)
+          and then Elements_Equal (Filter'Result, M)
+          and then (for all K of Filter'Result => Test (K, Get (M, K)))
+          and then
+            (for all K of M =>
+               (if Test (K, Get (M, K)) then Has_Key (Filter'Result, K))));
 
    function Sum
      (M     : Map;
@@ -232,7 +248,7 @@ is
    with
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
-     Pre      => Eq_Compatible (M, Value);
+     Pre      => (SPARKlib_Full => Eq_Compatible (M, Value));
 
    procedure Lemma_Sum_Eq
      (M1, M2 : Map;
@@ -241,7 +257,8 @@ is
    --  Automatically instantiated lemma:
    --  Sum returns the same value on maps containing the same mappings.
 
-   with Ghost,
+   with
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Annotate => (GNATprove, Automatic_Instantiation),
@@ -257,7 +274,8 @@ is
    --  Automatically instantiated lemma:
    --  Recursive definition of Sum for any mapping in M.
 
-   with Ghost,
+   with
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Annotate => (GNATprove, Automatic_Instantiation),

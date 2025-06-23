@@ -6,8 +6,8 @@
 
 --  This unit is provided as a replacement for the standard unit
 --  Ada.Numerics.Big_Numbers.Big_Integers when only proof with SPARK is
---  intended. It cannot be used for execution, as all subprograms are marked
---  imported with no definition.
+--  intended. It cannot be used for execution, as enforced by the assertion
+--  level SPARKlib_Logic.
 
 --  Contrary to Ada.Numerics.Big_Numbers.Big_Integers, this unit does not
 --  depend on System or Ada.Finalization, which makes it more convenient for
@@ -15,7 +15,7 @@
 
 package SPARK.Big_Integers with
    SPARK_Mode,
-   Ghost,
+   Ghost => SPARKlib_Logic,
    Pure,
    Always_Terminates
 is

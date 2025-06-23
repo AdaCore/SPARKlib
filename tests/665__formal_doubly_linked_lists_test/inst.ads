@@ -1,4 +1,3 @@
-pragma Ignore_Pragma (Assertion_Policy);
 with SPARK.Containers.Formal.Doubly_Linked_Lists;
 
 package Inst with SPARK_Mode is

@@ -11,8 +11,8 @@ package SPARK.Containers.Hash with SPARK_Mode, Pure is
    function String_Hash (S : String) return Hash_Type renames Ada.Strings.Hash;
 
    procedure String_Hash_Equivalent (X, Y : String) with
-     Ghost,
      Always_Terminates,
+     Ghost  => Static,
      Global => null,
      Pre    => X = Y,
      Post   => String_Hash (X) = String_Hash (Y);

@@ -29,6 +29,7 @@ is
    --  Recursive version of Count
 
    with
+     Ghost              => SPARKlib_Full,
      Subprogram_Variant => (Decreases => Length (M)),
      Post               => Count_Rec'Result <= Length (M);
 
@@ -39,7 +40,7 @@ is
    --  Prove Lemma_Count_Eq recursively
 
    with
-     Ghost,
+     Ghost              => Static,
      Pre                => Keys_Included (M2, M1)
          and then Elements_Equal (M1, M2) and then Eq_Compatible (M1, Test),
      Post               => Count (M1, Test) = Count (M2, Test),
@@ -53,7 +54,7 @@ is
    --  Prove Lemma_Count_Remove recursively
 
    with
-     Ghost,
+     Ghost              => Static,
      Subprogram_Variant => (Decreases => Length (M), Decreases => 0),
      Pre                => Has_Key (M, K) and then Eq_Compatible (M, Test),
      Post               =>
@@ -68,6 +69,7 @@ is
    --  Recursive version of Sum
 
    with
+     Ghost              => SPARKlib_Full,
      Subprogram_Variant => (Decreases => Length (M));
 
    procedure Lemma_Sum_Rec_Eq
@@ -77,7 +79,7 @@ is
    --  Prove Lemma_Sum_Eq recursively
 
    with
-     Ghost,
+     Ghost              => Static,
      Pre                => Keys_Included (M2, M1)
          and then Elements_Equal (M1, M2) and then Eq_Compatible (M1, Value),
      Post               => Sum (M1, Value) = Sum (M2, Value),
@@ -91,7 +93,7 @@ is
    --  Prove Lemma_Sum_Remove recursively
 
    with
-     Ghost,
+     Ghost              => Static,
      Subprogram_Variant => (Decreases => Length (M), Decreases => 0),
      Pre                => Has_Key (M, K) and then Eq_Compatible (M, Value),
      Post               =>
@@ -107,13 +109,14 @@ is
       Test : not null access
         function (K : Key_Type; E : Element_Type) return Boolean)
       return Big_Natural
-   with Refined_Post => Count'Result = Count_Rec (M, Test)
+   with Refined_Post => (SPARKlib_Full => Count'Result = Count_Rec (M, Test))
    is
    begin
       return Res : Big_Natural := 0 do
          for Submap in Iterate (M) loop
             pragma Loop_Invariant
-              (Count_Rec (M, Test) = Res + Count_Rec (Submap, Test));
+              (Static =>
+                 Count_Rec (M, Test) = Res + Count_Rec (Submap, Test));
             declare
                K : Key_Type renames Choose (Submap);
             begin
@@ -156,18 +159,23 @@ is
       return Res : Map do
          while I <= New_Length loop
             Res := Add (Res, New_Key (I), New_Item (I));
-            pragma Loop_Variant (Decreases => New_Length - I + 1);
-            pragma Loop_Invariant (I <= New_Length);
-            pragma Loop_Invariant (Length (Res) = I);
+            pragma Loop_Variant
+              (Static => (Decreases => New_Length - I + 1));
+            pragma Loop_Invariant (Static => I <= New_Length);
+            pragma Loop_Invariant (Static => Length (Res) = I);
             pragma Loop_Invariant
-              (for all J in Interval'(1, I) => Has_Key (Res, New_Key (J)));
+              (Static =>
+                 (for all J in Interval'(1, I) => Has_Key (Res, New_Key (J))));
             pragma Loop_Invariant
-              (for all K of Res =>
-                 (for some J in Interval'(1, I) =>
-                      Equivalent_Keys (K, New_Key (J))));
+              (Static =>
+                 (for all K of Res =>
+                      (for some J in Interval'(1, I) =>
+                             Equivalent_Keys (K, New_Key (J)))));
             pragma Loop_Invariant
-              (for all J in Interval'(1, I) =>
-                   Element_Logic_Equal (Get (Res, New_Key (J)), New_Item (J)));
+              (Static =>
+                 (for all J in Interval'(1, I) =>
+                      Element_Logic_Equal
+                         (Get (Res, New_Key (J)), New_Item (J))));
             I := I + 1;
          end loop;
       end return;
@@ -213,15 +221,19 @@ is
       return Res : Map do
          for Submap in Iterate (M) loop
             pragma Loop_Invariant
-              (Length (Res) + Count (Submap, Test) = Count (M, Test));
-            pragma Loop_Invariant (Elements_Equal (Res, M));
+              (Static =>
+                 Length (Res) + Count (Submap, Test) = Count (M, Test));
+            pragma Loop_Invariant (Static => Elements_Equal (Res, M));
             pragma Loop_Invariant
-              (for all K of Res => not Has_Key (Submap, K));
+              (Static =>
+                 (for all K of Res => not Has_Key (Submap, K)));
             pragma Loop_Invariant
-              (for all K of M =>
-                 (if not Has_Key (Submap, K) and Test (K, Get (M, K))
-                  then Has_Key (Res, K)));
-            pragma Loop_Invariant (for all K of Res => Test (K, Get (M, K)));
+              (Static =>
+                 (for all K of M =>
+                      (if not Has_Key (Submap, K) and Test (K, Get (M, K))
+                       then Has_Key (Res, K))));
+            pragma Loop_Invariant
+              (Static => (for all K of Res => Test (K, Get (M, K))));
 
             declare
                K : Key_Type renames Choose (Submap);
@@ -243,12 +255,25 @@ is
       Test : not null access
         function (K : Key_Type; E : Element_Type) return Boolean)
    is
+
+      procedure Do_Proof with Ghost => Static;
+      --  Prove the lemma
+
+      --------------
+      -- Do_Proof --
+      --------------
+
+      procedure Do_Proof is
+      begin
+         for Submap in Iterate (M) loop
+            pragma Loop_Invariant
+              (if Count_Rec (Submap, Test) = Length (Submap)
+               then Count_Rec (M, Test) = Length (M));
+         end loop;
+      end Do_Proof;
+
    begin
-      for Submap in Iterate (M) loop
-         pragma Loop_Invariant
-           (if Count_Rec (Submap, Test) = Length (Submap)
-            then Count_Rec (M, Test) = Length (M));
-      end loop;
+      Do_Proof;
    end Lemma_Count_All;
 
    --------------------
@@ -273,11 +298,24 @@ is
       Test : not null access
         function (K : Key_Type; E : Element_Type) return Boolean)
    is
+
+      procedure Do_Proof with Ghost => Static;
+      --  Prove the lemma
+
+      --------------
+      -- Do_Proof --
+      --------------
+
+      procedure Do_Proof is
+      begin
+         for Submap in Iterate (M) loop
+            pragma Loop_Invariant
+              (if Count_Rec (Submap, Test) = 0 then Count_Rec (M, Test) = 0);
+         end loop;
+      end Do_Proof;
+
    begin
-      for Submap in Iterate (M) loop
-         pragma Loop_Invariant
-           (if Count_Rec (Submap, Test) = 0 then Count_Rec (M, Test) = 0);
-      end loop;
+      Do_Proof;
    end Lemma_Count_None;
 
    ------------------------
@@ -414,13 +452,13 @@ is
       Value : not null access
         function (K : Key_Type; E : Element_Type) return Big_Integer)
       return Big_Integer
-   with Refined_Post => Sum'Result = Sum_Rec (M, Value)
+   with Refined_Post => (SPARKlib_Full => Sum'Result = Sum_Rec (M, Value))
    is
    begin
       return Res : Big_Integer := 0 do
          for Submap in Iterate (M) loop
             pragma Loop_Invariant
-              (Sum_Rec (M, Value) = Res + Sum_Rec (Submap, Value));
+              (Static => Sum_Rec (M, Value) = Res + Sum_Rec (Submap, Value));
             declare
                K : Key_Type renames Choose (Submap);
             begin
@@ -459,19 +497,24 @@ is
       return Res : Map do
          for Submap in Iterate (M) loop
             pragma Loop_Invariant
-              (Length (Res) + Length (Submap) = Length (M));
+              (Static => Length (Res) + Length (Submap) = Length (M));
             pragma Loop_Invariant
-              (for all K of M =>
-                 Has_Key (Submap, K) or else Has_Key (Res, Transform_Key (K)));
+              (Static =>
+                 (for all K of M =>
+                      Has_Key (Submap, K)
+                  or else Has_Key (Res, Transform_Key (K))));
             pragma Loop_Invariant
-              (for all K of Res =>
-                 (for some L of M => not Has_Key (Submap, L)
-                  and then Equivalent_Keys (K, Transform_Key (L))));
+              (Static =>
+                 (for all K of Res =>
+                      (for some L of M => not Has_Key (Submap, L)
+                       and then Equivalent_Keys (K, Transform_Key (L)))));
             pragma Loop_Invariant
-              (for all K of M =>
-                 Has_Key (Submap, K)
-               or else Element_Logic_Equal
-                 (Get (Res, Transform_Key (K)), Transform_Item (Get (M, K))));
+              (Static =>
+                 (for all K of M =>
+                      Has_Key (Submap, K)
+                  or else Element_Logic_Equal
+                    (Get (Res, Transform_Key (K)),
+                     Transform_Item (Get (M, K)))));
 
             declare
                K : Key_Type renames Choose (Submap);
@@ -497,17 +540,20 @@ is
       return Res : Map do
          for Submap in Iterate (M) loop
             pragma Loop_Invariant
-              (Length (Res) + Length (Submap) = Length (M));
+              (Static => Length (Res) + Length (Submap) = Length (M));
             pragma Loop_Invariant
-              (for all K of M =>
-                 Has_Key (Submap, K) or else Has_Key (Res, K));
+              (Static =>
+                 (for all K of M =>
+                      Has_Key (Submap, K) or else Has_Key (Res, K)));
             pragma Loop_Invariant
-              (for all K of Res =>
-                 not Has_Key (Submap, K) and then Has_Key (M, K));
+              (Static =>
+                 (for all K of Res =>
+                       not Has_Key (Submap, K) and then Has_Key (M, K)));
             pragma Loop_Invariant
-              (for all K of Res =>
-                 Element_Logic_Equal
-                   (Get (Res, K), Transform_Item (Get (M, K))));
+              (Static =>
+                 (for all K of Res =>
+                      Element_Logic_Equal
+                    (Get (Res, K), Transform_Item (Get (M, K)))));
 
             declare
                K : Key_Type renames Choose (Submap);

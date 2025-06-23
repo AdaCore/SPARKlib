@@ -161,7 +161,6 @@ package body SPARK.Containers.Functional.Sets with SPARK_Mode => Off is
       Key       : Private_Key) return Element_Type
    is
    begin
-      Check_Or_Fail;
       return Containers.Get (Container.Content, Count_Type (Key));
    end Iter_Element;
 
@@ -172,7 +171,6 @@ package body SPARK.Containers.Functional.Sets with SPARK_Mode => Off is
    function Iter_First (Container : Set) return Private_Key is
       pragma Unreferenced (Container);
    begin
-      Check_Or_Fail;
       return 1;
    end Iter_First;
 
@@ -185,7 +183,6 @@ package body SPARK.Containers.Functional.Sets with SPARK_Mode => Off is
       Key       : Private_Key) return Boolean
    is
    begin
-      Check_Or_Fail;
       return  Count_Type (Key) in 1 .. Containers.Length (Container.Content);
    end Iter_Has_Element;
 
@@ -199,7 +196,6 @@ package body SPARK.Containers.Functional.Sets with SPARK_Mode => Off is
    is
       pragma Unreferenced (Container);
    begin
-      Check_Or_Fail;
       return (if Key = Private_Key'Last then 0 else Key + 1);
    end Iter_Next;
 
