@@ -24,10 +24,6 @@ with Ada.Unchecked_Deallocation;
 package body SPARK.Containers.Formal.Unbounded_Ordered_Sets with
   SPARK_Mode => Off
 is
-   --  Contracts in this unit are meant for analysis only, not for run-time
-   --  checking.
-
-   pragma Assertion_Policy (Ignore);
 
    ------------------------------
    -- Access to Fields of Node --
@@ -127,9 +123,11 @@ is
    --  Allocate a new larger Tree
 
      Global => null,
-     Post   => Model (Container) = Model (Container)'Old
-                 and E.Equal (Elements (Container), Elements (Container)'Old)
-                 and Positions (Container) = Positions (Container)'Old;
+     Post   =>
+       (SPARKlib_Full =>
+          Model (Container) = Model (Container)'Old
+            and E.Equal (Elements (Container), Elements (Container)'Old)
+            and Positions (Container) = Positions (Container)'Old);
 
    procedure Finalize_Content is new Ada.Unchecked_Deallocation
      (Object => Tree_Types.Tree_Type,
@@ -963,13 +961,13 @@ is
          Count : Count_Type := 1) return Boolean
       is
       begin
-         for Cu of Small loop
+         for Cu of P.Iterate (Small) loop
             if not P.Has_Key (Big, Cu) then
                return False;
             end if;
          end loop;
 
-         for Cu of Big loop
+         for Cu of P.Iterate (Big) loop
             declare
                Pos : constant Positive_Count_Type := P.Get (Big, Cu);
 
@@ -1056,11 +1054,6 @@ is
    ------------------
 
    package body Generic_Keys with SPARK_Mode => Off is
-
-      --  Contracts in this unit are meant for analysis only, not for run-time
-      --  checking.
-
-      pragma Assertion_Policy (Ignore);
 
       -----------------------
       -- Local Subprograms --
@@ -1297,7 +1290,7 @@ is
             Key   : Key_Type) return Boolean
          is
          begin
-            for E of Left loop
+            for E of M.Iterate (Left) loop
                if not Contains (Right, E)
                  and not Equivalent_Keys (Generic_Keys.Key (E), Key)
                then

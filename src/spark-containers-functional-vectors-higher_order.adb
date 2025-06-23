@@ -25,7 +25,7 @@ is
    --  Recursive version of Count
 
    with
-     Ghost,
+     Ghost              => SPARKlib_Full,
      Subprogram_Variant => (Decreases => Last),
      Pre                => Last <= Vectors.Last (S),
      Post               => Count_Rec'Result <=
@@ -39,7 +39,7 @@ is
    --  Recursive version of Filter
 
    with
-     Ghost,
+     Ghost              => SPARKlib_Full,
      Subprogram_Variant => (Decreases => Last),
      Pre                => Last <= Vectors.Last (S),
      Post               =>
@@ -54,7 +54,7 @@ is
    --  Recursive version of Sum
 
    with
-     Ghost,
+     Ghost              => SPARKlib_Full,
      Subprogram_Variant => (Decreases => Last),
      Pre                => Last <= Vectors.Last (S);
 
@@ -74,7 +74,8 @@ is
       Last : Extended_Index;
       Test : not null access function (E : Element_Type) return Boolean)
       return Big_Natural
-   with Refined_Post => Count'Result = Count_Rec (S, Last, Test)
+   with Refined_Post =>
+       (SPARKlib_Full => Count'Result = Count_Rec (S, Last, Test))
    is
    begin
       return Res : Big_Natural := 0 do
@@ -82,8 +83,8 @@ is
             if Test (Get (S, I)) then
                Res := Res + 1;
             end if;
-            pragma Loop_Invariant (I <= Last);
-            pragma Loop_Invariant (Res = Count_Rec (S, I, Test));
+            pragma Loop_Invariant (Static => I <= Last);
+            pragma Loop_Invariant (Static => Res = Count_Rec (S, I, Test));
          end loop;
       end return;
    end Count;
@@ -117,10 +118,11 @@ is
          for I in Index_Type'First .. New_Last loop
             Res := Add (Res, New_Item (I));
 
-            pragma Loop_Invariant (Last (Res) = I);
+            pragma Loop_Invariant (Static => Last (Res) = I);
             pragma Loop_Invariant
-              (for all J in Index_Type'First .. I =>
-                   Element_Logic_Equal (Get (Res, J), New_Item (J)));
+              (Static =>
+                 (for all J in Index_Type'First .. I =>
+                      Element_Logic_Equal (Get (Res, J), New_Item (J))));
          end loop;
       end return;
    end Create;
@@ -140,9 +142,10 @@ is
       Last : Extended_Index;
       Test : not null access function (E : Element_Type) return Boolean)
       return Sequence
-   with Refined_Post =>
-     Length (Filter'Result) = Length (Filter_Rec (S, Last, Test))
-     and then Equal_Prefix (Filter'Result, Filter_Rec (S, Last, Test))
+     with Refined_Post =>
+       (SPARKlib_Full =>
+          Length (Filter'Result) = Length (Filter_Rec (S, Last, Test))
+        and then Equal_Prefix (Filter'Result, Filter_Rec (S, Last, Test)))
    is
    begin
       return Res : Sequence do
@@ -151,9 +154,9 @@ is
                Res := Add (Res, Get (S, I));
             end if;
             pragma Loop_Invariant
-              (Length (Res) = Length (Filter_Rec (S, I, Test)));
+              (Static => Length (Res) = Length (Filter_Rec (S, I, Test)));
             pragma Loop_Invariant
-              (Equal_Prefix (Res, Filter_Rec (S, I, Test)));
+              (Static => Equal_Prefix (Res, Filter_Rec (S, I, Test)));
          end loop;
       end return;
    end Filter;
@@ -183,11 +186,24 @@ is
       Last : Extended_Index;
       Test : not null access function (E : Element_Type) return Boolean)
    is
+
+      procedure Do_Proof with Ghost => Static;
+      --  Prove the lemma
+
+      --------------
+      -- Do_Proof --
+      --------------
+
+      procedure Do_Proof is
+      begin
+         for I in Index_Type'First .. Last loop
+            pragma Loop_Invariant
+              (Count_Rec (S, I, Test) = Big (I) - Big (Extended_Index'First));
+         end loop;
+      end Do_Proof;
+
    begin
-      for I in Index_Type'First .. Last loop
-         pragma Loop_Invariant
-           (Count_Rec (S, I, Test) = Big (I) - Big (Extended_Index'First));
-      end loop;
+      Do_Proof;
    end Lemma_Count_All;
 
    --------------------
@@ -199,11 +215,24 @@ is
       Last   : Extended_Index;
       Test   : not null access function (E : Element_Type) return Boolean)
    is
+
+      procedure Do_Proof with Ghost => Static;
+      --  Prove the lemma
+
+      --------------
+      -- Do_Proof --
+      --------------
+
+      procedure Do_Proof is
+      begin
+         for I in Index_Type'First .. Last loop
+            pragma Loop_Invariant
+              (Count_Rec (S1, I, Test) = Count_Rec (S2, I, Test));
+         end loop;
+      end Do_Proof;
+
    begin
-      for I in Index_Type'First .. Last loop
-         pragma Loop_Invariant
-           (Count_Rec (S1, I, Test) = Count_Rec (S2, I, Test));
-      end loop;
+      Do_Proof;
    end Lemma_Count_Eq;
 
    ----------------------
@@ -225,10 +254,23 @@ is
       Last : Extended_Index;
       Test : not null access function (E : Element_Type) return Boolean)
    is
+
+      procedure Do_Proof with Ghost => Static;
+      --  Prove the lemma
+
+      --------------
+      -- Do_Proof --
+      --------------
+
+      procedure Do_Proof is
+      begin
+         for I in Index_Type'First .. Last loop
+            pragma Loop_Invariant (Count_Rec (S, I, Test) = 0);
+         end loop;
+      end Do_Proof;
+
    begin
-      for I in Index_Type'First .. Last loop
-         pragma Loop_Invariant (Count_Rec (S, I, Test) = 0);
-      end loop;
+      Do_Proof;
    end Lemma_Count_None;
 
    ----------------------
@@ -240,11 +282,24 @@ is
       Last : Extended_Index;
       Test : not null access function (E : Element_Type) return Boolean)
    is
+
+      procedure Do_Proof with Ghost => Static;
+      --  Prove the lemma
+
+      --------------
+      -- Do_Proof --
+      --------------
+
+      procedure Do_Proof is
+      begin
+         for I in Index_Type'First .. Last loop
+            pragma Loop_Invariant (Vectors.Last (Filter_Rec (S, I, Test)) = I);
+            pragma Loop_Invariant (Equal_Prefix (Filter_Rec (S, I, Test), S));
+         end loop;
+      end Do_Proof;
+
    begin
-      for I in Index_Type'First .. Last loop
-         pragma Loop_Invariant (Vectors.Last (Filter_Rec (S, I, Test)) = I);
-         pragma Loop_Invariant (Equal_Prefix (Filter_Rec (S, I, Test), S));
-      end loop;
+      Do_Proof;
    end Lemma_Filter_All;
 
    ---------------------
@@ -256,14 +311,28 @@ is
       Last   : Extended_Index;
       Test   : not null access function (E : Element_Type) return Boolean)
    is
+
+      procedure Do_Proof with Ghost => Static;
+      --  Prove the lemma
+
+      --------------
+      -- Do_Proof --
+      --------------
+
+      procedure Do_Proof is
+      begin
+         for I in Index_Type'First .. Last loop
+            pragma Loop_Invariant
+              (Length (Filter_Rec (S1, I, Test)) =
+                 Length (Filter_Rec (S2, I, Test)));
+            pragma Loop_Invariant
+              (Equal_Prefix
+                 (Filter_Rec (S1, I, Test), Filter_Rec (S2, I, Test)));
+         end loop;
+      end Do_Proof;
+
    begin
-      for I in Index_Type'First .. Last loop
-         pragma Loop_Invariant
-           (Length (Filter_Rec (S1, I, Test)) =
-              Length (Filter_Rec (S2, I, Test)));
-         pragma Loop_Invariant
-           (Equal_Prefix (Filter_Rec (S1, I, Test), Filter_Rec (S2, I, Test)));
-      end loop;
+      Do_Proof;
    end Lemma_Filter_Eq;
 
    -----------------------
@@ -285,11 +354,24 @@ is
       Last   : Extended_Index;
       Value  : not null access function (E : Element_Type) return Big_Integer)
    is
+
+      procedure Do_Proof with Ghost => Static;
+      --  Prove the lemma
+
+      --------------
+      -- Do_Proof --
+      --------------
+
+      procedure Do_Proof is
+      begin
+         for I in Index_Type'First .. Last loop
+            pragma Loop_Invariant
+              (Sum_Rec (S1, I, Value) = Sum_Rec (S2, I, Value));
+         end loop;
+      end Do_Proof;
+
    begin
-      for I in Index_Type'First .. Last loop
-         pragma Loop_Invariant
-           (Sum_Rec (S1, I, Value) = Sum_Rec (S2, I, Value));
-      end loop;
+      Do_Proof;
    end Lemma_Sum_Eq;
 
    --------------------
@@ -317,13 +399,14 @@ is
       Last  : Extended_Index;
       Value : not null access function (E : Element_Type) return Big_Integer)
       return Big_Integer
-   with Refined_Post => Sum'Result = Sum_Rec (S, Last, Value)
+   with Refined_Post =>
+       (SPARKlib_Full => Sum'Result = Sum_Rec (S, Last, Value))
    is
    begin
       return Res : Big_Integer := 0 do
          for I in Index_Type'First .. Last loop
             Res := Res + Value (Get (S, I));
-            pragma Loop_Invariant (Res = Sum_Rec (S, I, Value));
+            pragma Loop_Invariant (Static => Res = Sum_Rec (S, I, Value));
          end loop;
       end return;
    end Sum;
@@ -356,11 +439,12 @@ is
       return Res : Sequence do
          for I in Index_Type'First .. Last (S) loop
             Res := Add (Res, Transform_Item (Get (S, I)));
-            pragma Loop_Invariant (Last (Res) = I);
+            pragma Loop_Invariant (Static => Last (Res) = I);
             pragma Loop_Invariant
-              (for all J in Index_Type'First .. I =>
-                 Element_Logic_Equal
-                    (Get (Res, J), Transform_Item (Get (S, J))));
+              (Static =>
+                 (for all J in Index_Type'First .. I =>
+                      Element_Logic_Equal
+                    (Get (Res, J), Transform_Item (Get (S, J)))));
          end loop;
       end return;
    end Transform;

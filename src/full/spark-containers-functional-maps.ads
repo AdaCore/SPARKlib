@@ -33,32 +33,32 @@ generic
    --  Ghost lemmas used to prove that "=" is an equivalence relation
 
    with procedure Eq_Reflexive (X : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
    with procedure Eq_Symmetric (X, Y : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
    with procedure Eq_Transitive (X, Y, Z : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
 
    --  Ghost lemmas used to prove that Equivalent_Keys is an equivalence
    --  relation.
 
    with procedure Equivalent_Keys_Reflexive (X : Key_Type) is null
-     with Ghost;
+     with Ghost => Static;
    with procedure Equivalent_Keys_Symmetric (X, Y : Key_Type) is null
-     with Ghost;
+     with Ghost => Static;
    with procedure Equivalent_Keys_Transitive (X, Y, Z : Key_Type) is null
-     with Ghost;
+     with Ghost => Static;
 
    --  Ghost lemmas used to prove that Equivalent_Elements is an equivalence
    --  relation.
 
    with procedure Equivalent_Elements_Reflexive (X, Y : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
    with procedure Equivalent_Elements_Symmetric (X, Y : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
    with procedure Equivalent_Elements_Transitive
      (X, Y, Z : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
 
 package SPARK.Containers.Functional.Maps with
   SPARK_Mode,
@@ -87,7 +87,7 @@ is
                     & "for compliance with GNATprove assumption"
                     & " [SPARK_ITERABLE]");
    type Map is private with
-     Default_Initial_Condition => Is_Empty (Map),
+     Default_Initial_Condition => (SPARKlib_Full => Is_Empty (Map)),
      Iterable                  => (First       => Iter_First,
                                    Next        => Iter_Next,
                                    Has_Element => Iter_Has_Element,
@@ -105,8 +105,8 @@ is
    --  is included/excluded at once. As equivalence classes might be infinite,
    --  quantification over the keys of a finite map could be infinite. Thus,
    --  quantified expressions cannot be executed and should only be used in
-   --  disabled ghost code. This is enforced by having a special imported
-   --  procedure Check_Or_Fail that will lead to link-time errors otherwise.
+   --  disabled ghost code. This is enforced by using the SPARKlib_Full
+   --  assertion level.
 
    -----------------------
    --  Basic operations --
@@ -128,18 +128,18 @@ is
       Key       : Key_Type)
    --  Has_Key returns the same result on all equivalent keys
    with
-     Ghost,
-     Global => null,
+     Ghost    => SPARKlib_Full,
+     Global   => null,
      Annotate => (GNATprove, Automatic_Instantiation),
-     Pre  => Enable_Handling_Of_Equivalence
+     Pre      => Enable_Handling_Of_Equivalence
        and then not Has_Key (Container, Key),
-     Post => (for all K of Container => not Equivalent_Keys (Key, K));
+     Post     => (for all K of Container => not Equivalent_Keys (Key, K));
 
    function Get (Container : Map; Key : Key_Type) return Element_Type with
    --  Return the element associated with Key in Container
 
      Global   => null,
-     Pre      => Has_Key (Container, Key),
+     Pre      => (SPARKlib_Defensive => Has_Key (Container, Key)),
      Annotate => (GNATprove, Container_Aggregates, "Get");
 
    procedure Lemma_Get_Equivalent
@@ -147,22 +147,22 @@ is
       Key_1, Key_2 : Key_Type)
    --  Get returns the same result on all equivalent keys
    with
-     Ghost,
-     Global => null,
+     Ghost    => SPARKlib_Full,
+     Global   => null,
      Annotate => (GNATprove, Automatic_Instantiation),
-     Pre  => Enable_Handling_Of_Equivalence
+     Pre      => Enable_Handling_Of_Equivalence
        and then Equivalent_Keys (Key_1, Key_2)
        and then
          (Has_Key (Container, Key_1) or else Has_Key (Container, Key_2)),
-     Post =>
+     Post     =>
        Element_Logic_Equal (Get (Container, Key_1), Get (Container, Key_2));
 
    function Choose (Container : Map) return Key_Type with
    --  Return an arbitrary key in container
 
      Global => null,
-     Pre    => not Is_Empty (Container),
-     Post   => Has_Key (Container, Choose'Result);
+     Pre    => (SPARKlib_Defensive => not Is_Empty (Container)),
+     Post   => (SPARKlib_Full => Has_Key (Container, Choose'Result));
 
    function Length (Container : Map) return Big_Natural with
      Global   => null,
@@ -178,28 +178,30 @@ is
 
      Global => null,
      Post   =>
-       "<="'Result =
+       (SPARKlib_Full => "<="'Result =
          (for all Key of Left =>
-           Has_Key (Right, Key) and then Get (Right, Key) = Get (Left, Key));
+           Has_Key (Right, Key) and then Get (Right, Key) = Get (Left, Key)));
 
    function "=" (Left : Map; Right : Map) return Boolean with
    --  Extensional equality over maps
 
      Global => null,
      Post   =>
-       "="'Result =
+       (SPARKlib_Full => "="'Result =
          ((for all Key of Left =>
             Has_Key (Right, Key)
               and then Get (Right, Key) = Get (Left, Key))
-          and (for all Key of Right => Has_Key (Left, Key)));
+          and (for all Key of Right => Has_Key (Left, Key))));
 
    pragma Warnings (Off, "unused variable ""Key""");
    function Is_Empty (Container : Map) return Boolean with
    --  A map is empty if it contains no key
 
      Global => null,
-     Post   => Is_Empty'Result = (for all Key of Container => False)
-       and Is_Empty'Result = (Length (Container) = 0);
+     Post   =>
+       (SPARKlib_Full =>
+          Is_Empty'Result = (for all Key of Container => False)
+          and Is_Empty'Result = (Length (Container) = 0));
    pragma Warnings (On, "unused variable ""Key""");
 
    function Keys_Included (Left : Map; Right : Map) return Boolean
@@ -208,7 +210,8 @@ is
    with
      Global => null,
      Post   =>
-       Keys_Included'Result = (for all Key of Left => Has_Key (Right, Key));
+       (SPARKlib_Full => Keys_Included'Result =
+          (for all Key of Left => Has_Key (Right, Key)));
 
    function Same_Keys (Left : Map; Right : Map) return Boolean
    --  Returns True if Left and Right have the same keys
@@ -216,10 +219,10 @@ is
    with
      Global => null,
      Post   =>
-       Same_Keys'Result =
+       (SPARKlib_Full => Same_Keys'Result =
          (Keys_Included (Left, Right)
-           and Keys_Included (Left => Right, Right => Left));
-   pragma Annotate (GNATprove, Inline_For_Proof, Same_Keys);
+           and Keys_Included (Left => Right, Right => Left)));
+   pragma Annotate (GNATprove, Inline_For_Proof, Entity => Same_Keys);
 
    function Keys_Included_Except
      (Left    : Map;
@@ -231,10 +234,10 @@ is
    with
      Global => null,
      Post   =>
-       Keys_Included_Except'Result =
+       (SPARKlib_Full => Keys_Included_Except'Result =
          (for all Key of Left =>
            (if not Equivalent_Keys (Key, New_Key) then
-               Has_Key (Right, Key)));
+               Has_Key (Right, Key))));
 
    function Keys_Included_Except
      (Left  : Map;
@@ -247,12 +250,12 @@ is
    with
      Global => null,
      Post   =>
-       Keys_Included_Except'Result =
+       (SPARKlib_Full => Keys_Included_Except'Result =
          (for all Key of Left =>
            (if not Equivalent_Keys (Key, X)
               and not Equivalent_Keys (Key, Y)
             then
-               Has_Key (Right, Key)));
+               Has_Key (Right, Key))));
 
    -----------------------------------------------------
    -- Properties handling elements modulo equivalence --
@@ -263,11 +266,11 @@ is
 
      Global => null,
      Post   =>
-       Equivalent_Maps'Result =
+       (SPARKlib_Full => Equivalent_Maps'Result =
          ((for all Key of Left =>
             Has_Key (Right, Key)
               and then Equivalent_Elements (Get (Right, Key), Get (Left, Key)))
-           and (for all Key of Right => Has_Key (Left, Key)));
+           and (for all Key of Right => Has_Key (Left, Key))));
 
    ----------------------------
    -- Construction Functions --
@@ -280,7 +283,7 @@ is
    --  Return an empty Map
 
      Global => null,
-     Post   => Is_Empty (Empty_Map'Result);
+     Post   => (SPARKlib_Full => Is_Empty (Empty_Map'Result));
 
    function Add
      (Container : Map;
@@ -291,14 +294,15 @@ is
 
    with
      Global => null,
-     Pre    => not Has_Key (Container, New_Key),
+     Pre    => (SPARKlib_Defensive => not Has_Key (Container, New_Key)),
      Post   =>
-       Length (Container) + 1 = Length (Add'Result)
-         and Has_Key (Add'Result, New_Key)
-         and Element_Logic_Equal
-           (Get (Add'Result, New_Key), Copy_Element (New_Item))
-         and Elements_Equal (Container, Add'Result)
-         and Keys_Included_Except (Add'Result, Container, New_Key);
+       (SPARKlib_Full =>
+          Length (Container) + 1 = Length (Add'Result)
+            and Has_Key (Add'Result, New_Key)
+            and Element_Logic_Equal
+              (Get (Add'Result, New_Key), Copy_Element (New_Item))
+            and Elements_Equal (Container, Add'Result)
+            and Keys_Included_Except (Add'Result, Container, New_Key));
 
    function Remove
      (Container : Map;
@@ -307,12 +311,13 @@ is
 
    with
      Global => null,
-     Pre    => Has_Key (Container, Key),
+     Pre    => (SPARKlib_Defensive => Has_Key (Container, Key)),
      Post   =>
-       Length (Container) = Length (Remove'Result) + 1
-         and not Has_Key (Remove'Result, Key)
-         and Elements_Equal (Remove'Result, Container)
-         and Keys_Included_Except (Container, Remove'Result, Key);
+       (SPARKlib_Full =>
+          Length (Container) = Length (Remove'Result) + 1
+            and not Has_Key (Remove'Result, Key)
+            and Elements_Equal (Remove'Result, Container)
+            and Keys_Included_Except (Container, Remove'Result, Key));
 
    function Set
      (Container : Map;
@@ -323,13 +328,14 @@ is
 
    with
      Global => null,
-     Pre    => Has_Key (Container, Key),
+     Pre    => (SPARKlib_Defensive => Has_Key (Container, Key)),
      Post   =>
-       Length (Container) = Length (Set'Result)
-         and Element_Logic_Equal
-           (Get (Set'Result, Key), Copy_Element (New_Item))
-         and Same_Keys (Container, Set'Result)
-         and Elements_Equal_Except (Container, Set'Result, Key);
+       (SPARKlib_Full =>
+          Length (Container) = Length (Set'Result)
+            and Element_Logic_Equal
+              (Get (Set'Result, Key), Copy_Element (New_Item))
+            and Same_Keys (Container, Set'Result)
+            and Elements_Equal_Except (Container, Set'Result, Key));
 
    ----------------------------------
    -- Iteration on Functional Maps --
@@ -359,13 +365,15 @@ is
                     "Restrictions:No_Specification_Of_Aspect => Iterable");
 
    function Map_Logic_Equal (Left, Right : Map) return Boolean with
-     Ghost,
+     Ghost    => SPARKlib_Full,
      Annotate => (GNATprove, Logical_Equal);
    --  Logical equality on maps
 
    function Iterate (Container : Map) return Iterable_Map with
      Global => null,
-     Post   => Map_Logic_Equal (Get_Map (Iterate'Result), Container);
+     Post   =>
+       (SPARKlib_Full =>
+          Map_Logic_Equal (Get_Map (Iterate'Result), Container));
    --  Return an iterator over a functional map
 
    function Get_Map (Iterator : Iterable_Map) return Map with
@@ -378,32 +386,39 @@ is
    with
      Global => null,
      Post   =>
-         (if Valid_Submap'Result
-          then Elements_Equal (Cursor, Get_Map (Iterator)));
+       (SPARKlib_Full =>
+          (if Valid_Submap'Result
+           then Elements_Equal (Cursor, Get_Map (Iterator))));
    --  Return True on all maps which can be reached by iterating over
    --  Container.
 
    function Element (Iterator : Iterable_Map; Cursor : Map) return Key_Type
    with
-     Global => null,
-     Pre    => not Is_Empty (Cursor),
-     Post   => Renamings."=" (Element'Result, Choose (Cursor)),
+     Global   => null,
+     Pre      => (SPARKlib_Defensive => not Is_Empty (Cursor)),
+     Post     =>
+       (SPARKlib_Full => Renamings."=" (Element'Result, Choose (Cursor))),
      Annotate => (GNATprove, Inline_For_Proof);
    --  The next element to be considered for the iteration is the result of
    --  choose on Cursor.
 
    function First (Iterator : Iterable_Map) return Map with
      Global => null,
-     Post   => Map_Logic_Equal (First'Result, Get_Map (Iterator))
-       and then Valid_Submap (Iterator, First'Result);
+     Post   =>
+       (SPARKlib_Full =>
+          Map_Logic_Equal (First'Result, Get_Map (Iterator))
+          and then Valid_Submap (Iterator, First'Result));
    --  In the first iteration, the cursor is the map associated with Iterator
 
    function Next (Iterator : Iterable_Map; Cursor : Map) return Map with
      Global => null,
-     Pre    => Valid_Submap (Iterator, Cursor) and then not Is_Empty (Cursor),
-     Post   => Valid_Submap (Iterator, Next'Result)
-       and then
-         Map_Logic_Equal (Next'Result, Remove (Cursor, Choose (Cursor)));
+     Pre    =>
+       (SPARKlib_Defensive =>
+          Valid_Submap (Iterator, Cursor) and then not Is_Empty (Cursor)),
+     Post   =>
+       (SPARKlib_Full => Valid_Submap (Iterator, Next'Result)
+          and then
+            Map_Logic_Equal (Next'Result, Remove (Cursor, Choose (Cursor))));
    --  At each iteration, remove the considered the equivalence class of the
    --  considered key from the Cursor map.
 
@@ -412,8 +427,9 @@ is
       Cursor   : Map) return Boolean
    with
      Global => null,
-     Post   => Has_Element'Result =
-       (Valid_Submap (Iterator, Cursor) and then not Is_Empty (Cursor));
+     Post   =>
+         (SPARKlib_Full => Has_Element'Result =
+            (Valid_Submap (Iterator, Cursor) and then not Is_Empty (Cursor)));
    --  Return True on non-empty maps which can be reached by iterating over
    --  Container.
 
@@ -423,13 +439,12 @@ is
 
    --  Logical equality on elements cannot be safely executed on most element
    --  types. Thus, this package should only be instantiated with ghost code
-   --  disabled. This is enforced by having a special imported procedure
-   --  Check_Or_Fail that will lead to link-time errors otherwise.
+   --  disabled. This is enforced by using the SPARKlib_Full assertion level.
 
    function Element_Logic_Equal (Left, Right : Element_Type) return Boolean
    with
-     Ghost,
-     Global => null,
+     Ghost    => SPARKlib_Full,
+     Global   => null,
      Annotate => (GNATprove, Logical_Equal);
 
    function Elements_Equal (Left, Right : Map) return Boolean
@@ -437,7 +452,7 @@ is
    --  Left and Right.
 
    with
-     Ghost,
+     Ghost  => SPARKlib_Full,
      Global => null,
      Post   =>
        Elements_Equal'Result =
@@ -454,7 +469,7 @@ is
    --  Left and Right except the equivalence class of New_Key.
 
    with
-     Ghost,
+     Ghost  => SPARKlib_Full,
      Global => null,
      Post   =>
        Elements_Equal_Except'Result =
@@ -473,7 +488,7 @@ is
    --  Left and Right except the equivalence classes of X and Y.
 
    with
-     Ghost,
+     Ghost  => SPARKlib_Full,
      Global => null,
      Post   =>
        Elements_Equal_Except'Result =
@@ -490,7 +505,7 @@ is
    --  mapped to the same elements in Left and Right.
 
    with
-     Ghost,
+     Ghost  => SPARKlib_Full,
      Global => null,
      Post   =>
        Equal'Result =
@@ -557,25 +572,25 @@ is
    type Private_Key is private;
 
    function Iter_First (Container : Map) return Private_Key with
-     Ghost,
+     Ghost  => SPARKlib_Full,
      Global => null;
 
    function Iter_Has_Element
      (Container : Map;
       Key       : Private_Key) return Boolean
    with
-     Ghost,
+     Ghost  => SPARKlib_Full,
      Global => null;
 
    function Iter_Next (Container : Map; Key : Private_Key) return Private_Key
    with
-     Ghost,
+     Ghost  => SPARKlib_Full,
      Global => null,
      Pre    => Iter_Has_Element (Container, Key);
 
    function Iter_Element (Container : Map; Key : Private_Key) return Key_Type
    with
-     Ghost,
+     Ghost  => SPARKlib_Full,
      Global => null,
      Pre    => Iter_Has_Element (Container, Key);
 
@@ -596,14 +611,15 @@ is
       New_Item  : Element_Type)
    with
      Global => null,
-     Pre    => not Has_Key (Container, New_Key),
+     Pre    => (SPARKlib_Defensive => not Has_Key (Container, New_Key)),
      Post   =>
-       Length (Container'Old) + 1 = Length (Container)
-       and Has_Key (Container, New_Key)
-       and Element_Logic_Equal
-           (Get (Container, New_Key), Copy_Element (New_Item))
-       and Elements_Equal (Container'Old, Container)
-       and Keys_Included_Except (Container, Container'Old, New_Key);
+       (SPARKlib_Full =>
+          Length (Container'Old) + 1 = Length (Container)
+          and Has_Key (Container, New_Key)
+          and Element_Logic_Equal
+              (Get (Container, New_Key), Copy_Element (New_Item))
+          and Elements_Equal (Container'Old, Container)
+          and Keys_Included_Except (Container, Container'Old, New_Key));
 
 private
 

@@ -14,10 +14,6 @@ with System; use type System.Address;
 package body SPARK.Containers.Formal.Unbounded_Vectors with
   SPARK_Mode => Off
 is
-   --  Contracts in this unit are meant for analysis only, not for run-time
-   --  checking.
-
-   pragma Assertion_Policy (Ignore);
 
    subtype Int is Long_Long_Integer;
 
@@ -47,10 +43,11 @@ is
    --  Internal version of Length without a postcondition calling Model
 
    procedure Resize (Container : in out Vector; Size : Count_Type := 0) with
-     --  Widen the sub array of the Vector
+   --  Widen the sub array of the Vector
 
      Global => null,
-     Post   => M.Equal (Model (Container), Model (Container)'Old);
+     Post   =>
+       (SPARKlib_Full => M.Equal (Model (Container), Model (Container)'Old));
 
    ---------
    -- "=" --
@@ -646,11 +643,6 @@ is
    ---------------------
 
    package body Generic_Sorting with SPARK_Mode => Off is
-
-      --  Contracts in this unit are meant for analysis only, not for run-time
-      --  checking.
-
-      pragma Assertion_Policy (Ignore);
 
       ------------------
       -- Formal_Model --

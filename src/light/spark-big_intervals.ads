@@ -7,7 +7,10 @@
 with SPARK.Big_Integers;
 use  SPARK.Big_Integers;
 
-package SPARK.Big_Intervals with SPARK_Mode, Ghost is
+package SPARK.Big_Intervals with
+  SPARK_Mode,
+  Ghost => SPARKlib_Logic
+is
    --  Intervals of big integers to allow iteration. To be replaced by the
    --  appropriate library unit when there is one.
 

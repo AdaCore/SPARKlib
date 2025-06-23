@@ -92,7 +92,6 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
 
    function Element_Logic_Equal (Left, Right : Element_Type) return Boolean is
    begin
-      Check_Or_Fail;
       return Left = Right;
    end Element_Logic_Equal;
 
@@ -273,7 +272,6 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
       Key       : Private_Key) return Key_Type
    is
    begin
-      Check_Or_Fail;
       return Key_Containers.Get (Container.Keys, Count_Type (Key));
    end Iter_Element;
 
@@ -284,7 +282,6 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
    function Iter_First (Container : Map) return Private_Key is
       pragma Unreferenced (Container);
    begin
-      Check_Or_Fail;
       return 1;
    end Iter_First;
 
@@ -297,7 +294,6 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
       Key       : Private_Key) return Boolean
    is
    begin
-      Check_Or_Fail;
       return Count_Type (Key) in 1 .. Key_Containers.Length (Container.Keys);
    end Iter_Has_Element;
 
@@ -311,7 +307,6 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
    is
       pragma Unreferenced (Container);
    begin
-      Check_Or_Fail;
       return (if Key = Private_Key'Last then 0 else Key + 1);
    end Iter_Next;
 

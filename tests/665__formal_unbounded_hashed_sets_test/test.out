@@ -1,16 +1,16 @@
-inst.ads:6:13: info: implicit aspect Always_Terminates on "Witness" has been proved, subprogram will terminate
-inst.ads:6:56: info: division check proved (CVC5: 1 VC)
-inst.ads:7:13: info: implicit aspect Always_Terminates on "Hash" has been proved, subprogram will terminate
-inst.ads:7:66: info: division check proved (CVC5: 1 VC)
-inst.ads:7:66: info: range check proved (CVC5: 1 VC)
-inst.ads:8:13: info: implicit aspect Always_Terminates on "Eq" has been proved, subprogram will terminate
-inst.ads:8:55: info: division check proved (CVC5: 1 VC)
-inst.ads:8:71: info: division check proved (CVC5: 1 VC)
-inst.ads:9:13: info: implicit aspect Always_Terminates on "Equivalent" has been proved, subprogram will terminate
-inst.ads:13:13: info: implicit aspect Always_Terminates on "Hash_Key" has been proved, subprogram will terminate
-inst.ads:13:71: info: division check proved (CVC5: 1 VC)
-inst.ads:13:71: info: range check proved (CVC5: 1 VC)
-spark-containers-parameter_checks.ads:246:19: medium: postcondition might fail, in instantiation at spark-containers-formal-unbounded_hashed_sets.ads:130, in instantiation at inst.ads:10
+inst.ads:5:13: info: implicit aspect Always_Terminates on "Witness" has been proved, subprogram will terminate
+inst.ads:5:56: info: division check proved (CVC5: 1 VC)
+inst.ads:6:13: info: implicit aspect Always_Terminates on "Hash" has been proved, subprogram will terminate
+inst.ads:6:66: info: division check proved (CVC5: 1 VC)
+inst.ads:6:66: info: range check proved (CVC5: 1 VC)
+inst.ads:7:13: info: implicit aspect Always_Terminates on "Eq" has been proved, subprogram will terminate
+inst.ads:7:55: info: division check proved (CVC5: 1 VC)
+inst.ads:7:71: info: division check proved (CVC5: 1 VC)
+inst.ads:8:13: info: implicit aspect Always_Terminates on "Equivalent" has been proved, subprogram will terminate
+inst.ads:12:13: info: implicit aspect Always_Terminates on "Hash_Key" has been proved, subprogram will terminate
+inst.ads:12:71: info: division check proved (CVC5: 1 VC)
+inst.ads:12:71: info: range check proved (CVC5: 1 VC)
+spark-containers-parameter_checks.ads:246:19: medium: postcondition might fail, in instantiation at spark-containers-formal-unbounded_hashed_sets.ads:126, in instantiation at inst.ads:9
 test.adb:24:14: info: add a contract to analyze it separately from calling contexts
 test.adb:24:14: info: local subprogram "Create_Non_Empty_Set" only analyzed in the context of calls [info-unrolling-inlining]
 test.adb:27:10: info: precondition proved (CVC5: 5 VC; Z3: 5 VC), in call inlined at test.adb:119
@@ -687,7 +687,7 @@ test.adb:856:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:857:07: info: precondition proved (Z3: 1 VC)
 test.adb:857:34: info: precondition proved (CVC5: 1 VC)
 test.adb:858:07: info: precondition proved (Z3: 1 VC)
-test.adb:862:18: info: elements shall be distinct and shall be smaller than "Aggr_Capacity" for set aggregates at spark-containers-formal-unbounded_hashed_sets.ads:80, in instantiation at inst.ads:10
+test.adb:862:18: info: elements shall be distinct and shall be smaller than "Aggr_Capacity" for set aggregates at spark-containers-formal-unbounded_hashed_sets.ads:76, in instantiation at inst.ads:9
 test.adb:862:18: info: precondition proved (CVC5: 11 VC)
 test.adb:864:07: info: precondition proved (CVC5: 1 VC)
 test.adb:865:07: info: precondition proved (CVC5: 1 VC)
@@ -741,9 +741,9 @@ test_resize.adb:14:30: info: loop invariant initialization proved (CVC5: 1 VC)
 test_resize.adb:14:30: info: loop invariant preservation proved (CVC5: 1 VC)
 test_resize.adb:15:30: info: loop invariant initialization proved (CVC5: 2 VC)
 test_resize.adb:15:30: info: loop invariant preservation proved (Z3: 2 VC)
-inst.ads:10:04: warning: check will fail at run time [-gnatw.a]
-inst.ads:10:04: warning: check will fail at run time [-gnatw.a]
-inst.ads:10:04: warning: in instantiation at spark-containers-formal-unbounded_hashed_sets.ads:275 [-gnatw.a]
-inst.ads:10:04: warning: in instantiation at spark-containers-formal-unbounded_hashed_sets.ads:275 [-gnatw.a]
-inst.ads:10:04: warning: in instantiation at spark-containers-functional-maps.ads:134 [-gnatw.a]
-inst.ads:10:04: warning: in instantiation at spark-containers-functional-maps.ads:153 [-gnatw.a]
+inst.ads:9:04: warning: check will fail at run time [-gnatw.a]
+inst.ads:9:04: warning: check will fail at run time [-gnatw.a]
+inst.ads:9:04: warning: in instantiation at spark-containers-formal-unbounded_hashed_sets.ads:279 [-gnatw.a]
+inst.ads:9:04: warning: in instantiation at spark-containers-formal-unbounded_hashed_sets.ads:279 [-gnatw.a]
+inst.ads:9:04: warning: in instantiation at spark-containers-functional-maps.ads:134 [-gnatw.a]
+inst.ads:9:04: warning: in instantiation at spark-containers-functional-maps.ads:153 [-gnatw.a]

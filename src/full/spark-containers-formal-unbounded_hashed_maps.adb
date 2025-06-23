@@ -18,10 +18,6 @@ with System; use type System.Address;
 package body SPARK.Containers.Formal.Unbounded_Hashed_Maps with
   SPARK_Mode => Off
 is
-   --  Contracts in this unit are meant for analysis only, not for run-time
-   --  checking.
-
-   pragma Assertion_Policy (Ignore);
 
    -----------------------
    -- Local Subprograms --
@@ -76,12 +72,13 @@ is
 
      Global => null,
      Post   =>
-       M.Equal (Model (Container), Model (Container)'Old)
-         and Mapping_Preserved
-           (K_Left  => Keys (Container)'Old,
-            K_Right => Keys (Container),
-            P_Left  => Positions (Container)'Old,
-            P_Right => Positions (Container));
+       (SPARKlib_Full =>
+          M.Equal (Model (Container), Model (Container)'Old)
+            and Mapping_Preserved
+              (K_Left  => Keys (Container)'Old,
+               K_Right => Keys (Container),
+               P_Left  => Positions (Container)'Old,
+               P_Right => Positions (Container)));
 
    --------------------------
    -- Local Instantiations --

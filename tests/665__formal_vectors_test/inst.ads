@@ -1,4 +1,3 @@
-pragma Ignore_Pragma (Assertion_Policy);
 with Gen_Inst;
 
 package Inst with SPARK_Mode is

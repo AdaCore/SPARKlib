@@ -25,7 +25,7 @@ is
    --  Computes recursively the Cardinality - i.e. the sum of the number of
    --  occurences of all the elements - of Container.
 
-     Ghost,
+     Ghost              => SPARKlib_Full,
      Global             => null,
      Subprogram_Variant => (Decreases => Maps.Length (Container)),
      Post               =>
@@ -40,7 +40,7 @@ is
    --  States that if two multisets are equal, then they have the same
    --  cardinality.
 
-     Ghost,
+     Ghost              => Static,
      Pre                => M1 = M2,
      Post               => Cardinality_Rec (M1) = Cardinality_Rec (M2),
      Subprogram_Variant => (Decreases => Length (M1), Decreases => 1);
@@ -49,7 +49,7 @@ is
    --  States that if an element is removed from a multiset, then its number of
    --  occurences is removed from the cardinality of this multiset.
 
-     Ghost,
+     Ghost              => Static,
      Subprogram_Variant => (Decreases => Maps.Length (M), Decreases => 0),
      Pre                => Has_Key (M, K),
      Post               =>
@@ -61,9 +61,9 @@ is
    --  This lemma eases the proof of Is_Empty bridging the gap between the
    --  Is_Empty function on functional maps and the one on multisets.
 
-     Ghost,
-     Pre  => Invariant (M.Map, M.Card),
-     Post => Is_Empty (M.Map) = (for all E of M => False);
+     Ghost => Static,
+     Pre   => Invariant (M.Map, M.Card),
+     Post  => Is_Empty (M.Map) = (for all E of M => False);
    pragma Warnings (On, "unused variable ""E""");
 
    procedure Lemma_Contains_Cardinality
@@ -72,6 +72,7 @@ is
    --  States that the cardinality of a multiset is larger than the number of
    --  occurences of each of its elements.
 
+     Ghost  => Static,
      Global => null,
      Pre    => Invariant (Container.Map, Container.Card)
        and then Contains (Container, Element),
@@ -82,28 +83,12 @@ is
    --  Right, then the cardinality of Left is smaller than the cardinality of
    --  Right.
 
-     Ghost,
+     Ghost              => Static,
      Subprogram_Variant => (Decreases => Length (Left)),
      Pre                => (for all E of Left =>
                               Has_Key (Right, E)
                               and then Get (Left, E) <= Get (Right, E)),
      Post               => Cardinality_Rec (Left) <= Cardinality_Rec (Right);
-
-   procedure Lemma_Equal_Except
-     (Left : Multiset;
-      Right : Multiset;
-      Element : Element_Type) with
-   --  This Lemma eases the proof of Equal_Except
-
-     Ghost,
-     Pre  =>
-       (Invariant (Left.Map, Left.Card)
-          and then Invariant (Right.Map, Right.Card)
-          and then (for all E of Left =>
-                      (if not Equivalent_Elements (E, Element)
-                       then Nb_Occurence (Right, E) =
-                              Nb_Occurence (Left, E)))),
-     Post => Elements_Equal_Except (Left.Map, Right.Map, Element);
 
    procedure Lemma_Remove_Intersection
      (Left    : Multiset;
@@ -112,7 +97,7 @@ is
    --  Expresses the behaviour of cardinality when removing an element from an
    --  intersection.
 
-     Ghost,
+     Ghost  => Static,
      Global => null,
      Pre    => Invariant (Left.Map, Left.Card)
                  and then Invariant (Right.Map, Right.Card)
@@ -141,7 +126,7 @@ is
    --  Expresses the behaviour of the cardinality when removing an element from
    --  an Union.
 
-     Ghost,
+     Ghost  => Static,
      Global => null,
      Pre    => Invariant (Left.Map, Left.Card)
                  and then Invariant (Right.Map, Right.Card)
@@ -173,6 +158,7 @@ is
    --  polluting its visible specification with a variant.
 
    with
+     Ghost  => Static,
      Global => null,
      Pre    => Invariant (Left.Map, Left.Card)
        and then Invariant (Right.Map, Right.Card),
@@ -186,6 +172,7 @@ is
    --  polluting its visible specification with a variant.
 
    with
+     Ghost  => Static,
      Global => null,
      Pre    => Invariant (Left.Map, Left.Card)
        and then Invariant (Right.Map, Right.Card),
@@ -212,11 +199,13 @@ is
          Buffer := Remove_All (Buffer, Element);
 
          pragma Loop_Invariant
-           (for all E of Left =>
-              (if not Contains (Buffer, E)
-               then Nb_Occurence (Left, E) <= Nb_Occurence (Right, E)
-                      and then Has_Key (Right.Map, E)));
-         pragma Loop_Invariant (Invariant (Buffer.Map, Buffer.Card));
+           (Static =>
+              (for all E of Left =>
+                   (if not Contains (Buffer, E)
+                    then Nb_Occurence (Left, E) <= Nb_Occurence (Right, E)
+                    and then Has_Key (Right.Map, E))));
+         pragma Loop_Invariant
+           (Static => Invariant (Buffer.Map, Buffer.Card));
          pragma Loop_Variant (Decreases => Cardinality (Buffer));
       end loop;
 
@@ -244,17 +233,20 @@ is
 
             Buffer := Remove_All (Buffer, E);
 
-            pragma Loop_Invariant (Invariant (Buffer.Map, Buffer.Card));
-            pragma Loop_Invariant (Buffer <= Left);
             pragma Loop_Invariant
-              (for all Element of Left =>
-                 (if not Contains (Buffer, Element)
-                  then Maps.Has_Key (Right.Map, Element)));
+              (Static => Invariant (Buffer.Map, Buffer.Card));
+            pragma Loop_Invariant (Static => Buffer <= Left);
             pragma Loop_Invariant
-              (for all Element of Left =>
-                 (if not Contains (Buffer, Element)
-                  then Maps.Get (Right.Map, Element) =
-                         Maps.Get (Left.Map, Element)));
+              (Static =>
+                 (for all Element of Left =>
+                      (if not Contains (Buffer, Element)
+                       then Maps.Has_Key (Right.Map, Element))));
+            pragma Loop_Invariant
+              (Static =>
+                 (for all Element of Left =>
+                      (if not Contains (Buffer, Element)
+                       then Maps.Get (Right.Map, Element) =
+                             Maps.Get (Left.Map, Element))));
 
             pragma Loop_Variant (Decreases => Cardinality (Buffer));
          end loop;
@@ -270,17 +262,20 @@ is
             end if;
 
             Buffer := Remove_All (Buffer, E);
-            pragma Loop_Invariant (Invariant (Buffer.Map, Buffer.Card));
-            pragma Loop_Invariant (Buffer <= Right);
             pragma Loop_Invariant
-              (for all Element of Right =>
-                 (if not Contains (Buffer, Element)
-                  then Maps.Has_Key (Left.Map, Element)));
+              (Static => Invariant (Buffer.Map, Buffer.Card));
+            pragma Loop_Invariant (Static => Buffer <= Right);
             pragma Loop_Invariant
-              (for all Element of Right =>
-                 (if not Contains (Buffer, Element)
-                  then Maps.Get (Right.Map, Element) =
-                         Maps.Get (Left.Map, Element)));
+              (Static =>
+                 (for all Element of Right =>
+                      (if not Contains (Buffer, Element)
+                       then Maps.Has_Key (Left.Map, Element))));
+            pragma Loop_Invariant
+              (Static =>
+                 (for all Element of Right =>
+                      (if not Contains (Buffer, Element)
+                       then Maps.Get (Right.Map, Element) =
+                             Maps.Get (Left.Map, Element))));
 
             pragma Loop_Variant (Decreases => Cardinality (Buffer));
          end loop;
@@ -400,20 +395,22 @@ is
 
          pragma Loop_Variant (Decreases => Cardinality (Buffer));
 
-         pragma Loop_Invariant (Invariant (Buffer.Map, Buffer.Card));
-         pragma Loop_Invariant (Invariant (Set.Map, Set.Card));
+         pragma Loop_Invariant (Static => Invariant (Buffer.Map, Buffer.Card));
+         pragma Loop_Invariant (Static => Invariant (Set.Map, Set.Card));
          pragma Loop_Invariant
-           (for all E of Buffer => Nb_Occurence (Set, E) = 0);
+           (Static => (for all E of Buffer => Nb_Occurence (Set, E) = 0));
          pragma Loop_Invariant
-           (for all E of Set =>
-              Nb_Occurence (Set, E) =
-                Nb_Occurence (Left, E) - Nb_Occurence (Right, E));
+           (Static =>
+              (for all E of Set =>
+                   Nb_Occurence (Set, E) =
+                   Nb_Occurence (Left, E) - Nb_Occurence (Right, E)));
          pragma Loop_Invariant
-           (for all E of Left =>
-              (if not Contains (Buffer, E)
+           (Static =>
+              (for all E of Left =>
+                   (if not Contains (Buffer, E)
                     and then Nb_Occurence (Left, E)
-                               - Nb_Occurence (Right, E) > 0
-               then Contains (Set, E)));
+                    - Nb_Occurence (Right, E) > 0
+                    then Contains (Set, E))));
 
       end loop;
       return Set;
@@ -438,26 +435,56 @@ is
       Element : Element_Type) return Boolean is
 
    begin
-      return B : constant Boolean :=
-        Elements_Equal_Except (Left.Map, Right.Map, Element)
-          and then Elements_Equal_Except (Right.Map, Left.Map, Element)
-      do
-         if (for all E of Left =>
-          (if not Equivalent_Elements (E, Element)
-           then Nb_Occurence (Left, E) = Nb_Occurence (Right, E)))
-         then
-            Lemma_Equal_Except (Left, Right, Element);
-         end if;
+      for S in Iterate (Left.Map) loop
+         pragma Loop_Invariant (Static => S <= Left.Map);
+         pragma Loop_Invariant
+           (Static =>
+              (for all E of Left.Map =>
+                   Has_Key (S, E)
+                  or else Equivalent_Elements (E, Element)
+                  or else (Has_Key (Right.Map, E)
+                           and then Get (Right.Map, E) = Get (Left.Map, E))));
+         declare
+            E : constant Element_Type := Choose (S);
+         begin
+            if Equivalent_Elements (E, Element) then
+               null;
+            elsif not Has_Key (Right.Map, E)
+              or else Get (Right.Map, E) /= Get (Left.Map, E)
+            then
+               pragma Assert
+                 (Static => Nb_Occurence (Left, E) /= Nb_Occurence (Right, E));
+               return False;
+            end if;
+         end;
+      end loop;
 
-         pragma Warnings (Off, "actuals for this call may be in wrong order");
-         if (for all E of Right =>
-               (if not Equivalent_Elements (E, Element)
-                then Nb_Occurence (Left, E) = Nb_Occurence (Right, E)))
-         then
-            Lemma_Equal_Except (Right, Left, Element);
-         end if;
-         pragma Warnings (On, "actuals for this call may be in wrong order");
-      end return;
+      for S in Iterate (Right.Map) loop
+         pragma Loop_Invariant (Static => S <= Right.Map);
+         pragma Loop_Invariant
+           (Static =>
+              (for all E of Right.Map =>
+                   Has_Key (S, E)
+                  or else Equivalent_Elements (E, Element)
+                  or else (Has_Key (Left.Map, E)
+                           and then Get (Right.Map, E) = Get (Left.Map, E))));
+         declare
+            E : constant Element_Type := Choose (S);
+         begin
+            if Equivalent_Elements (E, Element) then
+               null;
+            elsif not Has_Key (Left.Map, E) then
+               pragma Assert
+                 (Static => Nb_Occurence (Left, E) /= Nb_Occurence (Right, E));
+               return False;
+            else
+               pragma Assert
+                 (Static => Get (Right.Map, E) = Get (Left.Map, E));
+            end if;
+         end;
+      end loop;
+
+      return True;
    end Equal_Except;
 
    ------------------
@@ -484,35 +511,40 @@ is
          end if;
 
          pragma Assert
-           (for all Element of Set =>
-              (if Equivalent_Elements (Element, E)
-               then Nb_Occurence (Set, Element) <=
-                   Nb_Occurence (Left, Element)));
-         pragma Assert (for all Element of Set => Has_Key (Left.Map, Element));
+           (Static =>
+              (for all Element of Set =>
+                   (if Equivalent_Elements (Element, E)
+                    then Nb_Occurence (Set, Element) <=
+                          Nb_Occurence (Left, Element))));
+         pragma Assert
+           (Static => (for all Element of Set => Has_Key (Left.Map, Element)));
          Lemma_Leq_Cardinality (Set.Map, Left.Map);
-         pragma Assert (Cardinality (Set) <= Cardinality (Left));
+         pragma Assert (Static => Cardinality (Set) <= Cardinality (Left));
 
          pragma Assert
-           (for all Element of Set =>
-              Has_Key (Right.Map, Element)
-                and then Get (Set.Map, Element) <= Get (Right.Map, Element));
+           (Static =>
+              (for all Element of Set =>
+                   Has_Key (Right.Map, Element)
+                 and then Get (Set.Map, Element) <= Get (Right.Map, Element)));
          Lemma_Leq_Cardinality (Set.Map, Right.Map);
 
          pragma Loop_Variant (Decreases => Cardinality (Buffer));
 
-         pragma Loop_Invariant (Invariant (Buffer.Map, Buffer.Card));
-         pragma Loop_Invariant (Invariant (Set.Map, Set.Card));
-         pragma Loop_Invariant (Set <= Left);
-         pragma Loop_Invariant (Set <= Right);
+         pragma Loop_Invariant (Static => Invariant (Buffer.Map, Buffer.Card));
+         pragma Loop_Invariant (Static => Invariant (Set.Map, Set.Card));
+         pragma Loop_Invariant (Static => Set <= Left);
+         pragma Loop_Invariant (Static => Set <= Right);
          pragma Loop_Invariant
-           (for all Element of Buffer => Nb_Occurence (Set, Element) = 0);
+           (Static =>
+              (for all Element of Buffer => Nb_Occurence (Set, Element) = 0));
 
          pragma Loop_Invariant
-           (for all Element of Left =>
-              (if not Contains (Buffer, Element)
-               then Min (Nb_Occurence (Left, Element),
-                         Nb_Occurence (Right, Element)) =
-                      Nb_Occurence (Set, Element)));
+           (Static =>
+              (for all Element of Left =>
+                   (if not Contains (Buffer, Element)
+                    then Min (Nb_Occurence (Left, Element),
+                      Nb_Occurence (Right, Element)) =
+                      Nb_Occurence (Set, Element))));
 
       end loop;
       return Set;
@@ -579,39 +611,6 @@ is
          end;
       end if;
    end Lemma_Eq;
-
-   ------------------------
-   -- Lemma_Equal_Except --
-   ------------------------
-
-   procedure Lemma_Equal_Except
-     (Left  : Multiset;
-      Right : Multiset; Element : Element_Type)
-   is
-      Buffer : Map := Left.Map;
-      E      : Element_Type;
-   begin
-      while not Is_Empty (Buffer) loop
-         E := Choose (Buffer);
-
-         if not Equivalent_Elements (E, Element) then
-            pragma Assert (Nb_Occurence (Right, E) /= 0);
-            pragma Assert (Has_Key (Right.Map, E));
-            pragma Assert (Get (Left.Map, E) = Get (Right.Map, E));
-         end if;
-
-         Buffer := Remove (Buffer, E);
-
-         pragma Loop_Variant (Decreases => Length (Buffer));
-         pragma Loop_Invariant (Buffer <= Left.Map);
-         pragma Loop_Invariant
-           (for all El of Left =>
-              (if not Has_Key (Buffer, El)
-                    and then not Equivalent_Elements (El, Element)
-               then Has_Key (Right.Map, El)
-                      and then Get (Left.Map, El) = Get (Right.Map, El)));
-      end loop;
-   end Lemma_Equal_Except;
 
    ---------------------------
    -- Lemma_Leq_Cardinality --
@@ -823,7 +822,10 @@ is
    procedure Lemma_Sym_Intersection
      (Left  : Multiset;
       Right : Multiset)
-   renames Lemma_Sym_Intersection_Rec;
+   is
+   begin
+      Lemma_Sym_Intersection_Rec (Left, Right);
+   end Lemma_Sym_Intersection;
 
    --------------------------------
    -- Lemma_Sym_Intersection_Rec --
@@ -874,7 +876,10 @@ is
    procedure Lemma_Sym_Union
      (Left  : Multiset;
       Right : Multiset)
-   renames Lemma_Sym_Union_Rec;
+   is
+   begin
+      Lemma_Sym_Union_Rec (Left, Right);
+   end Lemma_Sym_Union;
 
    -------------------------
    -- Lemma_Sym_Union_Rec --
@@ -977,13 +982,13 @@ is
      (Container : Multiset;
       Element   : Element_Type) return Multiset
    with Refined_Post =>
-     Invariant (Remove_All'Result.Map, Remove_All'Result.Card)
-     and then not Contains (Remove_All'Result, Element)
-     and then Cardinality (Remove_All'Result) =
-       Cardinality (Container) - Nb_Occurence (Container, Element)
-     and then Equal_Except (Container, Remove_All'Result, Element)
-     and then Map_Logic_Equal
-       (Remove_All'Result.Map, Remove (Container.Map, Element))
+     (Static => Invariant (Remove_All'Result.Map, Remove_All'Result.Card)
+        and then not Contains (Remove_All'Result, Element)
+        and then Cardinality (Remove_All'Result) =
+          Cardinality (Container) - Nb_Occurence (Container, Element)
+        and then Equal_Except (Container, Remove_All'Result, Element)
+        and then Map_Logic_Equal
+          (Remove_All'Result.Map, Remove (Container.Map, Element)))
    is
    begin
       return Set : Multiset do
@@ -1011,33 +1016,40 @@ is
          Buffer := Remove_All (Buffer, E);
 
          pragma Loop_Variant (Decreases => Cardinality (Buffer));
-         pragma Loop_Invariant (Invariant (Set_Union.Map, Set_Union.Card));
-         pragma Loop_Invariant (Invariant (Buffer.Map, Buffer.Card));
          pragma Loop_Invariant
-           (Cardinality (Set_Union) + Cardinality (Buffer) =
+           (Static => Invariant (Set_Union.Map, Set_Union.Card));
+         pragma Loop_Invariant (Static => Invariant (Buffer.Map, Buffer.Card));
+         pragma Loop_Invariant
+           (Static =>
+              Cardinality (Set_Union) + Cardinality (Buffer) =
                 Cardinality (Left) + Cardinality (Right));
          pragma Loop_Invariant
-           (for all Element of Right =>
-              Contains (Set_Union, Element)
-                or else Contains (Buffer, Element));
+           (Static =>
+              (for all Element of Right =>
+                   Contains (Set_Union, Element)
+               or else Contains (Buffer, Element)));
          pragma Loop_Invariant
-           (for all Element of Left => Contains (Set_Union, Element));
+           (Static =>
+              (for all Element of Left => Contains (Set_Union, Element)));
          pragma Loop_Invariant
-           (for all Element of Buffer =>
-              Nb_Occurence (Set_Union, Element) =
-                Nb_Occurence (Left, Element));
+           (Static =>
+              (for all Element of Buffer =>
+                   Nb_Occurence (Set_Union, Element) =
+                   Nb_Occurence (Left, Element)));
          pragma Loop_Invariant
-           (for all Element of Buffer =>
-              Nb_Occurence (Buffer, Element) =
-                Nb_Occurence (Right, Element));
+           (Static =>
+              (for all Element of Buffer =>
+                   Nb_Occurence (Buffer, Element) =
+                   Nb_Occurence (Right, Element)));
          pragma Loop_Invariant
-           (for all Element of Set_Union =>
-              (if Contains (Buffer, Element)
-               then Nb_Occurence (Set_Union, Element) =
-                      Nb_Occurence (Left, Element)
-               else Nb_Occurence (Set_Union, Element) =
-                      Nb_Occurence (Left, Element) +
-                        Nb_Occurence (Right, Element)));
+           (Static =>
+              (for all Element of Set_Union =>
+                   (if Contains (Buffer, Element)
+                    then Nb_Occurence (Set_Union, Element) =
+                          Nb_Occurence (Left, Element)
+                    else Nb_Occurence (Set_Union, Element) =
+                          Nb_Occurence (Left, Element) +
+                          Nb_Occurence (Right, Element))));
       end loop;
 
       return Set_Union;
@@ -1069,23 +1081,27 @@ is
 
          pragma Loop_Variant (Decreases => Cardinality (Buffer));
 
-         pragma Loop_Invariant (Invariant (Buffer.Map, Buffer.Card));
-         pragma Loop_Invariant (Invariant (Set.Map, Set.Card));
+         pragma Loop_Invariant (Static => Invariant (Buffer.Map, Buffer.Card));
+         pragma Loop_Invariant (Static => Invariant (Set.Map, Set.Card));
          pragma Loop_Invariant
-           (for all Element of Buffer =>
-              Nb_Occurence (Set, Element) = Nb_Occurence (Left, Element));
+           (Static =>
+              (for all Element of Buffer =>
+                   Nb_Occurence (Set, Element) =
+                   Nb_Occurence (Left, Element)));
 
-         pragma Loop_Invariant (Left <= Set);
+         pragma Loop_Invariant (Static => Left <= Set);
          pragma Loop_Invariant
-           (for all Element of Right =>
-             (if not Contains (Buffer, Element)
-              then Has_Key (Set.Map, Element)));
+           (Static =>
+              (for all Element of Right =>
+                   (if not Contains (Buffer, Element)
+                    then Has_Key (Set.Map, Element))));
          pragma Loop_Invariant
-           (for all Element of Set =>
-              (if not Contains (Buffer, Element)
-               then Nb_Occurence (Set, Element) =
-                      Max (Nb_Occurence (Left, Element),
-                           Nb_Occurence (Right, Element))));
+           (Static =>
+              (for all Element of Set =>
+                   (if not Contains (Buffer, Element)
+                    then Nb_Occurence (Set, Element) =
+                          Max (Nb_Occurence (Left, Element),
+                      Nb_Occurence (Right, Element)))));
 
       end loop;
       Lemma_Leq_Cardinality (Right.Map, Set.Map);

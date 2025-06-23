@@ -17,10 +17,6 @@ with System; use type System.Address;
 package body SPARK.Containers.Formal.Ordered_Sets with
   SPARK_Mode => Off
 is
-   --  Contracts in this unit are meant for analysis only, not for run-time
-   --  checking.
-
-   pragma Assertion_Policy (Ignore);
 
    ------------------------------
    -- Access to Fields of Node --
@@ -935,13 +931,13 @@ is
          Count : Count_Type := 1) return Boolean
       is
       begin
-         for Cu of Small loop
+         for Cu of P.Iterate (Small) loop
             if not P.Has_Key (Big, Cu) then
                return False;
             end if;
          end loop;
 
-         for Cu of Big loop
+         for Cu of P.Iterate (Big) loop
             declare
                Pos : constant Positive_Count_Type := P.Get (Big, Cu);
 
@@ -1026,11 +1022,6 @@ is
    ------------------
 
    package body Generic_Keys with SPARK_Mode => Off is
-
-      --  Contracts in this unit are meant for analysis only, not for run-time
-      --  checking.
-
-      pragma Assertion_Policy (Ignore);
 
       -----------------------
       -- Local Subprograms --
@@ -1264,7 +1255,7 @@ is
             Key   : Key_Type) return Boolean
          is
          begin
-            for E of Left loop
+            for E of M.Iterate (Left) loop
                if not Contains (Right, E)
                  and not Equivalent_Keys (Generic_Keys.Key (E), Key)
                then
