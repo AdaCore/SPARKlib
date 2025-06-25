@@ -1,26 +1,17 @@
 from test_support import prove_all, spark_install_path
-from glob import glob
 import os
 
 import shutil
 
 
 def copy_project_file():
-    libraries_gpr = os.path.join(
-        spark_install_path(), "lib", "gnat", "sparklib_internal.gpr"
-    )
-    shutil.copyfile(libraries_gpr, "sparklib_internal.gpr")
+    lib_gnat = os.path.join(spark_install_path(), "lib", "gnat")
+    for fn in ["sparklib_internal.gpr", "sparklib_common.gpr"]:
+        shutil.copyfile(os.path.join(lib_gnat, fn), fn)
 
 
 def copy_lemma_files():
-    include_dir = os.path.join(spark_install_path(), "include", "spark")
-    lemma_files = glob(os.path.join(include_dir, "*.ad?"))
-    os.mkdir("src")
-    curdir = os.getcwd()
-    for f in lemma_files:
-        for f in lemma_files:
-            new_f = os.path.join(curdir, "src", os.path.basename(f))
-            shutil.copyfile(f, new_f)
+    shutil.copytree(os.path.join(spark_install_path(), "include", "spark"), "src")
 
 
 def copy_proof_files():
