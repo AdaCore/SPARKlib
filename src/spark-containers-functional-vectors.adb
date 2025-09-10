@@ -121,7 +121,6 @@ package body SPARK.Containers.Functional.Vectors with SPARK_Mode => Off is
 
    function Element_Logic_Equal (Left, Right : Element_Type) return Boolean is
    begin
-      Check_Or_Fail;
       return Left = Right;
    end Element_Logic_Equal;
 

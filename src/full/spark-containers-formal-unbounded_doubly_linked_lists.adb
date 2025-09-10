@@ -13,10 +13,6 @@ with System; use type System.Address;
 package body SPARK.Containers.Formal.Unbounded_Doubly_Linked_Lists with
   SPARK_Mode => Off
 is
-   --  Contracts in this unit are meant for analysis only, not for run-time
-   --  checking.
-
-   pragma Assertion_Policy (Ignore);
 
    -----------------------
    -- Local Subprograms --
@@ -59,10 +55,14 @@ is
    --  Add more room in the internal array
 
      Global => null,
-     Pre    => Container.Nodes = null
-                 or else Length (Container) = Container.Nodes'Length,
-     Post   => M.Equal (Model (Container), Model (Container)'Old)
-                 and Positions (Container) = Positions (Container)'Old;
+     Pre    =>
+       (SPARKlib_Full =>
+          Container.Nodes = null
+            or else Length (Container) = Container.Nodes'Length),
+     Post   =>
+       (SPARKlib_Full =>
+          M.Equal (Model (Container), Model (Container)'Old)
+            and Positions (Container) = Positions (Container)'Old);
 
    procedure Finalize_Element is new Ada.Unchecked_Deallocation
      (Object => Element_Type,
@@ -818,13 +818,13 @@ is
          Count : Count_Type := 1) return Boolean
       is
       begin
-         for Cu of Small loop
+         for Cu of P.Iterate (Small) loop
             if not P.Has_Key (Big, Cu) then
                return False;
             end if;
          end loop;
 
-         for Cu of Big loop
+         for Cu of P.Iterate (Big) loop
             declare
                Pos : constant Positive_Count_Type := P.Get (Big, Cu);
 
@@ -879,13 +879,13 @@ is
             return False;
          end if;
 
-         for C of Left loop
+         for C of P.Iterate (Left) loop
             if not P.Has_Key (Right, C) then
                return False;
             end if;
          end loop;
 
-         for C of Right loop
+         for C of P.Iterate (Right) loop
             if not P.Has_Key (Left, C)
               or else (C /= X
                         and C /= Y
@@ -909,13 +909,13 @@ is
          Count : Count_Type := 1) return Boolean
       is
       begin
-         for Cu of Small loop
+         for Cu of P.Iterate (Small) loop
             if not P.Has_Key (Big, Cu) then
                return False;
             end if;
          end loop;
 
-         for Cu of Big loop
+         for Cu of P.Iterate (Big) loop
             declare
                Pos : constant Positive_Count_Type := P.Get (Big, Cu);
 
@@ -1006,11 +1006,6 @@ is
    ---------------------
 
    package body Generic_Sorting with SPARK_Mode => Off is
-
-      --  Contracts in this unit are meant for analysis only, not for run-time
-      --  checking.
-
-      pragma Assertion_Policy (Ignore);
 
       ------------------
       -- Formal_Model --

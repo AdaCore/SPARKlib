@@ -18,7 +18,7 @@ with SPARK.Big_Integers;
 
 package SPARK.Big_Reals with
    SPARK_Mode,
-   Ghost,
+   Ghost => SPARKlib_Logic,
    Always_Terminates
 is
 

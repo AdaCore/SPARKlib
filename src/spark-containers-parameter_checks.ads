@@ -10,8 +10,7 @@
 with SPARK.Containers.Types; use SPARK.Containers.Types;
 
 package SPARK.Containers.Parameter_Checks with
-  SPARK_Mode,
-  Ghost
+  SPARK_Mode
 is
 
    --  Check that Eq is an equivalence relation. It shall be reflexive,
@@ -21,11 +20,11 @@ is
       type T (<>) is private;
       with function Eq (Left, Right : T) return Boolean;
 
-      with procedure Param_Eq_Reflexive (X : T);
-      with procedure Param_Eq_Symmetric (X, Y : T);
-      with procedure Param_Eq_Transitive (X, Y, Z : T);
+      with procedure Param_Eq_Reflexive (X : T) with Ghost => Static;
+      with procedure Param_Eq_Symmetric (X, Y : T) with Ghost => Static;
+      with procedure Param_Eq_Transitive (X, Y, Z : T) with Ghost => Static;
 
-   package Equivalence_Checks is
+   package Equivalence_Checks with Ghost => Static is
 
       procedure Eq_Reflexive (X : T) with
         Global => null,
@@ -52,12 +51,12 @@ is
       with function Eq (Left, Right : T) return Boolean;
       with function "=" (Left, Right : T) return Boolean;
 
-      with procedure Param_Equal_Reflexive (X : T);
-      with procedure Param_Eq_Reflexive (X, Y : T);
-      with procedure Param_Eq_Symmetric (X, Y : T);
-      with procedure Param_Eq_Transitive (X, Y, Z : T);
+      with procedure Param_Equal_Reflexive (X : T) with Ghost => Static;
+      with procedure Param_Eq_Reflexive (X, Y : T) with Ghost => Static;
+      with procedure Param_Eq_Symmetric (X, Y : T) with Ghost => Static;
+      with procedure Param_Eq_Transitive (X, Y, Z : T) with Ghost => Static;
 
-   package Equivalence_Checks_Eq is
+   package Equivalence_Checks_Eq with Ghost => Static is
 
       procedure Eq_Reflexive (X, Y : T) with
         Global => null,
@@ -92,9 +91,9 @@ is
       with function "=" (Left, Right : T) return Boolean;
       with function Eq (Left, Right : T) return Boolean;
 
-      with procedure Param_Eq_Reflexive (X : T);
+      with procedure Param_Eq_Reflexive (X : T) with Ghost => Static;
 
-   package Lift_Eq_Reflexive is
+   package Lift_Eq_Reflexive with Ghost => Static is
 
       procedure Eq_Reflexive (X, Y : T) with
         Global => null,
@@ -112,12 +111,12 @@ is
       type T (<>) is private;
       with function "<" (Left, Right : T) return Boolean;
 
-      with procedure Param_Lt_Irreflexive (X : T);
-      with procedure Param_Lt_Asymmetric (X, Y : T);
-      with procedure Param_Lt_Transitive (X, Y, Z : T);
-      with procedure Param_Lt_Order (X, Y, Z : T);
+      with procedure Param_Lt_Irreflexive (X : T) with Ghost => Static;
+      with procedure Param_Lt_Asymmetric (X, Y : T) with Ghost => Static;
+      with procedure Param_Lt_Transitive (X, Y, Z : T) with Ghost => Static;
+      with procedure Param_Lt_Order (X, Y, Z : T) with Ghost => Static;
 
-   package Strict_Weak_Order_Checks is
+   package Strict_Weak_Order_Checks with Ghost => Static is
 
       procedure Lt_Irreflexive (X : T) with
         Global => null,
@@ -171,14 +170,15 @@ is
       with function "=" (Left, Right : T) return Boolean;
       with function "<" (Left, Right : T) return Boolean;
 
-      with procedure Param_Eq_Reflexive (X : T) is null;
-      with procedure Param_Eq_Symmetric (X, Y : T) is null;
-      with procedure Param_Lt_Irreflexive (X, Y : T);
-      with procedure Param_Lt_Asymmetric (X, Y : T);
-      with procedure Param_Lt_Transitive (X, Y, Z : T);
-      with procedure Param_Lt_Order (X, Y, Z : T);
+      with procedure Param_Eq_Reflexive (X : T) is null with Ghost => Static;
+      with procedure Param_Eq_Symmetric (X, Y : T) is null
+        with Ghost => Static;
+      with procedure Param_Lt_Irreflexive (X, Y : T) with Ghost => Static;
+      with procedure Param_Lt_Asymmetric (X, Y : T) with Ghost => Static;
+      with procedure Param_Lt_Transitive (X, Y, Z : T) with Ghost => Static;
+      with procedure Param_Lt_Order (X, Y, Z : T) with Ghost => Static;
 
-   package Strict_Weak_Order_Checks_Eq is
+   package Strict_Weak_Order_Checks_Eq with Ghost => Static is
 
       procedure Lt_Irreflexive (X, Y : T) with
         Global => null,
@@ -236,9 +236,9 @@ is
       with function "=" (Left, Right : T) return Boolean;
       with function Hash (X : T) return Hash_Type;
 
-      with procedure Param_Hash_Equivalent (X, Y : T);
+      with procedure Param_Hash_Equivalent (X, Y : T) with Ghost => Static;
 
-   package Hash_Equivalence_Checks is
+   package Hash_Equivalence_Checks with Ghost => Static is
 
       procedure Hash_Equivalent (X, Y : T) with
         Global => null,
@@ -257,9 +257,9 @@ is
       with function Op2 (Left, Right : T2) return Boolean;
       with function F (X : T1) return T2;
 
-      with procedure Param_Op_Compatible (X, Y : T1);
+      with procedure Param_Op_Compatible (X, Y : T1) with Ghost => Static;
 
-   package Op_Compatibility_Checks is
+   package Op_Compatibility_Checks with Ghost => Static is
 
       procedure Op_Compatible (X, Y : T1) with
         Global => null,
@@ -277,9 +277,9 @@ is
       with function Hash2 (X : T2) return Hash_Type;
       with function F (X : T1) return T2;
 
-      with procedure Param_Hash_Compatible (X : T1);
+      with procedure Param_Hash_Compatible (X : T1) with Ghost => Static;
 
-   package Hash_Compatibility_Checks is
+   package Hash_Compatibility_Checks with Ghost => Static is
 
       procedure Hash_Compatible (X : T1) with
         Global => null,

@@ -1,13 +1,13 @@
-inst.ads:6:13: info: implicit aspect Always_Terminates on "Witness" has been proved, subprogram will terminate
-inst.ads:6:56: info: division check proved (CVC5: 1 VC)
-inst.ads:7:13: info: implicit aspect Always_Terminates on "Hash" has been proved, subprogram will terminate
-inst.ads:7:66: info: division check proved (CVC5: 1 VC)
-inst.ads:7:66: info: range check proved (CVC5: 1 VC)
-inst.ads:8:13: info: implicit aspect Always_Terminates on "Eq" has been proved, subprogram will terminate
-inst.ads:8:55: info: division check proved (CVC5: 1 VC)
-inst.ads:8:70: info: division check proved (CVC5: 1 VC)
-inst.ads:9:13: info: implicit aspect Always_Terminates on "Equivalent" has been proved, subprogram will terminate
-spark-containers-parameter_checks.ads:246:19: medium: postcondition might fail, in instantiation at spark-containers-formal-unbounded_hashed_maps.ads:140, in instantiation at inst.ads:10
+inst.ads:5:13: info: implicit aspect Always_Terminates on "Witness" has been proved, subprogram will terminate
+inst.ads:5:56: info: division check proved (CVC5: 1 VC)
+inst.ads:6:13: info: implicit aspect Always_Terminates on "Hash" has been proved, subprogram will terminate
+inst.ads:6:66: info: division check proved (CVC5: 1 VC)
+inst.ads:6:66: info: range check proved (CVC5: 1 VC)
+inst.ads:7:13: info: implicit aspect Always_Terminates on "Eq" has been proved, subprogram will terminate
+inst.ads:7:55: info: division check proved (CVC5: 1 VC)
+inst.ads:7:70: info: division check proved (CVC5: 1 VC)
+inst.ads:8:13: info: implicit aspect Always_Terminates on "Equivalent" has been proved, subprogram will terminate
+spark-containers-parameter_checks.ads:246:19: medium: postcondition might fail, in instantiation at spark-containers-formal-unbounded_hashed_maps.ads:136, in instantiation at inst.ads:9
 test.adb:25:14: info: postcondition proved (CVC5: 1 VC; Z3: 4 VC)
 test.adb:28:29: info: precondition proved (CVC5: 1 VC)
 test.adb:31:23: info: unrolling loop [info-unrolling-inlining]
@@ -387,7 +387,7 @@ test.adb:582:07: info: precondition proved (CVC5: 1 VC)
 test.adb:582:34: info: precondition proved (CVC5: 1 VC)
 test.adb:583:07: info: precondition proved (CVC5: 1 VC)
 test.adb:583:35: info: precondition proved (CVC5: 1 VC)
-test.adb:587:18: info: keys shall be distinct and all elements shall be smaller than "Aggr_Capacity" for maps aggregates at spark-containers-formal-unbounded_hashed_maps.ads:81, in instantiation at inst.ads:10
+test.adb:587:18: info: keys shall be distinct and all elements shall be smaller than "Aggr_Capacity" for maps aggregates at spark-containers-formal-unbounded_hashed_maps.ads:77, in instantiation at inst.ads:9
 test.adb:587:18: info: precondition proved (CVC5: 11 VC)
 test.adb:589:07: info: precondition proved (CVC5: 1 VC)
 test.adb:590:07: info: precondition proved (CVC5: 1 VC)
@@ -430,9 +430,9 @@ test_resize.adb:14:30: info: loop invariant initialization proved (CVC5: 1 VC)
 test_resize.adb:14:30: info: loop invariant preservation proved (CVC5: 1 VC)
 test_resize.adb:15:30: info: loop invariant initialization proved (CVC5: 2 VC)
 test_resize.adb:15:30: info: loop invariant preservation proved (Z3: 2 VC)
-inst.ads:10:04: warning: check will fail at run time [-gnatw.a]
-inst.ads:10:04: warning: check will fail at run time [-gnatw.a]
-inst.ads:10:04: warning: in instantiation at spark-containers-formal-unbounded_hashed_maps.ads:236 [-gnatw.a]
-inst.ads:10:04: warning: in instantiation at spark-containers-formal-unbounded_hashed_maps.ads:236 [-gnatw.a]
-inst.ads:10:04: warning: in instantiation at spark-containers-functional-maps.ads:134 [-gnatw.a]
-inst.ads:10:04: warning: in instantiation at spark-containers-functional-maps.ads:153 [-gnatw.a]
+inst.ads:9:04: warning: check will fail at run time [-gnatw.a]
+inst.ads:9:04: warning: check will fail at run time [-gnatw.a]
+inst.ads:9:04: warning: in instantiation at spark-containers-formal-unbounded_hashed_maps.ads:234 [-gnatw.a]
+inst.ads:9:04: warning: in instantiation at spark-containers-formal-unbounded_hashed_maps.ads:234 [-gnatw.a]
+inst.ads:9:04: warning: in instantiation at spark-containers-functional-maps.ads:134 [-gnatw.a]
+inst.ads:9:04: warning: in instantiation at spark-containers-functional-maps.ads:153 [-gnatw.a]

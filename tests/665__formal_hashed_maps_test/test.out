@@ -1,13 +1,13 @@
-inst.ads:6:13: info: implicit aspect Always_Terminates on "Witness" has been proved, subprogram will terminate
-inst.ads:6:56: info: division check proved (CVC5: 1 VC)
-inst.ads:7:13: info: implicit aspect Always_Terminates on "Hash" has been proved, subprogram will terminate
-inst.ads:7:66: info: division check proved (CVC5: 1 VC)
-inst.ads:7:66: info: range check proved (CVC5: 1 VC)
-inst.ads:8:13: info: implicit aspect Always_Terminates on "Eq" has been proved, subprogram will terminate
-inst.ads:8:55: info: division check proved (CVC5: 1 VC)
-inst.ads:8:70: info: division check proved (CVC5: 1 VC)
-inst.ads:9:13: info: implicit aspect Always_Terminates on "Equivalent" has been proved, subprogram will terminate
-spark-containers-parameter_checks.ads:246:19: medium: postcondition might fail, in instantiation at spark-containers-formal-hashed_maps.ads:148, in instantiation at inst.ads:10
+inst.ads:5:13: info: implicit aspect Always_Terminates on "Witness" has been proved, subprogram will terminate
+inst.ads:5:56: info: division check proved (CVC5: 1 VC)
+inst.ads:6:13: info: implicit aspect Always_Terminates on "Hash" has been proved, subprogram will terminate
+inst.ads:6:66: info: division check proved (CVC5: 1 VC)
+inst.ads:6:66: info: range check proved (CVC5: 1 VC)
+inst.ads:7:13: info: implicit aspect Always_Terminates on "Eq" has been proved, subprogram will terminate
+inst.ads:7:55: info: division check proved (CVC5: 1 VC)
+inst.ads:7:70: info: division check proved (CVC5: 1 VC)
+inst.ads:8:13: info: implicit aspect Always_Terminates on "Equivalent" has been proved, subprogram will terminate
+spark-containers-parameter_checks.ads:246:19: medium: postcondition might fail, in instantiation at spark-containers-formal-hashed_maps.ads:145, in instantiation at inst.ads:9
 test.adb:26:14: info: postcondition proved (CVC5: 1 VC; Z3: 4 VC)
 test.adb:29:29: info: precondition proved (CVC5: 1 VC)
 test.adb:32:23: info: unrolling loop [info-unrolling-inlining]
@@ -511,7 +511,7 @@ test.adb:609:07: info: precondition proved (Z3: 1 VC)
 test.adb:609:34: info: precondition proved (CVC5: 1 VC)
 test.adb:610:07: info: precondition proved (Z3: 1 VC)
 test.adb:610:35: info: precondition proved (CVC5: 1 VC)
-test.adb:614:18: info: keys shall be distinct and all elements shall fit in "Count_Type" for maps aggregates at spark-containers-formal-hashed_maps.ads:87, in instantiation at inst.ads:10
+test.adb:614:18: info: keys shall be distinct and all elements shall fit in "Count_Type" for maps aggregates at spark-containers-formal-hashed_maps.ads:82, in instantiation at inst.ads:9
 test.adb:614:18: info: precondition proved (CVC5: 11 VC)
 test.adb:616:07: info: precondition proved (CVC5: 1 VC)
 test.adb:617:07: info: precondition proved (CVC5: 1 VC)
@@ -551,10 +551,10 @@ test.adb:651:04: info: precondition proved (Trivial: 1 VC)
 test.adb:652:04: info: precondition proved (Trivial: 1 VC)
 test.adb:653:04: info: precondition proved (Trivial: 1 VC)
 test.adb:654:04: info: precondition proved (Trivial: 1 VC)
-inst.ads:10:04: warning: check will fail at run time [-gnatw.a]
-inst.ads:10:04: warning: check will fail at run time [-gnatw.a]
-inst.ads:10:04: warning: in instantiation at spark-containers-formal-hashed_maps.ads:244 [-gnatw.a]
-inst.ads:10:04: warning: in instantiation at spark-containers-formal-hashed_maps.ads:244 [-gnatw.a]
-inst.ads:10:04: warning: in instantiation at spark-containers-functional-maps.ads:134 [-gnatw.a]
-inst.ads:10:04: warning: in instantiation at spark-containers-functional-maps.ads:153 [-gnatw.a]
+inst.ads:9:04: warning: check will fail at run time [-gnatw.a]
+inst.ads:9:04: warning: check will fail at run time [-gnatw.a]
+inst.ads:9:04: warning: in instantiation at spark-containers-formal-hashed_maps.ads:243 [-gnatw.a]
+inst.ads:9:04: warning: in instantiation at spark-containers-formal-hashed_maps.ads:243 [-gnatw.a]
+inst.ads:9:04: warning: in instantiation at spark-containers-functional-maps.ads:134 [-gnatw.a]
+inst.ads:9:04: warning: in instantiation at spark-containers-functional-maps.ads:153 [-gnatw.a]
 test.adb:104:07: warning: variable "X" is read but never assigned [-gnatwv]

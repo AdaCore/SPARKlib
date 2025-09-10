@@ -23,25 +23,25 @@ generic
    --  Ghost lemmas used to prove that "=" is an equivalence relation
 
    with procedure Eq_Reflexive (X : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
    with procedure Eq_Symmetric (X, Y : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
    with procedure Eq_Transitive (X, Y, Z : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
 
    --  Ghost lemmas used to prove that Equivalent_Elements is an equivalence
    --  relation.
 
    with procedure Equivalent_Elements_Reflexive (X, Y : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
    with procedure Equivalent_Elements_Symmetric (X, Y : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
    with procedure Equivalent_Elements_Transitive
      (X, Y, Z : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
 
 package SPARK.Containers.Functional.Infinite_Sequences with
-  Ghost,
+  Ghost => SPARKlib_Logic,
   SPARK_Mode,
   Always_Terminates
 is
@@ -52,7 +52,7 @@ is
                     & "for compliance with GNATprove assumption"
                     & " [SPARK_ITERABLE]");
    type Sequence is private with
-     Default_Initial_Condition => Length (Sequence) = 0,
+     Default_Initial_Condition => (SPARKlib_Full => Length (Sequence) = 0),
      Iterable                  => (First       => Iter_First,
                                    Has_Element => Iter_Has_Element,
                                    Next        => Iter_Next,
@@ -88,7 +88,8 @@ is
 
    with
      Global   => null,
-     Pre      => Iter_Has_Element (Container, Position),
+     Pre      =>
+       (SPARKlib_Defensive => Iter_Has_Element (Container, Position)),
      Annotate => (GNATprove, Container_Aggregates, "Get");
 
    function Last (Container : Sequence) return Big_Natural with
@@ -96,8 +97,8 @@ is
 
      Global => null,
      Post =>
-       Last'Result = Length (Container);
-   pragma Annotate (GNATprove, Inline_For_Proof, Last);
+       (SPARKlib_Full => Last'Result = Length (Container));
+   pragma Annotate (GNATprove, Inline_For_Proof, Entity => Last);
 
    function First return Big_Positive is (1) with
    --  First index of a sequence
@@ -114,30 +115,30 @@ is
 
      Global => null,
      Post   =>
-       "="'Result =
+       (SPARKlib_Full => "="'Result =
          (Length (Left) = Length (Right)
-           and then (for all N in Left => Get (Left, N) = Get (Right, N)));
-   pragma Annotate (GNATprove, Inline_For_Proof, "=");
+           and then (for all N in Left => Get (Left, N) = Get (Right, N))));
+   pragma Annotate (GNATprove, Inline_For_Proof, Entity => "=");
 
    function "<" (Left : Sequence; Right : Sequence) return Boolean with
    --  Left is a strict subsequence of Right
 
      Global => null,
      Post   =>
-       "<"'Result =
+       (SPARKlib_Full => "<"'Result =
          (Length (Left) < Length (Right)
-           and then (for all N in Left => Get (Left, N) = Get (Right, N)));
-   pragma Annotate (GNATprove, Inline_For_Proof, "<");
+           and then (for all N in Left => Get (Left, N) = Get (Right, N))));
+   pragma Annotate (GNATprove, Inline_For_Proof, Entity => "<");
 
    function "<=" (Left : Sequence; Right : Sequence) return Boolean with
    --  Left is a subsequence of Right
 
      Global => null,
      Post   =>
-       "<="'Result =
+       (SPARKlib_Full => "<="'Result =
          (Length (Left) <= Length (Right)
-           and then (for all N in Left => Get (Left, N) = Get (Right, N)));
-   pragma Annotate (GNATprove, Inline_For_Proof, "<=");
+           and then (for all N in Left => Get (Left, N) = Get (Right, N))));
+   pragma Annotate (GNATprove, Inline_For_Proof, Entity => "<=");
 
    -----------------------------------------------------
    -- Properties handling elements modulo equivalence --
@@ -149,12 +150,13 @@ is
 
      Global => null,
      Post   =>
-       Equivalent_Sequences'Result =
+       (SPARKlib_Full => Equivalent_Sequences'Result =
          (Length (Left) = Length (Right)
            and then
             (for all N in Left =>
-               Equivalent_Elements (Get (Left, N), Get (Right, N))));
-   pragma Annotate (GNATprove, Inline_For_Proof, Equivalent_Sequences);
+               Equivalent_Elements (Get (Left, N), Get (Right, N)))));
+   pragma Annotate
+     (GNATprove, Inline_For_Proof, Entity => Equivalent_Sequences);
 
    function Contains
      (Container : Sequence;
@@ -165,13 +167,13 @@ is
 
    with
      Global => null,
-     Pre    => Lst <= Last (Container),
+     Pre    => (SPARKlib_Defensive => Lst <= Last (Container)),
      Post   =>
-       Contains'Result =
+       (SPARKlib_Full => Contains'Result =
            (for some J in Container =>
               Fst <= J and J <= Lst and
-                Equivalent_Elements (Get (Container, J), Item));
-   pragma Annotate (GNATprove, Inline_For_Proof, Contains);
+                Equivalent_Elements (Get (Container, J), Item)));
+   pragma Annotate (GNATprove, Inline_For_Proof, Entity => Contains);
 
    function Find
      (Container : Sequence;
@@ -181,14 +183,15 @@ is
      with
        Global => null,
        Contract_Cases =>
-         ((for all J in Container =>
-             not Equivalent_Elements (Get (Container, J), Item))
-          =>
-            Find'Result = 0,
-          others =>
-            Find'Result > 0 and
-            Find'Result <= Length (Container) and
-            Equivalent_Elements (Item, Get (Container, Find'Result)));
+         (SPARKlib_Full =>
+            ((for all J in Container =>
+                not Equivalent_Elements (Get (Container, J), Item))
+             =>
+               Find'Result = 0,
+             others =>
+               Find'Result > 0 and
+               Find'Result <= Length (Container) and
+               Equivalent_Elements (Item, Get (Container, Find'Result))));
 
    ----------------------------
    -- Construction Functions --
@@ -198,7 +201,7 @@ is
    --  Return an empty Sequence
 
      Global => null,
-     Post   => Length (Empty_Sequence'Result) = 0;
+     Post   => (SPARKlib_Full => Length (Empty_Sequence'Result) = 0);
 
    --  For better efficiency of both proofs and execution, avoid using
    --  construction functions in annotations and rather use property functions.
@@ -212,11 +215,11 @@ is
 
    with
      Global => null,
-     Pre    => Position <= Last (Container),
+     Pre    => (SPARKlib_Defensive => Position <= Last (Container)),
      Post   =>
-       Element_Logic_Equal
+       (SPARKlib_Full => Element_Logic_Equal
            (Get (Set'Result, Position), Copy_Element (New_Item))
-         and then Equal_Except (Container, Set'Result, Position);
+         and then Equal_Except (Container, Set'Result, Position));
 
    function Add (Container : Sequence; New_Item : Element_Type) return Sequence
    --  Returns a new sequence which contains the same elements as Container
@@ -225,10 +228,10 @@ is
    with
      Global => null,
      Post   =>
-       Length (Add'Result) = Length (Container) + 1
+       (SPARKlib_Full => Length (Add'Result) = Length (Container) + 1
          and then Element_Logic_Equal
            (Get (Add'Result, Last (Add'Result)), Copy_Element (New_Item))
-         and then Equal_Prefix (Container, Add'Result);
+         and then Equal_Prefix (Container, Add'Result));
 
    function Add
      (Container : Sequence;
@@ -239,9 +242,9 @@ is
    --  except that New_Item has been inserted at position Position.
 
      Global => null,
-     Pre    => Position <= Last (Container) + 1,
+     Pre    => (SPARKlib_Defensive => Position <= Last (Container) + 1),
      Post   =>
-       Length (Add'Result) = Length (Container) + 1
+       (SPARKlib_Full => Length (Add'Result) = Length (Container) + 1
          and then Element_Logic_Equal
            (Get (Add'Result, Position), Copy_Element (New_Item))
          and then Range_Equal
@@ -254,7 +257,7 @@ is
                      Right  => Add'Result,
                      Fst    => Position,
                      Lst    => Last (Container),
-                     Offset => 1);
+                     Offset => 1));
 
    function Remove
      (Container : Sequence;
@@ -264,9 +267,9 @@ is
 
    with
      Global => null,
-     Pre    => Position <= Last (Container),
+     Pre    => (SPARKlib_Defensive => Position <= Last (Container)),
      Post   =>
-       Length (Remove'Result) = Length (Container) - 1
+       (SPARKlib_Full => Length (Remove'Result) = Length (Container) - 1
          and then Range_Equal
                     (Left  => Container,
                      Right => Remove'Result,
@@ -277,7 +280,7 @@ is
                      Right  => Container,
                      Fst    => Position,
                      Lst    => Last (Remove'Result),
-                     Offset => 1);
+                     Offset => 1));
 
    --------------------------
    -- Instantiation Checks --
@@ -286,7 +289,9 @@ is
    --  Check that the actual parameters follow the appropriate assumptions.
 
    function Copy_Element (Item : Element_Type) return Element_Type is (Item)
-     with Annotate => (GNATprove, Inline_For_Proof);
+   with
+     Annotate => (GNATprove, Inline_For_Proof),
+     Ghost    => SPARKlib_Full;
    --  Elements of containers are copied by numerous primitives in this
    --  package. This function causes GNATprove to verify that such a copy is
    --  valid (in particular, it does not break the ownership policy of SPARK,
@@ -324,37 +329,37 @@ is
 
    function Iter_First (Container : Sequence) return Big_Integer with
      Global => null,
-     Post   => Iter_First'Result = 1;
+     Post   => (SPARKlib_Full => Iter_First'Result = 1);
 
    function Iter_Has_Element
      (Container : Sequence;
       Position  : Big_Integer) return Boolean
    with
      Global => null,
-       Post   => Iter_Has_Element'Result =
-                   In_Range (Position, 1, Length (Container));
-   pragma Annotate (GNATprove, Inline_For_Proof, Iter_Has_Element);
+     Post   =>
+       (SPARKlib_Full => Iter_Has_Element'Result =
+                   In_Range (Position, 1, Length (Container)));
+   pragma Annotate (GNATprove, Inline_For_Proof, Entity => Iter_Has_Element);
 
    function Iter_Next
      (Container : Sequence;
       Position  : Big_Integer) return Big_Integer
    with
      Global => null,
-     Pre    => Iter_Has_Element (Container, Position),
-     Post   => Iter_Next'Result = Position + 1;
+     Pre    => (SPARKlib_Defensive => Iter_Has_Element (Container, Position)),
+     Post   => (SPARKlib_Full => Iter_Next'Result = Position + 1);
 
    -------------------------------------------------------------------------
    -- Ghost non-executable properties used only in internal specification --
    -------------------------------------------------------------------------
 
    --  Logical equality on elements cannot be safely executed on most element
-   --  types. Thus, this package should only be instantiated with ghost code
-   --  disabled. This is enforced by having a special imported procedure
-   --  Check_Or_Fail that will lead to link-time errors otherwise.
+   --  types. Thus, it uses the assertion level SPARKlib_Full that cannot be
+   --  enabled at runtime.
 
    function Element_Logic_Equal (Left, Right : Element_Type) return Boolean
    with
-     Ghost,
+     Ghost  => SPARKlib_Full,
      Global => null,
      Annotate => (GNATprove, Logical_Equal);
 
@@ -367,7 +372,7 @@ is
    --  is equal to Item.
 
    with
-     Ghost,
+     Ghost  => SPARKlib_Full,
      Global => null,
      Pre    => Lst <= Last (Container),
      Post   =>
@@ -376,13 +381,13 @@ is
               (if Fst <= J and J <= Lst
                then Element_Logic_Equal
                  (Get (Container, J), Copy_Element (Item))));
-   pragma Annotate (GNATprove, Inline_For_Proof, Constant_Range);
+   pragma Annotate (GNATprove, Inline_For_Proof, Entity => Constant_Range);
 
    function Equal_Prefix (Left : Sequence; Right : Sequence) return Boolean
    with
    --  Left is a subsequence of Right
 
-     Ghost,
+     Ghost  => SPARKlib_Full,
      Global => null,
      Post   =>
        Equal_Prefix'Result =
@@ -390,7 +395,7 @@ is
            and then
             (for all N in Left =>
                Element_Logic_Equal (Get (Left, N), Get (Right, N))));
-   pragma Annotate (GNATprove, Inline_For_Proof, Equal_Prefix);
+   pragma Annotate (GNATprove, Inline_For_Proof, Entity => Equal_Prefix);
 
    function Equal_Except
      (Left     : Sequence;
@@ -399,7 +404,7 @@ is
    --  Returns True is Left and Right are the same except at position Position
 
    with
-     Ghost,
+     Ghost  => SPARKlib_Full,
      Global => null,
      Pre    => Position <= Last (Left),
      Post   =>
@@ -409,7 +414,7 @@ is
             (for all J in Left =>
                (if J /= Position
                 then Element_Logic_Equal (Get (Left, J), Get (Right, J)))));
-   pragma Annotate (GNATprove, Inline_For_Proof, Equal_Except);
+   pragma Annotate (GNATprove, Inline_For_Proof, Entity => Equal_Except);
 
    function Equal_Except
      (Left  : Sequence;
@@ -419,7 +424,7 @@ is
    --  Returns True is Left and Right are the same except at positions X and Y
 
    with
-     Ghost,
+     Ghost  => SPARKlib_Full,
      Global => null,
      Pre    => X <= Last (Left) and Y <= Last (Left),
      Post   =>
@@ -429,7 +434,7 @@ is
             (for all J in Left =>
                (if J /= X and J /= Y
                 then Element_Logic_Equal (Get (Left, J), Get (Right, J)))));
-   pragma Annotate (GNATprove, Inline_For_Proof, Equal_Except);
+   pragma Annotate (GNATprove, Inline_For_Proof, Entity => Equal_Except);
 
    function Range_Equal
      (Left  : Sequence;
@@ -440,7 +445,7 @@ is
    --  Left and Right.
 
    with
-     Ghost,
+     Ghost  => SPARKlib_Full,
      Global => null,
      Pre    => Lst <= Last (Left) and Lst <= Last (Right),
      Post   =>
@@ -448,7 +453,7 @@ is
          (for all J in Left =>
             (if Fst <= J and J <= Lst
              then Element_Logic_Equal (Get (Left, J), Get (Right, J))));
-   pragma Annotate (GNATprove, Inline_For_Proof, Range_Equal);
+   pragma Annotate (GNATprove, Inline_For_Proof, Entity => Range_Equal);
 
    function Range_Shifted
      (Left   : Sequence;
@@ -460,7 +465,7 @@ is
    --  elements as the range from Fst + Offset to Lst + Offset in Right.
 
    with
-     Ghost,
+     Ghost  => SPARKlib_Full,
      Global => null,
      Pre    =>
        Lst <= Last (Left)
@@ -477,7 +482,7 @@ is
                (if Fst + Offset <= J and J <= Lst + Offset then
                   Element_Logic_Equal
                     (Get (Left, J - Offset), Get (Right, J)))));
-   pragma Annotate (GNATprove, Inline_For_Proof, Range_Shifted);
+   pragma Annotate (GNATprove, Inline_For_Proof, Entity => Range_Shifted);
 
    ------------------------------------------
    -- Additional Primitives For Aggregates --
@@ -489,10 +494,10 @@ is
    with
      Global => null,
      Post   =>
-       Last (Container) = Last (Container'Old) + 1
+       (SPARKlib_Full => Last (Container) = Last (Container'Old) + 1
          and then Element_Logic_Equal
            (Get (Container, Last (Container)), Copy_Element (New_Item))
-         and then Equal_Prefix (Container'Old, Container);
+         and then Equal_Prefix (Container'Old, Container));
 
 private
    pragma SPARK_Mode (Off);

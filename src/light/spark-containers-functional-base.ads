@@ -28,7 +28,7 @@ private generic
 
 package SPARK.Containers.Functional.Base with
   SPARK_Mode => Off,
-  Ghost
+  Ghost      => SPARKlib_Logic
 is
 
    subtype Extended_Index is Index_Type'Base range

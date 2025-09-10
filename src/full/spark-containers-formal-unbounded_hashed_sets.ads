@@ -31,37 +31,33 @@ generic
    --  Ghost lemmas used to prove that "=" is an equivalence relation
 
    with procedure Eq_Reflexive (X : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
    with procedure Eq_Symmetric (X, Y : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
    with procedure Eq_Transitive (X, Y, Z : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
 
    --  Ghost lemmas used to prove that Equivalent_Elements is an equivalence
    --  relation with respect to "=".
 
    with procedure Equivalent_Elements_Reflexive (X, Y : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
    with procedure Equivalent_Elements_Symmetric (X, Y : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
    with procedure Equivalent_Elements_Transitive
      (X, Y, Z : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
 
    --  Ghost lemma used to prove that Hash returns the same value for all
    --  equivalent elements.
 
    with procedure Hash_Equivalent (X, Y : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
 
 package SPARK.Containers.Formal.Unbounded_Hashed_Sets with
   SPARK_Mode,
   Always_Terminates
 is
-   --  Contracts in this unit are meant for analysis only, not for run-time
-   --  checking.
-
-   pragma Assertion_Policy (Ignore);
    pragma Annotate (CodePeer, Skip_Analysis);
 
    pragma Annotate (GNATcheck, Exempt_On,
@@ -74,7 +70,7 @@ is
                                    Next        => Next,
                                    Has_Element => Has_Element,
                                    Element     => Element),
-     Default_Initial_Condition => Is_Empty (Set),
+     Default_Initial_Condition => (SPARKlib_Full => Is_Empty (Set)),
      Aggregate                 => (Empty       => Empty_Set,
                                    Add_Unnamed => Insert),
      Annotate                  =>
@@ -93,7 +89,7 @@ is
 
    pragma Unevaluated_Use_Of_Old (Allow);
 
-   package Formal_Model with Ghost is
+   package Formal_Model with Ghost => SPARKlib_Logic is
 
       --------------------------
       -- Instantiation Checks --
@@ -193,10 +189,11 @@ is
       with
         Global => null,
         Post =>
-          (if Find'Result > 0 then
-              Find'Result <= E.Last (Container)
-                and Equivalent_Elements
-                      (Item, E.Get (Container, Find'Result)));
+          (SPARKlib_Full =>
+             (if Find'Result > 0 then
+                 Find'Result <= E.Last (Container)
+                   and Equivalent_Elements
+                         (Item, E.Get (Container, Find'Result))));
 
       function E_Elements_Equal
         (Left  : E.Sequence;
@@ -206,12 +203,13 @@ is
       with
         Global => null,
         Post   =>
-          E_Elements_Equal'Result =
+          (SPARKlib_Full => E_Elements_Equal'Result =
             (for all I in 1 .. E.Last (Left) =>
               Find (Right, E.Get (Left, I)) > 0
                 and then E.Get (Right, Find (Right, E.Get (Left, I))) =
-                         E.Get (Left, I));
-      pragma Annotate (GNATprove, Inline_For_Proof, E_Elements_Equal);
+                         E.Get (Left, I)));
+      pragma Annotate
+        (GNATprove, Inline_For_Proof, Entity => E_Elements_Equal);
 
       function E_Elements_Included
         (Left  : E.Sequence;
@@ -219,6 +217,7 @@ is
       --  The elements of Left are contained in Right
 
       with
+        Ghost  => SPARKlib_Full,
         Global => null,
         Post   =>
           E_Elements_Included'Result =
@@ -227,7 +226,8 @@ is
                 and then Element_Logic_Equal
                    (E.Get (Right, Find (Right, E.Get (Left, I))),
                     E.Get (Left, I)));
-      pragma Annotate (GNATprove, Inline_For_Proof, E_Elements_Included);
+      pragma Annotate
+        (GNATprove, Inline_For_Proof, Entity => E_Elements_Included);
 
       function E_Elements_Included
         (Left  : E.Sequence;
@@ -236,6 +236,7 @@ is
       --  The elements of Container contained in Model are in Right
 
       with
+        Ghost  => SPARKlib_Full,
         Global => null,
         Post   =>
           E_Elements_Included'Result =
@@ -245,7 +246,8 @@ is
                     and then Element_Logic_Equal
                        (E.Get (Right, Find (Right, E.Get (Left, I))),
                         E.Get (Left, I))));
-      pragma Annotate (GNATprove, Inline_For_Proof, E_Elements_Included);
+      pragma Annotate
+        (GNATprove, Inline_For_Proof, Entity => E_Elements_Included);
 
       function E_Elements_Included
         (Container : E.Sequence;
@@ -256,6 +258,7 @@ is
       --  are in Right.
 
       with
+        Ghost  => SPARKlib_Full,
         Global => null,
         Post   =>
           E_Elements_Included'Result =
@@ -270,7 +273,8 @@ is
                     and then Element_Logic_Equal
                        (E.Get (Right, Find (Right, E.Get (Container, I))),
                         E.Get (Container, I))));
-      pragma Annotate (GNATprove, Inline_For_Proof, E_Elements_Included);
+      pragma Annotate
+        (GNATprove, Inline_For_Proof, Entity => E_Elements_Included);
 
       package P is new SPARK.Containers.Functional.Maps
         (Key_Type                       => Cursor,
@@ -292,7 +296,7 @@ is
          P_Left  : P.Map;
          P_Right : P.Map) return Boolean
       with
-        Ghost,
+        Ghost  => SPARKlib_Full,
         Global => null,
         Post   =>
           (if Mapping_Preserved'Result then
@@ -320,7 +324,7 @@ is
          P_Right  : P.Map;
          Position : Cursor) return Boolean
       with
-        Ghost,
+        Ghost  => SPARKlib_Full,
         Global => null,
         Post   =>
           (if Mapping_Preserved_Except'Result then
@@ -343,69 +347,71 @@ is
       --  nor order of elements are represented in this model. Elements are
       --  modeled up to equivalence.
 
-        Ghost,
         Global => null,
-        Post   => M.Length (Model'Result) = E.Big (Length (Container));
+        Post   =>
+          (SPARKlib_Full =>
+             M.Length (Model'Result) = E.Big (Length (Container)));
 
       function Elements (Container : Set) return E.Sequence with
       --  The Elements sequence represents the underlying list structure of
       --  sets that is used for iteration. It stores the actual values of
       --  elements in the set. It does not model cursors.
 
-        Ghost,
         Global => null,
         Post   =>
-          E.Last (Elements'Result) = Length (Container)
+          (SPARKlib_Full =>
+             E.Last (Elements'Result) = Length (Container)
 
-            --  It only contains keys contained in Model
+               --  It only contains keys contained in Model
 
-            and (for all Item of Elements'Result =>
-                  M.Contains (Model (Container), Item))
+               and (for all Item of Elements'Result =>
+                     M.Contains (Model (Container), Item))
 
-            --  It contains all the elements contained in Model
+               --  It contains all the elements contained in Model
 
-            and (for all Item of Model (Container) =>
-                  (Find (Elements'Result, Item) > 0
-                    and then Equivalent_Elements
-                               (E.Get (Elements'Result,
-                                       Find (Elements'Result, Item)),
-                                Item)))
+               and (for all Item of Model (Container) =>
+                     (Find (Elements'Result, Item) > 0
+                       and then Equivalent_Elements
+                                  (E.Get (Elements'Result,
+                                          Find (Elements'Result, Item)),
+                                   Item)))
 
-            --  It has no duplicate
+               --  It has no duplicate
 
-            and (for all I in 1 .. Length (Container) =>
-                  Find (Elements'Result, E.Get (Elements'Result, I)) = I)
+               and (for all I in 1 .. Length (Container) =>
+                     Find (Elements'Result, E.Get (Elements'Result, I)) = I)
 
-            and (for all I in 1 .. Length (Container) =>
-                  (for all J in 1 .. Length (Container) =>
-                    (if Equivalent_Elements
-                          (E.Get (Elements'Result, I),
-                           E.Get (Elements'Result, J))
-                     then I = J)));
+               and (for all I in 1 .. Length (Container) =>
+                     (for all J in 1 .. Length (Container) =>
+                       (if Equivalent_Elements
+                             (E.Get (Elements'Result, I),
+                              E.Get (Elements'Result, J))
+                        then I = J))));
 
       function Positions (Container : Set) return P.Map with
       --  The Positions map is used to model cursors. It only contains valid
       --  cursors and maps them to their position in the container.
 
-        Ghost,
         Global => null,
         Post   =>
-          not P.Has_Key (Positions'Result, No_Element)
+          (SPARKlib_Full =>
+             not P.Has_Key (Positions'Result, No_Element)
 
-            --  Positions of cursors are smaller than the container's length
+               --  Positions of cursors are smaller than the container's length
 
-            and then
-              (for all I of Positions'Result =>
-                P.Get (Positions'Result, I) in 1 .. Length (Container)
+               and then
+                 (for all I of Positions'Result =>
+                   P.Get (Positions'Result, I) in 1 .. Length (Container)
 
-            --  No two cursors have the same position. Note that we do not
-            --  state that there is a cursor in the map for each position, as
-            --  it is rarely needed.
+               --  No two cursors have the same position. Note that we do not
+               --  state that there is a cursor in the map for each position,
+               --  as it is rarely needed.
 
-            and then
-              (for all J of Positions'Result =>
-                (if P.Get (Positions'Result, I) = P.Get (Positions'Result, J)
-                 then I = J)));
+               and then
+                 (for all J of Positions'Result =>
+                   (if P.Get (Positions'Result, I) =
+                       P.Get (Positions'Result, J)
+                    then I = J))));
 
       procedure Lift_Abstraction_Level (Container : Set) with
         --  Lift_Abstraction_Level is a ghost procedure that does nothing but
@@ -415,7 +421,7 @@ is
         --  a low-level, cursor-aware view of a container, to a high-level,
         --  position-based view.
 
-        Ghost,
+        Ghost  => SPARKlib_Full,
         Global => null,
         Post   =>
           (for all Item of Elements (Container) =>
@@ -436,18 +442,19 @@ is
 
    function Empty_Set return Set with
      Global => null,
-     Post   => Is_Empty (Empty_Set'Result);
+     Post   => (SPARKlib_Full => Is_Empty (Empty_Set'Result));
 
    function "=" (Left, Right : Set) return Boolean with
      Global => null,
      Post   =>
-         "="'Result =
-           (Length (Left) = Length (Right)
-             and E_Elements_Equal (Elements (Left), Elements (Right)))
-       and
-         "="'Result =
-           (E_Elements_Equal (Elements (Left), Elements (Right))
-             and E_Elements_Equal (Elements (Right), Elements (Left)));
+       (SPARKlib_Full =>
+           "="'Result =
+              (Length (Left) = Length (Right)
+                and E_Elements_Equal (Elements (Left), Elements (Right)))
+          and
+            "="'Result =
+              (E_Elements_Equal (Elements (Left), Elements (Right))
+                and E_Elements_Equal (Elements (Right), Elements (Left))));
    --  For each element in Left, set equality attempts to find the equal
    --  element in Right; if a search fails, then set equality immediately
    --  returns False. The search works by calling Hash to find the bucket in
@@ -462,7 +469,9 @@ is
 
    function Equivalent_Sets (Left, Right : Set) return Boolean with
      Global => null,
-     Post   => Equivalent_Sets'Result = (Model (Left) = Model (Right));
+     Post   =>
+       (SPARKlib_Full =>
+          Equivalent_Sets'Result = (Model (Left) = Model (Right)));
    --  Similar to set equality, with the difference that the element in Left is
    --  compared to the elements in Right using the generic formal
    --  Equivalent_Elements operation instead of element equality.
@@ -470,36 +479,41 @@ is
    function To_Set (New_Item : Element_Type) return Set with
      Global => null,
      Post   =>
-       M.Is_Singleton (Model (To_Set'Result), New_Item)
-         and Length (To_Set'Result) = 1
-         and Element_Logic_Equal
-               (E.Get (Elements (To_Set'Result), 1),
-                E.Copy_Element (New_Item));
+       (SPARKlib_Full =>
+          M.Is_Singleton (Model (To_Set'Result), New_Item)
+            and Length (To_Set'Result) = 1
+            and Element_Logic_Equal
+                  (E.Get (Elements (To_Set'Result), 1),
+                   E.Copy_Element (New_Item)));
    --  Constructs a singleton set comprising New_Element. To_Set calls Hash to
    --  determine the bucket for New_Item.
 
    function Is_Empty (Container : Set) return Boolean with
      Global => null,
      Post   =>
-       Is_Empty'Result = M.Is_Empty (Model (Container))
-         and Is_Empty'Result = (Length (Container) = 0);
+       (SPARKlib_Full =>
+          Is_Empty'Result = M.Is_Empty (Model (Container))
+            and Is_Empty'Result = (Length (Container) = 0));
 
    procedure Clear (Container : in out Set) with
      Global => null,
-     Post   => Length (Container) = 0 and M.Is_Empty (Model (Container));
+     Post   =>
+       (SPARKlib_Full =>
+          Length (Container) = 0 and M.Is_Empty (Model (Container)));
    --  Removes all of the items from the set. This will deallocate all memory
    --  associated with this set.
 
    procedure Assign (Target : in out Set; Source : Set) with
      Global => null,
      Post   =>
-       Model (Target) = Model (Source)
-         and Length (Target) = Length (Source)
+       (SPARKlib_Full =>
+          Model (Target) = Model (Source)
+            and Length (Target) = Length (Source)
 
-         --  Actual elements are preserved
+            --  Actual elements are preserved
 
-         and E_Elements_Included (Elements (Target), Elements (Source))
-         and E_Elements_Included (Elements (Source), Elements (Target));
+            and E_Elements_Included (Elements (Target), Elements (Source))
+            and E_Elements_Included (Elements (Source), Elements (Target)));
    --  If Target denotes the same object as Source, then the operation has no
    --  effect. If the Target capacity is less than the Source length, then
    --  Assign raises Capacity_Error.  Otherwise, Assign clears Target and then
@@ -509,9 +523,10 @@ is
    with
      Global => null,
      Post   =>
-       Model (Copy'Result) = Model (Source)
-         and E.Equal (Elements (Copy'Result), Elements (Source))
-         and Positions (Copy'Result) = Positions (Source);
+       (SPARKlib_Full =>
+          Model (Copy'Result) = Model (Source)
+            and E.Equal (Elements (Copy'Result), Elements (Source))
+            and Positions (Copy'Result) = Positions (Source));
    --  Constructs a new set object whose elements correspond to Source
 
    function Element
@@ -519,10 +534,11 @@ is
       Position  : Cursor) return Element_Type
    with
      Global   => null,
-     Pre      => Has_Element (Container, Position),
+     Pre      => (SPARKlib_Defensive => Has_Element (Container, Position)),
      Post     =>
-       Element'Result =
-         E.Get (Elements (Container), P.Get (Positions (Container), Position)),
+       (SPARKlib_Full => Element'Result =
+          E.Get (Elements (Container),
+          P.Get (Positions (Container), Position))),
      Annotate => (GNATprove, Inline_For_Proof);
 
    procedure Replace_Element
@@ -531,63 +547,67 @@ is
       New_Item  : Element_Type)
    with
      Global => null,
-     Pre    => Has_Element (Container, Position),
+     Pre    => (SPARKlib_Defensive => Has_Element (Container, Position)),
      Post   =>
-       Length (Container) = Length (Container)'Old
+       (SPARKlib_Full =>
+          Length (Container) = Length (Container)'Old
 
-          --  Position now maps to New_Item
+             --  Position now maps to New_Item
 
-          and Element_Logic_Equal
-                (Element (Container, Position),
-                 E.Copy_Element (New_Item))
+             and Element_Logic_Equal
+                   (Element (Container, Position),
+                    E.Copy_Element (New_Item))
 
-          --  New_Item is contained in Container
+             --  New_Item is contained in Container
 
-          and Contains (Model (Container), New_Item)
+             and Contains (Model (Container), New_Item)
 
-          --  Other elements are preserved
+             --  Other elements are preserved
 
-          and M.Included_Except
-                (Model (Container)'Old,
-                 Model (Container),
-                 Element (Container, Position)'Old)
-          and M.Included_Except
-                (Model (Container),
-                 Model (Container)'Old,
-                 New_Item)
+             and M.Included_Except
+                   (Model (Container)'Old,
+                    Model (Container),
+                    Element (Container, Position)'Old)
+             and M.Included_Except
+                   (Model (Container),
+                    Model (Container)'Old,
+                    New_Item)
 
-          --  Mapping from cursors to elements is preserved
+             --  Mapping from cursors to elements is preserved
 
-          and Mapping_Preserved_Except
-                (E_Left   => Elements (Container)'Old,
-                 E_Right  => Elements (Container),
-                 P_Left   => Positions (Container)'Old,
-                 P_Right  => Positions (Container),
-                 Position => Position);
+             and Mapping_Preserved_Except
+                   (E_Left   => Elements (Container)'Old,
+                    E_Right  => Elements (Container),
+                    P_Left   => Positions (Container)'Old,
+                    P_Right  => Positions (Container),
+                    Position => Position));
 
    function Constant_Reference
      (Container : Set;
       Position  : Cursor) return not null access constant Element_Type
    with
      Global => null,
-     Pre    => Has_Element (Container, Position),
+     Pre    => (SPARKlib_Defensive => Has_Element (Container, Position)),
      Post   =>
-       Element_Logic_Equal
-         (Constant_Reference'Result.all,
-          E.Get (Elements (Container),
-                 P.Get (Positions (Container), Position)));
+       (SPARKlib_Full =>
+          Element_Logic_Equal
+            (Constant_Reference'Result.all,
+             E.Get (Elements (Container),
+                    P.Get (Positions (Container), Position))));
 
    procedure Move (Target : in out Set; Source : in out Set) with
      Global => null,
      Post   =>
-       Length (Source) = 0
-         and Model (Target) = Model (Source)'Old
-         and Length (Target) = Length (Source)'Old
+       (SPARKlib_Full =>
+          Length (Source) = 0
+            and Model (Target) = Model (Source)'Old
+            and Length (Target) = Length (Source)'Old
 
-         --  Actual elements are preserved
+            --  Actual elements are preserved
 
-         and E_Elements_Included (Elements (Target), Elements (Source)'Old)
-         and E_Elements_Included (Elements (Source)'Old, Elements (Target));
+            and E_Elements_Included (Elements (Target), Elements (Source)'Old)
+            and E_Elements_Included
+                  (Elements (Source)'Old, Elements (Target)));
    --  Clears Target (if it's not empty), and then moves (not copies) the
    --  buckets array and nodes from Source to Target.
 
@@ -599,54 +619,57 @@ is
    with
      Global         => null,
      Pre            =>
-       Length (Container) < Count_Type'Last
-         or Contains (Container, New_Item),
+       (SPARKlib_Defensive =>
+          Length (Container) < Count_Type'Last
+            or Contains (Container, New_Item)),
      Post           =>
-       Contains (Container, New_Item)
-         and Has_Element (Container, Position)
-         and Equivalent_Elements (Element (Container, Position), New_Item),
+       (SPARKlib_Full =>
+          Contains (Container, New_Item)
+            and Has_Element (Container, Position)
+            and Equivalent_Elements (Element (Container, Position), New_Item)),
      Contract_Cases =>
+       (SPARKlib_Full =>
 
-       --  If New_Item is already in Container, it is not modified and Inserted
-       --  is set to False.
+          --  If New_Item is already in Container, it is not modified and
+          --  Inserted is set to False.
 
-       (Contains (Container, New_Item) =>
-          not Inserted
-            and Model (Container) = Model (Container)'Old
-            and E.Equal (Elements (Container), Elements (Container)'Old)
-            and Positions (Container) = Positions (Container)'Old,
+          (Contains (Container, New_Item) =>
+             not Inserted
+               and Model (Container) = Model (Container)'Old
+               and E.Equal (Elements (Container), Elements (Container)'Old)
+               and Positions (Container) = Positions (Container)'Old,
 
-        --  Otherwise, New_Item is inserted in Container and Inserted is set to
-        --  True.
+           --  Otherwise, New_Item is inserted in Container and Inserted is set
+           --  to True.
 
-        others =>
-          Inserted
-            and Length (Container) = Length (Container)'Old + 1
+           others =>
+             Inserted
+               and Length (Container) = Length (Container)'Old + 1
 
-            --  Position now maps to New_Item
+               --  Position now maps to New_Item
 
-            and Element_Logic_Equal
-                  (Element (Container, Position), E.Copy_Element (New_Item))
+               and Element_Logic_Equal
+                     (Element (Container, Position), E.Copy_Element (New_Item))
 
-            --  Other elements are preserved
+               --  Other elements are preserved
 
-            and Model (Container)'Old <= Model (Container)
-            and M.Included_Except
-                  (Model (Container),
-                   Model (Container)'Old,
-                   New_Item)
+               and Model (Container)'Old <= Model (Container)
+               and M.Included_Except
+                     (Model (Container),
+                      Model (Container)'Old,
+                      New_Item)
 
-            --  Mapping from cursors to elements is preserved
+               --  Mapping from cursors to elements is preserved
 
-            and Mapping_Preserved
-                  (E_Left  => Elements (Container)'Old,
-                   E_Right => Elements (Container),
-                   P_Left  => Positions (Container)'Old,
-                   P_Right => Positions (Container))
-            and P.Keys_Included_Except
-                  (Positions (Container),
-                   Positions (Container)'Old,
-                   Position));
+               and Mapping_Preserved
+                     (E_Left  => Elements (Container)'Old,
+                      E_Right => Elements (Container),
+                      P_Left  => Positions (Container)'Old,
+                      P_Right => Positions (Container))
+               and P.Keys_Included_Except
+                     (Positions (Container),
+                      Positions (Container)'Old,
+                      Position)));
    --  Conditionally inserts New_Item into the set. If New_Item is already in
    --  the set, then Inserted returns False and Position designates the node
    --  containing the existing element (which is not modified). If New_Item is
@@ -662,78 +685,17 @@ is
 
    procedure Insert  (Container : in out Set; New_Item : Element_Type) with
      Global => null,
-     Pre    => Length (Container) < Count_Type'Last
-                 and then not Contains (Container, New_Item),
+     Pre    =>
+       (SPARKlib_Defensive =>
+          Length (Container) < Count_Type'Last
+            and then not Contains (Container, New_Item)),
      Post   =>
-       Length (Container) = Length (Container)'Old + 1
-         and Contains (Container, New_Item)
-         and Element_Logic_Equal
-               (Element (Container, Find (Container, New_Item)),
-                E.Copy_Element (New_Item))
-
-         --  Other elements are preserved
-
-         and Model (Container)'Old <= Model (Container)
-         and M.Included_Except
-               (Model (Container),
-                Model (Container)'Old,
-                New_Item)
-
-         --  Mapping from cursors to elements is preserved
-
-         and Mapping_Preserved
-               (E_Left  => Elements (Container)'Old,
-                E_Right => Elements (Container),
-                P_Left  => Positions (Container)'Old,
-                P_Right => Positions (Container))
-         and P.Keys_Included_Except
-               (Positions (Container),
-                Positions (Container)'Old,
-                Find (Container, New_Item));
-   --  Attempts to insert New_Item into the set, performing the usual insertion
-   --  search (which involves calling both Hash and Equivalent_Elements); if
-   --  the search succeeds (New_Item is equivalent to an element already in the
-   --  set, and so was not inserted), then this operation raises
-   --  Constraint_Error. (This version of Insert is similar to Replace, but
-   --  having the opposite exception behavior. It is intended for use when you
-   --  want to assert that the item is not already in the set.)
-
-   procedure Include (Container : in out Set; New_Item : Element_Type) with
-     Global         => null,
-     Pre            =>
-       Length (Container) < Count_Type'Last
-         or Contains (Container, New_Item),
-     Post           =>
-       Contains (Container, New_Item)
-         and Element_Logic_Equal
-               (Element (Container, Find (Container, New_Item)),
-                E.Copy_Element (New_Item)),
-     Contract_Cases =>
-
-       --  If an element equivalent to New_Item is already in Container, it is
-       --  replaced by New_Item.
-
-       (Contains (Container, New_Item) =>
-
-          --  Elements are preserved modulo equivalence
-
-          Model (Container) = Model (Container)'Old
-
-            --  Cursors are preserved
-
-            and Positions (Container) = Positions (Container)'Old
-
-            --  The actual value of other elements is preserved
-
-            and E.Equal_Except
-                  (Elements (Container)'Old,
-                   Elements (Container),
-                   P.Get (Positions (Container), Find (Container, New_Item))),
-
-        --  Otherwise, New_Item is inserted in Container
-
-        others =>
+       (SPARKlib_Full =>
           Length (Container) = Length (Container)'Old + 1
+            and Contains (Container, New_Item)
+            and Element_Logic_Equal
+                  (Element (Container, Find (Container, New_Item)),
+                   E.Copy_Element (New_Item))
 
             --  Other elements are preserved
 
@@ -754,6 +716,74 @@ is
                   (Positions (Container),
                    Positions (Container)'Old,
                    Find (Container, New_Item)));
+   --  Attempts to insert New_Item into the set, performing the usual insertion
+   --  search (which involves calling both Hash and Equivalent_Elements); if
+   --  the search succeeds (New_Item is equivalent to an element already in the
+   --  set, and so was not inserted), then this operation raises
+   --  Constraint_Error. (This version of Insert is similar to Replace, but
+   --  having the opposite exception behavior. It is intended for use when you
+   --  want to assert that the item is not already in the set.)
+
+   procedure Include (Container : in out Set; New_Item : Element_Type) with
+     Global         => null,
+     Pre            =>
+       (SPARKlib_Defensive =>
+          Length (Container) < Count_Type'Last
+            or Contains (Container, New_Item)),
+     Post           =>
+       (SPARKlib_Full =>
+          Contains (Container, New_Item)
+            and Element_Logic_Equal
+                  (Element (Container, Find (Container, New_Item)),
+                   E.Copy_Element (New_Item))),
+     Contract_Cases =>
+       (SPARKlib_Full =>
+
+          --  If an element equivalent to New_Item is already in Container, it
+          --  is replaced by New_Item.
+
+          (Contains (Container, New_Item) =>
+
+             --  Elements are preserved modulo equivalence
+
+             Model (Container) = Model (Container)'Old
+
+               --  Cursors are preserved
+
+               and Positions (Container) = Positions (Container)'Old
+
+               --  The actual value of other elements is preserved
+
+               and E.Equal_Except
+                     (Elements (Container)'Old,
+                      Elements (Container),
+                      P.Get (Positions (Container),
+                             Find (Container, New_Item))),
+
+           --  Otherwise, New_Item is inserted in Container
+
+           others =>
+             Length (Container) = Length (Container)'Old + 1
+
+               --  Other elements are preserved
+
+               and Model (Container)'Old <= Model (Container)
+               and M.Included_Except
+                     (Model (Container),
+                      Model (Container)'Old,
+                      New_Item)
+
+               --  Mapping from cursors to elements is preserved
+
+               and Mapping_Preserved
+                     (E_Left  => Elements (Container)'Old,
+                      E_Right => Elements (Container),
+                      P_Left  => Positions (Container)'Old,
+                      P_Right => Positions (Container))
+               and P.Keys_Included_Except
+                     (Positions (Container),
+                      Positions (Container)'Old,
+                      Find (Container, New_Item))));
    --  Attempts to insert New_Item into the set. If an element equivalent to
    --  New_Item is already in the set (the insertion search succeeded, and
    --  hence New_Item was not inserted), then the value of New_Item is assigned
@@ -764,28 +794,29 @@ is
 
    procedure Replace (Container : in out Set; New_Item : Element_Type) with
      Global => null,
-     Pre    => Contains (Container, New_Item),
+     Pre    => (SPARKlib_Defensive => Contains (Container, New_Item)),
      Post   =>
+       (SPARKlib_Full =>
 
-       --  Elements are preserved modulo equivalence
+          --  Elements are preserved modulo equivalence
 
-       Model (Container) = Model (Container)'Old
-         and Contains (Container, New_Item)
+          Model (Container) = Model (Container)'Old
+            and Contains (Container, New_Item)
 
-         --  Cursors are preserved
+            --  Cursors are preserved
 
-         and Positions (Container) = Positions (Container)'Old
+            and Positions (Container) = Positions (Container)'Old
 
-         --  The element equivalent to New_Item in Container is replaced by
-         --  New_Item.
+            --  The element equivalent to New_Item in Container is replaced by
+            --  New_Item.
 
-         and Element_Logic_Equal
-               (Element (Container, Find (Container, New_Item)),
-                E.Copy_Element (New_Item))
-         and E.Equal_Except
-               (Elements (Container)'Old,
-                Elements (Container),
-                P.Get (Positions (Container), Find (Container, New_Item)));
+            and Element_Logic_Equal
+                  (Element (Container, Find (Container, New_Item)),
+                   E.Copy_Element (New_Item))
+            and E.Equal_Except
+                  (Elements (Container)'Old,
+                   Elements (Container),
+                   P.Get (Positions (Container), Find (Container, New_Item))));
    --  Searches for New_Item in the set; if the search fails (because an
    --  equivalent element was not in the set), then it raises
    --  Constraint_Error. Otherwise, the existing element is assigned the value
@@ -795,20 +826,59 @@ is
 
    procedure Exclude (Container : in out Set; Item : Element_Type) with
      Global         => null,
-     Post           => not Contains (Container, Item),
+     Post           => (SPARKlib_Full => not Contains (Container, Item)),
      Contract_Cases =>
+       (SPARKlib_Full =>
 
-       --  If Item is not in Container, nothing is changed
+          --  If Item is not in Container, nothing is changed
 
-       (not Contains (Container, Item) =>
-          Model (Container) = Model (Container)'Old
-            and E.Equal (Elements (Container), Elements (Container)'Old)
-            and Positions (Container) = Positions (Container)'Old,
+          (not Contains (Container, Item) =>
+             Model (Container) = Model (Container)'Old
+               and E.Equal (Elements (Container), Elements (Container)'Old)
+               and Positions (Container) = Positions (Container)'Old,
 
-        --  Otherwise, Item is removed from Container
+           --  Otherwise, Item is removed from Container
 
-        others =>
+           others =>
+             Length (Container) = Length (Container)'Old - 1
+
+               --  Other elements are preserved
+
+               and Model (Container) <= Model (Container)'Old
+               and M.Included_Except
+                     (Model (Container)'Old,
+                      Model (Container),
+                      Item)
+
+               --  Mapping from cursors to elements is preserved
+
+               and Mapping_Preserved
+                     (E_Left  => Elements (Container),
+                      E_Right => Elements (Container)'Old,
+                      P_Left  => Positions (Container),
+                      P_Right => Positions (Container)'Old)
+               and P.Keys_Included_Except
+                     (Positions (Container)'Old,
+                      Positions (Container),
+                      Find (Container, Item)'Old)));
+   --  Searches for Item in the set, and if found, removes its node from the
+   --  set and then deallocates it. The search works as follows. The operation
+   --  calls Hash to determine the item's bucket; if the bucket is not empty,
+   --  it calls Equivalent_Elements to compare Item to the element of each node
+   --  in the bucket. (This is the deletion analog of Include. It is intended
+   --  for use when you want to remove the item from the set, but don't care
+   --  whether the item is already in the set.)
+
+   procedure Delete  (Container : in out Set; Item : Element_Type) with
+     Global => null,
+     Pre    => (SPARKlib_Defensive => Contains (Container, Item)),
+     Post   =>
+       (SPARKlib_Full =>
           Length (Container) = Length (Container)'Old - 1
+
+            --  Item is no longer in Container
+
+            and not Contains (Container, Item)
 
             --  Other elements are preserved
 
@@ -829,43 +899,6 @@ is
                   (Positions (Container)'Old,
                    Positions (Container),
                    Find (Container, Item)'Old));
-   --  Searches for Item in the set, and if found, removes its node from the
-   --  set and then deallocates it. The search works as follows. The operation
-   --  calls Hash to determine the item's bucket; if the bucket is not empty,
-   --  it calls Equivalent_Elements to compare Item to the element of each node
-   --  in the bucket. (This is the deletion analog of Include. It is intended
-   --  for use when you want to remove the item from the set, but don't care
-   --  whether the item is already in the set.)
-
-   procedure Delete  (Container : in out Set; Item : Element_Type) with
-     Global => null,
-     Pre    => Contains (Container, Item),
-     Post   =>
-       Length (Container) = Length (Container)'Old - 1
-
-         --  Item is no longer in Container
-
-         and not Contains (Container, Item)
-
-         --  Other elements are preserved
-
-         and Model (Container) <= Model (Container)'Old
-         and M.Included_Except
-               (Model (Container)'Old,
-                Model (Container),
-                Item)
-
-         --  Mapping from cursors to elements is preserved
-
-         and Mapping_Preserved
-               (E_Left  => Elements (Container),
-                E_Right => Elements (Container)'Old,
-                P_Left  => Positions (Container),
-                P_Right => Positions (Container)'Old)
-         and P.Keys_Included_Except
-               (Positions (Container)'Old,
-                Positions (Container),
-                Find (Container, Item)'Old);
    --  Searches for Item in the set (which involves calling both Hash and
    --  Equivalent_Elements). If the search fails, then the operation raises
    --  Constraint_Error. Otherwise it removes the node from the set and then
@@ -876,35 +909,36 @@ is
    procedure Delete (Container : in out Set; Position : in out Cursor) with
      Global  => null,
      Depends => (Container =>+ Position, Position => null),
-     Pre     => Has_Element (Container, Position),
+     Pre     => (SPARKlib_Defensive => Has_Element (Container, Position)),
      Post    =>
-       Position = No_Element
-         and Length (Container) = Length (Container)'Old - 1
+       (SPARKlib_Full =>
+          Position = No_Element
+            and Length (Container) = Length (Container)'Old - 1
 
-         --  The element at position Position is no longer in Container
+            --  The element at position Position is no longer in Container
 
-         and not Contains (Container, Element (Container, Position)'Old)
-         and not P.Has_Key (Positions (Container), Position'Old)
+            and not Contains (Container, Element (Container, Position)'Old)
+            and not P.Has_Key (Positions (Container), Position'Old)
 
-         --  Other elements are preserved
+            --  Other elements are preserved
 
-         and Model (Container) <= Model (Container)'Old
-         and M.Included_Except
-               (Model (Container)'Old,
-                Model (Container),
-                Element (Container, Position)'Old)
+            and Model (Container) <= Model (Container)'Old
+            and M.Included_Except
+                  (Model (Container)'Old,
+                   Model (Container),
+                   Element (Container, Position)'Old)
 
-         --  Mapping from cursors to elements is preserved
+            --  Mapping from cursors to elements is preserved
 
-         and Mapping_Preserved
-               (E_Left  => Elements (Container),
-                E_Right => Elements (Container)'Old,
-                P_Left  => Positions (Container),
-                P_Right => Positions (Container)'Old)
-         and P.Keys_Included_Except
-               (Positions (Container)'Old,
-                Positions (Container),
-                Position'Old);
+            and Mapping_Preserved
+                  (E_Left  => Elements (Container),
+                   E_Right => Elements (Container)'Old,
+                   P_Left  => Positions (Container),
+                   P_Right => Positions (Container)'Old)
+            and P.Keys_Included_Except
+                  (Positions (Container)'Old,
+                   Positions (Container),
+                   Position'Old));
    --  Removes the node designated by Position from the set, and then
    --  deallocates the node. The operation calls Hash to determine the bucket,
    --  and then compares Position to each node in the bucket until there's a
@@ -913,88 +947,94 @@ is
    procedure Union (Target : in out Set; Source : Set) with
      Global => null,
      Pre    =>
-       Length (Source) - Length (Target and Source) <=
-         Count_Type'Last - Length (Target),
+       (SPARKlib_Defensive =>
+          Length (Source) - Length (Target and Source) <=
+            Count_Type'Last - Length (Target)),
      Post   =>
-       E.Big (Length (Target)) = E.Big (Length (Target)'Old)
-         - M.Num_Overlaps (Model (Target)'Old, Model (Source))
-         + E.Big (Length (Source))
+       (SPARKlib_Full =>
+          E.Big (Length (Target)) = E.Big (Length (Target)'Old)
+            - M.Num_Overlaps (Model (Target)'Old, Model (Source))
+            + E.Big (Length (Source))
 
-         --  Elements already in Target are still in Target
+            --  Elements already in Target are still in Target
 
-         and Model (Target)'Old <= Model (Target)
+            and Model (Target)'Old <= Model (Target)
 
-         --  Elements of Source are included in Target
+            --  Elements of Source are included in Target
 
-         and Model (Source) <= Model (Target)
+            and Model (Source) <= Model (Target)
 
-         --  Elements of Target come from either Source or Target
+            --  Elements of Target come from either Source or Target
 
-         and M.Included_In_Union
-               (Model (Target), Model (Source), Model (Target)'Old)
+            and M.Included_In_Union
+                  (Model (Target), Model (Source), Model (Target)'Old)
 
-         --  Actual value of elements come from either Left or Right
+            --  Actual value of elements come from either Left or Right
 
-         and E_Elements_Included
-               (Elements (Target),
-                Model (Target)'Old,
-                Elements (Target)'Old,
-                Elements (Source))
+            and E_Elements_Included
+                  (Elements (Target),
+                   Model (Target)'Old,
+                   Elements (Target)'Old,
+                   Elements (Source))
 
-         and E_Elements_Included
-               (Elements (Target)'Old, Model (Target)'Old, Elements (Target))
+            and E_Elements_Included
+                  (Elements (Target)'Old,
+                   Model (Target)'Old, Elements (Target))
 
-         and E_Elements_Included
-               (Elements (Source),
-                Model (Target)'Old,
-                Elements (Source),
-                Elements (Target))
+            and E_Elements_Included
+                  (Elements (Source),
+                   Model (Target)'Old,
+                   Elements (Source),
+                   Elements (Target))
 
-         --  Mapping from cursors of Target to elements is preserved
+            --  Mapping from cursors of Target to elements is preserved
 
-         and Mapping_Preserved
-               (E_Left  => Elements (Target)'Old,
-                E_Right => Elements (Target),
-                P_Left  => Positions (Target)'Old,
-                P_Right => Positions (Target));
+            and Mapping_Preserved
+                  (E_Left  => Elements (Target)'Old,
+                   E_Right => Elements (Target),
+                   P_Left  => Positions (Target)'Old,
+                   P_Right => Positions (Target)));
    --  Iterates over the Source set, and conditionally inserts each element
    --  into Target.
 
    function Union (Left, Right : Set) return Set with
      Global => null,
-     Pre    => Length (Left) <= Count_Type'Last - Length (Right),
+     Pre    =>
+       (SPARKlib_Defensive =>
+          Length (Left) <= Count_Type'Last - Length (Right)),
      Post   =>
-       E.Big (Length (Union'Result)) = E.Big (Length (Left))
-         - M.Num_Overlaps (Model (Left), Model (Right))
-         + E.Big (Length (Right))
+       (SPARKlib_Full =>
+          E.Big (Length (Union'Result)) = E.Big (Length (Left))
+            - M.Num_Overlaps (Model (Left), Model (Right))
+            + E.Big (Length (Right))
 
-         --  Elements of Left and Right are in the result of Union
+            --  Elements of Left and Right are in the result of Union
 
-         and Model (Left) <= Model (Union'Result)
-         and Model (Right) <= Model (Union'Result)
+            and Model (Left) <= Model (Union'Result)
+            and Model (Right) <= Model (Union'Result)
 
-         --  Elements of the result of union come from either Left or Right
+            --  Elements of the result of union come from either Left or Right
 
-         and
-           M.Included_In_Union
-             (Model (Union'Result), Model (Left), Model (Right))
+            and
+              M.Included_In_Union
+                (Model (Union'Result), Model (Left), Model (Right))
 
-         --  Actual value of elements come from either Left or Right
+            --  Actual value of elements come from either Left or Right
 
-         and E_Elements_Included
-               (Elements (Union'Result),
-                Model (Left),
-                Elements (Left),
-                Elements (Right))
+            and E_Elements_Included
+                  (Elements (Union'Result),
+                   Model (Left),
+                   Elements (Left),
+                   Elements (Right))
 
-         and E_Elements_Included
-               (Elements (Left), Model (Left), Elements (Union'Result))
+            and E_Elements_Included
+                  (Elements (Left), Model (Left), Elements (Union'Result))
 
-         and E_Elements_Included
-               (Elements (Right),
-                Model (Left),
-                Elements (Right),
-                Elements (Union'Result));
+            and E_Elements_Included
+                  (Elements (Right),
+                   Model (Left),
+                   Elements (Right),
+                   Elements (Union'Result)));
    --  The operation first copies the Left set to the result, and then iterates
    --  over the Right set to conditionally insert each element into the result.
 
@@ -1003,35 +1043,36 @@ is
    procedure Intersection (Target : in out Set; Source : Set) with
      Global => null,
      Post   =>
-       E.Big (Length (Target)) =
-         M.Num_Overlaps (Model (Target)'Old, Model (Source))
+       (SPARKlib_Full =>
+          E.Big (Length (Target)) =
+            M.Num_Overlaps (Model (Target)'Old, Model (Source))
 
-         --  Elements of Target were already in Target
+            --  Elements of Target were already in Target
 
-         and Model (Target) <= Model (Target)'Old
+            and Model (Target) <= Model (Target)'Old
 
-         --  Elements of Target are in Source
+            --  Elements of Target are in Source
 
-         and Model (Target) <= Model (Source)
+            and Model (Target) <= Model (Source)
 
-         --  Elements both in Source and Target are in the intersection
+            --  Elements both in Source and Target are in the intersection
 
-         and M.Includes_Intersection
-               (Model (Target), Model (Source), Model (Target)'Old)
+            and M.Includes_Intersection
+                  (Model (Target), Model (Source), Model (Target)'Old)
 
-         --  Actual value of elements of Target is preserved
+            --  Actual value of elements of Target is preserved
 
-         and E_Elements_Included (Elements (Target), Elements (Target)'Old)
-         and E_Elements_Included
-               (Elements (Target)'Old, Model (Source), Elements (Target))
+            and E_Elements_Included (Elements (Target), Elements (Target)'Old)
+            and E_Elements_Included
+                  (Elements (Target)'Old, Model (Source), Elements (Target))
 
-         --  Mapping from cursors of Target to elements is preserved
+            --  Mapping from cursors of Target to elements is preserved
 
-         and Mapping_Preserved
-               (E_Left  => Elements (Target),
-                E_Right => Elements (Target)'Old,
-                P_Left  => Positions (Target),
-                P_Right => Positions (Target)'Old);
+            and Mapping_Preserved
+                  (E_Left  => Elements (Target),
+                   E_Right => Elements (Target)'Old,
+                   P_Left  => Positions (Target),
+                   P_Right => Positions (Target)'Old));
    --  Iterates over the Target set (calling First and Next), calling Find to
    --  determine whether the element is in Source. If an equivalent element is
    --  not found in Source, the element is deleted from Target.
@@ -1039,27 +1080,29 @@ is
    function Intersection (Left, Right : Set) return Set with
      Global => null,
      Post   =>
-       E.Big (Length (Intersection'Result)) =
-         M.Num_Overlaps (Model (Left), Model (Right))
+       (SPARKlib_Full =>
+          E.Big (Length (Intersection'Result)) =
+            M.Num_Overlaps (Model (Left), Model (Right))
 
-         --  Elements in the result of Intersection are in Left and Right
+            --  Elements in the result of Intersection are in Left and Right
 
-         and Model (Intersection'Result) <= Model (Left)
-         and Model (Intersection'Result) <= Model (Right)
+            and Model (Intersection'Result) <= Model (Left)
+            and Model (Intersection'Result) <= Model (Right)
 
-         --  Elements both in Left and Right are in the result of Intersection
+            --  Elements both in Left and Right are in the result of
+            --  Intersection.
 
-         and M.Includes_Intersection
-               (Model (Intersection'Result), Model (Left), Model (Right))
+            and M.Includes_Intersection
+                  (Model (Intersection'Result), Model (Left), Model (Right))
 
-         --  Actual value of elements come from Left
+            --  Actual value of elements come from Left
 
-         and E_Elements_Included
-               (Elements (Intersection'Result), Elements (Left))
+            and E_Elements_Included
+                  (Elements (Intersection'Result), Elements (Left))
 
-         and E_Elements_Included
-               (Elements (Left), Model (Right),
-                Elements (Intersection'Result));
+            and E_Elements_Included
+                  (Elements (Left), Model (Right),
+                   Elements (Intersection'Result)));
    --  Iterates over the Left set, calling Find to determine whether the
    --  element is in Right. If an equivalent element is found, it is inserted
    --  into the result set.
@@ -1069,35 +1112,36 @@ is
    procedure Difference (Target : in out Set; Source : Set) with
      Global => null,
      Post   =>
-       E.Big (Length (Target)) = E.Big (Length (Target)'Old) -
-         M.Num_Overlaps (Model (Target)'Old, Model (Source))
+       (SPARKlib_Full =>
+          E.Big (Length (Target)) = E.Big (Length (Target)'Old) -
+            M.Num_Overlaps (Model (Target)'Old, Model (Source))
 
-         --  Elements of Target were already in Target
+            --  Elements of Target were already in Target
 
-         and Model (Target) <= Model (Target)'Old
+            and Model (Target) <= Model (Target)'Old
 
-         --  Elements of Target are not in Source
+            --  Elements of Target are not in Source
 
-         and M.No_Overlap (Model (Target), Model (Source))
+            and M.No_Overlap (Model (Target), Model (Source))
 
-         --  Elements in Target but not in Source are in the difference
+            --  Elements in Target but not in Source are in the difference
 
-         and M.Included_In_Union
-               (Model (Target)'Old, Model (Target), Model (Source))
+            and M.Included_In_Union
+                  (Model (Target)'Old, Model (Target), Model (Source))
 
-         --  Actual value of elements of Target is preserved
+            --  Actual value of elements of Target is preserved
 
-         and E_Elements_Included (Elements (Target), Elements (Target)'Old)
-         and E_Elements_Included
-               (Elements (Target)'Old, Model (Target), Elements (Target))
+            and E_Elements_Included (Elements (Target), Elements (Target)'Old)
+            and E_Elements_Included
+                  (Elements (Target)'Old, Model (Target), Elements (Target))
 
-         --  Mapping from cursors of Target to elements is preserved
+            --  Mapping from cursors of Target to elements is preserved
 
-         and Mapping_Preserved
-               (E_Left  => Elements (Target),
-                E_Right => Elements (Target)'Old,
-                P_Left  => Positions (Target),
-                P_Right => Positions (Target)'Old);
+            and Mapping_Preserved
+                  (E_Left  => Elements (Target),
+                   E_Right => Elements (Target)'Old,
+                   P_Left  => Positions (Target),
+                   P_Right => Positions (Target)'Old));
    --  Iterates over the Source (calling First and Next), calling Find to
    --  determine whether the element is in Target. If an equivalent element is
    --  found, it is deleted from Target.
@@ -1105,31 +1149,32 @@ is
    function Difference (Left, Right : Set) return Set with
      Global => null,
      Post   =>
-       E.Big (Length (Difference'Result)) = E.Big (Length (Left)) -
-         M.Num_Overlaps (Model (Left), Model (Right))
+       (SPARKlib_Full =>
+          E.Big (Length (Difference'Result)) = E.Big (Length (Left)) -
+            M.Num_Overlaps (Model (Left), Model (Right))
 
-         --  Elements of the result of Difference are in Left
+            --  Elements of the result of Difference are in Left
 
-         and Model (Difference'Result) <= Model (Left)
+            and Model (Difference'Result) <= Model (Left)
 
-         --  Elements of the result of Difference are not in Right
+            --  Elements of the result of Difference are not in Right
 
-         and M.No_Overlap (Model (Difference'Result), Model (Right))
+            and M.No_Overlap (Model (Difference'Result), Model (Right))
 
-         --  Elements in Left but not in Right are in the difference
+            --  Elements in Left but not in Right are in the difference
 
-         and M.Included_In_Union
-               (Model (Left), Model (Difference'Result), Model (Right))
+            and M.Included_In_Union
+                  (Model (Left), Model (Difference'Result), Model (Right))
 
-         --  Actual value of elements come from Left
+            --  Actual value of elements come from Left
 
-         and E_Elements_Included
-               (Elements (Difference'Result), Elements (Left))
+            and E_Elements_Included
+                  (Elements (Difference'Result), Elements (Left))
 
-         and E_Elements_Included
-               (Elements (Left),
-                Model (Difference'Result),
-                Elements (Difference'Result));
+            and E_Elements_Included
+                  (Elements (Left),
+                   Model (Difference'Result),
+                   Elements (Difference'Result)));
    --  Iterates over the Left set, calling Find to determine whether the
    --  element is in the Right set. If an equivalent element is not found, the
    --  element is inserted into the result set.
@@ -1139,40 +1184,44 @@ is
    procedure Symmetric_Difference (Target : in out Set; Source : Set) with
      Global => null,
      Pre    =>
-       Length (Source) - Length (Target and Source) <=
-         Count_Type'Last - Length (Target) + Length (Target and Source),
+       (SPARKlib_Defensive =>
+          Length (Source) - Length (Target and Source) <=
+            Count_Type'Last - Length (Target) + Length (Target and Source)),
      Post   =>
-       E.Big (Length (Target)) = E.Big (Length (Target)'Old) -
-         2 * M.Num_Overlaps (Model (Target)'Old, Model (Source)) +
-         E.Big (Length (Source))
+       (SPARKlib_Full =>
+          E.Big (Length (Target)) = E.Big (Length (Target)'Old) -
+            2 * M.Num_Overlaps (Model (Target)'Old, Model (Source)) +
+            E.Big (Length (Source))
 
-         --  Elements of the difference were not both in Source and in Target
+            --  Elements of the difference were not both in Source and in
+            --  Target.
 
-         and M.Not_In_Both (Model (Target), Model (Target)'Old, Model (Source))
+            and M.Not_In_Both
+                  (Model (Target), Model (Target)'Old, Model (Source))
 
-         --  Elements in Target but not in Source are in the difference
+            --  Elements in Target but not in Source are in the difference
 
-         and M.Included_In_Union
-               (Model (Target)'Old, Model (Target), Model (Source))
+            and M.Included_In_Union
+                  (Model (Target)'Old, Model (Target), Model (Source))
 
-         --  Elements in Source but not in Target are in the difference
+            --  Elements in Source but not in Target are in the difference
 
-         and M.Included_In_Union
-               (Model (Source), Model (Target), Model (Target)'Old)
+            and M.Included_In_Union
+                  (Model (Source), Model (Target), Model (Target)'Old)
 
-         --  Actual value of elements come from either Left or Right
+            --  Actual value of elements come from either Left or Right
 
-         and E_Elements_Included
-               (Elements (Target),
-                Model (Target)'Old,
-                Elements (Target)'Old,
-                Elements (Source))
+            and E_Elements_Included
+                  (Elements (Target),
+                   Model (Target)'Old,
+                   Elements (Target)'Old,
+                   Elements (Source))
 
-         and E_Elements_Included
-               (Elements (Target)'Old, Model (Target), Elements (Target))
+            and E_Elements_Included
+                  (Elements (Target)'Old, Model (Target), Elements (Target))
 
-         and E_Elements_Included
-               (Elements (Source), Model (Target), Elements (Target));
+            and E_Elements_Included
+                  (Elements (Source), Model (Target), Elements (Target)));
    --  The operation iterates over the Source set, searching for the element
    --  in Target (calling Hash and Equivalent_Elements). If an equivalent
    --  element is found, it is removed from Target; otherwise it is inserted
@@ -1180,50 +1229,54 @@ is
 
    function Symmetric_Difference (Left, Right : Set) return Set with
      Global => null,
-     Pre    => Length (Left) <= Count_Type'Last - Length (Right),
+     Pre    =>
+       (SPARKlib_Defensive =>
+          Length (Left) <= Count_Type'Last - Length (Right)),
      Post   =>
-       E.Big (Length (Symmetric_Difference'Result)) = E.Big (Length (Left)) -
-         2 * M.Num_Overlaps (Model (Left), Model (Right)) +
-         E.Big (Length (Right))
+       (SPARKlib_Full =>
+          E.Big (Length (Symmetric_Difference'Result)) =
+            E.Big (Length (Left)) -
+            2 * M.Num_Overlaps (Model (Left), Model (Right)) +
+            E.Big (Length (Right))
 
-         --  Elements of the difference were not both in Left and Right
+            --  Elements of the difference were not both in Left and Right
 
-         and M.Not_In_Both
-               (Model (Symmetric_Difference'Result),
-                Model (Left),
-                Model (Right))
+            and M.Not_In_Both
+                  (Model (Symmetric_Difference'Result),
+                   Model (Left),
+                   Model (Right))
 
-         --  Elements in Left but not in Right are in the difference
+            --  Elements in Left but not in Right are in the difference
 
-         and M.Included_In_Union
-               (Model (Left),
-                Model (Symmetric_Difference'Result),
-                Model (Right))
+            and M.Included_In_Union
+                  (Model (Left),
+                   Model (Symmetric_Difference'Result),
+                   Model (Right))
 
-         --  Elements in Right but not in Left are in the difference
+            --  Elements in Right but not in Left are in the difference
 
-         and M.Included_In_Union
-               (Model (Right),
-                Model (Symmetric_Difference'Result),
-                Model (Left))
+            and M.Included_In_Union
+                  (Model (Right),
+                   Model (Symmetric_Difference'Result),
+                   Model (Left))
 
-         --  Actual value of elements come from either Left or Right
+            --  Actual value of elements come from either Left or Right
 
-         and E_Elements_Included
-               (Elements (Symmetric_Difference'Result),
-                Model (Left),
-                Elements (Left),
-                Elements (Right))
+            and E_Elements_Included
+                  (Elements (Symmetric_Difference'Result),
+                   Model (Left),
+                   Elements (Left),
+                   Elements (Right))
 
-         and E_Elements_Included
-               (Elements (Left),
-                Model (Symmetric_Difference'Result),
-                Elements (Symmetric_Difference'Result))
+            and E_Elements_Included
+                  (Elements (Left),
+                   Model (Symmetric_Difference'Result),
+                   Elements (Symmetric_Difference'Result))
 
-         and E_Elements_Included
-               (Elements (Right),
-                Model (Symmetric_Difference'Result),
-                Elements (Symmetric_Difference'Result));
+            and E_Elements_Included
+                  (Elements (Right),
+                   Model (Symmetric_Difference'Result),
+                   Elements (Symmetric_Difference'Result)));
    --  The operation first iterates over the Left set. It calls Find to
    --  determine whether the element is in the Right set. If no equivalent
    --  element is found, the element from Left is inserted into the result. The
@@ -1237,7 +1290,8 @@ is
    function Overlap (Left, Right : Set) return Boolean with
      Global => null,
      Post   =>
-       Overlap'Result = not M.No_Overlap (Model (Left), Model (Right));
+       (SPARKlib_Full =>
+          Overlap'Result = not M.No_Overlap (Model (Left), Model (Right)));
    --  Iterates over the Left set (calling First and Next), calling Find to
    --  determine whether the element is in the Right set. If an equivalent
    --  element is found, the operation immediately returns True. The operation
@@ -1246,7 +1300,9 @@ is
 
    function Is_Subset (Subset : Set; Of_Set : Set) return Boolean with
      Global => null,
-     Post   => Is_Subset'Result = (Model (Subset) <= Model (Of_Set));
+     Post   =>
+       (SPARKlib_Full =>
+          Is_Subset'Result = (Model (Subset) <= Model (Of_Set)));
    --  Iterates over Subset (calling First and Next), calling Find to determine
    --  whether the element is in Of_Set. If no equivalent element is found in
    --  Of_Set, the operation immediately returns False. The operation returns
@@ -1257,29 +1313,33 @@ is
    function First (Container : Set) return Cursor with
      Global         => null,
      Contract_Cases =>
-       (Length (Container) = 0 =>
-          First'Result = No_Element,
+       (SPARKlib_Full =>
+          (Length (Container) = 0 =>
+             First'Result = No_Element,
 
-        others =>
-          Has_Element (Container, First'Result)
-            and P.Get (Positions (Container), First'Result) = 1);
+           others =>
+             Has_Element (Container, First'Result)
+               and P.Get (Positions (Container), First'Result) = 1));
    --  Returns a cursor that designates the first non-empty bucket, by
    --  searching from the beginning of the buckets array.
 
    function Next (Container : Set; Position : Cursor) return Cursor with
      Global         => null,
      Pre            =>
-       Has_Element (Container, Position) or else Position = No_Element,
+       (SPARKlib_Defensive =>
+          Has_Element (Container, Position) or else Position = No_Element),
      Contract_Cases =>
-       (Position = No_Element
-          or else P.Get (Positions (Container), Position) = Length (Container)
-        =>
-          Next'Result = No_Element,
+       (SPARKlib_Full =>
+          (Position = No_Element
+             or else P.Get (Positions (Container), Position) =
+                     Length (Container)
+           =>
+             Next'Result = No_Element,
 
-        others =>
-          Has_Element (Container, Next'Result)
-            and then P.Get (Positions (Container), Next'Result) =
-                     P.Get (Positions (Container), Position) + 1);
+           others =>
+             Has_Element (Container, Next'Result)
+               and then P.Get (Positions (Container), Next'Result) =
+                        P.Get (Positions (Container), Position) + 1));
    --  Returns a cursor that designates the node that follows the current one
    --  designated by Position. If Position designates the last node in its
    --  bucket, the operation calls Hash to compute the index of this bucket,
@@ -1290,17 +1350,20 @@ is
    procedure Next (Container : Set; Position : in out Cursor) with
      Global         => null,
      Pre            =>
-       Has_Element (Container, Position) or else Position = No_Element,
+       (SPARKlib_Defensive =>
+          Has_Element (Container, Position) or else Position = No_Element),
      Contract_Cases =>
-       (Position = No_Element
-          or else P.Get (Positions (Container), Position) = Length (Container)
-        =>
-          Position = No_Element,
+       (SPARKlib_Full =>
+          (Position = No_Element
+             or else P.Get (Positions (Container), Position) =
+                     Length (Container)
+           =>
+             Position = No_Element,
 
-        others =>
-          Has_Element (Container, Position)
-            and then P.Get (Positions (Container), Position) =
-                     P.Get (Positions (Container), Position'Old) + 1);
+           others =>
+             Has_Element (Container, Position)
+               and then P.Get (Positions (Container), Position) =
+                        P.Get (Positions (Container), Position'Old) + 1));
    --  Equivalent to Position := Next (Position)
 
    function Find
@@ -1309,23 +1372,24 @@ is
    with
      Global         => null,
      Contract_Cases =>
+       (SPARKlib_Full =>
 
-       --  If Item is not contained in Container, Find returns No_Element
+          --  If Item is not contained in Container, Find returns No_Element
 
-       (not Contains (Model (Container), Item) =>
-          Find'Result = No_Element,
+          (not Contains (Model (Container), Item) =>
+             Find'Result = No_Element,
 
-        --  Otherwise, Find returns a valid cursor in Container
+           --  Otherwise, Find returns a valid cursor in Container
 
-        others =>
-          P.Has_Key (Positions (Container), Find'Result)
-            and P.Get (Positions (Container), Find'Result) =
-                Find (Elements (Container), Item)
+           others =>
+             P.Has_Key (Positions (Container), Find'Result)
+               and P.Get (Positions (Container), Find'Result) =
+                   Find (Elements (Container), Item)
 
-            --  The element designated by the result of Find is Item
+               --  The element designated by the result of Find is Item
 
-            and Equivalent_Elements
-                  (Element (Container, Find'Result), Item));
+               and Equivalent_Elements
+                     (Element (Container, Find'Result), Item)));
    --  Searches for Item in the set. Find calls Hash to determine the item's
    --  bucket; if the bucket is not empty, it calls Equivalent_Elements to
    --  compare Item to each element in the bucket. If the search succeeds, Find
@@ -1334,15 +1398,17 @@ is
 
    function Contains (Container : Set; Item : Element_Type) return Boolean with
      Global => null,
-     Post   => Contains'Result = Contains (Model (Container), Item);
-   pragma Annotate (GNATprove, Inline_For_Proof, Contains);
+     Post   =>
+       (SPARKlib_Full => Contains'Result = Contains (Model (Container), Item));
+   pragma Annotate (GNATprove, Inline_For_Proof, Entity => Contains);
 
    function Has_Element (Container : Set; Position : Cursor) return Boolean
    with
      Global => null,
      Post   =>
-       Has_Element'Result = P.Has_Key (Positions (Container), Position);
-   pragma Annotate (GNATprove, Inline_For_Proof, Has_Element);
+       (SPARKlib_Full =>
+          Has_Element'Result = P.Has_Key (Positions (Container), Position));
+   pragma Annotate (GNATprove, Inline_For_Proof, Entity => Has_Element);
 
    generic
       type Key_Type (<>) is private;
@@ -1357,22 +1423,17 @@ is
       --  Equivalent_Elements.
 
       with procedure Eq_Compatible (X, Y : Element_Type) is null
-        with Ghost;
+        with Ghost => Static;
 
       --  Ghost lemma used to prove that Hash on keys is compatible with Hash
       --  on elements.
 
       with procedure Hash_Compatible (X : Element_Type) is null
-        with Ghost;
+        with Ghost => Static;
 
    package Generic_Keys with SPARK_Mode, Always_Terminates is
 
-      --  Contracts in this unit are meant for analysis only, not for run-time
-      --  checking.
-
-      pragma Assertion_Policy (Ignore);
-
-      package Formal_Model with Ghost is
+      package Formal_Model with Ghost => SPARKlib_Logic is
 
          --------------------------
          -- Instantiation Checks --
@@ -1406,30 +1467,33 @@ is
            (Left  : M.Set;
             Right : M.Set;
             Key   : Key_Type) return Boolean
-           with
-             Global => null,
-             Post   =>
+         with
+           Global => null,
+           Post   =>
+             (SPARKlib_Full =>
                M_Included_Except'Result =
                  (for all E of Left =>
                    Contains (Right, E)
-                     or Equivalent_Keys (Generic_Keys.Key (E), Key));
+                     or Equivalent_Keys (Generic_Keys.Key (E), Key)));
 
       end Formal_Model;
       use Formal_Model;
 
       function Key (Container : Set; Position : Cursor) return Key_Type with
         Global => null,
-        Pre    => Has_Element (Container, Position),
-        Post   => Key'Result = Key (Element (Container, Position));
-      pragma Annotate (GNATprove, Inline_For_Proof, Key);
+        Pre    => (SPARKlib_Defensive => Has_Element (Container, Position)),
+        Post   =>
+          (SPARKlib_Full => Key'Result = Key (Element (Container, Position)));
+      pragma Annotate (GNATprove, Inline_For_Proof, Entity => Key);
 
       function Element (Container : Set; Key : Key_Type) return Element_Type
       with
         Global => null,
-        Pre    => Contains (Container, Key),
+        Pre    => (SPARKlib_Defensive => Contains (Container, Key)),
         Post   =>
-          Element'Result = Element (Container, Find (Container, Key));
-      pragma Annotate (GNATprove, Inline_For_Proof, Element);
+          (SPARKlib_Full =>
+             Element'Result = Element (Container, Find (Container, Key)));
+      pragma Annotate (GNATprove, Inline_For_Proof, Entity => Element);
 
       procedure Replace
         (Container : in out Set;
@@ -1437,56 +1501,89 @@ is
          New_Item  : Element_Type)
       with
         Global => null,
-        Pre    => Contains (Container, Key),
+        Pre    => (SPARKlib_Defensive => Contains (Container, Key)),
         Post   =>
-          Length (Container) = Length (Container)'Old
+          (SPARKlib_Full =>
+             Length (Container) = Length (Container)'Old
 
-             --  Key now maps to New_Item
+                --  Key now maps to New_Item
 
-             and Element_Logic_Equal
-                   (Element (Container, Key), E.Copy_Element (New_Item))
+                and Element_Logic_Equal
+                      (Element (Container, Key), E.Copy_Element (New_Item))
 
-             --  New_Item is contained in Container
+                --  New_Item is contained in Container
 
-             and Contains (Model (Container), New_Item)
+                and Contains (Model (Container), New_Item)
 
-             --  Other elements are preserved
+                --  Other elements are preserved
 
-             and M_Included_Except
-                   (Model (Container)'Old,
-                    Model (Container),
-                    Key)
-             and M.Included_Except
-                   (Model (Container),
-                    Model (Container)'Old,
-                    New_Item)
+                and M_Included_Except
+                      (Model (Container)'Old,
+                       Model (Container),
+                       Key)
+                and M.Included_Except
+                      (Model (Container),
+                       Model (Container)'Old,
+                       New_Item)
 
-             --  Mapping from cursors to elements is preserved
+                --  Mapping from cursors to elements is preserved
 
-             and Mapping_Preserved_Except
-                   (E_Left   => Elements (Container)'Old,
-                    E_Right  => Elements (Container),
-                    P_Left   => Positions (Container)'Old,
-                    P_Right  => Positions (Container),
-                    Position => Find (Container, Key))
-             and Positions (Container) = Positions (Container)'Old;
+                and Mapping_Preserved_Except
+                      (E_Left   => Elements (Container)'Old,
+                       E_Right  => Elements (Container),
+                       P_Left   => Positions (Container)'Old,
+                       P_Right  => Positions (Container),
+                       Position => Find (Container, Key))
+                and Positions (Container) = Positions (Container)'Old);
 
       procedure Exclude (Container : in out Set; Key : Key_Type) with
         Global         => null,
-        Post           => not Contains (Container, Key),
+        Post           => (SPARKlib_Full => not Contains (Container, Key)),
         Contract_Cases =>
+          (SPARKlib_Full =>
 
-          --  If Key is not in Container, nothing is changed
+             --  If Key is not in Container, nothing is changed
 
-          (not Contains (Container, Key) =>
-             Model (Container) = Model (Container)'Old
-               and E.Equal (Elements (Container), Elements (Container)'Old)
-               and Positions (Container) = Positions (Container)'Old,
+             (not Contains (Container, Key) =>
+                Model (Container) = Model (Container)'Old
+                  and E.Equal (Elements (Container), Elements (Container)'Old)
+                  and Positions (Container) = Positions (Container)'Old,
 
-           --  Otherwise, Key is removed from Container
+              --  Otherwise, Key is removed from Container
 
-           others =>
+              others =>
+                Length (Container) = Length (Container)'Old - 1
+
+                  --  Other elements are preserved
+
+                  and Model (Container) <= Model (Container)'Old
+                  and M_Included_Except
+                        (Model (Container)'Old,
+                         Model (Container),
+                         Key)
+
+                  --  Mapping from cursors to elements is preserved
+
+                  and Mapping_Preserved
+                        (E_Left  => Elements (Container),
+                         E_Right => Elements (Container)'Old,
+                         P_Left  => Positions (Container),
+                         P_Right => Positions (Container)'Old)
+                  and P.Keys_Included_Except
+                        (Positions (Container)'Old,
+                         Positions (Container),
+                         Find (Container, Key)'Old)));
+
+      procedure Delete (Container : in out Set; Key : Key_Type) with
+        Global => null,
+        Pre    => (SPARKlib_Defensive => Contains (Container, Key)),
+        Post   =>
+          (SPARKlib_Full =>
              Length (Container) = Length (Container)'Old - 1
+
+               --  Key is no longer in Container
+
+               and not Contains (Container, Key)
 
                --  Other elements are preserved
 
@@ -1508,62 +1605,33 @@ is
                       Positions (Container),
                       Find (Container, Key)'Old));
 
-      procedure Delete (Container : in out Set; Key : Key_Type) with
-        Global => null,
-        Pre    => Contains (Container, Key),
-        Post   =>
-          Length (Container) = Length (Container)'Old - 1
-
-            --  Key is no longer in Container
-
-            and not Contains (Container, Key)
-
-            --  Other elements are preserved
-
-            and Model (Container) <= Model (Container)'Old
-            and M_Included_Except
-                  (Model (Container)'Old,
-                   Model (Container),
-                   Key)
-
-            --  Mapping from cursors to elements is preserved
-
-            and Mapping_Preserved
-                  (E_Left  => Elements (Container),
-                   E_Right => Elements (Container)'Old,
-                   P_Left  => Positions (Container),
-                   P_Right => Positions (Container)'Old)
-            and P.Keys_Included_Except
-                  (Positions (Container)'Old,
-                   Positions (Container),
-                   Find (Container, Key)'Old);
-
       function Find (Container : Set; Key : Key_Type) return Cursor with
         Global         => null,
         Contract_Cases =>
+          (SPARKlib_Full =>
 
-          --  If Key is not contained in Container, Find returns No_Element
+             --  If Key is not contained in Container, Find returns No_Element
 
-          ((for all E of Model (Container) =>
-               not Equivalent_Keys (Key, Generic_Keys.Key (E))) =>
-             Find'Result = No_Element,
+             ((for all E of Model (Container) =>
+                  not Equivalent_Keys (Key, Generic_Keys.Key (E))) =>
+                Find'Result = No_Element,
 
-           --  Otherwise, Find returns a valid cursor in Container
+              --  Otherwise, Find returns a valid cursor in Container
 
-           others =>
-             P.Has_Key (Positions (Container), Find'Result)
+              others =>
+                P.Has_Key (Positions (Container), Find'Result)
 
-               --  The key designated by the result of Find is Key
+                  --  The key designated by the result of Find is Key
 
-               and Equivalent_Keys
-                     (Generic_Keys.Key (Container, Find'Result), Key));
+                  and Equivalent_Keys
+                        (Generic_Keys.Key (Container, Find'Result), Key)));
 
       function Contains (Container : Set; Key : Key_Type) return Boolean with
         Global => null,
         Post   =>
-          Contains'Result =
-            (for some E of Model (Container) =>
-              Equivalent_Keys (Key, Generic_Keys.Key (E)));
+          (SPARKlib_Full => Contains'Result =
+             (for some E of Model (Container) =>
+                Equivalent_Keys (Key, Generic_Keys.Key (E))));
 
    end Generic_Keys;
 
@@ -1574,7 +1642,7 @@ is
    function Aggr_Capacity return Count_Type is
       (Count_Type'Last)
    with
-     Ghost,
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Inline_For_Proof),
      Annotate => (GNATprove, Container_Aggregates, "Capacity");
@@ -1582,7 +1650,7 @@ is
    function Aggr_Model (Container : Set) return M.Set is
       (Model (Container))
    with
-     Ghost,
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Inline_For_Proof),
      Annotate => (GNATprove, Container_Aggregates, "Model");
@@ -1590,7 +1658,7 @@ is
    function Iter_Model (Container : Set) return E.Sequence is
       (Elements (Container))
    with
-     Ghost,
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Inline_For_Proof),
      Annotate => (GNATprove, Iterable_For_Proof, "Model");

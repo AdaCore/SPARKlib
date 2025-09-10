@@ -1,4 +1,3 @@
-pragma Ignore_Pragma (Assertion_Policy);
 with SPARK.Containers.Formal.Vectors;
 
 generic

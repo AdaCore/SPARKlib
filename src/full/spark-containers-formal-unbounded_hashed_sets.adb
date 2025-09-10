@@ -22,10 +22,6 @@ with System; use type System.Address;
 package body SPARK.Containers.Formal.Unbounded_Hashed_Sets with
   SPARK_Mode => Off
 is
-   --  Contracts in this unit are meant for analysis only, not for run-time
-   --  checking.
-
-   pragma Assertion_Policy (Ignore);
 
    -----------------------
    -- Local Subprograms --
@@ -107,12 +103,13 @@ is
 
      Global => null,
      Post   =>
-       Model (Container) = Model (Container)'Old
-         and Mapping_Preserved
-           (E_Left  => Elements (Container)'Old,
-            E_Right => Elements (Container),
-            P_Left  => Positions (Container)'Old,
-            P_Right => Positions (Container));
+       (SPARKlib_Full =>
+          Model (Container) = Model (Container)'Old
+            and Mapping_Preserved
+              (E_Left  => Elements (Container)'Old,
+               E_Right => Elements (Container),
+               P_Left  => Positions (Container)'Old,
+               P_Right => Positions (Container)));
 
    --------------------------
    -- Local Instantiations --
@@ -899,11 +896,6 @@ is
 
    package body Generic_Keys with SPARK_Mode => Off is
 
-      --  Contracts in this unit are meant for analysis only, not for run-time
-      --  checking.
-
-      pragma Assertion_Policy (Ignore);
-
       -----------------------
       -- Local Subprograms --
       -----------------------
@@ -1026,7 +1018,7 @@ is
             Key   : Key_Type) return Boolean
          is
          begin
-            for E of Left loop
+            for E of M.Iterate (Left) loop
                if not Contains (Right, E)
                  and not Equivalent_Keys (Generic_Keys.Key (E), Key)
                then

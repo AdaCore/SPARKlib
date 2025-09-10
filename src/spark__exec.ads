@@ -6,8 +6,11 @@
 
 --  This unit is meant to replace SPARK for internal testing only
 
-package SPARK with SPARK_Mode, Pure is
+pragma Assertion_Level (SPARKlib_Defensive);
+pragma Assertion_Level (SPARKlib_Logic);
+pragma Assertion_Level (SPARKlib_Full, Depends => SPARKlib_Logic);
+--  Allow execution of SPARKlib_Logic and SPARKlib_Full here for all runtimes
 
-   procedure Check_Or_Fail is null;
+package SPARK with SPARK_Mode, Pure is
 
 end SPARK;

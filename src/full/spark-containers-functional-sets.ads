@@ -28,12 +28,12 @@ generic
    --  relation.
 
    with procedure Equivalent_Elements_Reflexive (X : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
    with procedure Equivalent_Elements_Symmetric (X, Y : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
    with procedure Equivalent_Elements_Transitive
         (X, Y, Z : Element_Type) is null
-     with Ghost;
+     with Ghost => Static;
 
 package SPARK.Containers.Functional.Sets with
   SPARK_Mode,
@@ -62,7 +62,7 @@ is
                     & "for compliance with GNATprove assumption"
                     & " [SPARK_ITERABLE]");
    type Set is private with
-     Default_Initial_Condition => Is_Empty (Set),
+     Default_Initial_Condition => (SPARKlib_Full => Is_Empty (Set)),
      Iterable                  => (First       => Iter_First,
                                    Next        => Iter_Next,
                                    Has_Element => Iter_Has_Element,
@@ -80,8 +80,8 @@ is
    --  is included/excluded at once. As equivalence classes might be infinite,
    --  quantification over elements of a finite set could be infinite. Thus,
    --  quantified expressions cannot be executed and should only be used in
-   --  disabled ghost code. This is enforced by having a special imported
-   --  procedure Check_Or_Fail that will lead to link-time errors otherwise.
+   --  disabled ghost code. This is enforced by using the SPARKlib_Full
+   --  assertion level.
 
    -----------------------
    --  Basic operations --
@@ -102,7 +102,7 @@ is
       Item      : Element_Type)
    --  Contains returns the same result on all equivalent elements
    with
-     Ghost,
+     Ghost  => SPARKlib_Full,
      Global => null,
      Annotate => (GNATprove, Automatic_Instantiation),
      Pre  => Enable_Handling_Of_Equivalence
@@ -113,8 +113,8 @@ is
    --  Return an arbitrary element in Container
 
    Global => null,
-   Pre    => not Is_Empty (Container),
-   Post   => Contains (Container, Choose'Result);
+   Pre    => (SPARKlib_Defensive => not Is_Empty (Container)),
+   Post   => (SPARKlib_Full => Contains (Container, Choose'Result));
 
    function Length (Container : Set) return Big_Natural with
      Global   => null,
@@ -129,13 +129,16 @@ is
    --  Set inclusion
 
      Global => null,
-     Post   => "<="'Result = (for all Item of Left => Contains (Right, Item));
+     Post   =>
+       (SPARKlib_Full =>
+          "<="'Result = (for all Item of Left => Contains (Right, Item)));
 
    function "=" (Left : Set; Right : Set) return Boolean with
    --  Extensional equality over sets
 
      Global => null,
-     Post   => "="'Result = (Left <= Right and Right <= Left);
+     Post   =>
+       (SPARKlib_Full => "="'Result = (Left <= Right and Right <= Left));
 
    pragma Warnings (Off, "unused variable ""Item""");
    function Is_Empty (Container : Set) return Boolean with
@@ -143,8 +146,9 @@ is
 
      Global => null,
      Post   =>
-       Is_Empty'Result = (for all Item of Container => False)
-         and Is_Empty'Result = (Length (Container) = 0);
+       (SPARKlib_Full =>
+          Is_Empty'Result = (for all Item of Container => False)
+           and Is_Empty'Result = (Length (Container) = 0));
    pragma Warnings (On, "unused variable ""Item""");
 
    function Included_Except
@@ -157,9 +161,10 @@ is
    with
      Global => null,
      Post   =>
-       Included_Except'Result =
-         (for all E of Left =>
-           Contains (Right, E) or Equivalent_Elements (E, Item));
+       (SPARKlib_Full =>
+          Included_Except'Result =
+            (for all E of Left =>
+              Contains (Right, E) or Equivalent_Elements (E, Item)));
 
    function Includes_Intersection
      (Container : Set;
@@ -171,9 +176,10 @@ is
 
      Global => null,
      Post   =>
-       Includes_Intersection'Result =
-         (for all Item of Left =>
-           (if Contains (Right, Item) then Contains (Container, Item)));
+       (SPARKlib_Full =>
+          Includes_Intersection'Result =
+            (for all Item of Left =>
+              (if Contains (Right, Item) then Contains (Container, Item))));
 
    function Included_In_Union
      (Container : Set;
@@ -184,9 +190,10 @@ is
 
      Global => null,
      Post   =>
-       Included_In_Union'Result =
-         (for all Item of Container =>
-           Contains (Left, Item) or Contains (Right, Item));
+       (SPARKlib_Full =>
+          Included_In_Union'Result =
+            (for all Item of Container =>
+              Contains (Left, Item) or Contains (Right, Item)));
 
    function Is_Singleton
      (Container : Set;
@@ -196,10 +203,11 @@ is
 
      Global => null,
      Post   =>
-       Is_Singleton'Result =
-         (Contains (Container, New_Item)
-          and then (for all Item of Container =>
-                       Equivalent_Elements (Item, New_Item)));
+       (SPARKlib_Full =>
+          Is_Singleton'Result =
+            (Contains (Container, New_Item)
+             and then (for all Item of Container =>
+                          Equivalent_Elements (Item, New_Item))));
 
    function Not_In_Both
      (Container : Set;
@@ -211,29 +219,32 @@ is
    with
      Global => null,
      Post   =>
-       Not_In_Both'Result =
-         (for all Item of Container =>
-            not Contains (Left, Item) or not Contains (Right, Item));
+       (SPARKlib_Full =>
+          Not_In_Both'Result =
+            (for all Item of Container =>
+               not Contains (Left, Item) or not Contains (Right, Item)));
 
    function No_Overlap (Left : Set; Right : Set) return Boolean with
    --  Return True if there are no equivalent elements in Left and Right
 
      Global => null,
      Post   =>
-       No_Overlap'Result =
-         (for all Item of Left => not Contains (Right, Item));
+       (SPARKlib_Full =>
+          No_Overlap'Result =
+            (for all Item of Left => not Contains (Right, Item)));
 
    function Num_Overlaps (Left : Set; Right : Set) return Big_Natural with
    --  Number of equivalence classes that are both in Left and Right
 
      Global => null,
      Post   =>
-       Num_Overlaps'Result = Length (Intersection (Left, Right))
-         and (if Left <= Right then Num_Overlaps'Result = Length (Left)
-              else Num_Overlaps'Result < Length (Left))
-         and (if Right <= Left then Num_Overlaps'Result = Length (Right)
-              else Num_Overlaps'Result < Length (Right))
-         and (Num_Overlaps'Result = 0) = No_Overlap (Left, Right);
+       (SPARKlib_Full =>
+          Num_Overlaps'Result = Length (Intersection (Left, Right))
+            and (if Left <= Right then Num_Overlaps'Result = Length (Left)
+                 else Num_Overlaps'Result < Length (Left))
+            and (if Right <= Left then Num_Overlaps'Result = Length (Right)
+                 else Num_Overlaps'Result < Length (Right))
+            and (Num_Overlaps'Result = 0) = No_Overlap (Left, Right));
 
    ----------------------------
    -- Construction Functions --
@@ -246,51 +257,51 @@ is
    --  Return a new empty set
 
      Global => null,
-     Post   => Is_Empty (Empty_Set'Result);
+     Post   => (SPARKlib_Full => Is_Empty (Empty_Set'Result));
 
    function Add (Container : Set; Item : Element_Type) return Set with
    --  Return a new set containing all the elements of Container plus the
    --  equivalence class of E.
 
      Global => null,
-     Pre    => not Contains (Container, Item),
+     Pre    => (SPARKlib_Defensive => not Contains (Container, Item)),
      Post   =>
-       Length (Add'Result) = Length (Container) + 1
-         and Contains (Add'Result, Item)
-         and Container <= Add'Result
-         and Included_Except (Add'Result, Container, Item);
+       (SPARKlib_Full => Length (Add'Result) = Length (Container) + 1
+          and Contains (Add'Result, Item)
+          and Container <= Add'Result
+          and Included_Except (Add'Result, Container, Item));
 
    function Remove (Container : Set; Item : Element_Type) return Set with
    --  Return a new set containing all the elements of Container except the
    --  equivalence class of E.
 
      Global => null,
-     Pre    => Contains (Container, Item),
+     Pre    => (SPARKlib_Defensive => Contains (Container, Item)),
      Post   =>
-       Length (Remove'Result) = Length (Container) - 1
-         and not Contains (Remove'Result, Item)
-         and Remove'Result <= Container
-         and Included_Except (Container, Remove'Result, Item);
+       (SPARKlib_Full => Length (Remove'Result) = Length (Container) - 1
+          and not Contains (Remove'Result, Item)
+          and Remove'Result <= Container
+          and Included_Except (Container, Remove'Result, Item));
 
    function Intersection (Left : Set; Right : Set) return Set with
    --  Returns the intersection of Left and Right
 
      Global => null,
      Post   =>
-       Intersection'Result <= Left
-         and Intersection'Result <= Right
-         and Includes_Intersection (Intersection'Result, Left, Right);
+       (SPARKlib_Full => Intersection'Result <= Left
+          and Intersection'Result <= Right
+          and Includes_Intersection (Intersection'Result, Left, Right));
 
    function Union (Left : Set; Right : Set) return Set with
    --  Returns the union of Left and Right
 
      Global => null,
      Post   =>
-       Length (Union'Result) =
-         Length (Left) - Num_Overlaps (Left, Right) + Length (Right)
+       (SPARKlib_Full => Length (Union'Result) =
+             Length (Left) - Num_Overlaps (Left, Right) + Length (Right)
            and Left <= Union'Result
            and Right <= Union'Result
-           and Included_In_Union (Union'Result, Left, Right);
+           and Included_In_Union (Union'Result, Left, Right));
 
    ----------------------------------
    -- Iteration on Functional Sets --
@@ -320,13 +331,15 @@ is
                     "Restrictions:No_Specification_Of_Aspect => Iterable");
 
    function Set_Logic_Equal (Left, Right : Set) return Boolean with
-     Ghost,
+     Ghost    => SPARKlib_Full,
      Annotate => (GNATprove, Logical_Equal);
    --  Logical equality on sets
 
    function Iterate (Container : Set) return Iterable_Set with
      Global => null,
-     Post   => Set_Logic_Equal (Get_Set (Iterate'Result), Container);
+     Post   =>
+       (SPARKlib_Full =>
+          Set_Logic_Equal (Get_Set (Iterate'Result), Container));
    --  Return an iterator over a functional set
 
    function Get_Set (Iterator : Iterable_Set) return Set with
@@ -338,31 +351,38 @@ is
       Cursor   : Set) return Boolean
    with
      Global => null,
-     Post   => (if Valid_Subset'Result then Cursor <= Get_Set (Iterator));
+     Post   =>
+       (SPARKlib_Full =>
+          (if Valid_Subset'Result then Cursor <= Get_Set (Iterator)));
    --  Return True on all sets which can be reached by iterating over
    --  Container.
 
    function Element (Iterator : Iterable_Set; Cursor : Set) return Element_Type
    with
-     Global => null,
-     Pre    => not Is_Empty (Cursor),
-     Post   => Renamings."=" (Element'Result, Choose (Cursor)),
+     Global   => null,
+     Pre      => (SPARKlib_Defensive => not Is_Empty (Cursor)),
+     Post     =>
+       (SPARKlib_Full => Renamings."=" (Element'Result, Choose (Cursor))),
      Annotate => (GNATprove, Inline_For_Proof);
    --  The next element to be considered for the iteration is the result of
    --  choose on Cursor.
 
    function First (Iterator : Iterable_Set) return Set with
      Global => null,
-     Post   => Set_Logic_Equal (First'Result, Get_Set (Iterator))
-       and then Valid_Subset (Iterator, First'Result);
+     Post   =>
+       (SPARKlib_Full => Set_Logic_Equal (First'Result, Get_Set (Iterator))
+          and then Valid_Subset (Iterator, First'Result));
    --  In the first iteration, the cursor is the set associated with Iterator
 
    function Next (Iterator : Iterable_Set; Cursor : Set) return Set with
      Global => null,
-     Pre    => Valid_Subset (Iterator, Cursor) and then not Is_Empty (Cursor),
-     Post   => Valid_Subset (Iterator, Next'Result)
-       and then Set_Logic_Equal
-         (Next'Result, Remove (Cursor, Choose (Cursor)));
+     Pre    =>
+       (SPARKlib_Defensive => Valid_Subset (Iterator, Cursor)
+          and then not Is_Empty (Cursor)),
+       Post   =>
+         (SPARKlib_Full => Valid_Subset (Iterator, Next'Result)
+            and then Set_Logic_Equal
+             (Next'Result, Remove (Cursor, Choose (Cursor))));
    --  At each iteration, remove the equivalence class of the considered
    --  element from the Cursor set.
 
@@ -371,8 +391,9 @@ is
       Cursor   : Set) return Boolean
    with
      Global => null,
-     Post   => Has_Element'Result =
-       (Valid_Subset (Iterator, Cursor) and then not Is_Empty (Cursor));
+     Post   =>
+       (SPARKlib_Full => Has_Element'Result =
+          (Valid_Subset (Iterator, Cursor) and then not Is_Empty (Cursor)));
    --  Return True on non-empty sets which can be reached by iterating over
    --  Container.
 
@@ -382,7 +403,8 @@ is
 
    --  Check that the actual parameters follow the appropriate assumptions.
 
-   function Copy_Element (Item : Element_Type) return Element_Type is (Item);
+   function Copy_Element (Item : Element_Type) return Element_Type is (Item)
+   with Ghost => SPARKlib_Full;
    --  Elements of containers are copied by numerous primitives in this
    --  package. This function causes GNATprove to verify that such a copy is
    --  valid (in particular, it does not break the ownership policy of SPARK,
@@ -406,21 +428,21 @@ is
    type Private_Key is private;
 
    function Iter_First (Container : Set) return Private_Key with
-     Ghost,
+     Ghost  => SPARKlib_Full,
      Global => null;
 
    function Iter_Has_Element
      (Container : Set;
       Key       : Private_Key) return Boolean
    with
-     Ghost,
+     Ghost  => SPARKlib_Full,
      Global => null;
 
    function Iter_Next
      (Container : Set;
       Key       : Private_Key) return Private_Key
    with
-     Ghost,
+     Ghost  => SPARKlib_Full,
      Global => null,
      Pre    => Iter_Has_Element (Container, Key);
 
@@ -428,7 +450,7 @@ is
      (Container : Set;
       Key       : Private_Key) return Element_Type
    with
-     Ghost,
+     Ghost  => SPARKlib_Full,
      Global => null,
      Pre    => Iter_Has_Element (Container, Key);
 
@@ -445,11 +467,12 @@ is
 
    procedure Aggr_Include (Container : in out Set; Item : Element_Type) with
      Global => null,
-     Pre    => not Contains (Container, Item),
-     Post   => Length (Container) = Length (Container)'Old + 1
-       and Contains (Container, Item)
-       and Container'Old <= Container
-       and Included_Except (Container, Container'Old, Item);
+     Pre    => (SPARKlib_Defensive => not Contains (Container, Item)),
+     Post   =>
+       (SPARKlib_Full => Length (Container) = Length (Container)'Old + 1
+          and Contains (Container, Item)
+          and Container'Old <= Container
+          and Included_Except (Container, Container'Old, Item));
 
 private
 
