@@ -934,7 +934,7 @@ is
      (Iterator : Iterable_Multiset; Cursor : Multiset) return Multiset
    is
       R : constant Multiset := Remove_All (Cursor, Choose (Cursor));
-      C : constant Map := Next (Iterator.Map, Cursor.Map) with Ghost;
+      C : constant Map := Next (Iterator.Map, Cursor.Map) with Ghost => Static;
       pragma Unreferenced (C);
    begin
       return R;

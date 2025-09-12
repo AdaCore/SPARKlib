@@ -1,0 +1,28 @@
+SPARKlib_Logic:ON
+SPARKlib_Defensive:OFF
+main.adb:27:13: info: implicit aspect Always_Terminates on "Hash" has been proved, subprogram will terminate
+spark-containers-formal-hashed_maps.ads:82:06: medium: Container_Aggregates annotation might be incorrect, in instantiation at main.adb:43
+spark-containers-formal-hashed_maps.ads:82:06: medium: Container_Aggregates annotation might be incorrect, in instantiation at main.adb:43
+spark-containers-formal-hashed_maps.ads:82:06: medium: after a call to Insert at spark-containers-formal-hashed_maps.ads:688, in instantiation at main.adb:43
+spark-containers-formal-hashed_maps.ads:82:06: medium: after a call to Insert at spark-containers-formal-hashed_maps.ads:688, in instantiation at main.adb:43
+spark-containers-formal-hashed_maps.ads:82:06: medium: when reestablishing invariant on Get at spark-containers-functional-maps.ads:138, in instantiation at spark-containers-formal-hashed_maps.ads:160, in instantiation at main.adb:43
+spark-containers-formal-hashed_maps.ads:82:06: medium: when reestablishing invariant on Has_Key at spark-containers-functional-maps.ads:120, in instantiation at spark-containers-formal-hashed_maps.ads:160, in instantiation at main.adb:43
+spark-containers-formal-hashed_sets.ads:82:06: medium: Container_Aggregates annotation might be incorrect, in instantiation at main.adb:45
+spark-containers-formal-hashed_sets.ads:82:06: medium: after a call to Insert at spark-containers-formal-hashed_sets.ads:729, in instantiation at main.adb:45
+spark-containers-formal-hashed_sets.ads:82:06: medium: when reestablishing invariant on Contains at spark-containers-functional-sets.ads:94, in instantiation at spark-containers-formal-hashed_sets.ads:154, in instantiation at main.adb:45
+spark-containers-formal-ordered_maps.ads:80:06: medium: Container_Aggregates annotation might be incorrect, in instantiation at main.adb:47
+spark-containers-formal-ordered_maps.ads:80:06: medium: Container_Aggregates annotation might be incorrect, in instantiation at main.adb:47
+spark-containers-formal-ordered_maps.ads:80:06: medium: after a call to Insert at spark-containers-formal-ordered_maps.ads:692, in instantiation at main.adb:47
+spark-containers-formal-ordered_maps.ads:80:06: medium: after a call to Insert at spark-containers-formal-ordered_maps.ads:692, in instantiation at main.adb:47
+spark-containers-formal-ordered_maps.ads:80:06: medium: when reestablishing invariant on Get at spark-containers-functional-maps.ads:138, in instantiation at spark-containers-formal-ordered_maps.ads:148, in instantiation at main.adb:47
+spark-containers-formal-ordered_maps.ads:80:06: medium: when reestablishing invariant on Has_Key at spark-containers-functional-maps.ads:120, in instantiation at spark-containers-formal-ordered_maps.ads:148, in instantiation at main.adb:47
+spark-containers-formal-ordered_sets.ads:80:06: medium: Container_Aggregates annotation might be incorrect, in instantiation at main.adb:49
+spark-containers-formal-ordered_sets.ads:80:06: medium: after a call to Insert at spark-containers-formal-ordered_sets.ads:752, in instantiation at main.adb:49
+spark-containers-formal-ordered_sets.ads:80:06: medium: when reestablishing invariant on Contains at spark-containers-functional-sets.ads:94, in instantiation at spark-containers-formal-ordered_sets.ads:145, in instantiation at main.adb:49
+spark-lemmas-floating_point_arithmetic.ads:215:33: medium: range check might fail, cannot prove lower bound for F, in instantiation at spark-lemmas-float_arithmetic.ads:13 [reason for check: value must be convertible to the target type of the conversion] [possible fix: subprogram at line 211 should mention F in a precondition]
+spark-lemmas-floating_point_arithmetic.ads:223:33: medium: range check might fail, cannot prove lower bound for F, in instantiation at spark-lemmas-float_arithmetic.ads:13 [reason for check: value must be convertible to the target type of the conversion] [possible fix: subprogram at line 219 should mention F in a precondition]
+spark-lemmas-floating_point_arithmetic.ads:232:29: medium: range check might fail, cannot prove lower bound for Fl (I), in instantiation at spark-lemmas-float_arithmetic.ads:13 [reason for check: value must be convertible to the target type of the conversion] [possible fix: subprogram at line 228 should mention I in a precondition]
+spark-lemmas-floating_point_arithmetic.ads:241:29: medium: range check might fail, cannot prove lower bound for Fl (I), in instantiation at spark-lemmas-float_arithmetic.ads:13 [reason for check: value must be convertible to the target type of the conversion] [possible fix: subprogram at line 237 should mention I in a precondition]
+spark-lemmas-floating_point_arithmetic.ads:252:31: medium: range check might fail, cannot prove lower bound for F, in instantiation at spark-lemmas-float_arithmetic.ads:13 [reason for check: value must be convertible to the target type of the conversion] [possible fix: subprogram at line 245 should mention F in a precondition]
+main.adb:71:06: warning: variable "L" is read but never assigned [-gnatwv]
+main.adb:85:06: warning: variable "L" is read but never assigned [-gnatwv]
