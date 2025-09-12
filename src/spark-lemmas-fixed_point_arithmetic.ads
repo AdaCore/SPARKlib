@@ -15,7 +15,7 @@ generic
    type Fix is delta <>;
 package SPARK.Lemmas.Fixed_Point_Arithmetic
   with Pure,
-       Ghost,
+       Ghost => Static,
        Always_Terminates
 is
 
