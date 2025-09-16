@@ -1,10 +1,14 @@
+with Ada.Text_IO;
+with System.Assertions; use System.Assertions;
+with SPARK.Big_Integers;
 with SPARK.Containers.Functional.Infinite_Sequences;
 with SPARK.Containers.Functional.Maps;
 with SPARK.Containers.Functional.Multisets;
 with SPARK.Containers.Functional.Sets;
 with SPARK.Containers.Functional.Vectors;
 with SPARK.Lemmas.Float_Arithmetic;
-
+with SPARK.Lemmas.Integer_Arithmetic;
+with SPARK.Lemmas.Mod32_Arithmetic;
 with SPARK.Containers.Formal.Doubly_Linked_Lists;
 with SPARK.Containers.Formal.Vectors;
 with SPARK.Containers.Formal.Hashed_Maps;
@@ -17,9 +21,7 @@ with SPARK.Containers.Formal.Unbounded_Hashed_Maps;
 with SPARK.Containers.Formal.Unbounded_Hashed_Sets;
 with SPARK.Containers.Formal.Unbounded_Ordered_Maps;
 with SPARK.Containers.Formal.Unbounded_Ordered_Sets;
-
 with SPARK.Containers.Types; use SPARK.Containers.Types;
-
 procedure Main with SPARK_Mode is
 
    function Hash (I : Integer) return Hash_Type is
@@ -58,6 +60,39 @@ procedure Main with SPARK_Mode is
      SPARK.Containers.Formal.Unbounded_Ordered_Maps (Integer, Integer);
    package Unb_Ordered_Sets is new
      SPARK.Containers.Formal.Unbounded_Ordered_Sets (Integer);
+
+   --  Test whether SPARKlib_Logic is enabled
+
+   procedure Test_Logic with Global => null;
+
+   procedure Test_Logic with SPARK_Mode => Off is
+     use Lists.Formal_Model;
+     use SPARK.Big_Integers;
+     L : Lists.List (10);
+   begin
+     pragma Assert (SPARKlib_Logic => M.Length (Model (L)) /= 0);
+     Ada.Text_IO.Put_Line ("SPARKlib_Logic:OFF");
+   exception
+     when Assert_Failure =>
+       Ada.Text_IO.Put_Line ("SPARKlib_Logic:ON");
+   end;
+
+   --  Test whether SPARKlib_Defensive is enabled
+
+   procedure Test_Defensive with Global => null;
+
+   procedure Test_Defensive with SPARK_Mode => Off is
+     L : Lists.List (10);
+     E : Integer;
+   begin
+     E := Lists.First_Element (L);
+   exception
+     when Assert_Failure =>
+       Ada.Text_IO.Put_Line ("SPARKlib_Defensive:ON");
+     when Constraint_Error =>
+       Ada.Text_IO.Put_Line ("SPARKlib_Defensive:OFF");
+   end;
 begin
-   null;
+   Test_Logic;
+   Test_Defensive;
 end Main;

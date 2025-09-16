@@ -19,10 +19,10 @@ use SPARK.Big_Integers;
 
 generic
    type Int is range <>;
-   with function Big (V : Int) return Big_Integer is <>;
+   with function Big (V : Int) return Big_Integer is <> with Ghost => Static;
 package SPARK.Lemmas.Arithmetic
   with SPARK_Mode,
-       Ghost,
+       Ghost => Static,
        Always_Terminates
 is
 
