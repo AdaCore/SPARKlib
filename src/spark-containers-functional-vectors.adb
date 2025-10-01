@@ -258,12 +258,27 @@ package body SPARK.Containers.Functional.Vectors with SPARK_Mode => Off is
      (Of_Big ((Big (Index_Type'First) - 1) +
        Count_Conversions.To_Big_Integer (Length (Container.Content))));
 
+   --------------------------
+   -- Lemma_Eq_Extensional --
+   --------------------------
+
+   procedure Lemma_Eq_Extensional (Left : Sequence; Right : Sequence) is null;
+
    ------------
    -- Length --
    ------------
 
    function Length (Container : Sequence) return Big_Natural is
      (Count_Conversions.To_Big_Integer (Length (Container.Content)));
+
+   ----------------
+   -- Logical_Eq --
+   ----------------
+
+   function Logical_Eq (X, Y : Sequence) return Boolean is
+   begin
+      return X.Content = Y.Content;
+   end Logical_Eq;
 
    -----------------
    -- Range_Equal --

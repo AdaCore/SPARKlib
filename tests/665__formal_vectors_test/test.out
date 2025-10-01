@@ -1624,4 +1624,12 @@ test_gen.adb:741:04: info: precondition proved (Trivial: 1 VC), in instantiation
 test_gen.adb:741:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:14
 test_gen.adb:742:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
 test_gen.adb:742:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:14
+inst.ads:4:04: warning: check will fail at run time [-gnatw.a]
+inst.ads:4:04: warning: in instantiation at gen_inst.ads:8 [-gnatw.a]
+inst.ads:4:04: warning: in instantiation at spark-containers-formal-vectors.ads:128 [-gnatw.a]
+inst.ads:4:04: warning: in instantiation at spark-containers-functional-vectors.ads:164 [-gnatw.a]
+inst.ads:6:04: warning: check will fail at run time [-gnatw.a]
+inst.ads:6:04: warning: in instantiation at gen_inst.ads:8 [-gnatw.a]
+inst.ads:6:04: warning: in instantiation at spark-containers-formal-vectors.ads:128 [-gnatw.a]
+inst.ads:6:04: warning: in instantiation at spark-containers-functional-vectors.ads:164 [-gnatw.a]
 test_gen.adb:68:07: warning: variable "X" is read but never assigned [-gnatwv]
