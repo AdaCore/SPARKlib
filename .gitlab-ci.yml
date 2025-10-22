@@ -1,3 +1,15 @@
+variables:
+  GIT_CLONE_BASE: https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}:${CI_SERVER_PORT}
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || ($CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_PROTECTED == "true") || $CI_PIPELINE_SOURCE == "schedule"
+      when: always
+    # Run on pipelines created by selecting "Run pipeline" in the GitLab UI,
+    # from the project’s "Build > Pipelines" section.
+    - if: $CI_PIPELINE_SOURCE == "web"
+    - when: never
+
 include:
   - component: $CI_SERVER_FQDN/eng/gitlab-templates/check-issue@~latest
     inputs:
@@ -8,9 +20,11 @@ include:
 
 stages:
   - check
+  - build
 
 
 pre-commit:
+  interruptible: true
   before_script:
     - generic_anod_ci $GENERIC_ANOD_CI_OPTIONS
     - cat /tmp/ci_env.sh
@@ -20,3 +34,37 @@ pre-commit:
     - eval $(anod printenv gnat)
     - cd $CI_PROJECT_DIR
     - . setup.sh
+
+coverage:
+  stage: build
+  services:
+     - image:pe-base
+     - cpu:8
+  needs: []
+  interruptible: true
+  script:
+    # script to load helper functions for log sections
+    - source scripts/ci_predef.sh
+    - generic_anod_ci $GENERIC_ANOD_CI_OPTIONS
+    - cat /tmp/ci_env.sh
+    - . /tmp/ci_env.sh
+    - section_start "anod_setup" "Setup anod packages"
+    - cd $ANOD_DEFAULT_SANDBOX_DIR
+    - for i in gnat spark2014 gnatcov ; do anod install $i --latest ; done
+    - for i in gnat spark2014 gnatcov ; do eval $(anod printenv $i) ; done
+    - section_end "anod_setup"
+    - section_start "project_setup" "Setup testsuite and locations"
+    - cd /tmp
+    - git clone $GIT_CLONE_BASE/eng/spark/spark2014 --depth 1
+    - cd spark2014
+    - ln -s $CI_PROJECT_DIR include
+    - cd testsuite/gnatprove
+    - ln -s $CI_PROJECT_DIR/tests sparklib
+    - section_end "project_setup"
+    - python sparklib-coverage.py
+    - section_start "coverage_report" "Generate Coverage HTML report"
+    # Coverage HTML report
+    - export HTMLTARGETDIR=$CI_COMMIT_BRANCH
+    - if [[ $CI_PIPELINE_SOURCE == "merge_request_event" ]]; then export HTMLTARGETDIR=MRs/$CI_MERGE_REQUEST_IID ; fi
+    - publish-pages sparklib-report --target-subdir $HTMLTARGETDIR --expires 30
+    - section_end "coverage_report"
