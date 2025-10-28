@@ -20,7 +20,18 @@ generic
    --  Function used to compare elements in Contains, Find, and
    --  Equivalent_Sequences.
 
-   --  Ghost lemmas used to prove that "=" is an equivalence relation
+   Use_Logical_Equality : Boolean := False;
+   --  This constant should only be set to True when "=" is the logical
+   --  equality on Element_Type.
+
+   --  Ghost lemma to prove that "=" is the logical equality. It only matters
+   --  if Use_Logical_Equality is True.
+
+   with procedure Eq_Logical_Eq (X, Y : Element_Type) is null
+      with Ghost => Static;
+
+   --  Ghost lemmas used to prove that "=" is an equivalence relation.
+   --  They do not need to be supplied if Use_Logical_Equality is True.
 
    with procedure Eq_Reflexive (X : Element_Type) is null
      with Ghost => Static;
@@ -109,6 +120,12 @@ is
    -- Property Functions --
    ------------------------
 
+   function Logical_Eq (X, Y : Sequence) return Boolean with
+     Ghost    => SPARKlib_Full,
+     Global   => null,
+     Annotate => (GNATprove, Logical_Equal);
+   --  Logical equality over sequences, it is not executable
+
    function "=" (Left : Sequence; Right : Sequence) return Boolean with
    --  Extensional equality over sequences
 
@@ -117,7 +134,15 @@ is
        (SPARKlib_Full => "="'Result =
          (Length (Left) = Length (Right)
            and then (for all N in Left => Get (Left, N) = Get (Right, N))));
-   pragma Annotate (GNATprove, Inline_For_Proof, Entity => "=");
+
+   procedure Lemma_Eq_Extensional (Left : Sequence; Right : Sequence)
+   --  If Use_Logical_Equality is True, then "=" is the logical equality
+   with
+     Ghost    => SPARKlib_Full,
+     Global   => null,
+     Annotate => (GNATprove, Automatic_Instantiation),
+     Pre      => Use_Logical_Equality,
+     Post     => (Left = Right) = Logical_Eq (Left, Right);
 
    function "<" (Left : Sequence; Right : Sequence) return Boolean with
    --  Left is a strict subsequence of Right
@@ -303,11 +328,13 @@ is
 
    package Eq_Checks is new
      SPARK.Containers.Parameter_Checks.Equivalence_Checks
-       (T                   => Element_Type,
-        Eq                  => "=",
-        Param_Eq_Reflexive  => Eq_Reflexive,
-        Param_Eq_Symmetric  => Eq_Symmetric,
-        Param_Eq_Transitive => Eq_Transitive);
+       (T                    => Element_Type,
+        Eq                   => "=",
+        Param_Eq_Reflexive   => Eq_Reflexive,
+        Param_Eq_Symmetric   => Eq_Symmetric,
+        Param_Eq_Transitive  => Eq_Transitive,
+        Use_Logical_Equality => Use_Logical_Equality,
+        Param_Eq_Logical_Eq  => Eq_Logical_Eq);
    --  Check that the actual parameter for "=" is an equivalence relation
 
    package Eq_Elements_Checks is new
@@ -318,7 +345,9 @@ is
         Param_Equal_Reflexive => Eq_Checks.Eq_Reflexive,
         Param_Eq_Reflexive    => Equivalent_Elements_Reflexive,
         Param_Eq_Symmetric    => Equivalent_Elements_Symmetric,
-        Param_Eq_Transitive   => Equivalent_Elements_Transitive);
+        Param_Eq_Transitive   => Equivalent_Elements_Transitive,
+        Use_Logical_Equality  => Use_Logical_Equality,
+        Param_Eq_Logical_Eq   => Eq_Checks.Eq_Logical_Eq);
    --  Check that the actual parameter for Equivalent_Elements is an
    --  equivalence relation with respect to the equality "=".
 

@@ -14,7 +14,8 @@ package SPARK.Containers.Parameter_Checks with
 is
 
    --  Check that Eq is an equivalence relation. It shall be reflexive,
-   --  symmetric, and transitive.
+   --  symmetric, and transitive. If Use_Logical_Equality is True, check that
+   --  Eq is the logical equality over T. Other lemmas follow from that.
 
    generic
       type T (<>) is private;
@@ -23,6 +24,13 @@ is
       with procedure Param_Eq_Reflexive (X : T) with Ghost => Static;
       with procedure Param_Eq_Symmetric (X, Y : T) with Ghost => Static;
       with procedure Param_Eq_Transitive (X, Y, Z : T) with Ghost => Static;
+
+      Use_Logical_Equality : Boolean := False;
+      --  This constant should only be set to True when Eq is the logical
+      --  equality on T.
+
+      with procedure Param_Eq_Logical_Eq (X, Y : T) is null
+         with Ghost => Static;
 
    package Equivalence_Checks with Ghost => Static is
 
@@ -40,6 +48,15 @@ is
         Pre    => Eq (X, Y) and Eq (Y, Z),
         Post   => Eq (X, Z);
 
+      function Logical_Eq (X, Y : T) return Boolean with
+        Global => null,
+        Annotate => (GNATprove, Logical_Equal);
+
+      procedure Eq_Logical_Eq (X, Y : T) with
+        Global => null,
+        Pre    => Use_Logical_Equality,
+        Post   => Eq (X, Y) = Logical_Eq (X, Y);
+
    end Equivalence_Checks;
 
    --  Check that Eq is an equivalence relation with respect to an equality
@@ -55,6 +72,13 @@ is
       with procedure Param_Eq_Reflexive (X, Y : T) with Ghost => Static;
       with procedure Param_Eq_Symmetric (X, Y : T) with Ghost => Static;
       with procedure Param_Eq_Transitive (X, Y, Z : T) with Ghost => Static;
+
+      Use_Logical_Equality : Boolean := False;
+      --  This constant should only be set to True when Eq is the logical
+      --  equality on T.
+
+      with procedure Param_Eq_Logical_Eq (X, Y : T) is null
+         with Ghost => Static;
 
    package Equivalence_Checks_Eq with Ghost => Static is
 
