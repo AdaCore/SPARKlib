@@ -13,5 +13,4 @@ blog](https://blog.adacore.com/).
 # 3. Documentation
 
 Documentation about what is provided in the SPARKlib and how to use it can be
-found in the [SPARK User's Guide]
-(https://docs.adacore.com/spark2014-docs/html/ug/en/source/spark_libraries.html#spark-library).
+found in the [SPARK User's Guide](https://docs.adacore.com/spark2014-docs/html/ug/en/source/spark_libraries.html#spark-library).
