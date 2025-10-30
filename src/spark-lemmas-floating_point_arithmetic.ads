@@ -1,5 +1,5 @@
 --
---  Copyright (C) 2017-2024, AdaCore
+--  Copyright (C) 2017-2025, AdaCore
 --
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
@@ -20,8 +20,6 @@ with SPARK.Big_Integers;
 use  SPARK.Big_Integers;
 with SPARK.Big_Reals;
 use  SPARK.Big_Reals;
-with SPARK.Lemmas.Float_Base;
-pragma Unreferenced (SPARK.Lemmas.Float_Base);
 
 generic
    type Fl is digits <>;
@@ -31,14 +29,14 @@ generic
    --  representable.
    Fl_Last_Sqrt : Fl;
    --  Safe bound for the multiplication of two floating point numbers
-   Max_Int      : Big_Integer;
+   Max_Int      : Big_Integer with Ghost => Static;
    --  Maximal integer value such that all integer values up to Max_Int are
    --  representiable in Fl.
-   Epsilon      : Big_Real;
+   Epsilon      : Big_Real with Ghost => Static;
    --  Machile epsilon for Fl
-   Eta          : Big_Real;
+   Eta          : Big_Real with Ghost => Static;
    --  Smallest positive floating-point number
-   with function Real (V : Fl) return Big_Real is <>;
+   with function Real (V : Fl) return Big_Real is <> with Ghost => Static;
    --  Conversion to Big_Real
 
 package SPARK.Lemmas.Floating_Point_Arithmetic
@@ -55,6 +53,7 @@ is
       Val2 : Fl;
       Val3 : Fl)
    with
+       Ghost => Static,
        Global => null,
        Pre =>
          Val1 in Fl'First / 2.0 .. Fl'Last / 2.0 and then
@@ -68,6 +67,7 @@ is
       Val2 : Fl;
       Val3 : Fl)
      with
+       Ghost => Static,
        Global => null,
        Pre =>
          Val1 in Fl'First / 2.0 .. Fl'Last / 2.0 and then
@@ -81,6 +81,7 @@ is
       Val2 : Fl;
       Val3 : Fl)
      with
+       Ghost => Static,
        Global => null,
        Pre =>
          Val1 in -Fl_Last_Sqrt .. Fl_Last_Sqrt and then
@@ -94,6 +95,7 @@ is
       Val2 : Fl;
       Val3 : Fl)
      with
+       Ghost => Static,
        Global => null,
        Pre =>
          Val1 in -Fl_Last_Sqrt .. Fl_Last_Sqrt and then
@@ -106,6 +108,7 @@ is
      (Val1 : Fl;
       Val2 : Fl)
      with
+       Ghost => Static,
        Global => null,
        Pre => Val1 in 0.0 .. 1.0 and Val2 >= 0.0,
        Post => Val1 * Val2 <= Val2;  --  MANUAL PROOF
@@ -115,6 +118,7 @@ is
       Val2 : Fl;
       Val3 : Fl)
      with
+       Ghost => Static,
        Global => null,
        Pre =>
          Val1 in -Fl_Last_Sqrt .. Fl_Last_Sqrt and then
@@ -128,6 +132,7 @@ is
       Val2 : Fl;
       Val3 : Fl)
      with
+       Ghost => Static,
        Global => null,
        Pre =>
          Val1 in -Fl_Last_Sqrt .. Fl_Last_Sqrt and then
@@ -141,6 +146,7 @@ is
       Val2 : Fl;
       Val3 : Fl)
      with
+       Ghost => Static,
        Global => null,
        Pre =>
          Val1 in 0.0 .. Fl_Last_Sqrt and then
@@ -254,13 +260,17 @@ is
    --  numbers which are integers if they are small enough to fit in the range
    --  where all integers are representable.
 
-   package Integer_64_Conversions is new Signed_Conversions (Int);
+   package Integer_64_Conversions with Ghost => Static is
+      package Inst is new Signed_Conversions (Int);
+   end Integer_64_Conversions;
+
    function Big (X : Int) return Big_Integer renames
-     Integer_64_Conversions.To_Big_Integer;
+     Integer_64_Conversions.Inst.To_Big_Integer;
 
    procedure Lemma_Integer_Add_Exact
      (Val1, Val2 : Fl; Int1, Int2 : Int)
    with
+     Ghost => Static,
      Pre  =>
        Val1 = Fl (Int1) and then
        In_Range (Big (Int1), -Max_Int, Max_Int) and then
@@ -272,6 +282,7 @@ is
    procedure Lemma_Integer_Sub_Exact
      (Val1, Val2 : Fl; Int1, Int2 : Int)
    with
+     Ghost => Static,
      Pre  =>
        Val1 = Fl (Int1) and then
        In_Range (Big (Int1), -Max_Int, Max_Int) and then
@@ -283,6 +294,7 @@ is
    procedure Lemma_Integer_Mul_Exact
      (Val1, Val2 : Fl; Int1, Int2 : Int)
    with
+     Ghost => Static,
      Pre  =>
        Val1 = Fl (Int1) and then
        In_Range (Big (Int1), -Max_Int, Max_Int) and then
@@ -299,6 +311,7 @@ is
    --  floating point numbers Eta.
 
    procedure Lemma_Rounding_Error_Add (Val1, Val2 : Fl) with
+     Ghost => Static,
      Pre  =>
        Val1 in Fl'First / 2.0 .. Fl'Last / 2.0 and then
        Val2 in Fl'First / 2.0 .. Fl'Last / 2.0,
@@ -306,6 +319,7 @@ is
          Epsilon * abs (Real (Val1) + Real (Val2)) + Eta;
 
    procedure Lemma_Rounding_Error_Sub (Val1, Val2 : Fl) with
+     Ghost => Static,
      Pre  =>
        Val1 in Fl'First / 2.0 .. Fl'Last / 2.0 and then
        Val2 in Fl'First / 2.0 .. Fl'Last / 2.0,
@@ -313,6 +327,7 @@ is
          Epsilon * abs (Real (Val1) - Real (Val2)) + Eta;
 
    procedure Lemma_Rounding_Error_Mul (Val1, Val2 : Fl) with
+     Ghost => Static,
      Pre  =>
        Val1 in -Fl_Last_Sqrt .. Fl_Last_Sqrt and then
        Val2 in -Fl_Last_Sqrt .. Fl_Last_Sqrt,
@@ -320,6 +335,7 @@ is
          Epsilon * abs (Real (Val1) * Real (Val2)) + Eta;
 
    procedure Lemma_Rounding_Error_Div (Val1, Val2 : Fl) with
+     Ghost => Static,
      Pre  =>
        Val1 in -Fl_Last_Sqrt .. Fl_Last_Sqrt and then
        Val2 in Fl'First .. -1.0 / Fl_Last_Sqrt

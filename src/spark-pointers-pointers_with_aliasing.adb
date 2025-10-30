@@ -1,5 +1,5 @@
 --
---  Copyright (C) 2022-2024, AdaCore
+--  Copyright (C) 2022-2025, AdaCore
 --
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
@@ -77,7 +77,7 @@ package body SPARK.Pointers.Pointers_With_Aliasing with SPARK_Mode => Off is
    -- Reference --
    ---------------
 
-   function Reference (Memory : not null access Memory_Type; P : Pointer)
+   function Reference (Memory : Memory_Type; P : Pointer)
                        return not null access Object
    is
      (P);

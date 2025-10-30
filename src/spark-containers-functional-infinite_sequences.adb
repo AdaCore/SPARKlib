@@ -1,5 +1,5 @@
 --
---  Copyright (C) 2022-2024, Free Software Foundation, Inc.
+--  Copyright (C) 2022-2025, Free Software Foundation, Inc.
 --
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
@@ -137,7 +137,6 @@ is
 
    function Element_Logic_Equal (Left, Right : Element_Type) return Boolean is
    begin
-      Check_Or_Fail;
       return Left = Right;
    end Element_Logic_Equal;
 

@@ -1,5 +1,5 @@
 --
---  Copyright (C) 2016-2024, AdaCore
+--  Copyright (C) 2016-2025, AdaCore
 --
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
@@ -19,10 +19,10 @@ use SPARK.Big_Integers;
 
 generic
    type Int is range <>;
-   with function Big (V : Int) return Big_Integer is <>;
+   with function Big (V : Int) return Big_Integer is <> with Ghost => Static;
 package SPARK.Lemmas.Arithmetic
   with SPARK_Mode,
-       Ghost,
+       Ghost => Static,
        Always_Terminates
 is
 
@@ -103,7 +103,7 @@ is
      Global => null,
      Pre  => Scale_Num <= Scale_Denom and then
              Big (Res) = (Big (Val) * Big (Scale_Num)) / Big (Scale_Denom),
-     Post => abs (Big (Res)) <= abs (Big (Val)) and then
+     Post => abs Big (Res) <= abs Big (Val) and then
              (if Val >= 0 then Res >= 0 else Res <= 0);
 
    procedure Lemma_Mult_Then_Div_Is_Ident

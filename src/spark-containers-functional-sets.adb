@@ -1,5 +1,5 @@
 --
---  Copyright (C) 2016-2024, Free Software Foundation, Inc.
+--  Copyright (C) 2016-2025, Free Software Foundation, Inc.
 --
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
@@ -73,8 +73,17 @@ package body SPARK.Containers.Functional.Sets with SPARK_Mode => Off is
       Right : Set;
       Item  : Element_Type) return Boolean
    is
-     (for all E of Left =>
-       Equivalent_Elements (E, Item) or Contains (Right, E));
+   begin
+      for I in 1 .. Length (Left.Content) loop
+         if not Equivalent_Elements (Get (Left.Content, I), Item)
+           and then Find (Right.Content, Get (Left.Content, I)) = 0
+         then
+            return False;
+         end if;
+      end loop;
+
+      return True;
+   end Included_Except;
 
    -----------------------
    -- Included_In_Union --
@@ -85,8 +94,17 @@ package body SPARK.Containers.Functional.Sets with SPARK_Mode => Off is
       Left      : Set;
       Right     : Set) return Boolean
    is
-     (for all Item of Container =>
-       Contains (Left, Item) or Contains (Right, Item));
+   begin
+      for I in 1 .. Length (Container.Content) loop
+         if Find (Left.Content, Get (Container.Content, I)) = 0
+           and then Find (Right.Content, Get (Container.Content, I)) = 0
+         then
+            return False;
+         end if;
+      end loop;
+
+      return True;
+   end Included_In_Union;
 
    ---------------------------
    -- Includes_Intersection --
@@ -97,8 +115,17 @@ package body SPARK.Containers.Functional.Sets with SPARK_Mode => Off is
       Left      : Set;
       Right     : Set) return Boolean
    is
-     (for all Item of Left =>
-       (if Contains (Right, Item) then Contains (Container, Item)));
+   begin
+      for I in 1 .. Length (Left.Content) loop
+         if Find (Right.Content, Get (Left.Content, I)) /= 0
+           and then Find (Container.Content, Get (Left.Content, I)) = 0
+         then
+            return False;
+         end if;
+      end loop;
+
+      return True;
+   end Includes_Intersection;
 
    ------------------
    -- Intersection --
@@ -123,7 +150,7 @@ package body SPARK.Containers.Functional.Sets with SPARK_Mode => Off is
       New_Item  : Element_Type) return Boolean
    is
      (Length (Container.Content) = 1
-        and New_Item = Get (Container.Content, 1));
+        and then New_Item = Get (Container.Content, 1));
 
    ------------------
    -- Iter_Element --
@@ -134,7 +161,6 @@ package body SPARK.Containers.Functional.Sets with SPARK_Mode => Off is
       Key       : Private_Key) return Element_Type
    is
    begin
-      Check_Or_Fail;
       return Containers.Get (Container.Content, Count_Type (Key));
    end Iter_Element;
 
@@ -145,7 +171,6 @@ package body SPARK.Containers.Functional.Sets with SPARK_Mode => Off is
    function Iter_First (Container : Set) return Private_Key is
       pragma Unreferenced (Container);
    begin
-      Check_Or_Fail;
       return 1;
    end Iter_First;
 
@@ -158,7 +183,6 @@ package body SPARK.Containers.Functional.Sets with SPARK_Mode => Off is
       Key       : Private_Key) return Boolean
    is
    begin
-      Check_Or_Fail;
       return  Count_Type (Key) in 1 .. Containers.Length (Container.Content);
    end Iter_Has_Element;
 
@@ -172,7 +196,6 @@ package body SPARK.Containers.Functional.Sets with SPARK_Mode => Off is
    is
       pragma Unreferenced (Container);
    begin
-      Check_Or_Fail;
       return (if Key = Private_Key'Last then 0 else Key + 1);
    end Iter_Next;
 
@@ -201,8 +224,17 @@ package body SPARK.Containers.Functional.Sets with SPARK_Mode => Off is
       Left      : Set;
       Right     : Set) return Boolean
    is
-     (for all Item of Container =>
-       not Contains (Right, Item) or not Contains (Left, Item));
+   begin
+      for I in 1 .. Length (Container.Content) loop
+         if Find (Left.Content, Get (Container.Content, I)) /= 0
+           and then Find (Right.Content, Get (Container.Content, I)) /= 0
+         then
+            return False;
+         end if;
+      end loop;
+
+      return True;
+   end Not_In_Both;
 
    ----------------
    -- No_Overlap --

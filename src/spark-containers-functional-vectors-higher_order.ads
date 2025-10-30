@@ -1,5 +1,5 @@
 --
---  Copyright (C) 2023-2024, Free Software Foundation, Inc.
+--  Copyright (C) 2023-2025, Free Software Foundation, Inc.
 --
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
@@ -24,10 +24,12 @@ is
    with
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
-     Post     => Last (Create'Result) = New_Last
-       and then
-          (for all I in Index_Type'First .. New_Last =>
-             Element_Logic_Equal (Get (Create'Result, I), New_Item (I)));
+     Post     =>
+       (SPARKlib_Full =>
+          Last (Create'Result) = New_Last
+          and then
+             (for all I in Index_Type'First .. New_Last =>
+                Element_Logic_Equal (Get (Create'Result, I), New_Item (I))));
 
    function Transform
      (S              : Sequence;
@@ -40,11 +42,13 @@ is
    with
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
-     Post     => Length (Transform'Result) = Length (S)
-       and then
-          (for all I in Index_Type'First .. Last (S) =>
-             Element_Logic_Equal
-               (Get (Transform'Result, I), Transform_Item (Get (S, I))));
+     Post     =>
+       (SPARKlib_Full =>
+          Length (Transform'Result) = Length (S)
+          and then
+             (for all I in Index_Type'First .. Last (S) =>
+                Element_Logic_Equal
+                  (Get (Transform'Result, I), Transform_Item (Get (S, I)))));
 
    function Count
      (S    : Sequence;
@@ -57,7 +61,7 @@ is
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Annotate => (GNATprove, Inline_For_Proof),
-     Post     => Count'Result = Count (S, Last (S), Test);
+     Post     => (SPARKlib_Full => Count'Result = Count (S, Last (S), Test));
 
    function Count
      (S    : Sequence;
@@ -70,8 +74,10 @@ is
    with
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
-     Pre      => Last <= Vectors.Last (S),
-     Post     => Count'Result <= Big (Last) - Big (Extended_Index'First);
+     Pre      => (SPARKlib_Defensive => Last <= Vectors.Last (S)),
+     Post     =>
+       (SPARKlib_Full =>
+          Count'Result <= Big (Last) - Big (Extended_Index'First));
 
    procedure Lemma_Count_Eq
      (S1, S2 : Sequence;
@@ -80,7 +86,8 @@ is
    --  Automatically instantiated lemma:
    --  Count returns the same value on sequences containing the same elements.
 
-   with Ghost,
+   with
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Annotate => (GNATprove, Automatic_Instantiation),
@@ -95,7 +102,8 @@ is
    --  Automatically instantiated lemma:
    --  Recursive definition of Count.
 
-   with Ghost,
+   with
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Annotate => (GNATprove, Automatic_Instantiation),
@@ -111,7 +119,8 @@ is
    --  Additional lemma:
    --  Count returns Last if Test returns True on all elements of S up to Last.
 
-   with Ghost,
+   with
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Pre      => Last <= Vectors.Last (S)
@@ -126,7 +135,8 @@ is
    --  Additional lemma:
    --  Count returns 0 if Test returns False on all elements of S up to Last.
 
-   with Ghost,
+   with
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Pre      => Last <= Vectors.Last (S)
@@ -145,7 +155,7 @@ is
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Annotate => (GNATprove, Inline_For_Proof),
-     Post     => Filter'Result = Filter (S, Last (S), Test);
+     Post     => (SPARKlib_Full => Filter'Result = Filter (S, Last (S), Test));
 
    function Filter
      (S    : Sequence;
@@ -158,9 +168,11 @@ is
    with
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
-     Pre      => Last <= Vectors.Last (S),
-     Post     => Length (Filter'Result) = Count (S, Last, Test)
-       and then (for all E of Filter'Result => Test (E));
+     Pre      => (SPARKlib_Defensive => Last <= Vectors.Last (S)),
+     Post     =>
+       (SPARKlib_Full =>
+          Length (Filter'Result) = Count (S, Last, Test)
+          and then (for all E of Filter'Result => Test (E)));
 
    procedure Lemma_Filter_Eq
      (S1, S2 : Sequence;
@@ -169,7 +181,8 @@ is
    --  Automatically instantiated lemma:
    --  Filter returns the same value on sequences containing the same elements.
 
-   with Ghost,
+   with
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Annotate => (GNATprove, Automatic_Instantiation),
@@ -188,7 +201,8 @@ is
    --  Automatically instantiated lemma:
    --  Recursive definition of Filter.
 
-   with Ghost,
+   with
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Annotate => (GNATprove, Automatic_Instantiation),
@@ -217,7 +231,8 @@ is
    --  Filter returns the prefix of S up to Last if Test returns True on all
    --  of its elements.
 
-   with Ghost,
+   with
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Pre      => Last <= Vectors.Last (S)
@@ -235,7 +250,7 @@ is
      Global   => null,
      Annotate => (GNATprove, Inline_For_Proof),
      Annotate => (GNATprove, Higher_Order_Specialization),
-     Post     => Sum'Result = Sum (S, Last (S), Value);
+     Post     => (SPARKlib_Full => Sum'Result = Sum (S, Last (S), Value));
 
    function Sum
      (S     : Sequence;
@@ -247,8 +262,9 @@ is
    with
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
-     Pre      => Last <= Vectors.Last (S),
-     Post     => (if Last = Extended_Index'First then Sum'Result = 0);
+     Pre      => (SPARKlib_Defensive => Last <= Vectors.Last (S)),
+     Post     =>
+       (SPARKlib_Full => (if Last = Extended_Index'First then Sum'Result = 0));
 
    procedure Lemma_Sum_Eq
      (S1, S2 : Sequence;
@@ -257,7 +273,8 @@ is
    --  Automatically instantiated lemma:
    --  Sum returns the same value on sequences containing the same elements.
 
-   with Ghost,
+   with
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Annotate => (GNATprove, Automatic_Instantiation),
@@ -272,7 +289,8 @@ is
    --  Automatically instantiated lemma:
    --  Recursive definition of Sum.
 
-   with Ghost,
+   with
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Annotate => (GNATprove, Automatic_Instantiation),

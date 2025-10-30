@@ -1,5 +1,5 @@
 --
---  Copyright (C) 2023-2024, Free Software Foundation, Inc.
+--  Copyright (C) 2023-2025, Free Software Foundation, Inc.
 --
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
@@ -21,7 +21,8 @@ is
       return Boolean
    --  Test returns the same value on equivalent elements
 
-     with Ghost,
+     with
+       Ghost    => SPARKlib_Full,
        Global   => null,
        Post     => Eq_Compatible'Result =
          (for all E1 of S =>
@@ -36,7 +37,8 @@ is
       return Boolean
    --  Value returns the same value on equivalent keys
 
-     with Ghost,
+     with
+       Ghost    => SPARKlib_Full,
        Global   => null,
        Post     => Eq_Compatible'Result =
          (for all E1 of S =>
@@ -60,17 +62,19 @@ is
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Pre      =>
-       (for all I1 in Interval'(1, New_Length) =>
-          (for all I2 in Interval'(I1 + 1, New_Length) =>
-             not Equivalent_Elements (New_Item (I1), New_Item (I2)))),
-     Post     => Length (Create_Distinct'Result) = New_Length
-       and then
-          (for all I in Interval'(1, New_Length) =>
-             Contains (Create_Distinct'Result, New_Item (I)))
-       and then
-          (for all E of Create_Distinct'Result =>
-             (for some I in Interval'(1, New_Length) =>
-                  Equivalent_Elements (E, New_Item (I))));
+       (SPARKlib_Defensive =>
+          (for all I1 in Interval'(1, New_Length) =>
+             (for all I2 in Interval'(I1 + 1, New_Length) =>
+                not Equivalent_Elements (New_Item (I1), New_Item (I2))))),
+     Post     =>
+       (SPARKlib_Full => Length (Create_Distinct'Result) = New_Length
+          and then
+             (for all I in Interval'(1, New_Length) =>
+                Contains (Create_Distinct'Result, New_Item (I)))
+          and then
+             (for all E of Create_Distinct'Result =>
+                (for some I in Interval'(1, New_Length) =>
+                     Equivalent_Elements (E, New_Item (I)))));
 
    function Create
      (New_Length : Big_Natural;
@@ -84,14 +88,15 @@ is
    with
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
-     Post     => Length (Create'Result) <= New_Length
-       and then
-          (for all I in Interval'(1, New_Length) =>
-             Contains (Create'Result, New_Item (I)))
-       and then
-          (for all E of Create'Result =>
-             (for some I in Interval'(1, New_Length) =>
-                  Equivalent_Elements (E, New_Item (I))));
+     Post     =>
+       (SPARKlib_Full => Length (Create'Result) <= New_Length
+          and then
+             (for all I in Interval'(1, New_Length) =>
+                Contains (Create'Result, New_Item (I)))
+          and then
+             (for all E of Create'Result =>
+                (for some I in Interval'(1, New_Length) =>
+                     Equivalent_Elements (E, New_Item (I)))));
 
    procedure Lemma_Create_Distinct
      (New_Length : Big_Natural;
@@ -101,7 +106,8 @@ is
    --  The result of Create contains New_Length elements if New_Item never
    --  creates equivalent values on integers up to New_Length.
 
-   with Ghost,
+   with
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Pre      =>
@@ -124,17 +130,21 @@ is
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Pre      =>
-       (for all E1 of S =>
-          (for all E2 of S =>
-             Equivalent_Elements (Transform_Item (E1), Transform_Item (E2)) =
-             Equivalent_Elements (E1, E2))),
-     Post     => Length (Transform_Distinct'Result) = Length (S)
-       and then (for all E of S =>
-                   Contains (Transform_Distinct'Result, Transform_Item (E)))
-       and then
-           (for all E of Transform_Distinct'Result =>
-              (for some F of S =>
-                 Equivalent_Elements (E, Transform_Item (F))));
+       (SPARKlib_Full =>
+          (for all E1 of S =>
+             (for all E2 of S =>
+                Equivalent_Elements
+                   (Transform_Item (E1), Transform_Item (E2)) =
+                Equivalent_Elements (E1, E2)))),
+     Post     =>
+       (SPARKlib_Full =>
+          Length (Transform_Distinct'Result) = Length (S)
+          and then (for all E of S =>
+                      Contains (Transform_Distinct'Result, Transform_Item (E)))
+          and then
+              (for all E of Transform_Distinct'Result =>
+                 (for some F of S =>
+                    Equivalent_Elements (E, Transform_Item (F)))));
 
    function Transform
      (S              : Set;
@@ -151,18 +161,21 @@ is
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Pre      =>
-       (for all E1 of S =>
-          (for all E2 of S =>
-             (if Equivalent_Elements (E1, E2)
-              then Equivalent_Elements
-                (Transform_Item (E1), Transform_Item (E2))))),
-     Post     => Length (Transform'Result) <= Length (S)
-       and then (for all E of S =>
-                   Contains (Transform'Result, Transform_Item (E)))
-       and then
-           (for all E of Transform'Result =>
-              (for some F of S =>
-                 Equivalent_Elements (E, Transform_Item (F))));
+       (SPARKlib_Full =>
+          (for all E1 of S =>
+             (for all E2 of S =>
+                (if Equivalent_Elements (E1, E2)
+                 then Equivalent_Elements
+                   (Transform_Item (E1), Transform_Item (E2)))))),
+     Post     =>
+       (SPARKlib_Full =>
+          Length (Transform'Result) <= Length (S)
+          and then (for all E of S =>
+                      Contains (Transform'Result, Transform_Item (E)))
+          and then
+              (for all E of Transform'Result =>
+                 (for some F of S =>
+                    Equivalent_Elements (E, Transform_Item (F)))));
 
    procedure Lemma_Transform_Distinct
      (S              : Set;
@@ -172,7 +185,8 @@ is
    --  The result of Transform contains New_Length elements if Transform_Item
    --  never collapses elements of S.
 
-   with Ghost,
+   with
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Pre      =>
@@ -193,8 +207,8 @@ is
    with
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
-     Pre      => Eq_Compatible (S, Test),
-     Post     => Count'Result <= Length (S);
+     Pre      => (SPARKlib_Full => Eq_Compatible (S, Test)),
+     Post     => (SPARKlib_Full => Count'Result <= Length (S));
 
    procedure Lemma_Count_Eq
      (S1, S2 : Set;
@@ -202,7 +216,8 @@ is
    --  Automatically instantiated lemma:
    --  Count returns the same value on sets containing the same elements.
 
-   with Ghost,
+   with
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Annotate => (GNATprove, Automatic_Instantiation),
@@ -216,7 +231,8 @@ is
    --  Automatically instantiated lemma:
    --  Recursive definition of Count on for any element in S.
 
-   with Ghost,
+   with
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Annotate => (GNATprove, Automatic_Instantiation),
@@ -231,7 +247,8 @@ is
    --  Additional lemma:
    --  Count returns Length (S) if Test returns True on all elements of S.
 
-   with Ghost,
+   with
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Pre      => (for all E of S => Test (E)),
@@ -243,7 +260,8 @@ is
    --  Additional lemma:
    --  Count returns 0 if Test returns False on all elements of S.
 
-   with Ghost,
+   with
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Pre      => (for all E of S => not Test (E)),
@@ -260,12 +278,14 @@ is
    with
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
-     Pre      => Eq_Compatible (S, Test),
-     Post     => Length (Filter'Result) = Count (S, Test)
-       and then Filter'Result <= S
-       and then (for all E of Filter'Result => Test (E))
-       and then
-         (for all E of S => (if Test (E) then Contains (Filter'Result, E)));
+     Pre      => (SPARKlib_Full => Eq_Compatible (S, Test)),
+     Post     =>
+       (SPARKlib_Full => Length (Filter'Result) = Count (S, Test)
+          and then Filter'Result <= S
+          and then (for all E of Filter'Result => Test (E))
+          and then
+            (for all E of S =>
+               (if Test (E) then Contains (Filter'Result, E))));
 
    function Sum
      (S     : Set;
@@ -278,7 +298,7 @@ is
    with
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
-     Pre      => Eq_Compatible (S, Value);
+     Pre      => (SPARKlib_Full => Eq_Compatible (S, Value));
 
    procedure Lemma_Sum_Eq
      (S1, S2 : Set;
@@ -286,7 +306,8 @@ is
    --  Automatically instantiated lemma:
    --  Sum returns the same value on sets containing the same elements.
 
-   with Ghost,
+   with
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Annotate => (GNATprove, Automatic_Instantiation),
@@ -300,7 +321,8 @@ is
    --  Automatically instantiated lemma:
    --  Recursive definition of Sum for any element of S.
 
-   with Ghost,
+   with
+     Ghost    => SPARKlib_Full,
      Global   => null,
      Annotate => (GNATprove, Higher_Order_Specialization),
      Annotate => (GNATprove, Automatic_Instantiation),

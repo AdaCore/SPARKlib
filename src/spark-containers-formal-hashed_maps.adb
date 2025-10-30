@@ -1,21 +1,20 @@
 --
---  Copyright (C) 2004-2024, Free Software Foundation, Inc.
+--  Copyright (C) 2004-2025, Free Software Foundation, Inc.
 --
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
-with Ada.Containers.Hash_Tables.Generic_Formal_Operations;
-with Ada.Containers.Hash_Tables.Generic_Formal_Keys;
-with Ada.Containers.Prime_Numbers; use Ada.Containers.Prime_Numbers;
+pragma Ada_2022;
+
+with SPARK.Containers.Formal.Hash_Tables.Generic_Operations;
+with SPARK.Containers.Formal.Hash_Tables.Generic_Keys;
+with SPARK.Containers.Formal.Hash_Tables.Prime_Numbers;
+use SPARK.Containers.Formal.Hash_Tables.Prime_Numbers;
 with System; use type System.Address;
 
 package body SPARK.Containers.Formal.Hashed_Maps with
   SPARK_Mode => Off
 is
-   --  Contracts in this unit are meant for analysis only, not for run-time
-   --  checking.
-
-   pragma Assertion_Policy (Ignore);
 
    -----------------------
    -- Local Subprograms --
@@ -48,21 +47,19 @@ is
    pragma Inline (Set_Next);
 
    function Vet (Container : Map; Position : Cursor) return Boolean
-     with Inline;
+     with Ghost, Inline;
 
    --------------------------
    -- Local Instantiations --
    --------------------------
 
-   package HT_Ops is
-     new Hash_Tables.Generic_Formal_Operations
+   package HT_Ops is new Hash_Tables.Generic_Operations
        (HT_Types  => HT_Types,
         Hash_Node => Hash_Node,
         Next      => Next,
         Set_Next  => Set_Next);
 
-   package Key_Ops is
-     new Hash_Tables.Generic_Formal_Keys
+   package Key_Ops is new Hash_Tables.Generic_Keys
        (HT_Types        => HT_Types,
         Next            => Next,
         Set_Next        => Set_Next,
@@ -395,17 +392,6 @@ is
 
    package body Formal_Model is
 
-      -------------------------
-      -- Element_Logic_Equal --
-      -------------------------
-
-      function Element_Logic_Equal (Left, Right : Element_Type) return Boolean
-      is
-      begin
-         Check_Or_Fail;
-         return Left = Right;
-      end Element_Logic_Equal;
-
       ----------
       -- Find --
       ----------
@@ -441,16 +427,6 @@ is
 
          return True;
       end K_Keys_Included;
-
-      ---------------------
-      -- Key_Logic_Equal --
-      ---------------------
-
-      function Key_Logic_Equal (Left, Right : Key_Type) return Boolean is
-      begin
-         Check_Or_Fail;
-         return Equivalent_Keys (Left, Right);
-      end Key_Logic_Equal;
 
       ----------
       -- Keys --
@@ -493,8 +469,9 @@ is
             if not P.Has_Key (P_Right, C)
               or else P.Get (P_Left,  C) > K.Last (K_Left)
               or else P.Get (P_Right, C) > K.Last (K_Right)
-              or else K.Get (K_Left,  P.Get (P_Left,  C)) /=
-                      K.Get (K_Right, P.Get (P_Right, C))
+              or else not Key_Logic_Equal
+                (K.Get (K_Left,  P.Get (P_Left,  C)),
+                 K.Get (K_Right, P.Get (P_Right, C)))
             then
                return False;
             end if;
@@ -816,25 +793,25 @@ is
    ---------------
 
    function Reference
-     (Container : not null access Map;
+     (Container : aliased in out Map;
       Position  : Cursor) return not null access Element_Type
    is
    begin
-      if not Has_Element (Container.all, Position) then
+      if not Has_Element (Container, Position) then
          raise Constraint_Error with "Position cursor has no element";
       end if;
 
       pragma Assert
-        (Vet (Container.all, Position), "bad cursor in function Reference");
+        (Vet (Container, Position), "bad cursor in function Reference");
 
       return Container.Content.Nodes (Position.Node).Element'Access;
    end Reference;
 
    function Reference
-     (Container : not null access Map;
+     (Container : aliased in out Map;
       Key       : Key_Type) return not null access Element_Type
    is
-      Node : constant Count_Type := Find (Container.all, Key).Node;
+      Node : constant Count_Type := Find (Container, Key).Node;
 
    begin
       if Node = 0 then

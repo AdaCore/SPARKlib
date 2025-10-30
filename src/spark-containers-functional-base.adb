@@ -1,5 +1,5 @@
 --
---  Copyright (C) 2016-2024, Free Software Foundation, Inc.
+--  Copyright (C) 2016-2025, Free Software Foundation, Inc.
 --
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
@@ -175,7 +175,7 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
                         Max_Length      => 0,
                         Elements        => Elements);
    begin
-      return (Base_Type with Base => B);
+      return Create (B);
    end Content_Init;
 
    ------------------
@@ -188,7 +188,7 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
         new Refcounted_Element'(Reference_Count => 1,
                                 E_Access        => new Element_Type'(E));
    begin
-      return (Base_Type with Ref => Refcounted_E);
+      return Create (Refcounted_E);
    end Element_Init;
 
    --------------

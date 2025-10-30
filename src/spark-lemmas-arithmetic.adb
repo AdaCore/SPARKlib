@@ -1,5 +1,5 @@
 --
---  Copyright (C) 2016-2024, AdaCore
+--  Copyright (C) 2016-2025, AdaCore
 --
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
@@ -76,9 +76,9 @@ is
       pragma Unreferenced (Scale_Num, Scale_Denom);
    begin
       if Res >= 0 then
-         pragma Assert (abs (Big (Res)) <= abs (Big (Val)));
+         pragma Assert (abs Big (Res) <= abs Big (Val));
       else
-         pragma Assert (abs (Big (Res)) <= abs (Big (Val)));
+         pragma Assert (abs Big (Res) <= abs Big (Val));
       end if;
    end Lemma_Mult_Scale;
 

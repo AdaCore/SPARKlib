@@ -1,5 +1,5 @@
 --
---  Copyright (C) 2018-2024, AdaCore
+--  Copyright (C) 2018-2025, AdaCore
 --
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
@@ -15,7 +15,7 @@ generic
    type Fix is delta <>;
 package SPARK.Lemmas.Fixed_Point_Arithmetic
   with Pure,
-       Ghost,
+       Ghost => Static,
        Always_Terminates
 is
 

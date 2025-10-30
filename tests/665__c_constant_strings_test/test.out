@@ -1,0 +1,51 @@
+test_constant_string.adb:21:27: info: precondition proved (CVC5: 1 VC)
+test_constant_string.adb:23:10: info: precondition proved (CVC5: 1 VC)
+test_constant_string.adb:28:41: medium: resource or memory leak might occur [possible explanation: allocator for an access-to-constant type leaks memory]
+test_constant_string.adb:29:27: info: precondition proved (CVC5: 1 VC)
+test_constant_string.adb:31:10: info: precondition proved (CVC5: 1 VC)
+test_constant_string.adb:31:18: info: precondition proved (CVC5: 1 VC)
+test_constant_string.adb:37:41: medium: resource or memory leak might occur [possible explanation: allocator for an access-to-constant type leaks memory]
+test_constant_string.adb:37:59: info: range check proved (CVC5: 1 VC)
+test_constant_string.adb:38:27: info: precondition proved (CVC5: 1 VC)
+test_constant_string.adb:40:10: info: precondition proved (Z3: 1 VC)
+test_constant_string.adb:40:18: info: precondition proved (CVC5: 1 VC)
+test_constant_string.adb:40:38: info: no contextual analysis of "Test_To_Chars_Ptr" (call returns unconstrained type)
+test_constant_string.adb:40:38: info: precondition proved (CVC5: 1 VC)
+test_constant_string.adb:40:52: info: range check proved (CVC5: 1 VC)
+test_constant_string.adb:46:38: medium: resource or memory leak might occur [possible explanation: allocator for an access-to-constant type leaks memory]
+test_constant_string.adb:47:24: info: precondition proved (CVC5: 1 VC)
+test_constant_string.adb:48:25: info: no contextual analysis of "Test_Value" (call returns unconstrained type)
+test_constant_string.adb:48:25: info: precondition proved (CVC5: 1 VC)
+test_constant_string.adb:50:07: info: precondition proved (CVC5: 1 VC)
+test_constant_string.adb:51:07: info: precondition proved (Z3: 1 VC)
+test_constant_string.adb:56:38: medium: resource or memory leak might occur [possible explanation: allocator for an access-to-constant type leaks memory]
+test_constant_string.adb:57:24: info: precondition proved (CVC5: 1 VC)
+test_constant_string.adb:62:28: info: no contextual analysis of "Test_Value_Length" (call returns unconstrained type)
+test_constant_string.adb:62:28: info: precondition proved (CVC5: 2 VC)
+test_constant_string.adb:64:10: info: precondition proved (CVC5: 1 VC)
+test_constant_string.adb:65:10: info: precondition proved (Z3: 1 VC)
+test_constant_string.adb:70:28: info: precondition proved (CVC5: 2 VC)
+test_constant_string.adb:72:10: info: precondition proved (CVC5: 1 VC)
+test_constant_string.adb:73:10: info: precondition proved (Z3: 1 VC)
+test_constant_string.adb:79:38: medium: resource or memory leak might occur [possible explanation: allocator for an access-to-constant type leaks memory]
+test_constant_string.adb:80:24: info: precondition proved (CVC5: 1 VC)
+test_constant_string.adb:81:21: info: no contextual analysis of "Test_Value_String" (call returns unconstrained type)
+test_constant_string.adb:81:21: info: precondition proved (CVC5: 2 VC)
+test_constant_string.adb:83:07: info: precondition proved (CVC5: 1 VC)
+test_constant_string.adb:84:07: info: precondition proved (Z3: 1 VC)
+test_constant_string.adb:89:38: medium: resource or memory leak might occur [possible explanation: allocator for an access-to-constant type leaks memory]
+test_constant_string.adb:90:24: info: precondition proved (CVC5: 1 VC)
+test_constant_string.adb:95:24: info: no contextual analysis of "Test_Value_String_Length" (call returns unconstrained type)
+test_constant_string.adb:95:24: info: precondition proved (CVC5: 3 VC)
+test_constant_string.adb:97:10: info: precondition proved (CVC5: 1 VC)
+test_constant_string.adb:98:10: info: precondition proved (Z3: 1 VC)
+test_constant_string.adb:103:24: info: precondition proved (CVC5: 3 VC)
+test_constant_string.adb:105:10: info: precondition proved (CVC5: 1 VC)
+test_constant_string.adb:106:10: medium: precondition might fail
+test_constant_string.adb:110:14: info: add a contract to analyze it separately from calling contexts
+test_constant_string.adb:110:14: info: local subprogram "Test_Strlen" only analyzed in the context of calls [info-unrolling-inlining]
+test_constant_string.adb:112:38: medium: resource or memory leak might occur, in call inlined at test_constant_string.adb:124 [possible explanation: allocator for an access-to-constant type leaks memory]
+test_constant_string.adb:113:24: info: precondition proved (CVC5: 1 VC), in call inlined at test_constant_string.adb:124
+test_constant_string.adb:115:07: info: precondition proved (CVC5: 1 VC), in call inlined at test_constant_string.adb:124
+test_constant_string.adb:115:15: info: precondition proved (CVC5: 1 VC), in call inlined at test_constant_string.adb:124
+test_constant_string.adb:124:04: info: analyzing call to "Test_Strlen" in context

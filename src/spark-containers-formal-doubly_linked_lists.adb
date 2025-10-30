@@ -1,8 +1,10 @@
 --
---  Copyright (C) 2004-2024, Free Software Foundation, Inc.
+--  Copyright (C) 2004-2025, Free Software Foundation, Inc.
 --
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
+
+pragma Ada_2022;
 
 with SPARK.Containers.Stable_Sorting; use SPARK.Containers.Stable_Sorting;
 with System; use type System.Address;
@@ -10,10 +12,6 @@ with System; use type System.Address;
 package body SPARK.Containers.Formal.Doubly_Linked_Lists with
   SPARK_Mode => Off
 is
-   --  Contracts in this unit are meant for analysis only, not for run-time
-   --  checking.
-
-   pragma Assertion_Policy (Ignore);
 
    -----------------------
    -- Local Subprograms --
@@ -475,17 +473,6 @@ is
 
    package body Formal_Model is
 
-      -------------------------
-      -- Element_Logic_Equal --
-      -------------------------
-
-      function Element_Logic_Equal (Left, Right : Element_Type) return Boolean
-      is
-      begin
-         Check_Or_Fail;
-         return Left = Right;
-      end Element_Logic_Equal;
-
       ----------------------------
       -- Lift_Abstraction_Level --
       ----------------------------
@@ -693,13 +680,13 @@ is
          Count : Count_Type := 1) return Boolean
       is
       begin
-         for Cu of Small loop
+         for Cu of P.Iterate (Small) loop
             if not P.Has_Key (Big, Cu) then
                return False;
             end if;
          end loop;
 
-         for Cu of Big loop
+         for Cu of P.Iterate (Big) loop
             declare
                Pos : constant Positive_Count_Type := P.Get (Big, Cu);
 
@@ -754,13 +741,13 @@ is
             return False;
          end if;
 
-         for C of Left loop
+         for C of P.Iterate (Left) loop
             if not P.Has_Key (Right, C) then
                return False;
             end if;
          end loop;
 
-         for C of Right loop
+         for C of P.Iterate (Right) loop
             if not P.Has_Key (Left, C)
               or else (C /= X
                         and C /= Y
@@ -784,13 +771,13 @@ is
          Count : Count_Type := 1) return Boolean
       is
       begin
-         for Cu of Small loop
+         for Cu of P.Iterate (Small) loop
             if not P.Has_Key (Big, Cu) then
                return False;
             end if;
          end loop;
 
-         for Cu of Big loop
+         for Cu of P.Iterate (Big) loop
             declare
                Pos : constant Positive_Count_Type := P.Get (Big, Cu);
 
@@ -884,11 +871,6 @@ is
    ---------------------
 
    package body Generic_Sorting with SPARK_Mode => Off is
-
-      --  Contracts in this unit are meant for analysis only, not for run-time
-      --  checking.
-
-      pragma Assertion_Policy (Ignore);
 
       ------------------
       -- Formal_Model --
@@ -1255,7 +1237,8 @@ is
 
    begin
       if Target'Address = Source'Address then
-         return;
+         raise Program_Error with
+           "Source and Target are aliases";
       end if;
 
       if Target.Capacity < Source.Length then
@@ -1390,11 +1373,11 @@ is
    ---------------
 
    function Reference
-     (Container : not null access List;
+     (Container : aliased in out List;
       Position  : Cursor) return not null access Element_Type
    is
    begin
-      if not Has_Element (Container.all, Position) then
+      if not Has_Element (Container, Position) then
          raise Constraint_Error with "Position cursor has no element";
       end if;
 
@@ -1556,6 +1539,10 @@ is
          pragma Assert (Vet (Target, Before), "bad cursor in Splice");
       end if;
 
+      if Source.Length = 0 then
+         return;
+      end if;
+
       pragma Assert (SN (Source.First).Prev = 0);
       pragma Assert (SN (Source.Last).Next  = 0);
 
@@ -1568,8 +1555,8 @@ is
       end if;
 
       loop
-         Insert (Target, Before, SN (Source.Last).Element);
-         Delete_Last (Source);
+         Insert (Target, Before, SN (Source.First).Element);
+         Delete_First (Source);
          exit when Is_Empty (Source);
       end loop;
    end Splice;

@@ -1,5 +1,5 @@
 --
---  Copyright (C) 2018-2024, AdaCore
+--  Copyright (C) 2018-2025, AdaCore
 --
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
@@ -313,7 +313,7 @@ package SPARK.Higher_Order.Fold with SPARK_Mode is
         Pre => In_Range (To_Big (Left) + To_Big (Right));
       --  Axiom: Add does not overflow if the result of the addition on big
       --  integers is in range.
-      pragma Annotate (GNATprove, Inline_For_Proof, "+");
+      pragma Annotate (GNATprove, Inline_For_Proof, Entity => "+");
 
       procedure Prove_Add (Left, Right : Element_Out)
       with
@@ -347,7 +347,7 @@ package SPARK.Higher_Order.Fold with SPARK_Mode is
          function Add_Value (X : Element_In; Y : Big_Integer) return
            Big_Integer
          is (To_Big (Value (X)) + Y);
-         pragma Annotate (GNATprove, Inline_For_Proof, Add_Value);
+         pragma Annotate (GNATprove, Inline_For_Proof, Entity => Add_Value);
 
          package Sum_Left is new Fold_Left
            (Index_Type  => Index_Type,
@@ -428,7 +428,7 @@ package SPARK.Higher_Order.Fold with SPARK_Mode is
       function Add_One (E : Element; X : Natural) return Natural
       is (if Choose (E) then X + 1 else X)
       with Pre => X < Integer'Last;
-      pragma Annotate (GNATprove, Inline_For_Proof, Add_One);
+      pragma Annotate (GNATprove, Inline_For_Proof, Entity => Add_One);
 
       package Count_Left is new Fold_Left
         (Index_Type  => Index_Type,
@@ -620,7 +620,7 @@ package SPARK.Higher_Order.Fold with SPARK_Mode is
         Pre => In_Range (To_Big (Left) + To_Big (Right));
       --  Axiom: Add does not overflow if the result of the addition on big
       --  integers is in range.
-      pragma Annotate (GNATprove, Inline_For_Proof, "+");
+      pragma Annotate (GNATprove, Inline_For_Proof, Entity => "+");
 
       procedure Prove_Add (Left, Right : Element_Out)
       with
@@ -658,7 +658,7 @@ package SPARK.Higher_Order.Fold with SPARK_Mode is
          function Add_Value (X : Element_In; Y : Big_Integer) return
            Big_Integer
          is (To_Big (Value (X)) + Y);
-         pragma Annotate (GNATprove, Inline_For_Proof, Add_Value);
+         pragma Annotate (GNATprove, Inline_For_Proof, Entity => Add_Value);
 
          package Fold_Sum is new Fold_2
            (Index_1     => Index_1,
@@ -759,7 +759,7 @@ package SPARK.Higher_Order.Fold with SPARK_Mode is
       is (if Choose (E) then X + 1 else X)
       with Pre => X < Integer'Last,
         Post => Add_One'Result = (if Choose (E) then X + 1 else X);
-      pragma Annotate (GNATprove, Inline_For_Proof, Add_One);
+      pragma Annotate (GNATprove, Inline_For_Proof, Entity => Add_One);
 
       function Result_In_Range
         (A : Array_Type; X : Natural) return Boolean

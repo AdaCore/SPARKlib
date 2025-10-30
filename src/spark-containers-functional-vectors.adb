@@ -1,5 +1,5 @@
 --
---  Copyright (C) 2016-2024, Free Software Foundation, Inc.
+--  Copyright (C) 2016-2025, Free Software Foundation, Inc.
 --
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
@@ -121,7 +121,6 @@ package body SPARK.Containers.Functional.Vectors with SPARK_Mode => Off is
 
    function Element_Logic_Equal (Left, Right : Element_Type) return Boolean is
    begin
-      Check_Or_Fail;
       return Left = Right;
    end Element_Logic_Equal;
 
@@ -131,6 +130,18 @@ package body SPARK.Containers.Functional.Vectors with SPARK_Mode => Off is
 
    function Empty_Sequence return Sequence is
       ((others => <>));
+
+   -----------
+   -- Equal --
+   -----------
+
+   function Equal (Left : Sequence; Right : Sequence) return Boolean is
+     (Length (Left.Content) = Length (Right.Content)
+       and then
+        (Ptr_Eq (Left.Content, Right.Content)
+         or else (for all I in Index_Type'First .. Last (Left) =>
+              Element_Logic_Equal
+                (Get (Left.Content, I), Get (Right.Content, I)))));
 
    ------------------
    -- Equal_Except --

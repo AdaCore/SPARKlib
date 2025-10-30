@@ -1,5 +1,5 @@
 --
---  Copyright (C) 2024-2024, Free Software Foundation, Inc.
+--  Copyright (C) 2024-2025, Free Software Foundation, Inc.
 --
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
@@ -126,8 +126,9 @@ is
      Global => null;
 
    procedure Free (Item : in out chars_ptr) with
-     Post   => Item = Null_Ptr,
-     Global => null;
+     Post    => Item = Null_Ptr,
+     Global  => null,
+     Depends => (Item => null, null => Item);
    --  When deallocation is prohibited (eg: cert runtimes) this routine
    --  will raise Program_Error.
 
