@@ -1,7 +1,4 @@
 from test_support import prove_all, sparklib_exec_test
-import os
-
-os.environ["SPARKLIB_BODY_MODE"] = "On"
 
 
 if __name__ == "__main__":
@@ -9,6 +6,7 @@ if __name__ == "__main__":
         counterexample=False,
         sparklib=True,
         opt=["-u", "inst.ads", "test.adb", "test_resize.adb"],
+        sparklib_bodymode=True,
     )
 
     sparklib_exec_test()

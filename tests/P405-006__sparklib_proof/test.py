@@ -22,7 +22,6 @@ def copy_proof_files():
 copy_project_file()
 copy_lemma_files()
 copy_proof_files()
-os.environ["SPARKLIB_BODY_MODE"] = "On"
 os.environ["SPARKLIB_INSTALLED"] = "False"
 
 prove_all(
@@ -32,4 +31,5 @@ prove_all(
     #  We need to remove useless coq warning for Grammar extension
     filter_output=".*Grammar extension",
     filter_sparklib=False,
+    sparklib_bodymode=True,
 )
