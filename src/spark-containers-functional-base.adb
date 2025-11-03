@@ -48,10 +48,10 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
       I   : Count_Type)
       return Element_Access
    is
-     (C_E (I).Ref.E_Access)
+     (Get (C_E (I)))
    with
      Global => null,
-     Pre    => C_E /= null and then C_E (I).Ref /= null;
+     Pre    => C_E /= null;
 
    ----------
    -- "<=" --
@@ -109,7 +109,7 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
       if To_Count (I) = C.Length + 1 and then C.Length = C_B.Max_Length then
          Resize (C_B);
          C_B.Max_Length := C_B.Max_Length + 1;
-         C_B.Elements (C_B.Max_Length) := Element_Init (E);
+         C_B.Elements (C_B.Max_Length) := Create_Holder (E);
 
          return Container'(Length          => C_B.Max_Length,
                            Controlled_Base => C.Controlled_Base);
@@ -125,7 +125,7 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
                   P := P + 1;
                   A.Base.Elements (J) := C_B.Elements (P);
                else
-                  A.Base.Elements (J) := Element_Init (E);
+                  A.Base.Elements (J) := Create_Holder (E);
                end if;
             end loop;
 
@@ -144,13 +144,6 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
    begin
       if C_B /= null then
          C_B.Reference_Count := C_B.Reference_Count + 1;
-      end if;
-   end Adjust;
-
-   procedure Adjust (Ctrl_E : in out Controlled_Element_Access) is
-   begin
-      if Ctrl_E.Ref /= null then
-         Ctrl_E.Ref.Reference_Count := Ctrl_E.Ref.Reference_Count + 1;
       end if;
    end Adjust;
 
@@ -178,19 +171,6 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
       return Create (B);
    end Content_Init;
 
-   ------------------
-   -- Element_Init --
-   ------------------
-
-   function Element_Init (E : Element_Type) return Controlled_Element_Access
-   is
-      Refcounted_E : constant Refcounted_Element_Access :=
-        new Refcounted_Element'(Reference_Count => 1,
-                                E_Access        => new Element_Type'(E));
-   begin
-      return Create (Refcounted_E);
-   end Element_Init;
-
    --------------
    -- Finalize --
    --------------
@@ -213,26 +193,6 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
             Unchecked_Free_Base (Controlled_Base.Base);
          end if;
          C_B := null;
-      end if;
-   end Finalize;
-
-   procedure Finalize (Ctrl_E : in out Controlled_Element_Access) is
-      procedure Unchecked_Free_Ref is new Ada.Unchecked_Deallocation
-        (Object => Refcounted_Element,
-         Name   => Refcounted_Element_Access);
-
-      procedure Unchecked_Free_Element is new Ada.Unchecked_Deallocation
-        (Object => Element_Type,
-         Name   => Element_Access);
-
-   begin
-      if Ctrl_E.Ref /= null then
-         Ctrl_E.Ref.Reference_Count := Ctrl_E.Ref.Reference_Count - 1;
-         if Ctrl_E.Ref.Reference_Count = 0 then
-            Unchecked_Free_Element (Ctrl_E.Ref.E_Access);
-            Unchecked_Free_Ref (Ctrl_E.Ref);
-         end if;
-         Ctrl_E.Ref := null;
       end if;
    end Finalize;
 
@@ -409,7 +369,7 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
    begin
       R_Base.Max_Length := C.Length;
       R_Base.Elements (1 .. C.Length) := Elements (C) (1 .. C.Length);
-      R_Base.Elements (To_Count (I)) := Element_Init (E);
+      R_Base.Elements (To_Count (I)) := Create_Holder (E);
       return Result;
    end Set;
 
