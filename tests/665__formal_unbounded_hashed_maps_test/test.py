@@ -1,7 +1,6 @@
 from test_support import prove_all, sparklib_exec_test
 import os
 
-contains_manual_proof = False
 os.environ["SPARKLIB_BODY_MODE"] = "On"
 
 
