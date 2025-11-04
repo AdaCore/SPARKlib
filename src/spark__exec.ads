@@ -4,7 +4,7 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
---  This unit is meant to replace SPARK for internal testing only
+--  This file replaces spark.ads for testing in "body mode"
 
 pragma Assertion_Level (SPARKlib_Defensive);
 pragma Assertion_Level (SPARKlib_Logic);
