@@ -85,12 +85,9 @@ is
    pragma Inline (Set_Next);
    --  Set the node following Node. Useb by Hash_Tables operation's functions.
 
-   function Vet
-     (Container : Set; Position : Cursor)
-      return Boolean
-             --  Check if Position is correct in Container
-
+   function Vet (Container : Set; Position : Cursor) return Boolean
    with Inline;
+   --  Check if Position is correct in Container
 
    procedure Resize (Container : in out Set; Size : Count_Type := 0)
    with
