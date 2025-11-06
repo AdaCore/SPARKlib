@@ -311,6 +311,7 @@ is
             pragma Loop_Invariant
               (if Count_Rec (Subset, Test) = Length (Subset)
                then Count_Rec (S, Test) = Length (S));
+            pragma Assert (Test (Choose (Subset)));
          end loop;
       end Do_Proof;
 
