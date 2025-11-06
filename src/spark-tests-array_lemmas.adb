@@ -6,16 +6,9 @@
 
 with SPARK.Lemmas.Unconstrained_Array;
 
-pragma Style_Checks (Off);
 package body SPARK.Tests.Array_Lemmas
-  with SPARK_Mode =>
-#if SPARK_BODY_MODE="On"
-  On
-#else
-  Off
-#end if;
+  with SPARK_Mode => Off --  #BODYMODE
 is
-   pragma Style_Checks (On);
    pragma Warnings
      (Off, "postcondition does not check the outcome of calling");
 

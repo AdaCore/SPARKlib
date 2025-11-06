@@ -3,7 +3,7 @@ with "sparklib";
 project Test is
 
    package Compiler is
-      for Default_Switches ("Ada") use ("-gnata","-gnateDSPARK_BODY_MODE=On");
+      for Default_Switches ("Ada") use ("-gnata");
    end Compiler;
    package Prove is
       for Proof_Dir use "proof";

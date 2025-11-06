@@ -23,28 +23,10 @@ project SPARKlib_Light_Internal is
          for Object_Dir use "obj";
    end case;
 
-   SPARK_Body_Mode : SPARKlib_common.SPARK_Body_Mode_T := SPARKlib_common.SPARK_Body_Mode;
-
    package Compiler renames SPARKlib_common.Compiler;
 
    package Prove renames SPARKlib_common.Prove;
 
    Common_Default_Switches := SPARKlib_Common.Common_Default_Switches;
-
-   case SPARK_Body_Mode is
-      when "On" =>
-         for Excluded_Source_Files use ("spark.ads");
-      when "Off" =>
-         for Excluded_Source_Files use ("spark__exec.ads");
-   end case;
-
-   package Naming is
-      case SPARK_Body_Mode is
-         when "On" =>
-            for Spec ("SPARK") use "spark__exec.ads";
-         when "Off" =>
-            null;
-      end case;
-   end Naming;
 
 end SPARKlib_Light_Internal;

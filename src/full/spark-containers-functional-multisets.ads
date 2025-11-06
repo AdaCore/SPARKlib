@@ -560,13 +560,7 @@ is
                     Nb_Occurence (Container'Old, E))));
 
 private
-pragma Style_Checks (Off);
-
-#if SPARK_BODY_MODE="Off"
-   pragma SPARK_Mode (Off);
-#end if;
-pragma Style_Checks (On);
-
+   pragma SPARK_Mode (Off); --  #BODYMODE
    package Maps is new SPARK.Containers.Functional.Maps
      (Key_Type                   => Element_Type,
       Element_Type               => Big_Positive,
