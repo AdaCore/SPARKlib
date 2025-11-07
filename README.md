@@ -14,3 +14,19 @@ blog](https://blog.adacore.com/).
 
 Documentation about what is provided in the SPARKlib and how to use it can be
 found in the [SPARK User's Guide](https://docs.adacore.com/spark2014-docs/html/ug/en/source/spark_libraries.html#spark-library).
+
+# 4. Testing
+
+Some units or subprograms are in `SPARK_Mode => Off` for regular use, but
+`SPARK_Mode` should be enabled for specific tests. For this use case, these
+tests use sparklib in a special body mode. In this mode, the marked subprograms
+are moved to `SPARK_Mode => On` via a script. The following patterns are
+recognized:
+```
+   pragma SPARK_Mode (Off); --  #BODYMODE
+```
+and
+
+```
+  with SPARK_Mode => Off --  #BODYMODE
+```
