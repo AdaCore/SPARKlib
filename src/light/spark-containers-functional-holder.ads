@@ -18,8 +18,8 @@ private generic
    type Element_Type (<>) is private;
 
 package SPARK.Containers.Functional.Holder with
-  SPARK_Mode => Off,
-  Ghost      => SPARKlib_Logic
+    SPARK_Mode => Off,
+    Ghost      => SPARKlib_Logic
 is
 
    type Element_Access is access all Element_Type;
@@ -28,8 +28,7 @@ is
 
    function Create_Holder (E : Element_Type) return Element_Holder;
 
-   function Get
-     (E : Element_Holder) return not null Element_Access;
+   function Get (E : Element_Holder) return not null Element_Access;
 
 private
 
@@ -46,16 +45,11 @@ private
       Ref : Refcounted_Element_Access := null;
    end record;
 
-   function Create
-     (R : Refcounted_Element_Access)
-      return Element_Holder
-   is
-     (Ref => R);
+   function Create (R : Refcounted_Element_Access) return Element_Holder
+   is (Ref => R);
 
-   procedure Adjust
-     (Ctrl_E : in out Element_Holder);
+   procedure Adjust (Ctrl_E : in out Element_Holder);
 
-   procedure Finalize
-     (Ctrl_E : in out Element_Holder);
+   procedure Finalize (Ctrl_E : in out Element_Holder);
 
 end SPARK.Containers.Functional.Holder;

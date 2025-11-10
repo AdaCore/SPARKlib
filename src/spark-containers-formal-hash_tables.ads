@@ -22,10 +22,10 @@ private package SPARK.Containers.Formal.Hash_Tables is
 
       type Hash_Table_Type
         (Capacity : Count_Type;
-         Modulus  : Hash_Type) is
-      record
-         Length  : Count_Type                  := 0;
-         Free    : Count_Type'Base             := -1;
+         Modulus  : Hash_Type)
+      is record
+         Length  : Count_Type := 0;
+         Free    : Count_Type'Base := -1;
          Nodes   : Nodes_Type (1 .. Capacity);
          Buckets : Buckets_Type (1 .. Modulus) := [others => 0];
       end record;

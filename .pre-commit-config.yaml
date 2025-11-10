@@ -38,3 +38,12 @@ repos:
     rev: 25.1.0
     hooks:
     - id: black
+  - repo: local
+    hooks:
+      - id: check-gnatformat-gnatprove
+        name: Check for Ada formatting
+        files: ^src/.*\.ad(b|s)$
+        env:
+          SPARKLIB_INSTALLED: 'False'
+        language: system
+        entry: gnatformat -P sparklib_internal.gpr

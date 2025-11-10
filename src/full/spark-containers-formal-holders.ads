@@ -11,7 +11,8 @@ private with Ada.Finalization;
 private generic
    type Element_Type (<>) is private;
 
-package SPARK.Containers.Formal.Holders is
+package SPARK.Containers.Formal.Holders
+is
 
    type Element_Type_Access is access Element_Type;
 
@@ -25,8 +26,7 @@ package SPARK.Containers.Formal.Holders is
    --  Return the stored access.
 
    procedure Replace_Element
-     (Container : in out Holder_Type;
-      Element   : Element_Type);
+     (Container : in out Holder_Type; Element : Element_Type);
    --  Replace the Holder's element by Element and do the required
 
    procedure Move (Target, Source : in out Holder_Type);
@@ -43,11 +43,10 @@ package SPARK.Containers.Formal.Holders is
 
 private
 
-   type Holder_Type is new Ada.Finalization.Controlled
-   with record
+   type Holder_Type is new Ada.Finalization.Controlled with record
       Element : Element_Type_Access;
    end record;
 
-   function Is_Null (Container : Holder_Type) return Boolean is
-     (Container.Element = null);
+   function Is_Null (Container : Holder_Type) return Boolean
+   is (Container.Element = null);
 end SPARK.Containers.Formal.Holders;

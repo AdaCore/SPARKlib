@@ -13,37 +13,33 @@ pragma Elaborate_All (SPARK.Containers.Formal.Hash_Tables.Generic_Keys);
 with SPARK.Containers.Formal.Hash_Tables.Prime_Numbers;
 use SPARK.Containers.Formal.Hash_Tables.Prime_Numbers;
 with Ada.Unchecked_Deallocation;
-with System; use type System.Address;
+with System;
+use type System.Address;
 
-package body SPARK.Containers.Formal.Unbounded_Hashed_Maps with
-  SPARK_Mode => Off
+package body SPARK.Containers.Formal.Unbounded_Hashed_Maps
+  with SPARK_Mode => Off
 is
 
    -----------------------
    -- Local Subprograms --
    -----------------------
 
-   function Default_Modulus (Capacity : Count_Type) return Hash_Type with
-     Global => null;
+   function Default_Modulus (Capacity : Count_Type) return Hash_Type
+   with Global => null;
 
-   function Equivalent_Keys
-     (Key  : Key_Type;
-      Node : Node_Type) return Boolean;
+   function Equivalent_Keys (Key : Key_Type; Node : Node_Type) return Boolean;
    --  Test if the key of Node is equivalent to Key using the function provided
    --  as a generic parameter.
 
    pragma Inline (Equivalent_Keys);
 
-   procedure Free
-     (HT : in out Map;
-      X  : Count_Type);
+   procedure Free (HT : in out Map; X : Count_Type);
    --  Cleanly remove a node from the Map and put it back in the free list
 
    generic
       with procedure Set_Element (Node : in out Node_Type);
    procedure Generic_Allocate
-     (HT   : in out HT_Types.Hash_Table_Type;
-      Node : out Count_Type);
+     (HT : in out HT_Types.Hash_Table_Type; Node : out Count_Type);
    --  Allocate a new node i.e get it out of the free list
 
    function Hash_Node (Node : Node_Type) return Hash_Type;
@@ -63,41 +59,42 @@ is
    pragma Inline (Set_Next);
 
    function Vet (Container : Map; Position : Cursor) return Boolean
+   with Inline;
    --  Check if Position is correct in Container
 
-     with Inline;
-
-   procedure Resize (Container : in out Map; Size : Count_Type := 0) with
-   --  Allocate a new larger Map
+   procedure Resize (Container : in out Map; Size : Count_Type := 0)
+   with
+     --  Allocate a new larger Map
 
      Global => null,
      Post   =>
        (SPARKlib_Full =>
           M.Equal (Model (Container), Model (Container)'Old)
-            and Mapping_Preserved
-              (K_Left  => Keys (Container)'Old,
-               K_Right => Keys (Container),
-               P_Left  => Positions (Container)'Old,
-               P_Right => Positions (Container)));
+          and Mapping_Preserved
+                (K_Left  => Keys (Container)'Old,
+                 K_Right => Keys (Container),
+                 P_Left  => Positions (Container)'Old,
+                 P_Right => Positions (Container)));
 
    --------------------------
    -- Local Instantiations --
    --------------------------
 
-   procedure Finalize_Content is new Ada.Unchecked_Deallocation
-     (Object => HT_Types.Hash_Table_Type,
-      Name   => HT_Access);
+   procedure Finalize_Content is new
+     Ada.Unchecked_Deallocation
+       (Object => HT_Types.Hash_Table_Type,
+        Name   => HT_Access);
    --  Deallocate a HT_Types.Hash_Table_Type
 
-   package HT_Ops is
-     new Hash_Tables.Generic_Operations
+   package HT_Ops is new
+     Hash_Tables.Generic_Operations
        (HT_Types  => HT_Types,
         Hash_Node => Hash_Node,
         Next      => Next,
         Set_Next  => Set_Next);
 
-   package Key_Ops is
-     new Hash_Tables.Generic_Keys
+   package Key_Ops is new
+     Hash_Tables.Generic_Keys
        (HT_Types        => HT_Types,
         Next            => Next,
         Set_Next        => Set_Next,
@@ -129,12 +126,12 @@ is
             ENode :=
               Find
                 (Container => Right,
-                 Key       =>
-                   KHT.Element (Left.Content.Nodes (Node).K_Holder)).Node;
+                 Key       => KHT.Element (Left.Content.Nodes (Node).K_Holder))
+                .Node;
 
-            if ENode = 0 or else
-              EHT.Element (Right.Content.Nodes (ENode).E_Holder) /=
-              EHT.Element (Left.Content.Nodes (Node).E_Holder)
+            if ENode = 0
+              or else EHT.Element (Right.Content.Nodes (ENode).E_Holder)
+                      /= EHT.Element (Left.Content.Nodes (Node).E_Holder)
             then
                return False;
             end if;
@@ -159,11 +156,11 @@ is
       declare
          New_Map : constant HT_Access :=
            new HT_Types.Hash_Table_Type
-             (Container.Content.Capacity, Container.Content.Modulus);
+                 (Container.Content.Capacity, Container.Content.Modulus);
 
       begin
          New_Map.Length := Container.Content.Length;
-         New_Map.Free   := Container.Content.Free;
+         New_Map.Free := Container.Content.Free;
 
          --  Copy the nodes. The call to Adjust will make a proper copy of
          --  the holders.
@@ -193,8 +190,8 @@ is
       procedure Insert_Element (Source_Node : Count_Type);
       pragma Inline (Insert_Element);
 
-      procedure Insert_Elements is
-        new HT_Ops.Generic_Iteration (Insert_Element);
+      procedure Insert_Elements is new
+        HT_Ops.Generic_Iteration (Insert_Element);
 
       --------------------
       -- Insert_Element --
@@ -206,7 +203,7 @@ is
          Insert (Target, KHT.Element (N.K_Holder), EHT.Element (N.E_Holder));
       end Insert_Element;
 
-   --  Start of processing for Assign
+      --  Start of processing for Assign
 
    begin
       HT_Ops.Clear (Target.Content.all);
@@ -227,32 +224,32 @@ is
    ------------------------
 
    function Constant_Reference
-     (Container : Map;
-      Position  : Cursor) return not null access constant Element_Type
-   is
+     (Container : Map; Position : Cursor)
+      return not null access constant Element_Type is
    begin
       if not Has_Element (Container, Position) then
          raise Constraint_Error with "Position cursor has no element";
       end if;
 
-      pragma Assert
-        (Vet (Container, Position),
-         "bad cursor in function Constant_Reference");
+      pragma
+        Assert
+          (Vet (Container, Position),
+           "bad cursor in function Constant_Reference");
 
       return
         EHT.Element_Access (Container.Content.Nodes (Position.Node).E_Holder);
    end Constant_Reference;
 
    function Constant_Reference
-     (Container : Map;
-      Key       : Key_Type) return not null access constant Element_Type
+     (Container : Map; Key : Key_Type)
+      return not null access constant Element_Type
    is
       Node : constant Count_Type := Find (Container, Key).Node;
 
    begin
       if Node = 0 then
-         raise Constraint_Error with
-           "no element available because key not in map";
+         raise Constraint_Error
+           with "no element available because key not in map";
       end if;
 
       return EHT.Element_Access (Container.Content.Nodes (Node).E_Holder);
@@ -271,8 +268,7 @@ is
    -- Copy --
    ----------
 
-   function Copy (Source : Map) return Map
-   is
+   function Copy (Source : Map) return Map is
       Target : Map;
 
    begin
@@ -316,8 +312,8 @@ is
    procedure Delete (Container : in out Map; Position : in out Cursor) is
    begin
       if not Has_Element (Container, Position) then
-         raise Constraint_Error with
-           "Position cursor of Delete has no element";
+         raise Constraint_Error
+           with "Position cursor of Delete has no element";
       end if;
 
       pragma Assert (Vet (Container, Position), "bad cursor in Delete");
@@ -337,8 +333,8 @@ is
 
    begin
       if Node = 0 then
-         raise Constraint_Error with
-           "no element available because key not in map";
+         raise Constraint_Error
+           with "no element available because key not in map";
       end if;
 
       return EHT.Element (Container.Content.Nodes (Node).E_Holder);
@@ -350,8 +346,8 @@ is
          raise Constraint_Error with "Position cursor equals No_Element";
       end if;
 
-      pragma Assert
-        (Vet (Container, Position), "bad cursor in function Element");
+      pragma
+        Assert (Vet (Container, Position), "bad cursor in function Element");
 
       return EHT.Element (Container.Content.Nodes (Position.Node).E_Holder);
    end Element;
@@ -360,16 +356,14 @@ is
    -- Empty_Map --
    ---------------
 
-   function Empty_Map return Map is
-      ((Ada.Finalization.Controlled with Content => Empty_HT'Access));
+   function Empty_Map return Map
+   is ((Ada.Finalization.Controlled with Content => Empty_HT'Access));
 
    ---------------------
    -- Equivalent_Keys --
    ---------------------
 
-   function Equivalent_Keys
-     (Key  : Key_Type;
-      Node : Node_Type) return Boolean
+   function Equivalent_Keys (Key : Key_Type; Node : Node_Type) return Boolean
    is
    begin
       return Equivalent_Keys (Key, KHT.Element (Node.K_Holder));
@@ -442,9 +436,7 @@ is
       -- Find --
       ----------
 
-      function Find
-        (Container : K.Sequence;
-         Key       : Key_Type) return Count_Type
+      function Find (Container : K.Sequence; Key : Key_Type) return Count_Type
       is
       begin
          for I in 1 .. K.Last (Container) loop
@@ -460,13 +452,10 @@ is
       ---------------------
 
       function K_Keys_Included
-        (Left  : K.Sequence;
-         Right : K.Sequence) return Boolean
-      is
+        (Left : K.Sequence; Right : K.Sequence) return Boolean is
       begin
          for I in 1 .. K.Last (Left) loop
-            if not K.Contains (Right, 1, K.Last (Right), K.Get (Left, I))
-            then
+            if not K.Contains (Right, 1, K.Last (Right), K.Get (Left, I)) then
                return False;
             end if;
          end loop;
@@ -510,15 +499,14 @@ is
         (K_Left  : K.Sequence;
          K_Right : K.Sequence;
          P_Left  : P.Map;
-         P_Right : P.Map) return Boolean
-      is
+         P_Right : P.Map) return Boolean is
       begin
          for C of P_Left loop
             if not P.Has_Key (P_Right, C)
-              or else P.Get (P_Left,  C) > K.Last (K_Left)
+              or else P.Get (P_Left, C) > K.Last (K_Left)
               or else P.Get (P_Right, C) > K.Last (K_Right)
-              or else K.Get (K_Left,  P.Get (P_Left,  C)) /=
-                      K.Get (K_Right, P.Get (P_Right, C))
+              or else K.Get (K_Left, P.Get (P_Left, C))
+                      /= K.Get (K_Right, P.Get (P_Right, C))
             then
                return False;
             end if;
@@ -597,11 +585,9 @@ is
    ----------------------
 
    procedure Generic_Allocate
-     (HT   : in out HT_Types.Hash_Table_Type;
-      Node : out Count_Type)
+     (HT : in out HT_Types.Hash_Table_Type; Node : out Count_Type)
    is
-      procedure Allocate is
-        new HT_Ops.Generic_Allocate (Set_Element);
+      procedure Allocate is new HT_Ops.Generic_Allocate (Set_Element);
 
    begin
       Allocate (HT, Node);
@@ -615,8 +601,8 @@ is
    function Has_Element (Container : Map; Position : Cursor) return Boolean is
    begin
       if Position.Node < 1
-           or else Position.Node > Container.Content.Nodes'Length
-           or else not Container.Content.Nodes (Position.Node).Has_Element
+        or else Position.Node > Container.Content.Nodes'Length
+        or else not Container.Content.Nodes (Position.Node).Has_Element
       then
          return False;
       else
@@ -638,9 +624,7 @@ is
    -------------
 
    procedure Include
-     (Container : in out Map;
-      Key       : Key_Type;
-      New_Item  : Element_Type)
+     (Container : in out Map; Key : Key_Type; New_Item : Element_Type)
    is
       Position : Cursor;
       Inserted : Boolean;
@@ -674,15 +658,13 @@ is
       pragma Inline (Assign_Key);
 
       procedure New_Node
-        (HT   : in out HT_Types.Hash_Table_Type;
-         Node : out Count_Type);
+        (HT : in out HT_Types.Hash_Table_Type; Node : out Count_Type);
       pragma Inline (New_Node);
 
-      procedure Local_Insert is
-        new Key_Ops.Generic_Conditional_Insert (New_Node);
+      procedure Local_Insert is new
+        Key_Ops.Generic_Conditional_Insert (New_Node);
 
-      procedure Allocate is
-        new Generic_Allocate (Assign_Key);
+      procedure Allocate is new Generic_Allocate (Assign_Key);
 
       -----------------
       --  Assign_Key --
@@ -699,18 +681,15 @@ is
       --------------
 
       procedure New_Node
-        (HT   : in out HT_Types.Hash_Table_Type;
-         Node : out Count_Type)
-      is
+        (HT : in out HT_Types.Hash_Table_Type; Node : out Count_Type) is
       begin
          Allocate (HT, Node);
       end New_Node;
 
-   --  Start of processing for Insert
+      --  Start of processing for Insert
 
    begin
-      if Container.Content.Nodes'Length = Length (Container)
-      then
+      if Container.Content.Nodes'Length = Length (Container) then
          Resize (Container);
       end if;
 
@@ -718,9 +697,7 @@ is
    end Insert;
 
    procedure Insert
-     (Container : in out Map;
-      Key       : Key_Type;
-      New_Item  : Element_Type)
+     (Container : in out Map; Key : Key_Type; New_Item : Element_Type)
    is
       Unused_Position : Cursor;
       Inserted        : Boolean;
@@ -749,8 +726,8 @@ is
    function Key (Container : Map; Position : Cursor) return Key_Type is
    begin
       if not Has_Element (Container, Position) then
-         raise Constraint_Error with
-           "Position cursor of function Key has no element";
+         raise Constraint_Error
+           with "Position cursor of function Key has no element";
       end if;
 
       pragma Assert (Vet (Container, Position), "bad cursor in function Key");
@@ -823,31 +800,29 @@ is
    ---------------
 
    function Reference
-     (Container : Map;
-      Position  : Cursor) return not null access Element_Type
+     (Container : Map; Position : Cursor) return not null access Element_Type
    is
    begin
       if not Has_Element (Container, Position) then
          raise Constraint_Error with "Position cursor has no element";
       end if;
 
-      pragma Assert
-        (Vet (Container, Position), "bad cursor in function Reference");
+      pragma
+        Assert (Vet (Container, Position), "bad cursor in function Reference");
 
       return
         EHT.Element_Access (Container.Content.Nodes (Position.Node).E_Holder);
    end Reference;
 
    function Reference
-     (Container : Map;
-      Key       : Key_Type) return not null access Element_Type
+     (Container : Map; Key : Key_Type) return not null access Element_Type
    is
       Node : constant Count_Type := Find (Container, Key).Node;
 
    begin
       if Node = 0 then
-         raise Constraint_Error with
-           "no element available because key not in map";
+         raise Constraint_Error
+           with "no element available because key not in map";
       end if;
 
       return EHT.Element_Access (Container.Content.Nodes (Node).E_Holder);
@@ -858,9 +833,7 @@ is
    -------------
 
    procedure Replace
-     (Container : in out Map;
-      Key       : Key_Type;
-      New_Item  : Element_Type)
+     (Container : in out Map; Key : Key_Type; New_Item : Element_Type)
    is
       Node : constant Count_Type := Key_Ops.Find (Container.Content.all, Key);
 
@@ -882,18 +855,15 @@ is
    ---------------------
 
    procedure Replace_Element
-     (Container : in out Map;
-      Position  : Cursor;
-      New_Item  : Element_Type)
-   is
+     (Container : in out Map; Position : Cursor; New_Item : Element_Type) is
    begin
       if not Has_Element (Container, Position) then
-         raise Constraint_Error with
-           "Position cursor of Replace_Element has no element";
+         raise Constraint_Error
+           with "Position cursor of Replace_Element has no element";
       end if;
 
-      pragma Assert
-        (Vet (Container, Position), "bad cursor in Replace_Element");
+      pragma
+        Assert (Vet (Container, Position), "bad cursor in Replace_Element");
 
       EHT.Replace_Element
         (Container.Content.Nodes (Position.Node).E_Holder, New_Item);
@@ -924,7 +894,8 @@ is
          return;
       end if;
 
-      Rehash : declare
+      Rehash :
+      declare
          Next_Size : constant Count_Type :=
            Count_Type'Max
              (New_Size,

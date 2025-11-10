@@ -6,7 +6,7 @@
 
 pragma Ada_2022;
 
-with SPARK.Big_Integers;  use SPARK.Big_Integers;
+with SPARK.Big_Integers; use SPARK.Big_Integers;
 
 package body SPARK.Containers.Functional.Sets.Higher_Order
   with SPARK_Mode => Off --  #BODYMODE
@@ -18,27 +18,25 @@ is
 
    function All_Distinct
      (New_Length : Big_Natural;
-      New_Item   : not null access
-        function (I : Big_Positive) return Element_Type)
+      New_Item   :
+        not null access function (I : Big_Positive) return Element_Type)
       return Boolean
-   is
-     (for all I1 in Interval'(1, New_Length) =>
-        (for all I2 in Interval'(1, New_Length) =>
-           (if Equivalent_Elements (New_Item (I1), New_Item (I2))
-            then I1 = I2)))
+   is (for all I1 in Interval'(1, New_Length) =>
+         (for all I2 in Interval'(1, New_Length) =>
+            (if Equivalent_Elements (New_Item (I1), New_Item (I2))
+             then I1 = I2)))
    with Ghost => Static;
    --  Check that New_Item always returns distinct elements
 
    function All_Distinct
      (S              : Set;
-      Transform_Item : not null access
-        function (I : Element_Type) return Element_Type)
+      Transform_Item :
+        not null access function (I : Element_Type) return Element_Type)
       return Boolean
-   is
-     (for all E1 of S =>
-        (for all E2 of S =>
-           (if Equivalent_Elements (Transform_Item (E1), Transform_Item (E2))
-            then Equivalent_Elements (E1, E2))))
+   is (for all E1 of S =>
+         (for all E2 of S =>
+            (if Equivalent_Elements (Transform_Item (E1), Transform_Item (E2))
+             then Equivalent_Elements (E1, E2))))
    with Ghost => Static;
    --  Check that Transform_Item always returns distinct elements
 
@@ -46,71 +44,65 @@ is
      (S    : Set;
       Test : not null access function (E : Element_Type) return Boolean)
       return Big_Natural
-   --  Recursive version of Count
-
    with
      Ghost              => Static,
      Subprogram_Variant => (Decreases => Length (S)),
      Post               => Count_Rec'Result <= Length (S);
+   --  Recursive version of Count
 
    procedure Lemma_Count_Rec_Eq
      (S1, S2 : Set;
       Test   : not null access function (E : Element_Type) return Boolean)
-   --  Prove Lemma_Count_Eq recursively
-
    with
      Ghost              => Static,
      Pre                =>
        (Static => S1 = S2 and then Eq_Compatible (S1, Test)),
      Post               => Count_Rec (S1, Test) = Count_Rec (S2, Test),
      Subprogram_Variant => (Decreases => Length (S1), Decreases => 1);
+   --  Prove Lemma_Count_Eq recursively
 
    procedure Lemma_Count_Rec_Remove
      (S    : Set;
       E    : Element_Type;
       Test : not null access function (E : Element_Type) return Boolean)
-   --  Prove Lemma_Count_Remove recursively
-
    with
      Ghost              => Static,
      Subprogram_Variant => (Decreases => Length (S), Decreases => 0),
      Pre                => Contains (S, E) and then Eq_Compatible (S, Test),
      Post               =>
-       Count_Rec (S, Test) = Count_Rec (Remove (S, E), Test) +
-          (if Test (E) then 1 else Big_Natural'(0));
+       Count_Rec (S, Test)
+       = Count_Rec (Remove (S, E), Test)
+         + (if Test (E) then 1 else Big_Natural'(0));
+   --  Prove Lemma_Count_Remove recursively
 
    function Sum_Rec
      (S     : Set;
       Value : not null access function (E : Element_Type) return Big_Integer)
       return Big_Integer
+   with Subprogram_Variant => (Decreases => Length (S));
    --  Recursive version of Sum
-
-   with
-     Subprogram_Variant => (Decreases => Length (S));
 
    procedure Lemma_Sum_Rec_Eq
      (S1, S2 : Set;
       Value  : not null access function (E : Element_Type) return Big_Integer)
-   --  Prove Lemma_Sum_Eq recursively
-
    with
      Ghost              => Static,
      Pre                => S1 = S2 and then Eq_Compatible (S1, Value),
      Post               => Sum (S1, Value) = Sum (S2, Value),
      Subprogram_Variant => (Decreases => Length (S1), Decreases => 1);
+   --  Prove Lemma_Sum_Eq recursively
 
    procedure Lemma_Sum_Rec_Remove
      (S     : Set;
       E     : Element_Type;
       Value : not null access function (E : Element_Type) return Big_Integer)
-   --  Prove Lemma_Sum_Remove recursively
-
    with
      Ghost              => Static,
      Subprogram_Variant => (Decreases => Length (S), Decreases => 0),
      Pre                => Contains (S, E) and then Eq_Compatible (S, Value),
      Post               =>
        Sum_Rec (S, Value) = Sum_Rec (Remove (S, E), Value) + Value (E);
+   --  Prove Lemma_Sum_Remove recursively
 
    -----------
    -- Count --
@@ -125,8 +117,10 @@ is
    begin
       return Res : Big_Natural := 0 do
          for Subset in Iterate (S) loop
-            pragma Loop_Invariant
-              (Static => Count_Rec (S, Test) = Res + Count_Rec (Subset, Test));
+            pragma
+              Loop_Invariant
+                (Static =>
+                   Count_Rec (S, Test) = Res + Count_Rec (Subset, Test));
             if Test (Choose (Subset)) then
                Res := Res + 1;
             end if;
@@ -142,10 +136,11 @@ is
      (S    : Set;
       Test : not null access function (E : Element_Type) return Boolean)
       return Big_Natural
-   is
-     (if Is_Empty (S) then 0
-      else Count_Rec (Remove (S, Choose (S)), Test) +
-        (if Test (Choose (S)) then Big_Natural'(1) else 0));
+   is (if Is_Empty (S)
+       then 0
+       else
+         Count_Rec (Remove (S, Choose (S)), Test)
+         + (if Test (Choose (S)) then Big_Natural'(1) else 0));
 
    ------------
    -- Create --
@@ -153,21 +148,20 @@ is
 
    function Create
      (New_Length : Big_Natural;
-      New_Item   : not null access
-        function (I : Big_Positive) return Element_Type)
+      New_Item   :
+        not null access function (I : Big_Positive) return Element_Type)
       return Set
-     with Refined_Post =>
-       (Static => Length (Create'Result) <= New_Length
-          and then
-            (if All_Distinct (New_Length, New_Item)
-               then Length (Create'Result) = New_Length)
-          and then
-            (for all I in Interval'(1, New_Length) =>
-               Contains (Create'Result, New_Item (I)))
-          and then
-            (for all E of Create'Result =>
-               (for some I in Interval'(1, New_Length) =>
-                    Equivalent_Elements (E, New_Item (I)))))
+   with
+     Refined_Post =>
+       (Static =>
+          Length (Create'Result) <= New_Length
+          and then (if All_Distinct (New_Length, New_Item)
+                    then Length (Create'Result) = New_Length)
+          and then (for all I in Interval'(1, New_Length) =>
+                      Contains (Create'Result, New_Item (I)))
+          and then (for all E of Create'Result =>
+                      (for some I in Interval'(1, New_Length) =>
+                         Equivalent_Elements (E, New_Item (I)))))
    is
       I : Big_Natural := 0;
    begin
@@ -176,19 +170,22 @@ is
             pragma Loop_Variant (Decreases => New_Length - I);
             pragma Loop_Invariant (Static => I < New_Length);
             pragma Loop_Invariant (Static => Length (Res) <= I);
-            pragma Loop_Invariant
-              (Static =>
-                 (if All_Distinct (New_Length, New_Item)
-                  then Length (Res) = I));
-            pragma Loop_Invariant
-              (Static =>
-                 (for all J in Interval'(1, I) =>
+            pragma
+              Loop_Invariant
+                (Static =>
+                   (if All_Distinct (New_Length, New_Item)
+                    then Length (Res) = I));
+            pragma
+              Loop_Invariant
+                (Static =>
+                   (for all J in Interval'(1, I) =>
                       Contains (Res, New_Item (J))));
-            pragma Loop_Invariant
-              (Static =>
-                 (for all E of Res =>
+            pragma
+              Loop_Invariant
+                (Static =>
+                   (for all E of Res =>
                       (for some J in Interval'(1, I) =>
-                             Equivalent_Elements (E, New_Item (J)))));
+                         Equivalent_Elements (E, New_Item (J)))));
             I := I + 1;
             if not Contains (Res, New_Item (I)) then
                Res := Add (Res, New_Item (I));
@@ -203,8 +200,8 @@ is
 
    function Create_Distinct
      (New_Length : Big_Natural;
-      New_Item   : not null access
-        function (I : Big_Positive) return Element_Type)
+      New_Item   :
+        not null access function (I : Big_Positive) return Element_Type)
       return Set
    is
       I : Big_Positive := 1;
@@ -216,15 +213,17 @@ is
             pragma Loop_Variant (Decreases => New_Length - I + 1);
             pragma Loop_Invariant (Static => I <= New_Length);
             pragma Loop_Invariant (Static => Length (Res) = I);
-            pragma Loop_Invariant
-              (Static =>
-                 (for all J in Interval'(1, I) =>
+            pragma
+              Loop_Invariant
+                (Static =>
+                   (for all J in Interval'(1, I) =>
                       Contains (Res, New_Item (J))));
-            pragma Loop_Invariant
-              (Static =>
-                 (for all E of Res =>
+            pragma
+              Loop_Invariant
+                (Static =>
+                   (for all E of Res =>
                       (for some J in Interval'(1, I) =>
-                             Equivalent_Elements (E, New_Item (J)))));
+                         Equivalent_Elements (E, New_Item (J)))));
             I := I + 1;
          end loop;
       end return;
@@ -238,20 +237,17 @@ is
      (S    : Set;
       Test : not null access function (E : Element_Type) return Boolean)
       return Boolean
-   is
-     (for all E1 of S =>
-        (for all E2 of S =>
-             (if Equivalent_Elements (E1, E2) then Test (E1) = Test (E2))));
+   is (for all E1 of S =>
+         (for all E2 of S =>
+            (if Equivalent_Elements (E1, E2) then Test (E1) = Test (E2))));
 
    function Eq_Compatible
      (S     : Set;
       Value : not null access function (E : Element_Type) return Big_Integer)
       return Boolean
-   is
-     (for all E1 of S =>
-        (for all E2 of S =>
-             (if Equivalent_Elements (E1, E2)
-              then Value (E1) = Value (E2))));
+   is (for all E1 of S =>
+         (for all E2 of S =>
+            (if Equivalent_Elements (E1, E2) then Value (E1) = Value (E2))));
 
    ------------
    -- Filter --
@@ -260,20 +256,22 @@ is
    function Filter
      (S    : Set;
       Test : not null access function (E : Element_Type) return Boolean)
-      return Set
-   is
+      return Set is
    begin
       return Res : Set do
          for Subset in Iterate (S) loop
-            pragma Loop_Invariant
-              (Static =>
-                 Length (Res) + Count (Subset, Test) = Count (S, Test));
+            pragma
+              Loop_Invariant
+                (Static =>
+                   Length (Res) + Count (Subset, Test) = Count (S, Test));
             pragma Loop_Invariant (Static => Res <= S);
-            pragma Loop_Invariant
-              (Static => (for all E of Res => not Contains (Subset, E)));
-            pragma Loop_Invariant
-              (Static =>
-                 (for all E of S =>
+            pragma
+              Loop_Invariant
+                (Static => (for all E of Res => not Contains (Subset, E)));
+            pragma
+              Loop_Invariant
+                (Static =>
+                   (for all E of S =>
                       (if not Contains (Subset, E) and Test (E)
                        then Contains (Res, E))));
             pragma Loop_Invariant (Static => (for all E of Res => Test (E)));
@@ -298,7 +296,8 @@ is
       Test : not null access function (E : Element_Type) return Boolean)
    is
 
-      procedure Do_Proof with Ghost => Static;
+      procedure Do_Proof
+      with Ghost => Static;
       --  Prove the lemma
 
       --------------
@@ -308,9 +307,10 @@ is
       procedure Do_Proof is
       begin
          for Subset in Iterate (S) loop
-            pragma Loop_Invariant
-              (if Count_Rec (Subset, Test) = Length (Subset)
-               then Count_Rec (S, Test) = Length (S));
+            pragma
+              Loop_Invariant
+                (if Count_Rec (Subset, Test) = Length (Subset)
+                   then Count_Rec (S, Test) = Length (S));
             pragma Assert (Test (Choose (Subset)));
          end loop;
       end Do_Proof;
@@ -325,8 +325,7 @@ is
 
    procedure Lemma_Count_Eq
      (S1, S2 : Set;
-      Test   : not null access function (E : Element_Type) return Boolean)
-   is
+      Test   : not null access function (E : Element_Type) return Boolean) is
    begin
       Lemma_Count_Rec_Eq (S1, S2, Test);
    end Lemma_Count_Eq;
@@ -340,7 +339,8 @@ is
       Test : not null access function (E : Element_Type) return Boolean)
    is
 
-      procedure Do_Proof with Ghost => Static;
+      procedure Do_Proof
+      with Ghost => Static;
       --  Prove the lemma
 
       --------------
@@ -350,8 +350,9 @@ is
       procedure Do_Proof is
       begin
          for Subset in Iterate (S) loop
-            pragma Loop_Invariant
-              (if Count_Rec (Subset, Test) = 0 then Count_Rec (S, Test) = 0);
+            pragma
+              Loop_Invariant
+                (if Count_Rec (Subset, Test) = 0 then Count_Rec (S, Test) = 0);
          end loop;
       end Do_Proof;
 
@@ -365,8 +366,7 @@ is
 
    procedure Lemma_Count_Rec_Eq
      (S1, S2 : Set;
-      Test   : not null access function (E : Element_Type) return Boolean)
-   is
+      Test   : not null access function (E : Element_Type) return Boolean) is
    begin
       if Length (S1) /= 0 then
          declare
@@ -406,8 +406,7 @@ is
    procedure Lemma_Count_Remove
      (S    : Set;
       E    : Element_Type;
-      Test : not null access function (E : Element_Type) return Boolean)
-   is
+      Test : not null access function (E : Element_Type) return Boolean) is
    begin
       Lemma_Count_Rec_Remove (S, E, Test);
    end Lemma_Count_Remove;
@@ -418,8 +417,8 @@ is
 
    procedure Lemma_Create_Distinct
      (New_Length : Big_Natural;
-      New_Item   : not null access
-        function (I : Big_Positive) return Element_Type)
+      New_Item   :
+        not null access function (I : Big_Positive) return Element_Type)
    is null;
 
    ------------------
@@ -493,8 +492,8 @@ is
 
    procedure Lemma_Transform_Distinct
      (S              : Set;
-      Transform_Item : not null access
-        function (E : Element_Type) return Element_Type)
+      Transform_Item :
+        not null access function (E : Element_Type) return Element_Type)
    is null;
 
    ---------
@@ -510,8 +509,9 @@ is
    begin
       return Res : Big_Integer := 0 do
          for Subset in Iterate (S) loop
-            pragma Loop_Invariant
-              (Static => Sum_Rec (S, Value) = Res + Sum_Rec (Subset, Value));
+            pragma
+              Loop_Invariant
+                (Static => Sum_Rec (S, Value) = Res + Sum_Rec (Subset, Value));
             Res := Res + Value (Choose (Subset));
          end loop;
       end return;
@@ -525,9 +525,9 @@ is
      (S     : Set;
       Value : not null access function (E : Element_Type) return Big_Integer)
       return Big_Integer
-   is
-     (if Is_Empty (S) then 0
-      else Sum_Rec (Remove (S, Choose (S)), Value) + Value (Choose (S)));
+   is (if Is_Empty (S)
+       then 0
+       else Sum_Rec (Remove (S, Choose (S)), Value) + Value (Choose (S)));
 
    ---------------
    -- Transform --
@@ -535,41 +535,46 @@ is
 
    function Transform
      (S              : Set;
-      Transform_Item : not null access
-        function (E : Element_Type) return Element_Type)
+      Transform_Item :
+        not null access function (E : Element_Type) return Element_Type)
       return Set
    with
      Refined_Post =>
-         (Static =>
-            Length (Transform'Result) <= Length (S)
+       (Static =>
+          Length (Transform'Result) <= Length (S)
           and then (if All_Distinct (S, Transform_Item)
                     then Length (Transform'Result) = Length (S))
           and then (for all E of S =>
                       Contains (Transform'Result, Transform_Item (E)))
-          and then
-              (for all E of Transform'Result =>
-                 (for some F of S =>
-                    Equivalent_Elements (E, Transform_Item (F)))))
+          and then (for all E of Transform'Result =>
+                      (for some F of S =>
+                         Equivalent_Elements (E, Transform_Item (F)))))
    is
    begin
       return Res : Set do
          for Subset in Iterate (S) loop
-            pragma Loop_Invariant
-              (Static => Length (Res) + Length (Subset) <= Length (S));
-            pragma Loop_Invariant
-              (Static =>
-                 (if All_Distinct (S, Transform_Item)
-                  then Length (Res) + Length (Subset) = Length (S)));
-            pragma Loop_Invariant
-              (Static =>
-                 (for all E of S =>
+            pragma
+              Loop_Invariant
+                (Static => Length (Res) + Length (Subset) <= Length (S));
+            pragma
+              Loop_Invariant
+                (Static =>
+                   (if All_Distinct (S, Transform_Item)
+                    then Length (Res) + Length (Subset) = Length (S)));
+            pragma
+              Loop_Invariant
+                (Static =>
+                   (for all E of S =>
                       Contains (Subset, E)
-                  or else Contains (Res, Transform_Item (E))));
-            pragma Loop_Invariant
-              (Static =>
-                 (for all E of Res =>
-                      (for some F of S => not Contains (Subset, F)
-                       and then Equivalent_Elements (E, Transform_Item (F)))));
+                      or else Contains (Res, Transform_Item (E))));
+            pragma
+              Loop_Invariant
+                (Static =>
+                   (for all E of Res =>
+                      (for some F of S =>
+                         not Contains (Subset, F)
+                         and then Equivalent_Elements
+                                    (E, Transform_Item (F)))));
 
             declare
                E : constant Element_Type := Transform_Item (Choose (Subset));
@@ -588,25 +593,29 @@ is
 
    function Transform_Distinct
      (S              : Set;
-      Transform_Item : not null access
-        function (E : Element_Type) return Element_Type)
-      return Set
-   is
+      Transform_Item :
+        not null access function (E : Element_Type) return Element_Type)
+      return Set is
    begin
       return Res : Set do
          for Subset in Iterate (S) loop
-            pragma Loop_Invariant
-              (Static => Length (Res) + Length (Subset) = Length (S));
-            pragma Loop_Invariant
-              (Static =>
-                 (for all E of S =>
+            pragma
+              Loop_Invariant
+                (Static => Length (Res) + Length (Subset) = Length (S));
+            pragma
+              Loop_Invariant
+                (Static =>
+                   (for all E of S =>
                       Contains (Subset, E)
-                  or else Contains (Res, Transform_Item (E))));
-            pragma Loop_Invariant
-              (Static =>
-                 (for all E of Res =>
-                      (for some F of S => not Contains (Subset, F)
-                       and then Equivalent_Elements (E, Transform_Item (F)))));
+                      or else Contains (Res, Transform_Item (E))));
+            pragma
+              Loop_Invariant
+                (Static =>
+                   (for all E of Res =>
+                      (for some F of S =>
+                         not Contains (Subset, F)
+                         and then Equivalent_Elements
+                                    (E, Transform_Item (F)))));
 
             Res := Add (Res, Transform_Item (Choose (Subset)));
          end loop;

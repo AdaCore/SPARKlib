@@ -8,16 +8,18 @@ pragma Ada_2022;
 
 with Ada.Unchecked_Deallocation;
 
-package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
+package body SPARK.Containers.Functional.Base
+  with SPARK_Mode => Off
+is
 
-   function To_Count (Idx : Extended_Index) return Count_Type is
-     (Count_Type
-       (Extended_Index'Pos (Idx) -
-        Extended_Index'Pos (Extended_Index'First)));
+   function To_Count (Idx : Extended_Index) return Count_Type
+   is (Count_Type
+         (Extended_Index'Pos (Idx)
+          - Extended_Index'Pos (Extended_Index'First)));
 
-   function To_Index (Position : Count_Type) return Extended_Index is
-     (Extended_Index'Val
-       (Position + Extended_Index'Pos (Extended_Index'First)));
+   function To_Index (Position : Count_Type) return Extended_Index
+   is (Extended_Index'Val
+         (Position + Extended_Index'Pos (Extended_Index'First)));
    --  Conversion functions between Index_Type and Count_Type
 
    function Find (C : Container; E : access Element_Type) return Count_Type;
@@ -25,9 +27,7 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
    --  position in the underlying array.
 
    function Find_Rev
-     (C : Container;
-      E : access Element_Type)
-      return Count_Type;
+     (C : Container; E : access Element_Type) return Count_Type;
    --  Search a container C for the last element equal to E.all, returning the
    --  position in the underlying array.
 
@@ -35,8 +35,8 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
    --  Resize the underlying array if needed so that it can contain one more
    --  element.
 
-   function Elements (C : Container) return Element_Array_Access is
-     (C.Controlled_Base.Base.Elements)
+   function Elements (C : Container) return Element_Array_Access
+   is (C.Controlled_Base.Base.Elements)
    with
      Global => null,
      Pre    =>
@@ -44,14 +44,9 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
        and then C.Controlled_Base.Base.Elements /= null;
 
    function Get
-     (C_E : Element_Array_Access;
-      I   : Count_Type)
-      return Element_Access
-   is
-     (Get (C_E (I)))
-   with
-     Global => null,
-     Pre    => C_E /= null;
+     (C_E : Element_Array_Access; I : Count_Type) return Element_Access
+   is (Get (C_E (I)))
+   with Global => null, Pre => C_E /= null;
 
    ----------
    -- "<=" --
@@ -100,9 +95,7 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
    ---------
 
    function Add
-     (C : Container;
-      I : Index_Type;
-      E : Element_Type) return Container
+     (C : Container; I : Index_Type; E : Element_Type) return Container
    is
       C_B : Array_Base_Access renames C.Controlled_Base.Base;
    begin
@@ -111,8 +104,9 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
          C_B.Max_Length := C_B.Max_Length + 1;
          C_B.Elements (C_B.Max_Length) := Create_Holder (E);
 
-         return Container'(Length          => C_B.Max_Length,
-                           Controlled_Base => C.Controlled_Base);
+         return
+           Container'
+             (Length => C_B.Max_Length, Controlled_Base => C.Controlled_Base);
       else
          declare
             A : constant Array_Base_Controlled_Access :=
@@ -129,8 +123,8 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
                end if;
             end loop;
 
-            return Container'(Length           => A.Base.Max_Length,
-                              Controlled_Base  => A);
+            return
+              Container'(Length => A.Base.Max_Length, Controlled_Base => A);
          end;
       end if;
    end Add;
@@ -156,7 +150,8 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
    is
       Max_Init : constant Count_Type := 100;
       Size     : constant Count_Type :=
-        (if L < Count_Type'Last - Max_Init then L + Max_Init
+        (if L < Count_Type'Last - Max_Init
+         then L + Max_Init
          else Count_Type'Last);
 
       --  The Access in the array will be initialized to null
@@ -164,9 +159,8 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
       Elements : constant Element_Array_Access :=
         new Element_Array'(1 .. Size => <>);
       B        : constant Array_Base_Access :=
-        new Array_Base'(Reference_Count => 1,
-                        Max_Length      => 0,
-                        Elements        => Elements);
+        new Array_Base'
+          (Reference_Count => 1, Max_Length => 0, Elements => Elements);
    begin
       return Create (B);
    end Content_Init;
@@ -177,12 +171,14 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
 
    procedure Finalize (Controlled_Base : in out Array_Base_Controlled_Access)
    is
-      procedure Unchecked_Free_Base is new Ada.Unchecked_Deallocation
-        (Object => Array_Base,
-         Name   => Array_Base_Access);
-      procedure Unchecked_Free_Array is new Ada.Unchecked_Deallocation
-        (Object => Element_Array,
-         Name   => Element_Array_Access);
+      procedure Unchecked_Free_Base is new
+        Ada.Unchecked_Deallocation
+          (Object => Array_Base,
+           Name   => Array_Base_Access);
+      procedure Unchecked_Free_Array is new
+        Ada.Unchecked_Deallocation
+          (Object => Element_Array,
+           Name   => Element_Array_Access);
 
       C_B : Array_Base_Access renames Controlled_Base.Base;
    begin
@@ -211,8 +207,8 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
       return 0;
    end Find;
 
-   function Find (C : Container; E : Element_Type) return Extended_Index is
-     (To_Index (Find (C, E'Unrestricted_Access)));
+   function Find (C : Container; E : Element_Type) return Extended_Index
+   is (To_Index (Find (C, E'Unrestricted_Access)));
 
    --------------
    -- Find_Rev --
@@ -230,15 +226,15 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
       return 0;
    end Find_Rev;
 
-   function Find_Rev (C : Container; E : Element_Type) return Extended_Index is
-     (To_Index (Find_Rev (C, E'Unrestricted_Access)));
+   function Find_Rev (C : Container; E : Element_Type) return Extended_Index
+   is (To_Index (Find_Rev (C, E'Unrestricted_Access)));
 
    ---------
    -- Get --
    ---------
 
-   function Get (C : Container; I : Index_Type) return Element_Type is
-      (Get (Elements (C), To_Count (I)).all);
+   function Get (C : Container; I : Index_Type) return Element_Type
+   is (Get (Elements (C), To_Count (I)).all);
 
    ------------------
    -- Intersection --
@@ -265,7 +261,8 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
    -- Length --
    ------------
 
-   function Length (C : Container) return Count_Type is (C.Length);
+   function Length (C : Container) return Count_Type
+   is (C.Length);
    ---------------------
    -- Num_Overlaps --
    ---------------------
@@ -287,8 +284,8 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
    -- Ptr_Eq --
    ------------
 
-   function Ptr_Eq (C1 : Container; C2 : Container) return Boolean is
-     (C1.Controlled_Base = C2.Controlled_Base);
+   function Ptr_Eq (C1 : Container; C2 : Container) return Boolean
+   is (C1.Controlled_Base = C2.Controlled_Base);
 
    ------------
    -- Remove --
@@ -297,12 +294,13 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
    function Remove (C : Container; I : Index_Type) return Container is
    begin
       if To_Count (I) = C.Length then
-         return Container'(Length          => C.Length - 1,
-                           Controlled_Base => C.Controlled_Base);
+         return
+           Container'
+             (Length => C.Length - 1, Controlled_Base => C.Controlled_Base);
       else
          declare
-            A : constant Array_Base_Controlled_Access
-              := Content_Init (C.Length - 1);
+            A : constant Array_Base_Controlled_Access :=
+              Content_Init (C.Length - 1);
             P : Count_Type := 0;
          begin
             A.Base.Max_Length := C.Length - 1;
@@ -335,12 +333,14 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
       end if;
 
       declare
-         procedure Finalize is new Ada.Unchecked_Deallocation
-           (Object => Element_Array,
-            Name   => Element_Array_Access_Base);
+         procedure Finalize is new
+           Ada.Unchecked_Deallocation
+             (Object => Element_Array,
+              Name   => Element_Array_Access_Base);
 
          New_Length : constant Positive_Count_Type :=
-           (if Base.Max_Length > Count_Type'Last / 2 then Count_Type'Last
+           (if Base.Max_Length > Count_Type'Last / 2
+            then Count_Type'Last
             else 2 * Base.Max_Length);
          Elements   : constant Element_Array_Access :=
            new Element_Array (1 .. New_Length);
@@ -357,13 +357,11 @@ package body SPARK.Containers.Functional.Base with SPARK_Mode => Off is
    ---------
 
    function Set
-     (C : Container;
-      I : Index_Type;
-      E : Element_Type) return Container
+     (C : Container; I : Index_Type; E : Element_Type) return Container
    is
       Result : constant Container :=
-                 Container'(Length          => C.Length,
-                            Controlled_Base => Content_Init (C.Length));
+        Container'
+          (Length => C.Length, Controlled_Base => Content_Init (C.Length));
       R_Base : Array_Base_Access renames Result.Controlled_Base.Base;
 
    begin

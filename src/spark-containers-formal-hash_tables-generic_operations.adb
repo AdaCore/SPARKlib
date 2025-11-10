@@ -6,7 +6,8 @@
 
 pragma Ada_2022;
 
-with System; use type System.Address;
+with System;
+use type System.Address;
 
 package body SPARK.Containers.Formal.Hash_Tables.Generic_Operations is
 
@@ -28,8 +29,7 @@ package body SPARK.Containers.Formal.Hash_Tables.Generic_Operations is
    ---------------------------
 
    procedure Delete_Node_Sans_Free
-     (HT : in out Hash_Table_Type;
-      X  : Count_Type)
+     (HT : in out Hash_Table_Type; X : Count_Type)
    is
       pragma Assert (X /= 0);
 
@@ -39,16 +39,16 @@ package body SPARK.Containers.Formal.Hash_Tables.Generic_Operations is
 
    begin
       if Checks and then HT.Length = 0 then
-         raise Program_Error with
-           "attempt to delete node from empty hashed container";
+         raise Program_Error
+           with "attempt to delete node from empty hashed container";
       end if;
 
       Indx := Index (HT, HT.Nodes (X));
       Prev := HT.Buckets (Indx);
 
       if Checks and then Prev = 0 then
-         raise Program_Error with
-           "attempt to delete node from empty hash bucket";
+         raise Program_Error
+           with "attempt to delete node from empty hash bucket";
       end if;
 
       if Prev = X then
@@ -58,16 +58,16 @@ package body SPARK.Containers.Formal.Hash_Tables.Generic_Operations is
       end if;
 
       if Checks and then HT.Length = 1 then
-         raise Program_Error with
-           "attempt to delete node not in its proper hash bucket";
+         raise Program_Error
+           with "attempt to delete node not in its proper hash bucket";
       end if;
 
       loop
          Curr := Next (HT.Nodes (Prev));
 
          if Checks and then Curr = 0 then
-            raise Program_Error with
-              "attempt to delete node not in its proper hash bucket";
+            raise Program_Error
+              with "attempt to delete node not in its proper hash bucket";
          end if;
 
          if Curr = X then
@@ -106,10 +106,7 @@ package body SPARK.Containers.Formal.Hash_Tables.Generic_Operations is
    -- Free --
    ----------
 
-   procedure Free
-     (HT : in out Hash_Table_Type;
-      X  : Count_Type)
-   is
+   procedure Free (HT : in out Hash_Table_Type; X : Count_Type) is
       N : Nodes_Type renames HT.Nodes;
 
    begin
@@ -222,8 +219,7 @@ package body SPARK.Containers.Formal.Hash_Tables.Generic_Operations is
    ----------------------
 
    procedure Generic_Allocate
-     (HT   : in out Hash_Table_Type;
-      Node : out Count_Type)
+     (HT : in out Hash_Table_Type; Node : out Count_Type)
    is
       N : Nodes_Type renames HT.Nodes;
 
@@ -259,9 +255,7 @@ package body SPARK.Containers.Formal.Hash_Tables.Generic_Operations is
    -- Generic_Equal --
    -------------------
 
-   function Generic_Equal
-     (L, R : Hash_Table_Type) return Boolean
-   is
+   function Generic_Equal (L, R : Hash_Table_Type) return Boolean is
       L_Index : Hash_Type;
       L_Node  : Count_Type;
 
@@ -342,16 +336,13 @@ package body SPARK.Containers.Formal.Hash_Tables.Generic_Operations is
    -- Index --
    -----------
 
-   function Index
-     (Buckets : Buckets_Type;
-      Node    : Node_Type) return Hash_Type is
+   function Index (Buckets : Buckets_Type; Node : Node_Type) return Hash_Type
+   is
    begin
       return Buckets'First + Hash_Node (Node) mod Buckets'Length;
    end Index;
 
-   function Index
-     (HT   : Hash_Table_Type;
-      Node : Node_Type) return Hash_Type is
+   function Index (HT : Hash_Table_Type; Node : Node_Type) return Hash_Type is
    begin
       return Index (HT.Buckets, Node);
    end Index;
@@ -360,17 +351,15 @@ package body SPARK.Containers.Formal.Hash_Tables.Generic_Operations is
    -- Next --
    ----------
 
-   function Next
-     (HT   : Hash_Table_Type;
-      Node : Count_Type) return Count_Type
-   is
+   function Next (HT : Hash_Table_Type; Node : Count_Type) return Count_Type is
       Result : Count_Type;
       First  : Hash_Type;
 
    begin
       Result := Next (HT.Nodes (Node));
 
-      if Result /= 0 then  -- another node in same bucket
+      if Result /= 0 then
+         --  another node in same bucket
          return Result;
       end if;
 
@@ -381,7 +370,8 @@ package body SPARK.Containers.Formal.Hash_Tables.Generic_Operations is
       for Indx in First .. HT.Buckets'Last loop
          Result := HT.Buckets (Indx);
 
-         if Result /= 0 then  -- bucket is not empty
+         if Result /= 0 then
+            --  bucket is not empty
             return Result;
          end if;
       end loop;

@@ -18,17 +18,14 @@
 --     So (A, B) is assumed both A and B are assumed to be true.
 --
 
-package SPARK.Cut_Operations with
-  SPARK_Mode,
-  Always_Terminates
+package SPARK.Cut_Operations
+  with SPARK_Mode, Always_Terminates
 is
 
-   function By (Consequence, Premise : Boolean) return Boolean with
-     Ghost,
-     Global => null;
+   function By (Consequence, Premise : Boolean) return Boolean
+   with Ghost, Global => null;
 
-   function So (Premise, Consequence : Boolean) return Boolean with
-     Ghost,
-     Global => null;
+   function So (Premise, Consequence : Boolean) return Boolean
+   with Ghost, Global => null;
 
 end SPARK.Cut_Operations;
