@@ -10,7 +10,7 @@ inst.ads:8:13: info: implicit aspect Always_Terminates on "Equivalent" has been 
 inst.ads:12:13: info: implicit aspect Always_Terminates on "Hash_Key" has been proved, subprogram will terminate
 inst.ads:12:71: info: division check proved (CVC5: 1 VC)
 inst.ads:12:71: info: range check proved (CVC5: 1 VC)
-spark-containers-parameter_checks.ads:270:19: medium: postcondition might fail, in instantiation at spark-containers-formal-hashed_sets.ads:139, in instantiation at inst.ads:9
+spark-containers-parameter_checks.ads:274:50: medium: postcondition might fail, in instantiation at spark-containers-formal-hashed_sets.ads:159, in instantiation at inst.ads:9
 test.adb:24:14: info: add a contract to analyze it separately from calling contexts
 test.adb:24:14: info: local subprogram "Create_Non_Empty_Set" only analyzed in the context of calls [info-unrolling-inlining]
 test.adb:27:10: info: precondition proved (CVC5: 1 VC; Z3: 9 VC), in call inlined at test.adb:136
@@ -797,7 +797,7 @@ test.adb:881:07: info: unrolling loop [info-unrolling-inlining]
 test.adb:882:07: info: precondition proved (Z3: 1 VC)
 test.adb:882:34: info: precondition proved (CVC5: 1 VC)
 test.adb:883:07: info: precondition proved (Z3: 1 VC)
-test.adb:887:18: info: elements shall be distinct and shall fit in "Count_Type" for set aggregates at spark-containers-formal-hashed_sets.ads:82, in instantiation at inst.ads:9
+test.adb:887:18: info: elements shall be distinct and shall fit in "Count_Type" for set aggregates at spark-containers-formal-hashed_sets.ads:94, in instantiation at inst.ads:9
 test.adb:887:18: info: precondition proved (CVC5: 11 VC)
 test.adb:889:07: info: precondition proved (CVC5: 1 VC)
 test.adb:890:07: info: precondition proved (CVC5: 1 VC)
@@ -851,10 +851,10 @@ test.adb:940:04: info: precondition proved (Trivial: 1 VC)
 inst.ads:9:04: warning: check will fail at run time [-gnatw.a]
 inst.ads:9:04: warning: check will fail at run time [-gnatw.a]
 inst.ads:9:04: warning: check will fail at run time [-gnatw.a]
-inst.ads:9:04: warning: in instantiation at spark-containers-formal-hashed_sets.ads:169 [-gnatw.a]
-inst.ads:9:04: warning: in instantiation at spark-containers-formal-hashed_sets.ads:293 [-gnatw.a]
-inst.ads:9:04: warning: in instantiation at spark-containers-formal-hashed_sets.ads:293 [-gnatw.a]
-inst.ads:9:04: warning: in instantiation at spark-containers-functional-maps.ads:134 [-gnatw.a]
-inst.ads:9:04: warning: in instantiation at spark-containers-functional-maps.ads:153 [-gnatw.a]
-inst.ads:9:04: warning: in instantiation at spark-containers-functional-vectors.ads:164 [-gnatw.a]
+inst.ads:9:04: warning: in instantiation at spark-containers-formal-hashed_sets.ads:187 [-gnatw.a]
+inst.ads:9:04: warning: in instantiation at spark-containers-formal-hashed_sets.ads:302 [-gnatw.a]
+inst.ads:9:04: warning: in instantiation at spark-containers-formal-hashed_sets.ads:302 [-gnatw.a]
+inst.ads:9:04: warning: in instantiation at spark-containers-functional-maps.ads:144 [-gnatw.a]
+inst.ads:9:04: warning: in instantiation at spark-containers-functional-maps.ads:162 [-gnatw.a]
+inst.ads:9:04: warning: in instantiation at spark-containers-functional-vectors.ads:175 [-gnatw.a]
 test.adb:96:07: warning: variable "X" is read but never assigned [-gnatwv]
