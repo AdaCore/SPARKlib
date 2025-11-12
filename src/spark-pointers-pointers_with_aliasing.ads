@@ -10,10 +10,9 @@ with SPARK.Pointers.Abstract_Maps;
 generic
    type Object (<>) is private;
 package SPARK.Pointers.Pointers_With_Aliasing with
-  SPARK_Mode,
-  Always_Terminates,
-  Initial_Condition =>
-    (for all A in Address_Type => not Valid (Memory, A))
+    SPARK_Mode,
+    Always_Terminates,
+    Initial_Condition => (for all A in Address_Type => not Valid (Memory, A))
     --  The memory is initially empty
 is
    pragma Unevaluated_Use_Of_Old (Allow);
@@ -21,7 +20,9 @@ is
    --  Identity function on objects. As the library copies objects inside
    --  code annotated with SPARK_Mode => Off, we need to make sure that such
    --  copies are allowed by SPARK.
-   function Check_No_Deep_Objects (O : Object) return Object is (O) with Ghost;
+   function Check_No_Deep_Objects (O : Object) return Object
+   is (O)
+   with Ghost;
 
    --  Model for the memory, this is not executable
 
@@ -29,23 +30,25 @@ is
       type Address_Type is new Unsigned_64;
       --  Address type on 64 bits machines
 
-      package Address_To_Object_Maps is new Abstract_Maps
-        (Address_Type, 0, Object);
+      package Address_To_Object_Maps is new
+        Abstract_Maps (Address_Type, 0, Object);
       --  Use an abstract map rather than a functional map to avoid taking up
       --  memory space as the memory model cannot be ghost.
 
       type Memory_Type is new Address_To_Object_Maps.Map;
 
       --  Whether an address designates some valid data in the memory
-      function Valid (M : Memory_Type; A : Address_Type) return Boolean renames
-        Has_Key;
+      function Valid (M : Memory_Type; A : Address_Type) return Boolean
+      renames Has_Key;
 
-      function Copy (O : Object) return Object is (O);
+      function Copy (O : Object) return Object
+      is (O);
 
-      function Object_Logic_Equal (Left, Right : Object) return Boolean with
+      function Object_Logic_Equal (Left, Right : Object) return Boolean
+      with
         Ghost,
         Import,
-        Global => null,
+        Global   => null,
         Annotate => (GNATprove, Logical_Equal);
       --  Logical equality on objects. It is marked as import as it cannot be
       --  safely executed on most object types.
@@ -55,37 +58,33 @@ is
 
       type Addresses is array (Address_Type) of Boolean with Ghost;
 
-      function None return Addresses is
-        ([others => False])
+      function None return Addresses
+      is ([others => False])
       with Ghost;
-      function Only (A : Address_Type) return Addresses is
-        ([for Q in Address_Type => (Q = A)])
+      function Only (A : Address_Type) return Addresses
+      is ([for Q in Address_Type => (Q = A)])
       with Ghost;
 
-      function Writes
-        (M1, M2 : Memory_Type; Target : Addresses) return Boolean
-      is
-        (for all A in Address_Type =>
-           (if not Target (A) and Valid (M1, A) and Valid (M2, A)
-            then Object_Logic_Equal (Get (M1, A), Get (M2, A))))
+      function Writes (M1, M2 : Memory_Type; Target : Addresses) return Boolean
+      is (for all A in Address_Type =>
+            (if not Target (A) and Valid (M1, A) and Valid (M2, A)
+             then Object_Logic_Equal (Get (M1, A), Get (M2, A))))
       with Ghost;
 
       function Allocates
         (M1, M2 : Memory_Type; Target : Addresses) return Boolean
-      is
-        ((for all A in Address_Type =>
-            (if Valid (M2, A) then Target (A) or Valid (M1, A)))
-         and (for all A in Address_Type =>
-                  (if Target (A) then not Valid (M1, A) and Valid (M2, A))))
+      is ((for all A in Address_Type =>
+             (if Valid (M2, A) then Target (A) or Valid (M1, A)))
+          and (for all A in Address_Type =>
+                 (if Target (A) then not Valid (M1, A) and Valid (M2, A))))
       with Ghost;
 
       function Deallocates
         (M1, M2 : Memory_Type; Target : Addresses) return Boolean
-      is
-        ((for all A in Address_Type =>
-            (if Valid (M1, A) then Target (A) or Valid (M2, A)))
-         and (for all A in Address_Type =>
-                  (if Target (A) then not Valid (M2, A) and Valid (M1, A))))
+      is ((for all A in Address_Type =>
+             (if Valid (M1, A) then Target (A) or Valid (M2, A)))
+          and (for all A in Address_Type =>
+                 (if Target (A) then not Valid (M2, A) and Valid (M1, A))))
       with Ghost;
 
    end Memory_Model;
@@ -96,64 +95,67 @@ is
    --  Constant_Reference and Reference functions so they can be traversal
    --  functions.
 
-   type Pointer is private with
-     Default_Initial_Condition => Address (Pointer) = 0;
-   function Null_Pointer return Pointer with
-     Global => null,
-     Post   => Address (Null_Pointer'Result) = 0;
-   function Address (P : Pointer) return Address_Type with
-     Global => null;
+   type Pointer is private
+   with Default_Initial_Condition => Address (Pointer) = 0;
+   function Null_Pointer return Pointer
+   with Global => null, Post => Address (Null_Pointer'Result) = 0;
+   function Address (P : Pointer) return Address_Type
+   with Global => null;
 
-   function "=" (P1, P2 : Pointer) return Boolean with
+   function "=" (P1, P2 : Pointer) return Boolean
+   with
      Global   => null,
      Post     => "="'Result = (Address (P1) = Address (P2)),
      Annotate => (GNATprove, Inline_For_Proof);
 
-   procedure Create (O : Object; P : out Pointer) with
+   procedure Create (O : Object; P : out Pointer)
+   with
      Global => (In_Out => Memory),
      Post   =>
        Valid (Memory, Address (P))
-         and then Allocates (Memory'Old, Memory, Only (Address (P)))
-         and then Deallocates (Memory'Old, Memory, None)
-         and then Writes (Memory'Old, Memory, None)
-         and then Object_Logic_Equal (Deref (P), Copy (O));
+       and then Allocates (Memory'Old, Memory, Only (Address (P)))
+       and then Deallocates (Memory'Old, Memory, None)
+       and then Writes (Memory'Old, Memory, None)
+       and then Object_Logic_Equal (Deref (P), Copy (O));
 
    --  Primitives for classical pointer functionalities. Deref will copy the
    --  designated value.
 
-   function Deref (P : Pointer) return Object with
+   function Deref (P : Pointer) return Object
+   with
      Global   => Memory,
      Pre      => Valid (Memory, Address (P)),
      Post     => Deref'Result = Get (Memory, Address (P)),
      Annotate => (GNATprove, Inline_For_Proof);
 
-   procedure Assign (P : Pointer; O : Object) with
+   procedure Assign (P : Pointer; O : Object)
+   with
      Global => (In_Out => Memory),
      Pre    => Valid (Memory, Address (P)),
      Post   =>
        Object_Logic_Equal (Get (Memory, Address (P)), Copy (O))
-         and then Allocates (Memory'Old, Memory, None)
-         and then Deallocates (Memory'Old, Memory, None)
-         and then Writes (Memory'Old, Memory, Only (Address (P)));
+       and then Allocates (Memory'Old, Memory, None)
+       and then Deallocates (Memory'Old, Memory, None)
+       and then Writes (Memory'Old, Memory, Only (Address (P)));
 
-   procedure Dealloc (P : in out Pointer) with
+   procedure Dealloc (P : in out Pointer)
+   with
      Global => (In_Out => Memory),
      Pre    => Valid (Memory, Address (P)) or P = Null_Pointer,
      Post   =>
        P = Null_Pointer
-         and then Allocates (Memory'Old, Memory, None)
-         and then
-           (if P'Old = Null_Pointer
-            then Deallocates (Memory'Old, Memory, None)
-            else Deallocates (Memory'Old, Memory, Only (Address (P)'Old)))
-         and then Writes (Memory'Old, Memory, None);
+       and then Allocates (Memory'Old, Memory, None)
+       and then (if P'Old = Null_Pointer
+                 then Deallocates (Memory'Old, Memory, None)
+                 else Deallocates (Memory'Old, Memory, Only (Address (P)'Old)))
+       and then Writes (Memory'Old, Memory, None);
 
    --  Primitives to access the content of a memory cell directly. Ownership is
    --  used to preserve the link between the dereferenced value and the
    --  memory model.
 
-   function Constant_Reference (Memory : Memory_Type; P : Pointer)
-                                return not null access constant Object
+   function Constant_Reference
+     (Memory : Memory_Type; P : Pointer) return not null access constant Object
    with
      Global => null,
      Pre    => Valid (Memory, Address (P)),
@@ -161,33 +163,25 @@ is
        Object_Logic_Equal
          (Constant_Reference'Result.all, Get (Memory, Address (P)));
 
-   function At_End (X :    access constant Object)
-                    return access constant Object
-   is
-     (X)
-   with
-     Ghost,
-     Annotate => (GNATprove, At_End_Borrow);
+   function At_End (X : access constant Object) return access constant Object
+   is (X)
+   with Ghost, Annotate => (GNATprove, At_End_Borrow);
 
-   function At_End (X :  Memory_Type) return Memory_Type
-   is
-     (X)
-   with
-     Ghost,
-     Annotate => (GNATprove, At_End_Borrow);
+   function At_End (X : Memory_Type) return Memory_Type
+   is (X)
+   with Ghost, Annotate => (GNATprove, At_End_Borrow);
 
-   function Reference (Memory : Memory_Type; P : Pointer)
-                       return not null access Object
+   function Reference
+     (Memory : Memory_Type; P : Pointer) return not null access Object
    with
      Global => null,
      Pre    => Valid (Memory, Address (P)),
      Post   =>
        Object_Logic_Equal
-         (At_End (Reference'Result).all,
-          Get (At_End (Memory), Address (P)))
-         and then Allocates (Memory, At_End (Memory), None)
-         and then Deallocates (Memory, At_End (Memory), None)
-         and then Writes (Memory, At_End (Memory), Only (Address (P)));
+         (At_End (Reference'Result).all, Get (At_End (Memory), Address (P)))
+       and then Allocates (Memory, At_End (Memory), None)
+       and then Deallocates (Memory, At_End (Memory), None)
+       and then Writes (Memory, At_End (Memory), Only (Address (P)));
 
 private
    pragma SPARK_Mode (Off);

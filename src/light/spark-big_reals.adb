@@ -8,12 +8,12 @@
 --  currently does not compile instantiations of the spec with imported ghost
 --  generics for packages Signed_Conversions and Unsigned_Conversions.
 
-package body SPARK.Big_Reals with
-   SPARK_Mode => Off
+package body SPARK.Big_Reals
+  with SPARK_Mode => Off
 is
 
-   package body Float_Conversions with
-     SPARK_Mode => Off
+   package body Float_Conversions
+     with SPARK_Mode => Off
    is
 
       function From_Big_Real (Arg : Big_Real) return Num is
@@ -30,8 +30,8 @@ is
 
    end Float_Conversions;
 
-   package body Fixed_Conversions with
-     SPARK_Mode => Off
+   package body Fixed_Conversions
+     with SPARK_Mode => Off
    is
 
       function From_Big_Real (Arg : Big_Real) return Num is

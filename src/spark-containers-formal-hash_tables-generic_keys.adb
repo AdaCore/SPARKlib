@@ -14,9 +14,7 @@ package body SPARK.Containers.Formal.Hash_Tables.Generic_Keys is
    --------------------------
 
    procedure Delete_Key_Sans_Free
-     (HT  : in out Hash_Table_Type;
-      Key : Key_Type;
-      X   : out Count_Type)
+     (HT : in out Hash_Table_Type; Key : Key_Type; X : out Count_Type)
    is
       Indx : Hash_Type;
       Prev : Count_Type;
@@ -60,10 +58,7 @@ package body SPARK.Containers.Formal.Hash_Tables.Generic_Keys is
    -- Find --
    ----------
 
-   function Find
-     (HT  : Hash_Table_Type;
-      Key : Key_Type) return Count_Type
-   is
+   function Find (HT : Hash_Table_Type; Key : Key_Type) return Count_Type is
       Indx : Hash_Type;
       Node : Count_Type;
 
@@ -146,9 +141,7 @@ package body SPARK.Containers.Formal.Hash_Tables.Generic_Keys is
    -----------------------------
 
    procedure Generic_Replace_Element
-     (HT   : in out Hash_Table_Type;
-      Node : Count_Type;
-      Key  : Key_Type)
+     (HT : in out Hash_Table_Type; Node : Count_Type; Key : Key_Type)
    is
       pragma Assert (HT.Length > 0);
       pragma Assert (Node /= 0);
@@ -187,8 +180,7 @@ package body SPARK.Containers.Formal.Hash_Tables.Generic_Keys is
       while N /= 0 loop
          if Checks and then Equivalent_Keys (Key, NN (N)) then
             pragma Assert (N /= Node);
-            raise Program_Error with
-              "attempt to replace existing element";
+            raise Program_Error with "attempt to replace existing element";
          end if;
 
          N := Next (NN (N));
@@ -217,7 +209,8 @@ package body SPARK.Containers.Formal.Hash_Tables.Generic_Keys is
       N := BB (Old_Indx);  -- get value of first node in old bucket
       pragma Assert (N /= 0);
 
-      if N = Node then  -- node is first node in its bucket
+      if N = Node then
+         --  node is first node in its bucket
          BB (Old_Indx) := Next (NN (Node));
 
       else
@@ -246,9 +239,7 @@ package body SPARK.Containers.Formal.Hash_Tables.Generic_Keys is
    -- Index --
    -----------
 
-   function Index
-     (HT  : Hash_Table_Type;
-      Key : Key_Type) return Hash_Type is
+   function Index (HT : Hash_Table_Type; Key : Key_Type) return Hash_Type is
    begin
       return HT.Buckets'First + Hash (Key) mod HT.Buckets'Length;
    end Index;

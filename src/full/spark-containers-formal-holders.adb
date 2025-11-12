@@ -10,9 +10,10 @@ with Ada.Unchecked_Deallocation;
 
 package body SPARK.Containers.Formal.Holders is
 
-   procedure Finalize_Element is new Ada.Unchecked_Deallocation
-     (Object => Element_Type,
-      Name   => Element_Type_Access);
+   procedure Finalize_Element is new
+     Ada.Unchecked_Deallocation
+       (Object => Element_Type,
+        Name   => Element_Type_Access);
    --  Deallocate an Element_Type
 
    ------------
@@ -44,8 +45,7 @@ package body SPARK.Containers.Formal.Holders is
    --------------------
 
    function Element_Access
-     (Container : Holder_Type) return not null access Element_Type
-   is
+     (Container : Holder_Type) return not null access Element_Type is
    begin
       if Container.Element = null then
          raise Constraint_Error with "Holder is empty";
@@ -84,9 +84,7 @@ package body SPARK.Containers.Formal.Holders is
    ---------------------
 
    procedure Replace_Element
-     (Container : in out Holder_Type;
-      Element   : Element_Type)
-   is
+     (Container : in out Holder_Type; Element : Element_Type) is
    begin
       if Container.Element /= null then
          Finalize_Element (Container.Element);

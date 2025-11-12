@@ -12,10 +12,11 @@ with Ada.Containers.Red_Black_Trees.Generic_Bounded_Keys;
 
 with Ada.Containers.Red_Black_Trees.Generic_Bounded_Set_Operations;
 
-with System; use type System.Address;
+with System;
+use type System.Address;
 
-package body SPARK.Containers.Formal.Ordered_Sets with
-  SPARK_Mode => Off
+package body SPARK.Containers.Formal.Ordered_Sets
+  with SPARK_Mode => Off
 is
 
    ------------------------------
@@ -38,8 +39,7 @@ is
    pragma Inline (Right_Son);
 
    procedure Set_Color
-     (Node  : in out Node_Type;
-      Color : Red_Black_Trees.Color_Type);
+     (Node : in out Node_Type; Color : Red_Black_Trees.Color_Type);
    pragma Inline (Set_Color);
 
    procedure Set_Left (Node : in out Node_Type; Left : Count_Type);
@@ -58,14 +58,12 @@ is
    --  Comments needed???
 
    procedure Assign
-     (Target : in out Tree_Types.Tree_Type;
-      Source : Tree_Types.Tree_Type);
+     (Target : in out Tree_Types.Tree_Type; Source : Tree_Types.Tree_Type);
 
    generic
       with procedure Set_Element (Node : in out Node_Type);
    procedure Generic_Allocate
-     (Tree : in out Tree_Types.Tree_Type'Class;
-      Node : out Count_Type);
+     (Tree : in out Tree_Types.Tree_Type'Class; Node : out Count_Type);
 
    procedure Free (Tree : in out Set; X : Count_Type);
 
@@ -82,44 +80,40 @@ is
       Dst_Node : out Count_Type);
 
    function Is_Greater_Element_Node
-     (Left  : Element_Type;
-      Right : Node_Type) return Boolean;
+     (Left : Element_Type; Right : Node_Type) return Boolean;
    pragma Inline (Is_Greater_Element_Node);
 
    function Is_Less_Element_Node
-     (Left  : Element_Type;
-      Right : Node_Type) return Boolean;
+     (Left : Element_Type; Right : Node_Type) return Boolean;
    pragma Inline (Is_Less_Element_Node);
 
    function Is_Less_Node_Node (L, R : Node_Type) return Boolean;
    pragma Inline (Is_Less_Node_Node);
 
    procedure Replace_Element
-     (Tree : in out Set;
-      Node : Count_Type;
-      Item : Element_Type);
+     (Tree : in out Set; Node : Count_Type; Item : Element_Type);
 
    --------------------------
    -- Local Instantiations --
    --------------------------
 
-   package Tree_Operations is
-     new Red_Black_Trees.Generic_Bounded_Operations
+   package Tree_Operations is new
+     Red_Black_Trees.Generic_Bounded_Operations
        (Tree_Types,
         Left  => Left_Son,
         Right => Right_Son);
 
    use Tree_Operations;
 
-   package Element_Keys is
-     new Red_Black_Trees.Generic_Bounded_Keys
+   package Element_Keys is new
+     Red_Black_Trees.Generic_Bounded_Keys
        (Tree_Operations     => Tree_Operations,
         Key_Type            => Element_Type,
         Is_Less_Key_Node    => Is_Less_Element_Node,
         Is_Greater_Key_Node => Is_Greater_Element_Node);
 
-   package Set_Ops is
-     new Red_Black_Trees.Generic_Bounded_Set_Operations
+   package Set_Ops is new
+     Red_Black_Trees.Generic_Bounded_Set_Operations
        (Tree_Operations  => Tree_Operations,
         Set_Type         => Tree_Types.Tree_Type,
         Assign           => Assign,
@@ -150,8 +144,8 @@ is
       while Node /= Lst loop
          ENode := Find (Right, Left.Content.Nodes (Node).Element).Node;
          if ENode = 0
-           or else Left.Content.Nodes (Node).Element /=
-           Right.Content.Nodes (ENode).Element
+           or else Left.Content.Nodes (Node).Element
+                   /= Right.Content.Nodes (ENode).Element
          then
             return False;
          end if;
@@ -167,13 +161,12 @@ is
    ------------
 
    procedure Assign
-     (Target : in out Tree_Types.Tree_Type;
-      Source : Tree_Types.Tree_Type)
+     (Target : in out Tree_Types.Tree_Type; Source : Tree_Types.Tree_Type)
    is
       procedure Append_Element (Source_Node : Count_Type);
 
-      procedure Append_Elements is
-        new Tree_Operations.Generic_Iteration (Append_Element);
+      procedure Append_Elements is new
+        Tree_Operations.Generic_Iteration (Append_Element);
 
       --------------------
       -- Append_Element --
@@ -188,16 +181,16 @@ is
          function New_Node return Count_Type;
          pragma Inline (New_Node);
 
-         procedure Insert_Post is
-           new Element_Keys.Generic_Insert_Post (New_Node);
+         procedure Insert_Post is new
+           Element_Keys.Generic_Insert_Post (New_Node);
 
-         procedure Unconditional_Insert_Sans_Hint is
-           new Element_Keys.Generic_Unconditional_Insert (Insert_Post);
+         procedure Unconditional_Insert_Sans_Hint is new
+           Element_Keys.Generic_Unconditional_Insert (Insert_Post);
 
-         procedure Unconditional_Insert_Avec_Hint is
-           new Element_Keys.Generic_Unconditional_Insert_With_Hint
-                 (Insert_Post,
-                  Unconditional_Insert_Sans_Hint);
+         procedure Unconditional_Insert_Avec_Hint is new
+           Element_Keys.Generic_Unconditional_Insert_With_Hint
+             (Insert_Post,
+              Unconditional_Insert_Sans_Hint);
 
          procedure Allocate is new Generic_Allocate (Set_Element);
 
@@ -225,17 +218,14 @@ is
 
          Target_Node : Count_Type;
 
-      --  Start of processing for Append_Element
+         --  Start of processing for Append_Element
 
       begin
          Unconditional_Insert_Avec_Hint
-           (Tree  => Target,
-            Hint  => 0,
-            Key   => SN.Element,
-            Node  => Target_Node);
+           (Tree => Target, Hint => 0, Key => SN.Element, Node => Target_Node);
       end Append_Element;
 
-   --  Start of processing for Assign
+      --  Start of processing for Assign
 
    begin
       if Target'Address = Source'Address then
@@ -295,16 +285,16 @@ is
    ------------------------
 
    function Constant_Reference
-     (Container : aliased Set;
-      Position  : Cursor) return not null access constant Element_Type
-   is
+     (Container : aliased Set; Position : Cursor)
+      return not null access constant Element_Type is
    begin
       if not Has_Element (Container, Position) then
          raise Constraint_Error with "Position cursor has no element";
       end if;
 
-      pragma Assert (Vet (Container.Content, Position.Node),
-                     "bad cursor in Element");
+      pragma
+        Assert
+          (Vet (Container.Content, Position.Node), "bad cursor in Element");
 
       return Container.Content.Nodes (Position.Node).Element'Access;
    end Constant_Reference;
@@ -313,10 +303,7 @@ is
    -- Contains --
    --------------
 
-   function Contains
-     (Container : Set;
-      Item      : Element_Type) return Boolean
-   is
+   function Contains (Container : Set; Item : Element_Type) return Boolean is
    begin
       return Find (Container, Item) /= No_Element;
    end Contains;
@@ -337,10 +324,10 @@ is
 
       if Length (Source) > 0 then
          Target.Content.Length := Source.Content.Length;
-         Target.Content.Root   := Source.Content.Root;
-         Target.Content.First  := Source.Content.First;
-         Target.Content.Last   := Source.Content.Last;
-         Target.Content.Free   := Source.Content.Free;
+         Target.Content.Root := Source.Content.Root;
+         Target.Content.First := Source.Content.First;
+         Target.Content.Last := Source.Content.Last;
+         Target.Content.Free := Source.Content.Free;
 
          Node := 1;
          while Node <= Source.Capacity loop
@@ -379,11 +366,11 @@ is
          raise Constraint_Error with "Position cursor has no element";
       end if;
 
-      pragma Assert (Vet (Container.Content, Position.Node),
-                     "bad cursor in Delete");
+      pragma
+        Assert
+          (Vet (Container.Content, Position.Node), "bad cursor in Delete");
 
-      Tree_Operations.Delete_Node_Sans_Free (Container.Content,
-                                             Position.Node);
+      Tree_Operations.Delete_Node_Sans_Free (Container.Content, Position.Node);
       Free (Container, Position.Node);
       Position := No_Element;
    end Delete;
@@ -465,8 +452,9 @@ is
          raise Constraint_Error with "Position cursor has no element";
       end if;
 
-      pragma Assert (Vet (Container.Content, Position.Node),
-                     "bad cursor in Element");
+      pragma
+        Assert
+          (Vet (Container.Content, Position.Node), "bad cursor in Element");
 
       return Container.Content.Nodes (Position.Node).Element;
    end Element;
@@ -477,12 +465,9 @@ is
 
    function Empty_Set (Capacity : Count_Type := 10) return Set is
       Tree : constant Tree_Types.Tree_Type :=
-        (Capacity => Capacity,
-         others   => <>);
+        (Capacity => Capacity, others => <>);
    begin
-      return
-        (Capacity => Capacity,
-         Content  => Tree);
+      return (Capacity => Capacity, Content => Tree);
    end Empty_Set;
 
    -------------------------
@@ -491,9 +476,7 @@ is
 
    function Equivalent_Elements (Left, Right : Element_Type) return Boolean is
    begin
-      if Left < Right
-        or else Right < Left
-      then
+      if Left < Right or else Right < Left then
          return False;
       else
          return True;
@@ -505,12 +488,11 @@ is
    ---------------------
 
    function Equivalent_Sets (Left, Right : Set) return Boolean is
-      function Is_Equivalent_Node_Node
-        (L, R : Node_Type) return Boolean;
+      function Is_Equivalent_Node_Node (L, R : Node_Type) return Boolean;
       pragma Inline (Is_Equivalent_Node_Node);
 
-      function Is_Equivalent is
-        new Tree_Operations.Generic_Equal (Is_Equivalent_Node_Node);
+      function Is_Equivalent is new
+        Tree_Operations.Generic_Equal (Is_Equivalent_Node_Node);
 
       -----------------------------
       -- Is_Equivalent_Node_Node --
@@ -527,7 +509,7 @@ is
          end if;
       end Is_Equivalent_Node_Node;
 
-   --  Start of processing for Equivalent_Sets
+      --  Start of processing for Equivalent_Sets
 
    begin
       return Is_Equivalent (Left.Content, Right.Content);
@@ -626,8 +608,7 @@ is
         (Container : E.Sequence;
          Fst       : Positive_Count_Type;
          Lst       : Count_Type;
-         Item      : Element_Type) return Boolean
-      is
+         Item      : Element_Type) return Boolean is
       begin
          for I in Fst .. Lst loop
             if not (E.Get (Container, I) < Item) then
@@ -643,13 +624,10 @@ is
       ----------------------
 
       function E_Elements_Equal
-        (Left  : E.Sequence;
-         Right : E.Sequence) return Boolean
-      is
+        (Left : E.Sequence; Right : E.Sequence) return Boolean is
       begin
          for I in 1 .. E.Last (Left) loop
-            if not E.Contains (Right, 1, E.Last (Right), E.Get (Left, I))
-            then
+            if not E.Contains (Right, 1, E.Last (Right), E.Get (Left, I)) then
                return False;
             end if;
          end loop;
@@ -662,18 +640,15 @@ is
       -------------------------
 
       function E_Elements_Included
-        (Left  : E.Sequence;
-         Right : E.Sequence) return Boolean
-      is
+        (Left : E.Sequence; Right : E.Sequence) return Boolean is
       begin
          for I in 1 .. E.Last (Left) loop
             declare
-               J : constant Count_Type :=
-                 E.Find (Right, E.Get (Left, I));
+               J : constant Count_Type := E.Find (Right, E.Get (Left, I));
             begin
                if J = 0
                  or else not Element_Logic_Equal
-                   (E.Get (Left, I), E.Get (Right, J))
+                               (E.Get (Left, I), E.Get (Right, J))
                then
                   return False;
                end if;
@@ -684,9 +659,7 @@ is
       end E_Elements_Included;
 
       function E_Elements_Included
-        (Left  : E.Sequence;
-         Model : M.Set;
-         Right : E.Sequence) return Boolean
+        (Left : E.Sequence; Model : M.Set; Right : E.Sequence) return Boolean
       is
       begin
          for I in 1 .. E.Last (Left) loop
@@ -715,8 +688,7 @@ is
         (Container : E.Sequence;
          Model     : M.Set;
          Left      : E.Sequence;
-         Right     : E.Sequence) return Boolean
-      is
+         Right     : E.Sequence) return Boolean is
       begin
          for I in 1 .. E.Last (Container) loop
             declare
@@ -756,10 +728,8 @@ is
       ---------------
 
       function E_Is_Find
-        (Container : E.Sequence;
-         Item      : Element_Type;
-         Position  : Count_Type) return Boolean
-      is
+        (Container : E.Sequence; Item : Element_Type; Position : Count_Type)
+         return Boolean is
       begin
          for I in 1 .. Position - 1 loop
             if Item < E.Get (Container, I) then
@@ -786,8 +756,7 @@ is
         (Container : E.Sequence;
          Fst       : Positive_Count_Type;
          Lst       : Count_Type;
-         Item      : Element_Type) return Boolean
-      is
+         Item      : Element_Type) return Boolean is
       begin
          for I in Fst .. Lst loop
             if not (Item < E.Get (Container, I)) then
@@ -823,9 +792,7 @@ is
       ----------
 
       function Find
-        (Container : E.Sequence;
-         Item      : Element_Type) return Count_Type
-      is
+        (Container : E.Sequence; Item : Element_Type) return Count_Type is
       begin
          for I in 1 .. E.Last (Container) loop
             if Equivalent_Elements (Item, E.Get (Container, I)) then
@@ -850,16 +817,15 @@ is
         (E_Left  : E.Sequence;
          E_Right : E.Sequence;
          P_Left  : P.Map;
-         P_Right : P.Map) return Boolean
-      is
+         P_Right : P.Map) return Boolean is
       begin
          for C of P_Left loop
             if not P.Has_Key (P_Right, C)
-              or else P.Get (P_Left,  C) > E.Last (E_Left)
+              or else P.Get (P_Left, C) > E.Last (E_Left)
               or else P.Get (P_Right, C) > E.Last (E_Right)
               or else not Element_Logic_Equal
-                (E.Get (E_Left,  P.Get (P_Left,  C)),
-                 E.Get (E_Right, P.Get (P_Right, C)))
+                            (E.Get (E_Left, P.Get (P_Left, C)),
+                             E.Get (E_Right, P.Get (P_Right, C)))
             then
                return False;
             end if;
@@ -877,17 +843,16 @@ is
          E_Right  : E.Sequence;
          P_Left   : P.Map;
          P_Right  : P.Map;
-         Position : Cursor) return Boolean
-      is
+         Position : Cursor) return Boolean is
       begin
          for C of P_Left loop
             if C /= Position
               and (not P.Has_Key (P_Right, C)
-                    or else P.Get (P_Left,  C) > E.Last (E_Left)
-                    or else P.Get (P_Right, C) > E.Last (E_Right)
-                    or else not Element_Logic_Equal
-                     (E.Get (E_Left,  P.Get (P_Left,  C)),
-                      E.Get (E_Right, P.Get (P_Right, C))))
+                   or else P.Get (P_Left, C) > E.Last (E_Left)
+                   or else P.Get (P_Right, C) > E.Last (E_Right)
+                   or else not Element_Logic_Equal
+                                 (E.Get (E_Left, P.Get (P_Left, C)),
+                                  E.Get (E_Right, P.Get (P_Right, C))))
             then
                return False;
             end if;
@@ -928,8 +893,7 @@ is
         (Small : P.Map;
          Big   : P.Map;
          Cut   : Positive_Count_Type;
-         Count : Count_Type := 1) return Boolean
-      is
+         Count : Count_Type := 1) return Boolean is
       begin
          for Cu of P.Iterate (Small) loop
             if not P.Has_Key (Big, Cu) then
@@ -943,8 +907,7 @@ is
 
             begin
                if Pos < Cut then
-                  if not P.Has_Key (Small, Cu)
-                    or else Pos /= P.Get (Small, Cu)
+                  if not P.Has_Key (Small, Cu) or else Pos /= P.Get (Small, Cu)
                   then
                      return False;
                   end if;
@@ -1007,11 +970,9 @@ is
    ----------------------
 
    procedure Generic_Allocate
-     (Tree : in out Tree_Types.Tree_Type'Class;
-      Node : out Count_Type)
+     (Tree : in out Tree_Types.Tree_Type'Class; Node : out Count_Type)
    is
-      procedure Allocate is
-        new Tree_Operations.Generic_Allocate (Set_Element);
+      procedure Allocate is new Tree_Operations.Generic_Allocate (Set_Element);
    begin
       Allocate (Tree, Node);
       Tree.Nodes (Node).Has_Element := True;
@@ -1021,28 +982,28 @@ is
    -- Generic_Keys --
    ------------------
 
-   package body Generic_Keys with SPARK_Mode => Off is
+   package body Generic_Keys
+     with SPARK_Mode => Off
+   is
 
       -----------------------
       -- Local Subprograms --
       -----------------------
 
       function Is_Greater_Key_Node
-        (Left  : Key_Type;
-         Right : Node_Type) return Boolean;
+        (Left : Key_Type; Right : Node_Type) return Boolean;
       pragma Inline (Is_Greater_Key_Node);
 
       function Is_Less_Key_Node
-        (Left  : Key_Type;
-         Right : Node_Type) return Boolean;
+        (Left : Key_Type; Right : Node_Type) return Boolean;
       pragma Inline (Is_Less_Key_Node);
 
       --------------------------
       -- Local Instantiations --
       --------------------------
 
-      package Key_Keys is
-        new Red_Black_Trees.Generic_Bounded_Keys
+      package Key_Keys is new
+        Red_Black_Trees.Generic_Bounded_Keys
           (Tree_Operations     => Tree_Operations,
            Key_Type            => Key_Type,
            Is_Less_Key_Node    => Is_Less_Key_Node,
@@ -1114,9 +1075,7 @@ is
 
       function Equivalent_Keys (Left, Right : Key_Type) return Boolean is
       begin
-         if Left < Right
-           or else Right < Left
-         then
+         if Left < Right or else Right < Left then
             return False;
          else
             return True;
@@ -1170,8 +1129,7 @@ is
            (Container : E.Sequence;
             Fst       : Positive_Count_Type;
             Lst       : Count_Type;
-            Key       : Key_Type) return Boolean
-         is
+            Key       : Key_Type) return Boolean is
          begin
             for I in Fst .. Lst loop
                if not (Generic_Keys.Key (E.Get (Container, I)) < Key) then
@@ -1186,10 +1144,8 @@ is
          ---------------
 
          function E_Is_Find
-           (Container : E.Sequence;
-            Key       : Key_Type;
-            Position  : Count_Type) return Boolean
-         is
+           (Container : E.Sequence; Key : Key_Type; Position : Count_Type)
+            return Boolean is
          begin
             for I in 1 .. Position - 1 loop
                if Key < Generic_Keys.Key (E.Get (Container, I)) then
@@ -1215,8 +1171,7 @@ is
            (Container : E.Sequence;
             Fst       : Positive_Count_Type;
             Lst       : Count_Type;
-            Key       : Key_Type) return Boolean
-         is
+            Key       : Key_Type) return Boolean is
          begin
             for I in Fst .. Lst loop
                if not (Key < Generic_Keys.Key (E.Get (Container, I))) then
@@ -1231,13 +1186,11 @@ is
          ----------
 
          function Find
-           (Container : E.Sequence;
-            Key       : Key_Type) return Count_Type
-         is
+           (Container : E.Sequence; Key : Key_Type) return Count_Type is
          begin
             for I in 1 .. E.Last (Container) loop
                if Equivalent_Keys
-                   (Key, Generic_Keys.Key (E.Get (Container, I)))
+                    (Key, Generic_Keys.Key (E.Get (Container, I)))
                then
                   return I;
                end if;
@@ -1250,10 +1203,7 @@ is
          -----------------------
 
          function M_Included_Except
-           (Left  : M.Set;
-            Right : M.Set;
-            Key   : Key_Type) return Boolean
-         is
+           (Left : M.Set; Right : M.Set; Key : Key_Type) return Boolean is
          begin
             for E of M.Iterate (Left) loop
                if not Contains (Right, E)
@@ -1271,9 +1221,7 @@ is
       -------------------------
 
       function Is_Greater_Key_Node
-        (Left  : Key_Type;
-         Right : Node_Type) return Boolean
-      is
+        (Left : Key_Type; Right : Node_Type) return Boolean is
       begin
          return Key (Right.Element) < Left;
       end Is_Greater_Key_Node;
@@ -1283,9 +1231,7 @@ is
       ----------------------
 
       function Is_Less_Key_Node
-        (Left  : Key_Type;
-         Right : Node_Type) return Boolean
-      is
+        (Left : Key_Type; Right : Node_Type) return Boolean is
       begin
          return Left < Key (Right.Element);
       end Is_Less_Key_Node;
@@ -1297,12 +1243,12 @@ is
       function Key (Container : Set; Position : Cursor) return Key_Type is
       begin
          if not Has_Element (Container, Position) then
-            raise Constraint_Error with
-              "Position cursor has no element";
+            raise Constraint_Error with "Position cursor has no element";
          end if;
 
-         pragma Assert (Vet (Container.Content, Position.Node),
-                        "bad cursor in Key");
+         pragma
+           Assert
+             (Vet (Container.Content, Position.Node), "bad cursor in Key");
 
          declare
             N : Tree_Types.Nodes_Type renames Container.Content.Nodes;
@@ -1316,15 +1262,12 @@ is
       -------------
 
       procedure Replace
-        (Container : in out Set;
-         Key       : Key_Type;
-         New_Item  : Element_Type)
+        (Container : in out Set; Key : Key_Type; New_Item : Element_Type)
       is
          Node : constant Count_Type := Key_Keys.Find (Container.Content, Key);
       begin
          if not Has_Element (Container, (Node => Node)) then
-            raise Constraint_Error with
-              "attempt to replace key not in set";
+            raise Constraint_Error with "attempt to replace key not in set";
          else
             Replace_Element (Container, Node, New_Item);
          end if;
@@ -1373,16 +1316,12 @@ is
      (Container : in out Set;
       New_Item  : Element_Type;
       Position  : out Cursor;
-      Inserted  : out Boolean)
-   is
+      Inserted  : out Boolean) is
    begin
       Insert_Sans_Hint (Container.Content, New_Item, Position.Node, Inserted);
    end Insert;
 
-   procedure Insert
-     (Container : in out Set;
-      New_Item  : Element_Type)
-   is
+   procedure Insert (Container : in out Set; New_Item : Element_Type) is
       Position : Cursor;
       Inserted : Boolean;
 
@@ -1390,8 +1329,8 @@ is
       Insert (Container, New_Item, Position, Inserted);
 
       if not Inserted then
-         raise Constraint_Error with
-           "attempt to insert element already in set";
+         raise Constraint_Error
+           with "attempt to insert element already in set";
       end if;
    end Insert;
 
@@ -1410,11 +1349,10 @@ is
       function New_Node return Count_Type;
       pragma Inline (New_Node);
 
-      procedure Insert_Post is
-        new Element_Keys.Generic_Insert_Post (New_Node);
+      procedure Insert_Post is new Element_Keys.Generic_Insert_Post (New_Node);
 
-      procedure Conditional_Insert_Sans_Hint is
-        new Element_Keys.Generic_Conditional_Insert (Insert_Post);
+      procedure Conditional_Insert_Sans_Hint is new
+        Element_Keys.Generic_Conditional_Insert (Insert_Post);
 
       procedure Allocate is new Generic_Allocate (Set_Element);
 
@@ -1438,14 +1376,10 @@ is
          Node.Element := New_Item;
       end Set_Element;
 
-   --  Start of processing for Insert_Sans_Hint
+      --  Start of processing for Insert_Sans_Hint
 
    begin
-      Conditional_Insert_Sans_Hint
-        (Container,
-         New_Item,
-         Node,
-         Inserted);
+      Conditional_Insert_Sans_Hint (Container, New_Item, Node, Inserted);
    end Insert_Sans_Hint;
 
    ----------------------
@@ -1465,15 +1399,15 @@ is
       function New_Node return Count_Type;
       pragma Inline (New_Node);
 
-      procedure Insert_Post is
-        new Element_Keys.Generic_Insert_Post (New_Node);
+      procedure Insert_Post is new Element_Keys.Generic_Insert_Post (New_Node);
 
-      procedure Insert_Sans_Hint is
-        new Element_Keys.Generic_Conditional_Insert (Insert_Post);
+      procedure Insert_Sans_Hint is new
+        Element_Keys.Generic_Conditional_Insert (Insert_Post);
 
-      procedure Local_Insert_With_Hint is
-        new Element_Keys.Generic_Conditional_Insert_With_Hint
-              (Insert_Post, Insert_Sans_Hint);
+      procedure Local_Insert_With_Hint is new
+        Element_Keys.Generic_Conditional_Insert_With_Hint
+          (Insert_Post,
+           Insert_Sans_Hint);
 
       procedure Allocate is new Generic_Allocate (Set_Element);
 
@@ -1497,15 +1431,11 @@ is
          Node.Element := Src_Node.Element;
       end Set_Element;
 
-   --  Start of processing for Insert_With_Hint
+      --  Start of processing for Insert_With_Hint
 
    begin
       Local_Insert_With_Hint
-        (Dst_Set,
-         Dst_Hint,
-         Src_Node.Element,
-         Dst_Node,
-         Success);
+        (Dst_Set, Dst_Hint, Src_Node.Element, Dst_Node, Success);
    end Insert_With_Hint;
 
    ------------------
@@ -1524,8 +1454,8 @@ is
       end if;
 
       return S : Set (Count_Type'Min (Length (Left), Length (Right))) do
-            Assign (S.Content,
-                    Set_Ops.Set_Intersection (Left.Content, Right.Content));
+         Assign
+           (S.Content, Set_Ops.Set_Intersection (Left.Content, Right.Content));
       end return;
    end Intersection;
 
@@ -1543,9 +1473,7 @@ is
    -----------------------------
 
    function Is_Greater_Element_Node
-     (Left  : Element_Type;
-      Right : Node_Type) return Boolean
-   is
+     (Left : Element_Type; Right : Node_Type) return Boolean is
    begin
       --  Compute e > node same as node < e
 
@@ -1557,9 +1485,7 @@ is
    --------------------------
 
    function Is_Less_Element_Node
-     (Left  : Element_Type;
-      Right : Node_Type) return Boolean
-   is
+     (Left : Element_Type; Right : Node_Type) return Boolean is
    begin
       return Left < Right.Element;
    end Is_Less_Element_Node;
@@ -1588,9 +1514,10 @@ is
 
    function Last (Container : Set) return Cursor is
    begin
-      return (if Length (Container) = 0
-              then No_Element
-              else (Node => Container.Content.Last));
+      return
+        (if Length (Container) = 0
+         then No_Element
+         else (Node => Container.Content.Last));
    end Last;
 
    ------------------
@@ -1642,8 +1569,9 @@ is
       end if;
 
       if Target.Capacity < Length (Source) then
-         raise Constraint_Error with  -- ???
-           "Source length exceeds Target capacity";
+         raise Constraint_Error
+           with  -- ???
+             "Source length exceeds Target capacity";
       end if;
 
       Clear (Target);
@@ -1673,8 +1601,8 @@ is
          raise Constraint_Error;
       end if;
 
-      pragma Assert (Vet (Container.Content, Position.Node),
-                     "bad cursor in Next");
+      pragma
+        Assert (Vet (Container.Content, Position.Node), "bad cursor in Next");
       return (Node => Tree_Operations.Next (Container.Content, Position.Node));
    end Next;
 
@@ -1715,8 +1643,9 @@ is
          raise Constraint_Error;
       end if;
 
-      pragma Assert (Vet (Container.Content, Position.Node),
-                     "bad cursor in Previous");
+      pragma
+        Assert
+          (Vet (Container.Content, Position.Node), "bad cursor in Previous");
 
       declare
          Node : constant Count_Type :=
@@ -1741,8 +1670,7 @@ is
 
    begin
       if Node = 0 then
-         raise Constraint_Error with
-           "attempt to replace element not in set";
+         raise Constraint_Error with "attempt to replace element not in set";
       end if;
 
       Container.Content.Nodes (Node).Element := New_Item;
@@ -1753,23 +1681,21 @@ is
    ---------------------
 
    procedure Replace_Element
-     (Tree : in out Set;
-      Node : Count_Type;
-      Item : Element_Type)
+     (Tree : in out Set; Node : Count_Type; Item : Element_Type)
    is
       pragma Assert (Node /= 0);
 
       function New_Node return Count_Type;
       pragma Inline (New_Node);
 
-      procedure Local_Insert_Post is
-        new Element_Keys.Generic_Insert_Post (New_Node);
+      procedure Local_Insert_Post is new
+        Element_Keys.Generic_Insert_Post (New_Node);
 
-      procedure Local_Insert_Sans_Hint is
-        new Element_Keys.Generic_Conditional_Insert (Local_Insert_Post);
+      procedure Local_Insert_Sans_Hint is new
+        Element_Keys.Generic_Conditional_Insert (Local_Insert_Post);
 
-      procedure Local_Insert_With_Hint is
-        new Element_Keys.Generic_Conditional_Insert_With_Hint
+      procedure Local_Insert_With_Hint is new
+        Element_Keys.Generic_Conditional_Insert_With_Hint
           (Local_Insert_Post,
            Local_Insert_Sans_Hint);
 
@@ -1783,23 +1709,21 @@ is
          N : Node_Type renames NN (Node);
       begin
          N.Element := Item;
-         N.Color   := Red;
-         N.Parent  := 0;
-         N.Right   := 0;
-         N.Left    := 0;
+         N.Color := Red;
+         N.Parent := 0;
+         N.Right := 0;
+         N.Left := 0;
          return Node;
       end New_Node;
 
-      Hint      : Count_Type;
-      Result    : Count_Type;
-      Inserted  : Boolean;
+      Hint     : Count_Type;
+      Result   : Count_Type;
+      Inserted : Boolean;
 
-   --  Start of processing for Insert
+      --  Start of processing for Insert
 
    begin
-      if Item < NN (Node).Element
-        or else NN (Node).Element < Item
-      then
+      if Item < NN (Node).Element or else NN (Node).Element < Item then
          null;
 
       else
@@ -1837,18 +1761,16 @@ is
    end Replace_Element;
 
    procedure Replace_Element
-     (Container : in out Set;
-      Position  : Cursor;
-      New_Item  : Element_Type)
-   is
+     (Container : in out Set; Position : Cursor; New_Item : Element_Type) is
    begin
       if not Has_Element (Container, Position) then
-         raise Constraint_Error with
-           "Position cursor has no element";
+         raise Constraint_Error with "Position cursor has no element";
       end if;
 
-      pragma Assert (Vet (Container.Content, Position.Node),
-                     "bad cursor in Replace_Element");
+      pragma
+        Assert
+          (Vet (Container.Content, Position.Node),
+           "bad cursor in Replace_Element");
 
       Replace_Element (Container, Position.Node, New_Item);
    end Replace_Element;
@@ -1867,9 +1789,7 @@ is
    ---------------
 
    procedure Set_Color
-     (Node  : in out Node_Type;
-      Color : Red_Black_Trees.Color_Type)
-   is
+     (Node : in out Node_Type; Color : Red_Black_Trees.Color_Type) is
    begin
       Node.Color := Color;
    end Set_Color;

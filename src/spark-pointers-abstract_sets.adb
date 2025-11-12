@@ -4,8 +4,8 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
-package body SPARK.Pointers.Abstract_Sets with
-  SPARK_Mode => Off
+package body SPARK.Pointers.Abstract_Sets
+  with SPARK_Mode => Off
 is
 
    function Elements

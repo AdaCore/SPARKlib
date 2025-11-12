@@ -9,40 +9,39 @@ with SPARK.Lemmas.Unconstrained_Array;
 package body SPARK.Tests.Array_Lemmas
   with SPARK_Mode => Off --  #BODYMODE
 is
-   pragma Warnings
-     (Off, "postcondition does not check the outcome of calling");
+   pragma
+     Warnings (Off, "postcondition does not check the outcome of calling");
 
-   package Test_Uint is new SPARK.Lemmas.Unconstrained_Array
-     (Index_Type => Integer,
-      Element_T  => Integer,
-      A          => Arr_Int_Unconstrained,
-      Less       => "<");
+   package Test_Uint is new
+     SPARK.Lemmas.Unconstrained_Array
+       (Index_Type => Integer,
+        Element_T  => Integer,
+        A          => Arr_Int_Unconstrained,
+        Less       => "<");
 
-   package Test_Ufloat is new SPARK.Lemmas.Unconstrained_Array
-     (Index_Type => Integer,
-      Element_T  => Float,
-      A          => Arr_Float_Unconstrained,
-      Less       => "<");
+   package Test_Ufloat is new
+     SPARK.Lemmas.Unconstrained_Array
+       (Index_Type => Integer,
+        Element_T  => Float,
+        A          => Arr_Float_Unconstrained,
+        Less       => "<");
 
    --  For now, constrained array need a type conversion. In the future,
    --  there will be a constrained array library.
 
    procedure Test_Transitive_Order_Float (Arr : Arr_Float_Constrained) is
    begin
-      Test_Ufloat.Lemma_Transitive_Order
-        (Arr_Float_Unconstrained (Arr));
+      Test_Ufloat.Lemma_Transitive_Order (Arr_Float_Unconstrained (Arr));
    end Test_Transitive_Order_Float;
 
-   procedure Test_Transitive_Order_Float
-     (Arr : Arr_Float_Unconstrained) is
+   procedure Test_Transitive_Order_Float (Arr : Arr_Float_Unconstrained) is
    begin
       Test_Ufloat.Lemma_Transitive_Order (Arr);
    end Test_Transitive_Order_Float;
 
    procedure Test_Transitive_Order_Int (Arr : Arr_Int_Constrained) is
    begin
-      Test_Uint.Lemma_Transitive_Order
-        (Arr_Int_Unconstrained (Arr));
+      Test_Uint.Lemma_Transitive_Order (Arr_Int_Unconstrained (Arr));
    end Test_Transitive_Order_Int;
 
    procedure Test_Transitive_Order_Int (Arr : Arr_Int_Unconstrained) is

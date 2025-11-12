@@ -6,8 +6,7 @@
 
 pragma SPARK_Mode;
 
-with SPARK.Big_Integers;
-use SPARK.Big_Integers;
+with SPARK.Big_Integers; use SPARK.Big_Integers;
 
 package SPARK.Conversions.Long_Integer_Conversions is new
   Signed_Conversions (Long_Integer);

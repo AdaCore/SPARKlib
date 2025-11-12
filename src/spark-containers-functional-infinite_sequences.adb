@@ -7,7 +7,7 @@
 pragma Ada_2022;
 
 package body SPARK.Containers.Functional.Infinite_Sequences
-with SPARK_Mode => Off
+  with SPARK_Mode => Off
 is
    use Containers;
 
@@ -15,11 +15,10 @@ is
    -- Local Subprograms --
    -----------------------
 
-   package Big_From_Count is new Signed_Conversions
-     (Int => Count_Type);
+   package Big_From_Count is new Signed_Conversions (Int => Count_Type);
 
-   function Big (C : Count_Type) return Big_Integer renames
-     Big_From_Count.To_Big_Integer;
+   function Big (C : Count_Type) return Big_Integer
+   renames Big_From_Count.To_Big_Integer;
 
    --  Store Count_Type'Last as a Big Natural because it is often used
 
@@ -32,54 +31,46 @@ is
    -- "<" --
    ---------
 
-   function "<" (Left : Sequence; Right : Sequence) return Boolean is
-     (Length (Left) < Length (Right)
-      and then
-        (Ptr_Eq (Left.Content, Right.Content)
-         or else
-           (for all N in Left =>
-                     Get (Left, N) = Get (Right, N))));
+   function "<" (Left : Sequence; Right : Sequence) return Boolean
+   is (Length (Left) < Length (Right)
+       and then (Ptr_Eq (Left.Content, Right.Content)
+                 or else (for all N in Left =>
+                            Get (Left, N) = Get (Right, N))));
 
    ----------
    -- "<=" --
    ----------
 
-   function "<=" (Left : Sequence; Right : Sequence) return Boolean is
-     (Length (Left) <= Length (Right)
-      and then
-        (Ptr_Eq (Left.Content, Right.Content)
-         or else
-            (for all N in Left =>
-                     Get (Left, N) = Get (Right, N))));
+   function "<=" (Left : Sequence; Right : Sequence) return Boolean
+   is (Length (Left) <= Length (Right)
+       and then (Ptr_Eq (Left.Content, Right.Content)
+                 or else (for all N in Left =>
+                            Get (Left, N) = Get (Right, N))));
 
    ---------
    -- "=" --
    ---------
 
-   function "=" (Left : Sequence; Right : Sequence) return Boolean is
-     (Left.Content = Right.Content);
+   function "=" (Left : Sequence; Right : Sequence) return Boolean
+   is (Left.Content = Right.Content);
 
    ---------
    -- Add --
    ---------
 
    function Add (Container : Sequence; New_Item : Element_Type) return Sequence
-   is
-     (Add (Container, Last (Container) + 1, New_Item));
+   is (Add (Container, Last (Container) + 1, New_Item));
 
    function Add
-     (Container : Sequence;
-      Position  : Big_Positive;
-      New_Item  : Element_Type) return Sequence is
-     (Content => Add (Container.Content, To_Count (Position), New_Item));
+     (Container : Sequence; Position : Big_Positive; New_Item : Element_Type)
+      return Sequence
+   is (Content => Add (Container.Content, To_Count (Position), New_Item));
 
    -----------------
    -- Aggr_Append --
    -----------------
 
-   procedure Aggr_Append
-     (Container : in out Sequence;
-      New_Item  : Element_Type)
+   procedure Aggr_Append (Container : in out Sequence; New_Item : Element_Type)
    is
    begin
       Container := Add (Container, New_Item);
@@ -144,17 +135,16 @@ is
    -- Empty_Sequence --
    --------------------
 
-   function Empty_Sequence return Sequence is
-      (Content => <>);
+   function Empty_Sequence return Sequence
+   is (Content => <>);
 
    ------------------
    -- Equal_Except --
    ------------------
 
    function Equal_Except
-     (Left     : Sequence;
-      Right    : Sequence;
-      Position : Big_Positive) return Boolean
+     (Left : Sequence; Right : Sequence; Position : Big_Positive)
+      return Boolean
    is
       Count_Pos : constant Count_Type := To_Count (Position);
       Count_Lst : constant Count_Type := To_Count (Last (Left));
@@ -168,8 +158,8 @@ is
 
       for J in 1 .. Count_Lst loop
          if J /= Count_Pos
-              and then not Element_Logic_Equal
-               (Get (Left.Content, J), Get (Right.Content, J))
+           and then not Element_Logic_Equal
+                          (Get (Left.Content, J), Get (Right.Content, J))
          then
             return False;
          end if;
@@ -179,10 +169,8 @@ is
    end Equal_Except;
 
    function Equal_Except
-     (Left  : Sequence;
-      Right : Sequence;
-      X     : Big_Positive;
-      Y     : Big_Positive) return Boolean
+     (Left : Sequence; Right : Sequence; X : Big_Positive; Y : Big_Positive)
+      return Boolean
    is
       Count_X   : constant Count_Type := To_Count (X);
       Count_Y   : constant Count_Type := To_Count (Y);
@@ -197,9 +185,9 @@ is
 
       for J in 1 .. Count_Lst loop
          if J /= Count_X
-              and then J /= Count_Y
-              and then not Element_Logic_Equal
-                  (Get (Left.Content, J), Get (Right.Content, J))
+           and then J /= Count_Y
+           and then not Element_Logic_Equal
+                          (Get (Left.Content, J), Get (Right.Content, J))
          then
             return False;
          end if;
@@ -212,34 +200,29 @@ is
    -- Equal_Prefix --
    ------------------
 
-   function Equal_Prefix (Left, Right : Sequence) return Boolean is
-     (Length (Left) <= Length (Right)
-      and then
-        (Ptr_Eq (Left.Content, Right.Content)
-         or else
-            (for all N in Left =>
-                  Element_Logic_Equal (Get (Left, N), Get (Right, N)))));
+   function Equal_Prefix (Left, Right : Sequence) return Boolean
+   is (Length (Left) <= Length (Right)
+       and then (Ptr_Eq (Left.Content, Right.Content)
+                 or else (for all N in Left =>
+                            Element_Logic_Equal
+                              (Get (Left, N), Get (Right, N)))));
 
    --------------------------
    -- Equivalent_Sequences --
    --------------------------
 
    function Equivalent_Sequences (Left, Right : Sequence) return Boolean
-   is
-     (Length (Left) = Length (Right)
-      and then
-        (Ptr_Eq (Left.Content, Right.Content)
-         or else
-            (for all N in Left =>
-               Equivalent_Elements (Get (Left, N), Get (Right, N)))));
+   is (Length (Left) = Length (Right)
+       and then (Ptr_Eq (Left.Content, Right.Content)
+                 or else (for all N in Left =>
+                            Equivalent_Elements
+                              (Get (Left, N), Get (Right, N)))));
 
    ----------
    -- Find --
    ----------
 
-   function Find
-     (Container : Sequence;
-      Item      : Element_Type) return Big_Natural
+   function Find (Container : Sequence; Item : Element_Type) return Big_Natural
    is
       Count_Lst : constant Count_Type := To_Count (Last (Container));
 
@@ -258,16 +241,15 @@ is
    ---------
 
    function Get
-     (Container : Sequence;
-      Position  : Big_Integer) return Element_Type is
-     (Get (Container.Content, To_Count (Position)));
+     (Container : Sequence; Position : Big_Integer) return Element_Type
+   is (Get (Container.Content, To_Count (Position)));
 
    ----------
    -- Last --
    ----------
 
-   function Last (Container : Sequence) return Big_Natural is
-      (Length (Container));
+   function Last (Container : Sequence) return Big_Natural
+   is (Length (Container));
 
    --------------------------
    -- Lemma_Eq_Extensional --
@@ -279,8 +261,8 @@ is
    -- Length --
    ------------
 
-   function Length (Container : Sequence) return Big_Natural is
-     (Big (Length (Container.Content)));
+   function Length (Container : Sequence) return Big_Natural
+   is (Big (Length (Container.Content)));
 
    ----------------
    -- Logical_Eq --
@@ -296,10 +278,8 @@ is
    -----------------
 
    function Range_Equal
-     (Left  : Sequence;
-      Right : Sequence;
-      Fst   : Big_Positive;
-      Lst   : Big_Natural) return Boolean
+     (Left : Sequence; Right : Sequence; Fst : Big_Positive; Lst : Big_Natural)
+      return Boolean
    is
       Count_Fst : constant Count_Type := To_Count (Fst);
       Count_Lst : constant Count_Type := To_Count (Lst);
@@ -347,19 +327,17 @@ is
    ------------
 
    function Remove
-     (Container : Sequence;
-      Position : Big_Positive) return Sequence is
-     (Content => Remove (Container.Content, To_Count (Position)));
+     (Container : Sequence; Position : Big_Positive) return Sequence
+   is (Content => Remove (Container.Content, To_Count (Position)));
 
    ---------
    -- Set --
    ---------
 
    function Set
-     (Container : Sequence;
-      Position  : Big_Positive;
-      New_Item  : Element_Type) return Sequence is
-     (Content => Set (Container.Content, To_Count (Position), New_Item));
+     (Container : Sequence; Position : Big_Positive; New_Item : Element_Type)
+      return Sequence
+   is (Content => Set (Container.Content, To_Count (Position), New_Item));
 
    --------------
    -- To_Count --

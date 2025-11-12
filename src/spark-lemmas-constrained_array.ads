@@ -17,23 +17,24 @@ generic
    --  inconsistencies.
    with function Less (X, Y : Element_T) return Boolean;
 
-package SPARK.Lemmas.Constrained_Array
-  with SPARK_Mode,
-       Pure,
-       Ghost,
-       Always_Terminates
+package SPARK.Lemmas.Constrained_Array with
+    SPARK_Mode,
+    Pure,
+    Ghost,
+    Always_Terminates
 is
 
-   pragma Warnings
-     (Off, "postcondition does not check the outcome of calling");
+   pragma
+     Warnings (Off, "postcondition does not check the outcome of calling");
 
-   procedure Lemma_Transitive_Order (Arr : A) with
+   procedure Lemma_Transitive_Order (Arr : A)
+   with
      Global => null,
-     Pre  => (for all I in Arr'Range =>
-               (if I /= Arr'First then
-                 Less (Arr (Index_Type'Pred (I)), Arr (I)))),
-     Post => (for all I in Arr'Range =>
-               (for all J in Arr'Range =>
-                 (if I < J then Less (Arr (I), Arr (J)))));
+     Pre    =>
+       (for all I in Arr'Range =>
+          (if I /= Arr'First then Less (Arr (Index_Type'Pred (I)), Arr (I)))),
+     Post   =>
+       (for all I in Arr'Range =>
+          (for all J in Arr'Range => (if I < J then Less (Arr (I), Arr (J)))));
 
 end SPARK.Lemmas.Constrained_Array;

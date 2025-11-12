@@ -21,6 +21,7 @@ check:
 	SPARKLIB_INSTALLED=False SPARKLIB_BODY_MODE=On gprbuild -P sparklib_light_internal.gpr -c -f -gnatc -gnatg -gnat2022 -gnateDSPARK_BODY_MODE=On -gnatwe -k
 
 format:
-	SPARKLIB_INSTALLED=False gnatformat -P sparklib_internal.gpr spark-containers-formal-unbounded_hashed_sets.adb spark-containers-formal-unbounded_hashed_sets.ads
+	SPARKLIB_INSTALLED=False gnatformat -P sparklib_internal.gpr
+	SPARKLIB_INSTALLED=False gnatformat -P sparklib_light_internal.gpr
 
 generate: $(ALL_COQ)
