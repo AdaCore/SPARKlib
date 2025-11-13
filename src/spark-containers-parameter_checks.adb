@@ -13,13 +13,26 @@ is
 
    package body Equivalence_Checks is
 
+      -------------------
+      -- Eq_Logical_Eq --
+      -------------------
+
+      procedure Eq_Logical_Eq (X, Y : T) is
+      begin
+         Param_Eq_Logical_Eq (X, Y);
+      end Eq_Logical_Eq;
+
       ------------------
       -- Eq_Reflexive --
       ------------------
 
       procedure Eq_Reflexive (X : T) is
       begin
-         Param_Eq_Reflexive (X);
+         if Use_Logical_Equality then
+            Eq_Logical_Eq (X, X);
+         else
+            Param_Eq_Reflexive (X);
+         end if;
       end Eq_Reflexive;
 
       ------------------
@@ -28,7 +41,16 @@ is
 
       procedure Eq_Symmetric (X, Y : T) is
       begin
-         Param_Eq_Symmetric (X, Y);
+         if Use_Logical_Equality then
+            Eq_Logical_Eq (X, Y);
+            pragma
+              Warnings (Off, "actuals for this call may be in wrong order");
+            Eq_Logical_Eq (Y, X);
+            pragma Warnings
+              (On, "actuals for this call may be in wrong order");
+         else
+            Param_Eq_Symmetric (X, Y);
+         end if;
       end Eq_Symmetric;
 
       -------------------
@@ -37,8 +59,24 @@ is
 
       procedure Eq_Transitive (X, Y, Z : T) is
       begin
-         Param_Eq_Transitive (X, Y, Z);
+         if Use_Logical_Equality then
+            Eq_Logical_Eq (X, Y);
+            Eq_Logical_Eq (Y, Z);
+            Eq_Logical_Eq (X, Z);
+         else
+            Param_Eq_Transitive (X, Y, Z);
+         end if;
       end Eq_Transitive;
+
+      ----------------
+      -- Logical_Eq --
+      ----------------
+
+      function Logical_Eq (X, Y : T) return Boolean with SPARK_Mode => Off is
+         pragma Unreferenced (X, Y);
+      begin
+         return (raise Program_Error);
+      end Logical_Eq;
 
    end Equivalence_Checks;
 
@@ -69,6 +107,14 @@ is
 
       procedure Eq_Symmetric (X, Y : T) is
       begin
+         if Use_Logical_Equality then
+            Param_Eq_Logical_Eq (X, Y);
+            pragma
+              Warnings (Off, "actuals for this call may be in wrong order");
+            Param_Eq_Logical_Eq (Y, X);
+            pragma
+              Warnings (On, "actuals for this call may be in wrong order");
+         end if;
          Param_Eq_Symmetric (X, Y);
       end Eq_Symmetric;
 
@@ -78,6 +124,11 @@ is
 
       procedure Eq_Transitive (X, Y, Z : T) is
       begin
+         if Use_Logical_Equality then
+            Param_Eq_Logical_Eq (X, Y);
+            Param_Eq_Logical_Eq (Y, Z);
+            Param_Eq_Logical_Eq (X, Z);
+         end if;
          Param_Eq_Transitive (X, Y, Z);
       end Eq_Transitive;
 

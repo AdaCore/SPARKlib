@@ -269,12 +269,27 @@ is
    function Last (Container : Sequence) return Big_Natural is
       (Length (Container));
 
+   --------------------------
+   -- Lemma_Eq_Extensional --
+   --------------------------
+
+   procedure Lemma_Eq_Extensional (Left : Sequence; Right : Sequence) is null;
+
    ------------
    -- Length --
    ------------
 
    function Length (Container : Sequence) return Big_Natural is
      (Big (Length (Container.Content)));
+
+   ----------------
+   -- Logical_Eq --
+   ----------------
+
+   function Logical_Eq (X, Y : Sequence) return Boolean is
+   begin
+      return X.Content = Y.Content;
+   end Logical_Eq;
 
    -----------------
    -- Range_Equal --
