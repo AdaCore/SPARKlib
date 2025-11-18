@@ -1124,7 +1124,7 @@ is
    function Aggr_Capacity (Container : Vector) return Count_Type
    is (Container.Capacity)
    with
-     Ghost    => SPARKlib_Full,
+     Ghost    => Static,
      Global   => null,
      Annotate => (GNATprove, Inline_For_Proof),
      Annotate => (GNATprove, Container_Aggregates, "Capacity");
@@ -1132,7 +1132,7 @@ is
    function Aggr_And_Iter_Model (Container : Vector) return M.Sequence
    is (Model (Container))
    with
-     Ghost    => SPARKlib_Full,
+     Ghost    => Static,
      Global   => null,
      Annotate => (GNATprove, Inline_For_Proof),
      Annotate => (GNATprove, Iterable_For_Proof, "Model"),

@@ -538,12 +538,14 @@ is
    is (Equivalent_Elements (Left, Right))
    with
      Global   => null,
+     Ghost    => Static,
      Annotate => (GNATprove, Inline_For_Proof),
      Annotate => (GNATprove, Container_Aggregates, "Equivalent_Keys");
 
    function Default_Count return Big_Natural
    is (0)
    with
+     Ghost    => Static,
      Annotate => (GNATprove, Inline_For_Proof),
      Annotate => (GNATprove, Container_Aggregates, "Default_Item");
 

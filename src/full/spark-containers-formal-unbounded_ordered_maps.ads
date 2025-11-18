@@ -1261,7 +1261,7 @@ is
    function Aggr_Capacity return Count_Type
    is (Count_Type'Last)
    with
-     Ghost    => SPARKlib_Full,
+     Ghost    => Static,
      Global   => null,
      Annotate => (GNATprove, Inline_For_Proof),
      Annotate => (GNATprove, Container_Aggregates, "Capacity");
@@ -1269,7 +1269,7 @@ is
    function Aggr_Model (Container : Map) return M.Map
    is (Model (Container))
    with
-     Ghost    => SPARKlib_Full,
+     Ghost    => Static,
      Global   => null,
      Annotate => (GNATprove, Inline_For_Proof),
      Annotate => (GNATprove, Container_Aggregates, "Model");
@@ -1277,7 +1277,7 @@ is
    function Iter_Model (Container : Map) return K.Sequence
    is (Keys (Container))
    with
-     Ghost    => SPARKlib_Full,
+     Ghost    => Static,
      Global   => null,
      Annotate => (GNATprove, Inline_For_Proof),
      Annotate => (GNATprove, Iterable_For_Proof, "Model");
