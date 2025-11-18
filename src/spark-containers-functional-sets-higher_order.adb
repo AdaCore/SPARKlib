@@ -8,16 +8,9 @@ pragma Ada_2022;
 
 with SPARK.Big_Integers;  use SPARK.Big_Integers;
 
-pragma Style_Checks (Off);
 package body SPARK.Containers.Functional.Sets.Higher_Order
-  with SPARK_Mode =>
-#if SPARK_BODY_MODE="On"
-  On
-#else
-  Off
-#end if;
+  with SPARK_Mode => Off --  #BODYMODE
 is
-   pragma Style_Checks (On);
 
    -----------------------------------
    -- Local subprogram declarations --
@@ -318,6 +311,7 @@ is
             pragma Loop_Invariant
               (if Count_Rec (Subset, Test) = Length (Subset)
                then Count_Rec (S, Test) = Length (S));
+            pragma Assert (Test (Choose (Subset)));
          end loop;
       end Do_Proof;
 

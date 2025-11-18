@@ -11,21 +11,12 @@ abstract project SPARKlib_common is
    type SPARKlib_Installed_T is ("True", "False");
    SPARKlib_Installed : SPARKlib_Installed_T := External("SPARKLIB_INSTALLED", "True");
 
-   --  Environment variable SPARKLIB_BODY_MODE controls whether the
-   --  project is with'ed in client projects to use lemmas (value "Off"),
-   --  or whether it is being itself formally verified (value "On").
-   --  Users should not set the value of this variable to "On".
-
-   type SPARK_Body_Mode_T is ("Off", "On");
-   SPARK_Body_Mode : SPARK_Body_Mode_T := External ("SPARKLIB_BODY_MODE", "Off");
-
    --  Enforce GNAT style checks, except for multiple blank lines which does
    --  not work for preprocessed files, and alphabetical ordering of
    --  subprogram bodies (although not applicable to null subprograms).
    Common_Default_Switches :=
      ("-gnat2022", "-gnatygo-u",
-      "-gnatwI",  --  disable warnings about SPARKlib using GNAT internal units
-      "-gnateDSPARK_BODY_MODE=" & SPARK_Body_Mode);
+      "-gnatwI");  --  disable warnings about SPARKlib using GNAT internal units
 
    Root := "";
 

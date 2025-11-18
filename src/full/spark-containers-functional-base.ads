@@ -10,6 +10,7 @@ pragma Ada_2022;
 
 with SPARK.Containers.Types; use SPARK.Containers.Types;
 private with Ada.Finalization;
+private with SPARK.Containers.Functional.Holder;
 
 private generic
    type Index_Type is (<>);
@@ -115,37 +116,18 @@ private
 
    subtype Positive_Count_Type is Count_Type range 1 .. Count_Type'Last;
 
-   type Reference_Count_Type is new Natural;
-
-   type Element_Access is access all Element_Type;
-
-   type Refcounted_Element is record
-      Reference_Count : Reference_Count_Type;
-      E_Access        : Element_Access;
-   end record;
-
-   type Refcounted_Element_Access is access Refcounted_Element;
-
-   type Controlled_Element_Access is
-     new Ada.Finalization.Controlled with record
-      Ref : Refcounted_Element_Access := null;
-   end record;
-
-   function Create
-     (R : Refcounted_Element_Access)
-      return Controlled_Element_Access
-   is
-     (Ada.Finalization.Controlled with Ref => R);
-
-   function Element_Init (E : Element_Type) return Controlled_Element_Access;
-   --  Use to initialize a refcounted element
+   package Element_Holders is new SPARK.Containers.Functional.Holder
+     (Element_Type);
+   use Element_Holders;
 
    type Element_Array is
-     array (Positive_Count_Type range <>) of Controlled_Element_Access;
+     array (Positive_Count_Type range <>) of Element_Holder;
 
    type Element_Array_Access_Base is access Element_Array;
 
    subtype Element_Array_Access is Element_Array_Access_Base;
+
+   type Reference_Count_Type is new Natural;
 
    type Array_Base is record
      Reference_Count : Reference_Count_Type;
@@ -169,12 +151,6 @@ private
 
    procedure Finalize
      (Controlled_Base : in out Array_Base_Controlled_Access);
-
-   procedure Adjust
-     (Ctrl_E : in out Controlled_Element_Access);
-
-   procedure Finalize
-     (Ctrl_E : in out Controlled_Element_Access);
 
    function Content_Init (L : Count_Type := 0)
                           return Array_Base_Controlled_Access;

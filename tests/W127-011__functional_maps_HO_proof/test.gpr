@@ -3,7 +3,7 @@ with "sparklib";
 project Test is
 
    package Builder is
-      for Switches ("ada") use ("-gnata", "-gnat2022", "-gnateDSPARK_BODY_MODE=On");
+      for Switches ("ada") use ("-gnata", "-gnat2022");
    end Builder;
 
    package Prove is
