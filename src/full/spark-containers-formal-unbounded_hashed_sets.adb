@@ -13,44 +13,41 @@ with SPARK.Containers.Formal.Hash_Tables.Generic_Keys;
 pragma Elaborate_All (SPARK.Containers.Formal.Hash_Tables.Generic_Keys);
 
 with SPARK.Containers.Formal.Hash_Tables.Prime_Numbers;
-use  SPARK.Containers.Formal.Hash_Tables.Prime_Numbers;
+use SPARK.Containers.Formal.Hash_Tables.Prime_Numbers;
 
 with Ada.Unchecked_Deallocation;
 
-with System; use type System.Address;
+with System;
+use type System.Address;
 
-package body SPARK.Containers.Formal.Unbounded_Hashed_Sets with
-  SPARK_Mode => Off
+package body SPARK.Containers.Formal.Unbounded_Hashed_Sets
+  with SPARK_Mode => Off
 is
 
    -----------------------
    -- Local Subprograms --
    -----------------------
 
-   function Default_Modulus (Capacity : Count_Type) return Hash_Type with
-     Global => null;
+   function Default_Modulus (Capacity : Count_Type) return Hash_Type
+   with Global => null;
 
    procedure Difference (Left : Set; Right : Set; Target : in out Set);
    --  Inserts all the elements of Left that are not in Right in Target
 
    function Equivalent_Keys
-     (Key  : Element_Type;
-      Node : Node_Type) return Boolean;
+     (Key : Element_Type; Node : Node_Type) return Boolean;
    --  Test if Node has the key Key using the function provided as a generic
    --  parameter.
 
    pragma Inline (Equivalent_Keys);
 
-   procedure Free
-     (HT : in out Set;
-      X  : Count_Type);
+   procedure Free (HT : in out Set; X : Count_Type);
    --  Cleanly remove a node from the Map and put it back in the free list
 
    generic
       with procedure Set_Element (Node : in out Node_Type);
    procedure Generic_Allocate
-     (HT   : in out Hash_Table_Type;
-      Node : out Count_Type);
+     (HT : in out Hash_Table_Type; Node : out Count_Type);
    --  Allocate a new node i.e get it out of the free list
 
    function Hash_Node (Node : Node_Type) return Hash_Type;
@@ -67,15 +64,10 @@ is
    --  might fail if, for example, another element in the Set already got the
    --  same key. In this case, Node refer to this node and Inserted is False.
 
-   procedure Intersection
-     (Left   : Set;
-      Right  : Set;
-      Target : in out Set);
+   procedure Intersection (Left : Set; Right : Set; Target : in out Set);
    --  Compute the Intersection between Left and Right and store it in Target
 
-   function Is_In
-     (HT  : Set;
-      Key : Node_Type) return Boolean;
+   function Is_In (HT : Set; Key : Node_Type) return Boolean;
    --  Check if Node's element is in HT
 
    pragma Inline (Is_In);
@@ -94,48 +86,51 @@ is
    --  Set the node following Node. Useb by Hash_Tables operation's functions.
 
    function Vet (Container : Set; Position : Cursor) return Boolean
+   with Inline;
    --  Check if Position is correct in Container
 
-     with Inline;
-
-   procedure Resize (Container : in out Set; Size : Count_Type := 0) with
-   --  Allocate a new larger Set
+   procedure Resize (Container : in out Set; Size : Count_Type := 0)
+   with
+     --  Allocate a new larger Set
 
      Global => null,
      Post   =>
        (SPARKlib_Full =>
           Model (Container) = Model (Container)'Old
-            and Mapping_Preserved
-              (E_Left  => Elements (Container)'Old,
-               E_Right => Elements (Container),
-               P_Left  => Positions (Container)'Old,
-               P_Right => Positions (Container)));
+          and Mapping_Preserved
+                (E_Left  => Elements (Container)'Old,
+                 E_Right => Elements (Container),
+                 P_Left  => Positions (Container)'Old,
+                 P_Right => Positions (Container)));
 
    --------------------------
    -- Local Instantiations --
    --------------------------
 
-   procedure Finalize_Content is new Ada.Unchecked_Deallocation
-     (Object => HT_Types.Hash_Table_Type,
-      Name   => HT_Access);
+   procedure Finalize_Content is new
+     Ada.Unchecked_Deallocation
+       (Object => HT_Types.Hash_Table_Type,
+        Name   => HT_Access);
    --  Deallocate a HT_Types.Hash_Table_Type
 
-   package HT_Ops is new Hash_Tables.Generic_Operations
-     (HT_Types  => HT_Types,
-      Hash_Node => Hash_Node,
-      Next      => Next,
-      Set_Next  => Set_Next);
+   package HT_Ops is new
+     Hash_Tables.Generic_Operations
+       (HT_Types  => HT_Types,
+        Hash_Node => Hash_Node,
+        Next      => Next,
+        Set_Next  => Set_Next);
 
-   package Element_Keys is new Hash_Tables.Generic_Keys
-     (HT_Types        => HT_Types,
-      Next            => Next,
-      Set_Next        => Set_Next,
-      Key_Type        => Element_Type,
-      Hash            => Hash,
-      Equivalent_Keys => Equivalent_Keys);
+   package Element_Keys is new
+     Hash_Tables.Generic_Keys
+       (HT_Types        => HT_Types,
+        Next            => Next,
+        Set_Next        => Set_Next,
+        Key_Type        => Element_Type,
+        Hash            => Hash,
+        Equivalent_Keys => Equivalent_Keys);
 
-   procedure Replace_Element is
-     new Element_Keys.Generic_Replace_Element (Hash_Node, Set_Element);
+   procedure Replace_Element is new
+     Element_Keys.Generic_Replace_Element (Hash_Node, Set_Element);
 
    ---------
    -- "=" --
@@ -156,17 +151,17 @@ is
          ENode : Count_Type;
 
       begin
-         Node  := First (Left).Node;
+         Node := First (Left).Node;
          while Node /= 0 loop
             ENode :=
               Find
                 (Container => Right,
-                 Item      =>
-                   Element (Left.Content.Nodes (Node).E_Holder)).Node;
+                 Item      => Element (Left.Content.Nodes (Node).E_Holder))
+                .Node;
 
             if ENode = 0
-              or else Element (Right.Content.Nodes (ENode).E_Holder) /=
-              Element (Left.Content.Nodes (Node).E_Holder)
+              or else Element (Right.Content.Nodes (ENode).E_Holder)
+                      /= Element (Left.Content.Nodes (Node).E_Holder)
             then
                return False;
             end if;
@@ -189,11 +184,12 @@ is
       end if;
 
       declare
-         New_Set : constant HT_Access := new HT_Types.Hash_Table_Type
-           (Source.Content.Capacity, Source.Content.Modulus);
+         New_Set : constant HT_Access :=
+           new HT_Types.Hash_Table_Type
+                 (Source.Content.Capacity, Source.Content.Modulus);
       begin
          New_Set.Length := Source.Content.Length;
-         New_Set.Free   := Source.Content.Free;
+         New_Set.Free := Source.Content.Free;
 
          --  Copy the nodes. The call to Adjust will make a proper copy of
          --  the holders.
@@ -224,8 +220,8 @@ is
    procedure Assign (Target : in out Set; Source : Set) is
       procedure Insert_Element (Source_Node : Count_Type);
 
-      procedure Insert_Elements is
-        new HT_Ops.Generic_Iteration (Insert_Element);
+      procedure Insert_Elements is new
+        HT_Ops.Generic_Iteration (Insert_Element);
 
       --------------------
       -- Insert_Element --
@@ -241,7 +237,7 @@ is
          pragma Assert (B);
       end Insert_Element;
 
-   --  Start of processing for Assign
+      --  Start of processing for Assign
 
    begin
       HT_Ops.Clear (Target.Content.all);
@@ -262,16 +258,15 @@ is
    ------------------------
 
    function Constant_Reference
-     (Container : Set;
-      Position  : Cursor) return not null access constant Element_Type
-   is
+     (Container : Set; Position : Cursor)
+      return not null access constant Element_Type is
    begin
       if not Has_Element (Container, Position) then
          raise Constraint_Error with "Position cursor equals No_Element";
       end if;
 
-      pragma Assert
-        (Vet (Container, Position), "bad cursor in function Element");
+      pragma
+        Assert (Vet (Container, Position), "bad cursor in function Element");
 
       return Element_Access (Container.Content.Nodes (Position.Node).E_Holder);
    end Constant_Reference;
@@ -289,8 +284,7 @@ is
    -- Copy --
    ----------
 
-   function Copy (Source : Set) return Set
-   is
+   function Copy (Source : Set) return Set is
       Target : Set;
 
    begin
@@ -369,7 +363,8 @@ is
          Tgt_Node := HT_Ops.First (Target.Content.all);
          while Tgt_Node /= 0 loop
             if Element_Keys.Find
-                 (Source.Content.all, Element (TN (Tgt_Node).E_Holder)) /= 0
+                 (Source.Content.all, Element (TN (Tgt_Node).E_Holder))
+              /= 0
             then
                declare
                   X : constant Count_Type := Tgt_Node;
@@ -391,8 +386,9 @@ is
       end if;
 
       while Src_Node /= Src_Last loop
-         Tgt_Node := Element_Keys.Find
-           (Target.Content.all, Element (SN (Src_Node).E_Holder));
+         Tgt_Node :=
+           Element_Keys.Find
+             (Target.Content.all, Element (SN (Src_Node).E_Holder));
 
          if Tgt_Node /= 0 then
             HT_Ops.Delete_Node_Sans_Free (Target.Content.all, Tgt_Node);
@@ -406,8 +402,7 @@ is
    procedure Difference (Left : Set; Right : Set; Target : in out Set) is
       procedure Process (L_Node : Count_Type);
 
-      procedure Iterate is
-        new HT_Ops.Generic_Iteration (Process);
+      procedure Iterate is new HT_Ops.Generic_Iteration (Process);
 
       -------------
       -- Process --
@@ -426,7 +421,7 @@ is
          end if;
       end Process;
 
-   --  Start of processing for Difference
+      --  Start of processing for Difference
 
    begin
       Iterate (Left.Content.all);
@@ -451,17 +446,14 @@ is
    -- Element --
    -------------
 
-   function Element
-     (Container : Set;
-      Position  : Cursor) return Element_Type
-   is
+   function Element (Container : Set; Position : Cursor) return Element_Type is
    begin
       if not Has_Element (Container, Position) then
          raise Constraint_Error with "Position cursor equals No_Element";
       end if;
 
-      pragma Assert
-        (Vet (Container, Position), "bad cursor in function Element");
+      pragma
+        Assert (Vet (Container, Position), "bad cursor in function Element");
 
       return Element (Container.Content.Nodes (Position.Node).E_Holder);
    end Element;
@@ -480,9 +472,7 @@ is
    ---------------------
 
    function Equivalent_Keys
-     (Key  : Element_Type;
-      Node : Node_Type) return Boolean
-   is
+     (Key : Element_Type; Node : Node_Type) return Boolean is
    begin
       return Equivalent_Elements (Key, Element (Node.E_Holder));
    end Equivalent_Keys;
@@ -494,23 +484,20 @@ is
    function Equivalent_Sets (Left, Right : Set) return Boolean is
 
       function Find_Equivalent_Key
-        (R_HT   : Hash_Table_Type;
-         L_Node : Node_Type) return Boolean;
+        (R_HT : Hash_Table_Type; L_Node : Node_Type) return Boolean;
       pragma Inline (Find_Equivalent_Key);
 
-      function Is_Equivalent is
-        new HT_Ops.Generic_Equal (Find_Equivalent_Key);
+      function Is_Equivalent is new HT_Ops.Generic_Equal (Find_Equivalent_Key);
 
       -------------------------
       -- Find_Equivalent_Key --
       -------------------------
 
       function Find_Equivalent_Key
-        (R_HT   : Hash_Table_Type;
-         L_Node : Node_Type) return Boolean
+        (R_HT : Hash_Table_Type; L_Node : Node_Type) return Boolean
       is
          R_Index : constant Hash_Type :=
-                     Element_Keys.Index (R_HT, Element (L_Node.E_Holder));
+           Element_Keys.Index (R_HT, Element (L_Node.E_Holder));
          R_Node  : Count_Type := R_HT.Buckets (R_Index);
          RN      : Nodes_Type renames R_HT.Nodes;
 
@@ -530,7 +517,7 @@ is
          end loop;
       end Find_Equivalent_Key;
 
-   --  Start of processing for Equivalent_Sets
+      --  Start of processing for Equivalent_Sets
 
    begin
       return Is_Equivalent (Left.Content.all, Right.Content.all);
@@ -567,10 +554,7 @@ is
    -- Find --
    ----------
 
-   function Find
-     (Container : Set;
-      Item      : Element_Type) return Cursor
-   is
+   function Find (Container : Set; Item : Element_Type) return Cursor is
       Node : constant Count_Type :=
         Element_Keys.Find (Container.Content.all, Item);
 
@@ -608,13 +592,10 @@ is
       ----------------------
 
       function E_Elements_Equal
-        (Left  : E.Sequence;
-         Right : E.Sequence) return Boolean
-      is
+        (Left : E.Sequence; Right : E.Sequence) return Boolean is
       begin
          for I in 1 .. E.Last (Left) loop
-            if not E.Contains (Right, 1, E.Last (Right), E.Get (Left, I))
-            then
+            if not E.Contains (Right, 1, E.Last (Right), E.Get (Left, I)) then
                return False;
             end if;
          end loop;
@@ -627,9 +608,7 @@ is
       -------------------------
 
       function E_Elements_Included
-        (Left  : E.Sequence;
-         Right : E.Sequence) return Boolean
-      is
+        (Left : E.Sequence; Right : E.Sequence) return Boolean is
       begin
          for I in 1 .. E.Last (Left) loop
             declare
@@ -637,7 +616,7 @@ is
             begin
                if J = 0
                  or else not Element_Logic_Equal
-                   (E.Get (Left, I), E.Get (Right, J))
+                               (E.Get (Left, I), E.Get (Right, J))
                then
                   return False;
                end if;
@@ -648,9 +627,7 @@ is
       end E_Elements_Included;
 
       function E_Elements_Included
-        (Left  : E.Sequence;
-         Model : M.Set;
-         Right : E.Sequence) return Boolean
+        (Left : E.Sequence; Model : M.Set; Right : E.Sequence) return Boolean
       is
       begin
          for I in 1 .. E.Last (Left) loop
@@ -679,8 +656,7 @@ is
         (Container : E.Sequence;
          Model     : M.Set;
          Left      : E.Sequence;
-         Right     : E.Sequence) return Boolean
-      is
+         Right     : E.Sequence) return Boolean is
       begin
          for I in 1 .. E.Last (Container) loop
             declare
@@ -741,9 +717,7 @@ is
       ----------
 
       function Find
-        (Container : E.Sequence;
-         Item      : Element_Type) return Count_Type
-      is
+        (Container : E.Sequence; Item : Element_Type) return Count_Type is
       begin
          for I in 1 .. E.Last (Container) loop
             if Equivalent_Elements (Item, E.Get (Container, I)) then
@@ -767,16 +741,15 @@ is
         (E_Left  : E.Sequence;
          E_Right : E.Sequence;
          P_Left  : P.Map;
-         P_Right : P.Map) return Boolean
-      is
+         P_Right : P.Map) return Boolean is
       begin
          for C of P_Left loop
             if not P.Has_Key (P_Right, C)
-              or else P.Get (P_Left,  C) > E.Last (E_Left)
+              or else P.Get (P_Left, C) > E.Last (E_Left)
               or else P.Get (P_Right, C) > E.Last (E_Right)
               or else not Element_Logic_Equal
-                (E.Get (E_Left,  P.Get (P_Left,  C)),
-                 E.Get (E_Right, P.Get (P_Right, C)))
+                            (E.Get (E_Left, P.Get (P_Left, C)),
+                             E.Get (E_Right, P.Get (P_Right, C)))
             then
                return False;
             end if;
@@ -794,17 +767,16 @@ is
          E_Right  : E.Sequence;
          P_Left   : P.Map;
          P_Right  : P.Map;
-         Position : Cursor) return Boolean
-      is
+         Position : Cursor) return Boolean is
       begin
          for C of P_Left loop
             if C /= Position
               and (not P.Has_Key (P_Right, C)
-                    or else P.Get (P_Left,  C) > E.Last (E_Left)
-                    or else P.Get (P_Right, C) > E.Last (E_Right)
-                    or else not Element_Logic_Equal
-                     (E.Get (E_Left,  P.Get (P_Left,  C)),
-                      E.Get (E_Right, P.Get (P_Right, C))))
+                   or else P.Get (P_Left, C) > E.Last (E_Left)
+                   or else P.Get (P_Right, C) > E.Last (E_Right)
+                   or else not Element_Logic_Equal
+                                 (E.Get (E_Left, P.Get (P_Left, C)),
+                                  E.Get (E_Right, P.Get (P_Right, C))))
             then
                return False;
             end if;
@@ -829,8 +801,8 @@ is
             R :=
               M.Add
                 (Container => R,
-                 Item      => Element
-                                (Container.Content.Nodes (Position).E_Holder));
+                 Item      =>
+                   Element (Container.Content.Nodes (Position).E_Holder));
 
             Position := HT_Ops.Next (Container.Content.all, Position);
          end loop;
@@ -885,8 +857,7 @@ is
    ----------------------
 
    procedure Generic_Allocate
-     (HT   : in out Hash_Table_Type;
-      Node : out Count_Type)
+     (HT : in out Hash_Table_Type; Node : out Count_Type)
    is
       procedure Allocate is new HT_Ops.Generic_Allocate (Set_Element);
    begin
@@ -894,37 +865,36 @@ is
       HT.Nodes (Node).Has_Element := True;
    end Generic_Allocate;
 
-   package body Generic_Keys with SPARK_Mode => Off is
+   package body Generic_Keys
+     with SPARK_Mode => Off
+   is
 
       -----------------------
       -- Local Subprograms --
       -----------------------
 
       function Equivalent_Key_Node
-        (Key  : Key_Type;
-         Node : Node_Type) return Boolean;
+        (Key : Key_Type; Node : Node_Type) return Boolean;
       pragma Inline (Equivalent_Key_Node);
 
       --------------------------
       -- Local Instantiations --
       --------------------------
 
-      package Key_Keys is new Hash_Tables.Generic_Keys
-        (HT_Types        => HT_Types,
-         Next            => Next,
-         Set_Next        => Set_Next,
-         Key_Type        => Key_Type,
-         Hash            => Hash,
-         Equivalent_Keys => Equivalent_Key_Node);
+      package Key_Keys is new
+        Hash_Tables.Generic_Keys
+          (HT_Types        => HT_Types,
+           Next            => Next,
+           Set_Next        => Set_Next,
+           Key_Type        => Key_Type,
+           Hash            => Hash,
+           Equivalent_Keys => Equivalent_Key_Node);
 
       --------------
       -- Contains --
       --------------
 
-      function Contains
-        (Container : Set;
-         Key       : Key_Type) return Boolean
-      is
+      function Contains (Container : Set; Key : Key_Type) return Boolean is
       begin
          return Find (Container, Key) /= No_Element;
       end Contains;
@@ -950,10 +920,7 @@ is
       -- Element --
       -------------
 
-      function Element
-        (Container : Set;
-         Key       : Key_Type) return Element_Type
-      is
+      function Element (Container : Set; Key : Key_Type) return Element_Type is
          Node : constant Count_Type := Find (Container, Key).Node;
 
       begin
@@ -969,12 +936,10 @@ is
       -------------------------
 
       function Equivalent_Key_Node
-        (Key  : Key_Type;
-         Node : Node_Type) return Boolean
-      is
+        (Key : Key_Type; Node : Node_Type) return Boolean is
       begin
-         return Equivalent_Keys
-                  (Key, Generic_Keys.Key (Element (Node.E_Holder)));
+         return
+           Equivalent_Keys (Key, Generic_Keys.Key (Element (Node.E_Holder)));
       end Equivalent_Key_Node;
 
       -------------
@@ -992,10 +957,7 @@ is
       -- Find --
       ----------
 
-      function Find
-        (Container : Set;
-         Key       : Key_Type) return Cursor
-      is
+      function Find (Container : Set; Key : Key_Type) return Cursor is
          Node : constant Count_Type :=
            Key_Keys.Find (Container.Content.all, Key);
       begin
@@ -1013,10 +975,7 @@ is
          -----------------------
 
          function M_Included_Except
-           (Left  : M.Set;
-            Right : M.Set;
-            Key   : Key_Type) return Boolean
-         is
+           (Left : M.Set; Right : M.Set; Key : Key_Type) return Boolean is
          begin
             for E of M.Iterate (Left) loop
                if not Contains (Right, E)
@@ -1041,8 +1000,8 @@ is
             raise Constraint_Error with "Position cursor has no element";
          end if;
 
-         pragma Assert
-           (Vet (Container, Position), "bad cursor in function Key");
+         pragma
+           Assert (Vet (Container, Position), "bad cursor in function Key");
 
          declare
             N : Node_Type renames Container.Content.Nodes (Position.Node);
@@ -1056,9 +1015,7 @@ is
       -------------
 
       procedure Replace
-        (Container : in out Set;
-         Key       : Key_Type;
-         New_Item  : Element_Type)
+        (Container : in out Set; Key : Key_Type; New_Item : Element_Type)
       is
          Node : constant Count_Type :=
            Key_Keys.Find (Container.Content.all, Key);
@@ -1124,8 +1081,7 @@ is
      (Container : in out Set;
       New_Item  : Element_Type;
       Position  : out Cursor;
-      Inserted  : out Boolean)
-   is
+      Inserted  : out Boolean) is
    begin
       Insert (Container, New_Item, Position.Node, Inserted);
    end Insert;
@@ -1138,8 +1094,8 @@ is
       Insert (Container, New_Item, Unused_Position, Inserted);
 
       if not Inserted then
-         raise Constraint_Error with
-           "attempt to insert element already in set";
+         raise Constraint_Error
+           with "attempt to insert element already in set";
       end if;
    end Insert;
 
@@ -1152,16 +1108,13 @@ is
       procedure Allocate_Set_Element (Node : in out Node_Type);
       pragma Inline (Allocate_Set_Element);
 
-      procedure New_Node
-        (HT   : in out Hash_Table_Type;
-         Node : out Count_Type);
+      procedure New_Node (HT : in out Hash_Table_Type; Node : out Count_Type);
       pragma Inline (New_Node);
 
-      procedure Local_Insert is
-        new Element_Keys.Generic_Conditional_Insert (New_Node);
+      procedure Local_Insert is new
+        Element_Keys.Generic_Conditional_Insert (New_Node);
 
-      procedure Allocate is
-        new Generic_Allocate (Allocate_Set_Element);
+      procedure Allocate is new Generic_Allocate (Allocate_Set_Element);
 
       ---------------------------
       --  Allocate_Set_Element --
@@ -1176,15 +1129,13 @@ is
       -- New_Node --
       --------------
 
-      procedure New_Node
-        (HT   : in out Hash_Table_Type;
-         Node : out Count_Type)
+      procedure New_Node (HT : in out Hash_Table_Type; Node : out Count_Type)
       is
       begin
          Allocate (HT, Node);
       end New_Node;
 
-   --  Start of processing for Insert
+      --  Start of processing for Insert
 
    begin
       if Length (Container) = Container.Content.Capacity then
@@ -1228,8 +1179,7 @@ is
    procedure Intersection (Left : Set; Right : Set; Target : in out Set) is
       procedure Process (L_Node : Count_Type);
 
-      procedure Iterate is
-        new HT_Ops.Generic_Iteration (Process);
+      procedure Iterate is new HT_Ops.Generic_Iteration (Process);
 
       -------------
       -- Process --
@@ -1248,7 +1198,7 @@ is
          end if;
       end Process;
 
-   --  Start of processing for Intersection
+      --  Start of processing for Intersection
 
    begin
       Iterate (Left.Content.all);
@@ -1431,17 +1381,14 @@ is
    ---------------------
 
    procedure Replace_Element
-     (Container : in out Set;
-      Position  : Cursor;
-      New_Item  : Element_Type)
-   is
+     (Container : in out Set; Position : Cursor; New_Item : Element_Type) is
    begin
       if not Has_Element (Container, Position) then
          raise Constraint_Error with "Position cursor equals No_Element";
       end if;
 
-      pragma Assert
-        (Vet (Container, Position), "bad cursor in Replace_Element");
+      pragma
+        Assert (Vet (Container, Position), "bad cursor in Replace_Element");
 
       Replace_Element (Container.Content.all, Position.Node, New_Item);
    end Replace_Element;
@@ -1471,16 +1418,17 @@ is
          return;
       end if;
 
-      Rehash : declare
+      Rehash :
+      declare
          Next_Size : constant Count_Type :=
            Count_Type'Max
              (New_Size,
               (if CC.Nodes'Length < Count_Type'Last / 2
                then 2 * CC.Nodes'Length
                else Count_Type'Last));
-         New_Set : constant HT_Access :=
-           new HT_Types.Hash_Table_Type (Next_Size,
-                                         Default_Modulus (Next_Size));
+         New_Set   : constant HT_Access :=
+           new HT_Types.Hash_Table_Type
+                 (Next_Size, Default_Modulus (Next_Size));
 
       begin
          New_Set.Length := CC.Length;
@@ -1578,7 +1526,7 @@ is
          end if;
       end Process;
 
-   --  Start of processing for Symmetric_Difference
+      --  Start of processing for Symmetric_Difference
 
    begin
       if Length (Target) = 0 then
@@ -1627,8 +1575,7 @@ is
    procedure Union (Target : in out Set; Source : Set) is
       procedure Process (Src_Node : Count_Type);
 
-      procedure Iterate is
-        new HT_Ops.Generic_Iteration (Process);
+      procedure Iterate is new HT_Ops.Generic_Iteration (Process);
 
       -------------
       -- Process --
@@ -1645,7 +1592,7 @@ is
          Insert (Target, E, Unused_X, Unused_B);
       end Process;
 
-   --  Start of processing for Union
+      --  Start of processing for Union
 
    begin
       Iterate (Source.Content.all);
@@ -1699,9 +1646,10 @@ is
             return False;
          end if;
 
-         X := S.Content.Buckets
-           (Element_Keys.Index
-              (S.Content.all, Element (N (Position.Node).E_Holder)));
+         X :=
+           S.Content.Buckets
+             (Element_Keys.Index
+                (S.Content.all, Element (N (Position.Node).E_Holder)));
 
          for J in 1 .. S.Content.Length loop
             if X = Position.Node then
@@ -1712,7 +1660,8 @@ is
                return False;
             end if;
 
-            if X = N (X).Next then  --  to prevent unnecessary looping
+            if X = N (X).Next then
+               --  to prevent unnecessary looping
                return False;
             end if;
 
