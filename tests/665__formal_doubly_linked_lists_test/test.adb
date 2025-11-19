@@ -554,7 +554,7 @@ procedure Test with SPARK_Mode is
          Delete (X, P2);
          Assert (Length (X) = 4, "Delete on full container, length is decremented");
          Assert (P3 = No_Element, "Delete on full container, Position is set to No_Element");
-         Assert (Next (X, P2) = P4, "Delete on full containert, Position has been removed");
+         Assert (Next (X, P2) = P4, "Delete on full container, Position has been removed");
       end Test_Delete_Full_Container;
    begin
       Test_Delete_In_The_Middle;
