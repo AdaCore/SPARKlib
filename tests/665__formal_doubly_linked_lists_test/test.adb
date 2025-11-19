@@ -539,9 +539,27 @@ procedure Test with SPARK_Mode is
          Assert (Has_Element (X, P4) and then Element (X, P4) = 4, "Delete first element, other cursor/element mappings are preserved");
          Assert (P5 = Next (X, P4), "Delete first element, order of other cursors is preserved");
       end Test_Delete_First;
+
+      --  Test that deletion works on a full container
+
+      procedure Test_Delete_Full_Container with Pre => True is
+         X                  : List (5);
+         P1, P2, P3, P4, P5 : Cursor;
+      begin
+         Create_Non_Empty_List (X);
+         Assert (Length (X) = X.Capacity, "Delete on full container, container is not full");
+         P1 := First (X);
+         P2 := Next (X, P1);
+
+         Delete (X, P2);
+         Assert (Length (X) = 4, "Delete on full container, length is decremented");
+         Assert (P3 = No_Element, "Delete on full container, Position is set to No_Element");
+         Assert (Next (X, P2) = P4, "Delete on full container, Position has been removed");
+      end Test_Delete_Full_Container;
    begin
       Test_Delete_In_The_Middle;
       Test_Delete_First;
+      Test_Delete_Full_Container;
    end Test_Delete_1;
 
    --  Delete with a Count parameter
