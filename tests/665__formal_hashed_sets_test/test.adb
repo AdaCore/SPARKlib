@@ -4,7 +4,6 @@ with Inst; use Inst;
 use Inst.Int_Sets;
 
 procedure Test with SPARK_Mode is
-
    procedure Assert (B : Boolean; S : String) with
      Pre => B;
    procedure Assert (B : Boolean; S : String) is
@@ -550,13 +549,21 @@ procedure Test with SPARK_Mode is
       Difference (Y, Z);
       Assert (Y = X, "Difference with empty right");
 
-      for I in 4 .. 8 loop
+      for I in 4 .. 7 loop
          Insert (Z, I);
       end loop;
       Difference (Y, Z);
       Assert ((for all E of X => (if not Contains (Z, E) then Contains (Y, E))), "Difference of non-empty sets, contains elements not in right");
       Assert (Is_Subset (Y, X), "Difference of non-empty sets, Is_Subset left");
       Assert (not Overlap (Y, Z), "Difference of non-empty sets, no overlap right");
+
+      --  Same as above but with parameters reversed
+      Y := X;
+      X := Z;
+      Difference (Z, Y);
+      Assert ((for all E of X => (if not Contains (Y, E) then Contains (Z, E))), "Difference of non-empty sets reverse, contains elements not in right");
+      Assert (Is_Subset (Z, X), "Difference of non-empty set reverses, Is_Subset left");
+      Assert (not Overlap (Y, Z), "Difference of non-empty sets reverse, no overlap right");
    end Test_Difference_1;
 
    --  Difference function
