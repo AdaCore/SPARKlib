@@ -13,7 +13,9 @@
 
 with SPARK.Containers.Types; use SPARK.Containers.Types;
 
-private package SPARK.Containers.Stable_Sorting with SPARK_Mode => On is
+private package SPARK.Containers.Stable_Sorting
+  with SPARK_Mode => On
+is
    pragma Pure;
 
    --  Stable sorting algorithms with N-log-N worst case execution time.
@@ -23,11 +25,10 @@ private package SPARK.Containers.Stable_Sorting with SPARK_Mode => On is
       Nil : Node_Ref;
    package List_Descriptors is
 
-      type List_Descriptor is
-         record
-            First, Last : Node_Ref := Nil;
-            Length      : Count_Type := 0;
-         end record;
+      type List_Descriptor is record
+         First, Last : Node_Ref := Nil;
+         Length      : Count_Type := 0;
+      end record;
 
       --  We use a nested generic here so that the inner generic can
       --  refer to the List_Descriptor type.

@@ -9,10 +9,11 @@ pragma Ada_2022;
 with Ada.Containers.Generic_Array_Sort;
 with Ada.Unchecked_Deallocation;
 
-with System; use type System.Address;
+with System;
+use type System.Address;
 
-package body SPARK.Containers.Formal.Unbounded_Vectors with
-  SPARK_Mode => Off
+package body SPARK.Containers.Formal.Unbounded_Vectors
+  with SPARK_Mode => Off
 is
 
    subtype Int is Long_Long_Integer;
@@ -28,11 +29,11 @@ is
 
    function To_Array_Index (Index : Index_Type) return Array_Index;
 
-   procedure Free_Element is new Ada.Unchecked_Deallocation
-     (Element_Type, Element_Access);
+   procedure Free_Element is new
+     Ada.Unchecked_Deallocation (Element_Type, Element_Access);
 
-   procedure Free_Element_Array is new Ada.Unchecked_Deallocation
-     (Element_Array, Element_Array_Access);
+   procedure Free_Element_Array is new
+     Ada.Unchecked_Deallocation (Element_Array, Element_Array_Access);
 
    procedure Insert_Space
      (Container : in out Vector;
@@ -42,8 +43,9 @@ is
    function Length_Internal (Container : Vector) return Capacity_Range;
    --  Internal version of Length without a postcondition calling Model
 
-   procedure Resize (Container : in out Vector; Size : Count_Type := 0) with
-   --  Widen the sub array of the Vector
+   procedure Resize (Container : in out Vector; Size : Count_Type := 0)
+   with
+     --  Widen the sub array of the Vector
 
      Global => null,
      Post   =>
@@ -102,9 +104,7 @@ is
    end Append;
 
    procedure Append
-     (Container : in out Vector;
-      New_Item  : Element_Type;
-      Count     : Count_Type)
+     (Container : in out Vector; New_Item : Element_Type; Count : Count_Type)
    is
    begin
       if Count = 0 then
@@ -168,9 +168,8 @@ is
    ------------------------
 
    function Constant_Reference
-     (Container : aliased Vector;
-      Index     : Index_Type) return not null access constant Element_Type
-   is
+     (Container : aliased Vector; Index : Index_Type)
+      return not null access constant Element_Type is
    begin
       if Index > Container.Last then
          raise Constraint_Error with "Index is out of range";
@@ -183,9 +182,7 @@ is
    -- Contains --
    --------------
 
-   function Contains
-     (Container : Vector;
-      Item      : Element_Type) return Boolean
+   function Contains (Container : Vector; Item : Element_Type) return Boolean
    is
    begin
       return Find_Index (Container, Item) /= No_Index;
@@ -212,9 +209,7 @@ is
    end Delete;
 
    procedure Delete
-     (Container : in out Vector;
-      Index     : Extended_Index;
-      Count     : Count_Type)
+     (Container : in out Vector; Index : Extended_Index; Count : Count_Type)
    is
       Old_Last : constant Index_Type'Base := Container.Last;
       Old_Len  : constant Count_Type := Length (Container);
@@ -286,8 +281,7 @@ is
 
          --  The elements between Index and Container.Last must be deallocated
 
-         for Idx in
-           To_Array_Index (Index) .. To_Array_Index (Container.Last)
+         for Idx in To_Array_Index (Index) .. To_Array_Index (Container.Last)
          loop
             Free_Element (Container.Elements (Idx));
          end loop;
@@ -398,9 +392,7 @@ is
    -------------
 
    function Element
-     (Container : Vector;
-      Index     : Extended_Index) return Element_Type
-   is
+     (Container : Vector; Index : Extended_Index) return Element_Type is
    begin
       if Index > Container.Last or Index = No_Index then
          raise Constraint_Error with "Index is out of range";
@@ -488,10 +480,8 @@ is
       -------------------------
 
       function M_Elements_In_Union
-        (Container : M.Sequence;
-         Left      : M.Sequence;
-         Right     : M.Sequence) return Boolean
-      is
+        (Container : M.Sequence; Left : M.Sequence; Right : M.Sequence)
+         return Boolean is
       begin
          for Index in Index_Type'First .. M.Last (Container) loop
             declare
@@ -499,7 +489,7 @@ is
             begin
                for J in Index_Type'First .. M.Last (Left) loop
                   if Element_Logic_Equal
-                    (Element (Container, Index), Element (Left, J))
+                       (Element (Container, Index), Element (Left, J))
                   then
                      Found := True;
                      exit;
@@ -509,7 +499,7 @@ is
                if not Found then
                   for J in Index_Type'First .. M.Last (Right) loop
                      if Element_Logic_Equal
-                       (Element (Container, Index), Element (Right, J))
+                          (Element (Container, Index), Element (Right, J))
                      then
                         Found := True;
                         exit;
@@ -536,8 +526,7 @@ is
          L_Lst : Extended_Index;
          Right : M.Sequence;
          R_Fst : Index_Type := Index_Type'First;
-         R_Lst : Extended_Index) return Boolean
-      is
+         R_Lst : Extended_Index) return Boolean is
       begin
          for I in L_Fst .. L_Lst loop
             declare
@@ -568,8 +557,7 @@ is
       -------------------------
 
       function M_Elements_Reversed
-        (Left  : M.Sequence;
-         Right : M.Sequence) return Boolean
+        (Left : M.Sequence; Right : M.Sequence) return Boolean
       is
          L : constant Extended_Index := M.Last (Left);
 
@@ -580,7 +568,7 @@ is
 
          for I in Index_Type'First .. L loop
             if not Element_Logic_Equal
-              (Element (Left, I), Element (Right, L - I + 1))
+                     (Element (Left, I), Element (Right, L - I + 1))
             then
                return False;
             end if;
@@ -594,25 +582,23 @@ is
       ------------------------
 
       function M_Elements_Swapped
-        (Left  : M.Sequence;
-         Right : M.Sequence;
-         X     : Index_Type;
-         Y     : Index_Type) return Boolean
-      is
+        (Left : M.Sequence; Right : M.Sequence; X : Index_Type; Y : Index_Type)
+         return Boolean is
       begin
          if M.Length (Left) /= M.Length (Right)
            or else not Element_Logic_Equal
-             (Element (Left, X), Element (Right, Y))
+                         (Element (Left, X), Element (Right, Y))
            or else not Element_Logic_Equal
-             (Element (Left, Y), Element (Right, X))
+                         (Element (Left, Y), Element (Right, X))
          then
             return False;
          end if;
 
          for I in Index_Type'First .. M.Last (Left) loop
-            if I /= X and then I /= Y
+            if I /= X
+              and then I /= Y
               and then not Element_Logic_Equal
-                (Element (Left, I), Element (Right, I))
+                             (Element (Left, I), Element (Right, I))
             then
                return False;
             end if;
@@ -642,14 +628,17 @@ is
    -- Generic_Sorting --
    ---------------------
 
-   package body Generic_Sorting with SPARK_Mode => Off is
+   package body Generic_Sorting
+     with SPARK_Mode => Off
+   is
 
       ------------------
       -- Formal_Model --
       ------------------
 
-      function Strictly_Less (L, R : Element_Access) return Boolean with
-      --  Compare Element with access check
+      function Strictly_Less (L, R : Element_Access) return Boolean
+      with
+        --  Compare Element with access check
 
         Global => null;
 
@@ -768,12 +757,12 @@ is
 
       procedure Sort (Container : in out Vector) is
 
-         procedure Sort is
-           new Generic_Array_Sort
-                 (Index_Type   => Array_Index,
-                  Element_Type => Element_Access,
-                  Array_Type   => Element_Array,
-                  "<"          => Strictly_Less);
+         procedure Sort is new
+           Generic_Array_Sort
+             (Index_Type   => Array_Index,
+              Element_Type => Element_Access,
+              Array_Type   => Element_Array,
+              "<"          => Strictly_Less);
 
          Len : constant Capacity_Range := Length (Container);
 
@@ -789,15 +778,12 @@ is
       -- Strictly_Less --
       -------------------
 
-      function Strictly_Less (L, R : Element_Access) return Boolean is
-        (if L = null
-         then
-            R = null
-         elsif R = null
-         then
-            L = null
-         else
-            L.all < R.all);
+      function Strictly_Less (L, R : Element_Access) return Boolean
+      is (if L = null
+          then R = null
+          elsif R = null
+          then L = null
+          else L.all < R.all);
 
    end Generic_Sorting;
 
@@ -806,9 +792,7 @@ is
    -----------------
 
    function Has_Element
-     (Container : Vector;
-      Position  : Extended_Index) return Boolean
-   is
+     (Container : Vector; Position : Extended_Index) return Boolean is
    begin
       return Position in First_Index (Container) .. Last_Index (Container);
    end Has_Element;
@@ -820,8 +804,7 @@ is
    procedure Insert
      (Container : in out Vector;
       Before    : Extended_Index;
-      New_Item  : Element_Type)
-   is
+      New_Item  : Element_Type) is
    begin
       Insert (Container, Before, New_Item, 1);
    end Insert;
@@ -874,8 +857,8 @@ is
       --  values in the Index_Type.)
 
       if Before < Index_Type'First then
-         raise Constraint_Error with
-           "Before index is out of range (too small)";
+         raise Constraint_Error
+           with "Before index is out of range (too small)";
       end if;
 
       --  We do allow a value greater than Container.Last to be specified as
@@ -885,11 +868,9 @@ is
       --  deeper flaw in the caller's algorithm, so that case is treated as a
       --  proper error.)
 
-      if Before > Container.Last
-        and then Before - 1 > Container.Last
-      then
-         raise Constraint_Error with
-           "Before index is out of range (too large)";
+      if Before > Container.Last and then Before - 1 > Container.Last then
+         raise Constraint_Error
+           with "Before index is out of range (too large)";
       end if;
 
       --  We treat inserting 0 items into the container as a no-op, so we
@@ -1029,7 +1010,7 @@ is
          EA : Element_Array_Access renames Container.Elements;
       begin
          if Container.Elements = null
-              or else Container.Elements'Length < New_Length
+           or else Container.Elements'Length < New_Length
          then
 
             --  The array must be resized
@@ -1062,17 +1043,15 @@ is
    -------------------
 
    procedure Insert_Vector
-     (Container : in out Vector;
-      Before    : Extended_Index;
-      New_Item  : Vector)
+     (Container : in out Vector; Before : Extended_Index; New_Item : Vector)
    is
       N : constant Count_Type := Length (New_Item);
       B : Count_Type;  -- index Before converted to Count_Type
 
    begin
       if Container'Address = New_Item'Address then
-         raise Program_Error with
-           "Container and New_Item denote same container";
+         raise Program_Error
+           with "Container and New_Item denote same container";
       end if;
 
       --  Use Insert_Space to create the "hole" (the destination slice) into
@@ -1183,9 +1162,7 @@ is
    end Prepend;
 
    procedure Prepend
-     (Container : in out Vector;
-      New_Item  : Element_Type;
-      Count     : Count_Type)
+     (Container : in out Vector; New_Item : Element_Type; Count : Count_Type)
    is
    begin
       Insert (Container, Index_Type'First, New_Item, Count);
@@ -1205,9 +1182,8 @@ is
    ---------------
 
    function Reference
-     (Container : Vector;
-      Index     : Index_Type) return not null access Element_Type
-   is
+     (Container : Vector; Index : Index_Type)
+      return not null access Element_Type is
    begin
       if Index > Container.Last then
          raise Constraint_Error with "Index is out of range";
@@ -1221,9 +1197,7 @@ is
    ---------------------
 
    procedure Replace_Element
-     (Container : in out Vector;
-      Index     : Index_Type;
-      New_Item  : Element_Type)
+     (Container : in out Vector; Index : Index_Type; New_Item : Element_Type)
    is
       Index_Arr : constant Array_Index := To_Array_Index (Index);
    begin
@@ -1240,8 +1214,7 @@ is
    -- Resize --
    ------------
 
-   procedure Resize (Container : in out Vector; Size : Count_Type := 0)
-   is
+   procedure Resize (Container : in out Vector; Size : Count_Type := 0) is
       EA : Element_Array_Access renames Container.Elements;
 
    begin
@@ -1254,14 +1227,15 @@ is
       declare
          New_Length : constant Capacity_Range :=
            (if Container.Elements'Length < Capacity_Range'Last / 2
-            then (if Container.Elements'Length * 2 < Size
-                  then Size
-                  else Container.Elements'Length * 2)
+            then
+              (if Container.Elements'Length * 2 < Size
+               then Size
+               else Container.Elements'Length * 2)
             else Capacity_Range'Last);
 
-         New_Array  : constant Element_Array_Access :=
+         New_Array : constant Element_Array_Access :=
            new Element_Array (1 .. Count_Type'Max (Min_Size, New_Length));
-         Last       : constant Count_Type := Length (Container);
+         Last      : constant Count_Type := Length (Container);
 
       begin
          New_Array (1 .. Last) := EA (1 .. Last);
@@ -1340,10 +1314,7 @@ is
    -- Swap --
    ----------
 
-   procedure Swap
-     (Container : in out Vector;
-      I         : Index_Type;
-      J         : Index_Type)
+   procedure Swap (Container : in out Vector; I : Index_Type; J : Index_Type)
    is
    begin
       if I > Container.Last then
@@ -1411,9 +1382,7 @@ is
    ---------------
 
    function To_Vector
-     (New_Item : Element_Type;
-      Length   : Capacity_Range) return Vector
-   is
+     (New_Item : Element_Type; Length : Capacity_Range) return Vector is
    begin
       if Length = 0 then
          return Empty_Vector;

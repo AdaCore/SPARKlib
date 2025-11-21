@@ -13,25 +13,27 @@
 
 generic
    type Fix is delta <>;
-package SPARK.Lemmas.Fixed_Point_Arithmetic
-  with Pure,
-       Ghost => Static,
-       Always_Terminates
+package SPARK.Lemmas.Fixed_Point_Arithmetic with
+    Pure,
+    Ghost => Static,
+    Always_Terminates
 is
 
-   pragma Warnings
-     (Off, "postcondition does not check the outcome of calling");
+   pragma
+     Warnings (Off, "postcondition does not check the outcome of calling");
 
    procedure GNAT_Lemma_Div_Is_Monotonic
-     (Num1  : Fix;
-      Num2  : Fix;
-      Denom : Positive)
+     (Num1 : Fix; Num2 : Fix; Denom : Positive)
    with
      Global => null,
-     Pre  => Num1 <= Num2,
-     Post => Num1 / Denom <= Num2 / Denom;
-   pragma Annotate (GNATprove, Intentional, "postcondition",
-                    "GNAT-specific lemma, as Ada RM does not guarantee it");
+     Pre    => Num1 <= Num2,
+     Post   => Num1 / Denom <= Num2 / Denom;
+   pragma
+     Annotate
+       (GNATprove,
+        Intentional,
+        "postcondition",
+        "GNAT-specific lemma, as Ada RM does not guarantee it");
    --  GNAT implements division of fixed-point type by Integer with integer
    --  division, which is monotonic in its numerator.
    --
@@ -42,16 +44,17 @@ is
    --  Lemma_Div_Is_Monotonic from SPARK.Arithmetic_Lemmas
 
    procedure GNAT_Lemma_Div_Right_Is_Monotonic
-     (Num    : Fix;
-      Denom1 : Positive;
-      Denom2 : Positive)
+     (Num : Fix; Denom1 : Positive; Denom2 : Positive)
    with
      Global => null,
-     Pre  => Num >= 0.0
-       and then Denom1 <= Denom2,
-     Post => Num / Denom1 >= Num / Denom2;
-   pragma Annotate (GNATprove, Intentional, "postcondition",
-                    "GNAT-specific lemma, as Ada RM does not guarantee it");
+     Pre    => Num >= 0.0 and then Denom1 <= Denom2,
+     Post   => Num / Denom1 >= Num / Denom2;
+   pragma
+     Annotate
+       (GNATprove,
+        Intentional,
+        "postcondition",
+        "GNAT-specific lemma, as Ada RM does not guarantee it");
    --  GNAT implements division of fixed-point type by Integer with integer
    --  division, which is monotonic in its denominator, when all arguments
    --  are non-negative.
@@ -62,15 +65,17 @@ is
    --  above lemma rests on the proof of Lemma_Div_Right_Is_Monotonic from
    --  SPARK.Arithmetic_Lemmas
 
-   procedure GNAT_Lemma_Mult_Then_Div_Is_Ident
-     (Val1 : Fix;
-      Val2 : Positive)
+   procedure GNAT_Lemma_Mult_Then_Div_Is_Ident (Val1 : Fix; Val2 : Positive)
    with
      Global => null,
-     Pre  => Val1 in 0.0 .. Fix'Last / Val2,
-     Post => (Val1 * Val2) / Val2 = Val1;
-   pragma Annotate (GNATprove, Intentional, "overflow check",
-                    "GNAT-specific lemma, as Ada RM does not guarantee it");
+     Pre    => Val1 in 0.0 .. Fix'Last / Val2,
+     Post   => (Val1 * Val2) / Val2 = Val1;
+   pragma
+     Annotate
+       (GNATprove,
+        Intentional,
+        "overflow check",
+        "GNAT-specific lemma, as Ada RM does not guarantee it");
    --  GNAT implements division of fixed-point type by Integer with integer
    --  division, which ensures that Fix'Last / Val2 is rounded to zero. Hence
    --  the multiplication (Val1 * Val2) in the postcondition cannot overflow.

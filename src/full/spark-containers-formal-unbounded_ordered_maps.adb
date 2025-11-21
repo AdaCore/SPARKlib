@@ -7,15 +7,16 @@
 pragma Ada_2022;
 
 with Ada.Containers.Red_Black_Trees.Generic_Bounded_Operations;
-pragma Elaborate_All
-  (Ada.Containers.Red_Black_Trees.Generic_Bounded_Operations);
+pragma
+  Elaborate_All (Ada.Containers.Red_Black_Trees.Generic_Bounded_Operations);
 with Ada.Containers.Red_Black_Trees.Generic_Bounded_Keys;
 pragma Elaborate_All (Ada.Containers.Red_Black_Trees.Generic_Bounded_Keys);
 with Ada.Unchecked_Deallocation;
-with System; use type System.Address;
+with System;
+use type System.Address;
 
-package body SPARK.Containers.Formal.Unbounded_Ordered_Maps with
-  SPARK_Mode => Off
+package body SPARK.Containers.Formal.Unbounded_Ordered_Maps
+  with SPARK_Mode => Off
 is
 
    -----------------------------
@@ -59,8 +60,7 @@ is
    generic
       with procedure Set_Element (Node : in out Node_Type);
    procedure Generic_Allocate
-     (Tree : in out Tree_Types.Tree_Type'Class;
-      Node : out Count_Type);
+     (Tree : in out Tree_Types.Tree_Type'Class; Node : out Count_Type);
    --  Get a Node out of the free list and output it. It also set its Element
    --  and Key using Set_Element.
 
@@ -68,48 +68,48 @@ is
    --  Turn the Node X back to the free list and Finalize it
 
    function Is_Greater_Key_Node
-     (Left  : Key_Type;
-      Right : Node_Type) return Boolean;
+     (Left : Key_Type; Right : Node_Type) return Boolean;
    --  Check if the Key_Type Left is greater than the Key_Type held by Right
 
    pragma Inline (Is_Greater_Key_Node);
 
    function Is_Less_Key_Node
-     (Left  : Key_Type;
-      Right : Node_Type) return Boolean;
+     (Left : Key_Type; Right : Node_Type) return Boolean;
    --  Check if the Key_Type Left is smaller than the Key_Type held by Right
 
    pragma Inline (Is_Less_Key_Node);
 
-   procedure Resize (Container : in out Map; Size : Count_Type := 0) with
-   --  Allocate a new larger Tree
+   procedure Resize (Container : in out Map; Size : Count_Type := 0)
+   with
+     --  Allocate a new larger Tree
 
      Global => null,
      Post   =>
        (SPARKlib_Full =>
           M.Equal (Model (Container), Model (Container)'Old)
-            and Positions (Container) = Positions (Container)'Old
-            and K.Equal (Keys (Container), Keys (Container)'Old));
+          and Positions (Container) = Positions (Container)'Old
+          and K.Equal (Keys (Container), Keys (Container)'Old));
 
    --------------------------
    -- Local Instantiations --
    --------------------------
 
-   procedure Finalize_Content is new Ada.Unchecked_Deallocation
-     (Object => Tree_Types.Tree_Type,
-      Name   => Tree_Access);
+   procedure Finalize_Content is new
+     Ada.Unchecked_Deallocation
+       (Object => Tree_Types.Tree_Type,
+        Name   => Tree_Access);
    --  Deallocate a Tree
 
-   package Tree_Operations is
-     new Red_Black_Trees.Generic_Bounded_Operations
+   package Tree_Operations is new
+     Red_Black_Trees.Generic_Bounded_Operations
        (Tree_Types => Tree_Types,
         Left       => Left_Son,
         Right      => Right_Son);
 
    use Tree_Operations;
 
-   package Key_Ops is
-     new Red_Black_Trees.Generic_Bounded_Keys
+   package Key_Ops is new
+     Red_Black_Trees.Generic_Bounded_Keys
        (Tree_Operations     => Tree_Operations,
         Key_Type            => Key_Type,
         Is_Less_Key_Node    => Is_Less_Key_Node,
@@ -143,9 +143,9 @@ is
          ENode :=
            Find (Right, KHT.Element (Left.Content.Nodes (Node).K_Holder)).Node;
 
-         if ENode = 0 or else
-           EHT.Element (Left.Content.Nodes (Node).E_Holder) /=
-           EHT.Element (Right.Content.Nodes (ENode).E_Holder)
+         if ENode = 0
+           or else EHT.Element (Left.Content.Nodes (Node).E_Holder)
+                   /= EHT.Element (Right.Content.Nodes (ENode).E_Holder)
          then
             return False;
          end if;
@@ -173,11 +173,11 @@ is
            new Tree_Types.Tree_Type (Container.Content.Capacity);
 
       begin
-         New_Map.First  := Container.Content.First;
-         New_Map.Last   := Container.Content.Last;
-         New_Map.Root   := Container.Content.Root;
+         New_Map.First := Container.Content.First;
+         New_Map.Last := Container.Content.Last;
+         New_Map.Root := Container.Content.Root;
          New_Map.Length := Container.Content.Length;
-         New_Map.Free   := Container.Content.Free;
+         New_Map.Free := Container.Content.Free;
 
          New_Map.Nodes := Container.Content.Nodes;
          --  The call to Adjust on the holders will ensure a proper copy of
@@ -196,8 +196,8 @@ is
    procedure Assign (Target : in out Map; Source : Map) is
       procedure Append_Element (Source_Node : Count_Type);
 
-      procedure Append_Elements is
-         new Tree_Operations.Generic_Iteration (Append_Element);
+      procedure Append_Elements is new
+        Tree_Operations.Generic_Iteration (Append_Element);
 
       --------------------
       -- Append_Element --
@@ -214,11 +214,11 @@ is
 
          procedure Insert_Post is new Key_Ops.Generic_Insert_Post (New_Node);
 
-         procedure Unconditional_Insert_Sans_Hint is
-           new Key_Ops.Generic_Unconditional_Insert (Insert_Post);
+         procedure Unconditional_Insert_Sans_Hint is new
+           Key_Ops.Generic_Unconditional_Insert (Insert_Post);
 
-         procedure Unconditional_Insert_Avec_Hint is
-           new Key_Ops.Generic_Unconditional_Insert_With_Hint
+         procedure Unconditional_Insert_Avec_Hint is new
+           Key_Ops.Generic_Unconditional_Insert_With_Hint
              (Insert_Post,
               Unconditional_Insert_Sans_Hint);
 
@@ -247,17 +247,17 @@ is
 
          Target_Node : Count_Type;
 
-      --  Start of processing for Append_Element
+         --  Start of processing for Append_Element
 
       begin
          Unconditional_Insert_Avec_Hint
-           (Tree  => Target.Content.all,
-            Hint  => 0,
-            Key   => KHT.Element (SN.K_Holder),
-            Node  => Target_Node);
+           (Tree => Target.Content.all,
+            Hint => 0,
+            Key  => KHT.Element (SN.K_Holder),
+            Node => Target_Node);
       end Append_Element;
 
-   --  Start of processing for Assign
+      --  Start of processing for Assign
 
    begin
       if Target'Address = Source'Address then
@@ -314,31 +314,32 @@ is
    ------------------------
 
    function Constant_Reference
-     (Container : Map;
-      Position  : Cursor) return not null access constant Element_Type
-   is
+     (Container : Map; Position : Cursor)
+      return not null access constant Element_Type is
    begin
       if not Has_Element (Container, Position) then
          raise Constraint_Error with "Position cursor has no element";
       end if;
 
-      pragma Assert (Vet (Container.Content.all, Position.Node),
-                     "bad cursor in function Constant_Reference");
+      pragma
+        Assert
+          (Vet (Container.Content.all, Position.Node),
+           "bad cursor in function Constant_Reference");
 
-      return EHT.Element_Access
-               (Container.Content.Nodes (Position.Node).E_Holder);
+      return
+        EHT.Element_Access (Container.Content.Nodes (Position.Node).E_Holder);
    end Constant_Reference;
 
    function Constant_Reference
-     (Container : Map;
-      Key       : Key_Type) return not null access constant Element_Type
+     (Container : Map; Key : Key_Type)
+      return not null access constant Element_Type
    is
       Node : constant Node_Access := Find (Container, Key).Node;
 
    begin
       if Node = 0 then
-         raise Constraint_Error with
-           "no element available because key not in map";
+         raise Constraint_Error
+           with "no element available because key not in map";
       end if;
 
       return EHT.Element_Access (Container.Content.Nodes (Node).E_Holder);
@@ -379,15 +380,17 @@ is
    procedure Delete (Container : in out Map; Position : in out Cursor) is
    begin
       if not Has_Element (Container, Position) then
-         raise Constraint_Error with
-           "Position cursor of Delete has no element";
+         raise Constraint_Error
+           with "Position cursor of Delete has no element";
       end if;
 
-      pragma Assert (Vet (Container.Content.all, Position.Node),
-                     "Position cursor of Delete is bad");
+      pragma
+        Assert
+          (Vet (Container.Content.all, Position.Node),
+           "Position cursor of Delete is bad");
 
-      Tree_Operations.Delete_Node_Sans_Free (Container.Content.all,
-                                             Position.Node);
+      Tree_Operations.Delete_Node_Sans_Free
+        (Container.Content.all, Position.Node);
       Free (Container, Position.Node);
       Position := No_Element;
    end Delete;
@@ -437,12 +440,14 @@ is
    function Element (Container : Map; Position : Cursor) return Element_Type is
    begin
       if not Has_Element (Container, Position) then
-         raise Constraint_Error with
-           "Position cursor of function Element has no element";
+         raise Constraint_Error
+           with "Position cursor of function Element has no element";
       end if;
 
-      pragma Assert (Vet (Container.Content.all, Position.Node),
-                     "Position cursor of function Element is bad");
+      pragma
+        Assert
+          (Vet (Container.Content.all, Position.Node),
+           "Position cursor of function Element is bad");
 
       return EHT.Element (Container.Content.Nodes (Position.Node).E_Holder);
 
@@ -463,8 +468,8 @@ is
    -- Empty_Map --
    ---------------
 
-   function Empty_Map return Map is
-     ((Ada.Finalization.Controlled with others => <>));
+   function Empty_Map return Map
+   is ((Ada.Finalization.Controlled with others => <>));
 
    ---------------------
    -- Equivalent_Keys --
@@ -472,9 +477,7 @@ is
 
    function Equivalent_Keys (Left, Right : Key_Type) return Boolean is
    begin
-      if Left < Right
-        or else Right < Left
-      then
+      if Left < Right or else Right < Left then
          return False;
       else
          return True;
@@ -506,8 +509,8 @@ is
          begin
             Container.Content := Empty_Tree'Access;
             Finalize_Content (Tree);
-            --  The elements are in Controlled Holder_Type and thus will be
-            --  deallocated properly.
+         --  The elements are in Controlled Holder_Type and thus will be
+         --  deallocated properly.
 
          end;
       end if;
@@ -551,8 +554,9 @@ is
          raise Constraint_Error with "map is empty";
       end if;
 
-      return EHT.Element
-               (Container.Content.Nodes (First (Container).Node).E_Holder);
+      return
+        EHT.Element
+          (Container.Content.Nodes (First (Container).Node).E_Holder);
    end First_Element;
 
    ---------------
@@ -565,8 +569,9 @@ is
          raise Constraint_Error with "map is empty";
       end if;
 
-      return KHT.Element
-               (Container.Content.Nodes (First (Container).Node).K_Holder);
+      return
+        KHT.Element
+          (Container.Content.Nodes (First (Container).Node).K_Holder);
    end First_Key;
 
    -----------
@@ -594,9 +599,7 @@ is
       -- Find --
       ----------
 
-      function Find
-        (Container : K.Sequence;
-         Key       : Key_Type) return Count_Type
+      function Find (Container : K.Sequence; Key : Key_Type) return Count_Type
       is
       begin
          for I in 1 .. K.Last (Container) loop
@@ -617,8 +620,7 @@ is
         (Container : K.Sequence;
          Fst       : Positive_Count_Type;
          Lst       : Count_Type;
-         Key       : Key_Type) return Boolean
-      is
+         Key       : Key_Type) return Boolean is
       begin
          for I in Fst .. Lst loop
             if not (K.Get (Container, I) < Key) then
@@ -633,10 +635,8 @@ is
       ---------------
 
       function K_Is_Find
-        (Container : K.Sequence;
-         Key       : Key_Type;
-         Position  : Count_Type) return Boolean
-      is
+        (Container : K.Sequence; Key : Key_Type; Position : Count_Type)
+         return Boolean is
       begin
          for I in 1 .. Position - 1 loop
             if Key < K.Get (Container, I) then
@@ -662,8 +662,7 @@ is
         (Container : K.Sequence;
          Fst       : Positive_Count_Type;
          Lst       : Count_Type;
-         Key       : Key_Type) return Boolean
-      is
+         Key       : Key_Type) return Boolean is
       begin
          for I in Fst .. Lst loop
             if not (Key < K.Get (Container, I)) then
@@ -717,10 +716,10 @@ is
             R :=
               M.Add
                 (Container => R,
-                 New_Key   => KHT.Element
-                                (Container.Content.Nodes (Position).K_Holder),
-                 New_Item  => EHT.Element
-                                (Container.Content.Nodes (Position).E_Holder));
+                 New_Key   =>
+                   KHT.Element (Container.Content.Nodes (Position).K_Holder),
+                 New_Item  =>
+                   EHT.Element (Container.Content.Nodes (Position).E_Holder));
 
             Position := Tree_Operations.Next (Container.Content.all, Position);
          end loop;
@@ -736,8 +735,7 @@ is
         (Small : P.Map;
          Big   : P.Map;
          Cut   : Positive_Count_Type;
-         Count : Count_Type := 1) return Boolean
-      is
+         Count : Count_Type := 1) return Boolean is
       begin
          for Cu of P.Iterate (Small) loop
             if not P.Has_Key (Big, Cu) then
@@ -751,8 +749,7 @@ is
 
             begin
                if Pos < Cut then
-                  if not P.Has_Key (Small, Cu)
-                    or else Pos /= P.Get (Small, Cu)
+                  if not P.Has_Key (Small, Cu) or else Pos /= P.Get (Small, Cu)
                   then
                      return False;
                   end if;
@@ -804,10 +801,7 @@ is
    -- Free --
    ----------
 
-   procedure Free
-     (Tree : in out Map;
-      X  : Count_Type)
-   is
+   procedure Free (Tree : in out Map; X : Count_Type) is
    begin
 
       --  It is not mandatory to Finalize the holder as there are controlled
@@ -825,11 +819,9 @@ is
    ----------------------
 
    procedure Generic_Allocate
-     (Tree : in out Tree_Types.Tree_Type'Class;
-      Node : out Count_Type)
+     (Tree : in out Tree_Types.Tree_Type'Class; Node : out Count_Type)
    is
-      procedure Allocate is
-        new Tree_Operations.Generic_Allocate (Set_Element);
+      procedure Allocate is new Tree_Operations.Generic_Allocate (Set_Element);
    begin
       Allocate (Tree, Node);
       Tree.Nodes (Node).Has_Element := True;
@@ -856,9 +848,7 @@ is
    -------------
 
    procedure Include
-     (Container : in out Map;
-      Key       : Key_Type;
-      New_Item  : Element_Type)
+     (Container : in out Map; Key : Key_Type; New_Item : Element_Type)
    is
       Position : Cursor;
       Inserted : Boolean;
@@ -886,11 +876,10 @@ is
       function New_Node return Node_Access;
       --  Allocate a new node and set is key to Key and is elment to New_Item.
 
-      procedure Insert_Post is
-        new Key_Ops.Generic_Insert_Post (New_Node);
+      procedure Insert_Post is new Key_Ops.Generic_Insert_Post (New_Node);
 
-      procedure Insert_Sans_Hint is
-        new Key_Ops.Generic_Conditional_Insert (Insert_Post);
+      procedure Insert_Sans_Hint is new
+        Key_Ops.Generic_Conditional_Insert (Insert_Post);
 
       --------------
       -- New_Node --
@@ -913,7 +902,7 @@ is
          return X;
       end New_Node;
 
-   --  Start of processing for Insert
+      --  Start of processing for Insert
 
    begin
 
@@ -923,17 +912,11 @@ is
          Resize (Container);
       end if;
 
-      Insert_Sans_Hint
-        (Container.Content.all,
-         Key,
-         Position.Node,
-         Inserted);
+      Insert_Sans_Hint (Container.Content.all, Key, Position.Node, Inserted);
    end Insert;
 
    procedure Insert
-     (Container : in out Map;
-      Key       : Key_Type;
-      New_Item  : Element_Type)
+     (Container : in out Map; Key : Key_Type; New_Item : Element_Type)
    is
       Position : Cursor;
       Inserted : Boolean;
@@ -960,9 +943,7 @@ is
    -------------------------
 
    function Is_Greater_Key_Node
-     (Left  : Key_Type;
-      Right : Node_Type) return Boolean
-   is
+     (Left : Key_Type; Right : Node_Type) return Boolean is
    begin
       --  k > node same as node < k
 
@@ -974,9 +955,7 @@ is
    ----------------------
 
    function Is_Less_Key_Node
-     (Left  : Key_Type;
-      Right : Node_Type) return Boolean
-   is
+     (Left : Key_Type; Right : Node_Type) return Boolean is
    begin
       return Left < KHT.Element (Right.K_Holder);
    end Is_Less_Key_Node;
@@ -988,12 +967,14 @@ is
    function Key (Container : Map; Position : Cursor) return Key_Type is
    begin
       if not Has_Element (Container, Position) then
-         raise Constraint_Error with
-           "Position cursor of function Key has no element";
+         raise Constraint_Error
+           with "Position cursor of function Key has no element";
       end if;
 
-      pragma Assert (Vet (Container.Content.all, Position.Node),
-                     "Position cursor of function Key is bad");
+      pragma
+        Assert
+          (Vet (Container.Content.all, Position.Node),
+           "Position cursor of function Key is bad");
 
       return KHT.Element (Container.Content.Nodes (Position.Node).K_Holder);
    end Key;
@@ -1021,8 +1002,8 @@ is
          raise Constraint_Error with "map is empty";
       end if;
 
-      return EHT.Element
-        (Container.Content.Nodes (Last (Container).Node).E_Holder);
+      return
+        EHT.Element (Container.Content.Nodes (Last (Container).Node).E_Holder);
    end Last_Element;
 
    --------------
@@ -1035,8 +1016,8 @@ is
          raise Constraint_Error with "map is empty";
       end if;
 
-      return KHT.Element
-               (Container.Content.Nodes (Last (Container).Node).K_Holder);
+      return
+        KHT.Element (Container.Content.Nodes (Last (Container).Node).K_Holder);
    end Last_Key;
 
    --------------
@@ -1092,11 +1073,12 @@ is
          raise Constraint_Error;
       end if;
 
-      pragma Assert (Vet (Container.Content.all, Position.Node),
-                     "bad cursor in Next");
+      pragma
+        Assert
+          (Vet (Container.Content.all, Position.Node), "bad cursor in Next");
 
-      return (Node => Tree_Operations.Next
-                        (Container.Content.all, Position.Node));
+      return
+        (Node => Tree_Operations.Next (Container.Content.all, Position.Node));
    end Next;
 
    ------------
@@ -1127,8 +1109,10 @@ is
          raise Constraint_Error;
       end if;
 
-      pragma Assert (Vet (Container.Content.all, Position.Node),
-                     "bad cursor in Previous");
+      pragma
+        Assert
+          (Vet (Container.Content.all, Position.Node),
+           "bad cursor in Previous");
 
       declare
          Node : constant Count_Type :=
@@ -1148,32 +1132,31 @@ is
    --------------
 
    function Reference
-     (Container : Map;
-      Position  : Cursor) return not null access Element_Type
+     (Container : Map; Position : Cursor) return not null access Element_Type
    is
    begin
       if not Has_Element (Container, Position) then
          raise Constraint_Error with "Position cursor has no element";
       end if;
 
-      pragma Assert
-        (Vet (Container.Content.all, Position.Node),
-         "bad cursor in function Reference");
+      pragma
+        Assert
+          (Vet (Container.Content.all, Position.Node),
+           "bad cursor in function Reference");
 
-      return EHT.Element_Access
-               (Container.Content.Nodes (Position.Node).E_Holder);
+      return
+        EHT.Element_Access (Container.Content.Nodes (Position.Node).E_Holder);
    end Reference;
 
    function Reference
-     (Container : Map;
-      Key       : Key_Type) return not null access Element_Type
+     (Container : Map; Key : Key_Type) return not null access Element_Type
    is
       Node : constant Count_Type := Find (Container, Key).Node;
 
    begin
       if Node = 0 then
-         raise Constraint_Error with
-           "no element available because key not in map";
+         raise Constraint_Error
+           with "no element available because key not in map";
       end if;
 
       return EHT.Element_Access (Container.Content.Nodes (Node).E_Holder);
@@ -1184,12 +1167,9 @@ is
    -------------
 
    procedure Replace
-     (Container : in out Map;
-      Key       : Key_Type;
-      New_Item  : Element_Type)
+     (Container : in out Map; Key : Key_Type; New_Item : Element_Type)
    is
-      Node : constant Node_Access :=
-        Key_Ops.Find (Container.Content.all, Key);
+      Node : constant Node_Access := Key_Ops.Find (Container.Content.all, Key);
    begin
       if Node = 0 then
          raise Constraint_Error with "key not in map";
@@ -1208,18 +1188,17 @@ is
    ---------------------
 
    procedure Replace_Element
-     (Container : in out Map;
-      Position  : Cursor;
-      New_Item  : Element_Type)
-   is
+     (Container : in out Map; Position : Cursor; New_Item : Element_Type) is
    begin
       if not Has_Element (Container, Position) then
-         raise Constraint_Error with
-           "Position cursor of Replace_Element has no element";
+         raise Constraint_Error
+           with "Position cursor of Replace_Element has no element";
       end if;
 
-      pragma Assert (Vet (Container.Content.all, Position.Node),
-                     "Position cursor of Replace_Element is bad");
+      pragma
+        Assert
+          (Vet (Container.Content.all, Position.Node),
+           "Position cursor of Replace_Element is bad");
 
       EHT.Replace_Element
         (Container.Content.Nodes (Position.Node).E_Holder, New_Item);
@@ -1254,18 +1233,18 @@ is
            (if CC.Nodes'Length < Count_Type'Last / 2
             then 2 * CC.Nodes'Length
             else Count_Type'Last);
-         New_Map : constant Tree_Access :=
+         New_Map   : constant Tree_Access :=
            new Tree_Types.Tree_Type (Count_Type'Max (New_Size, Next_Size));
 
       begin
 
          --  Make a perfect copy of Container.Content
 
-         New_Map.First  := CC.First;
-         New_Map.Last   := CC.Last;
-         New_Map.Root   := CC.Root;
+         New_Map.First := CC.First;
+         New_Map.Last := CC.Last;
+         New_Map.Root := CC.Root;
          New_Map.Length := CC.Length;
-         New_Map.Free   := CC.Free;
+         New_Map.Free := CC.Free;
 
          --  Copy the nodes. It is not possible to use an affectation
          --  because it wouild copy the element instead of moving them.
@@ -1277,10 +1256,10 @@ is
 
             begin
                New_Node.Has_Element := Old_Node.Has_Element;
-               New_Node.Parent      := Old_Node.Parent;
-               New_Node.Left        := Old_Node.Left;
-               New_Node.Right       := Old_Node.Right;
-               New_Node.Color       := Old_Node.Color;
+               New_Node.Parent := Old_Node.Parent;
+               New_Node.Left := Old_Node.Left;
+               New_Node.Right := Old_Node.Right;
+               New_Node.Color := Old_Node.Color;
                KHT.Move (New_Node.K_Holder, Old_Node.K_Holder);
                EHT.Move (New_Node.E_Holder, Old_Node.E_Holder);
             end;
@@ -1315,7 +1294,7 @@ is
    -- Set_Color --
    ---------------
 
-   procedure Set_Color (Node  : in out Node_Type; Color : Color_Type) is
+   procedure Set_Color (Node : in out Node_Type; Color : Color_Type) is
    begin
       Node.Color := Color;
    end Set_Color;

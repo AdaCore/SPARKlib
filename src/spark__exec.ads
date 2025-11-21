@@ -11,6 +11,8 @@ pragma Assertion_Level (SPARKlib_Logic);
 pragma Assertion_Level (SPARKlib_Full, Depends => SPARKlib_Logic);
 --  Allow execution of SPARKlib_Logic and SPARKlib_Full here for all runtimes
 
-package SPARK with SPARK_Mode, Pure is
+package SPARK
+  with SPARK_Mode, Pure
+is
 
 end SPARK;

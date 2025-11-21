@@ -6,8 +6,7 @@
 
 pragma SPARK_Mode;
 
-with SPARK.Big_Integers;
-use SPARK.Big_Integers;
+with SPARK.Big_Integers; use SPARK.Big_Integers;
 
 with SPARK.Lemmas.Arithmetic;
 pragma Elaborate_All (SPARK.Lemmas.Arithmetic);
