@@ -263,6 +263,7 @@ is
 
    function Empty_Vector (Capacity : Count_Type := 10) return Vector with
      Global => null,
+     Pre    => (SPARKlib_Defensive => Capacity in Capacity_Range),
      Post   =>
        (SPARKlib_Full =>
           Length (Empty_Vector'Result) = 0
