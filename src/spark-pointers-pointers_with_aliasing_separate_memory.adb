@@ -7,8 +7,8 @@
 with Ada.Unchecked_Conversion;
 with Ada.Unchecked_Deallocation;
 
-package body SPARK.Pointers.Pointers_With_Aliasing_Separate_Memory with
-  SPARK_Mode => Off
+package body SPARK.Pointers.Pointers_With_Aliasing_Separate_Memory
+  with SPARK_Mode => Off
 is
    procedure Dealloc_Obj is new Ada.Unchecked_Deallocation (Object, Pointer);
    function Pointer_To_Integer is new
@@ -18,14 +18,15 @@ is
    -- "=" --
    ---------
 
-   function "=" (P1, P2 : Pointer) return Boolean is (Eq (P1, P2));
+   function "=" (P1, P2 : Pointer) return Boolean
+   is (Eq (P1, P2));
 
    -------------
    -- Address --
    -------------
 
-   function Address (P : Pointer) return Address_Type is
-     (Pointer_To_Integer (P));
+   function Address (P : Pointer) return Address_Type
+   is (Pointer_To_Integer (P));
 
    ------------
    -- Assign --
@@ -41,10 +42,9 @@ is
    -- Constant_Reference --
    ------------------------
 
-   function Constant_Reference (Memory : Memory_Type; P : Pointer)
-                                return not null access constant Object
-   is
-     (P);
+   function Constant_Reference
+     (Memory : Memory_Type; P : Pointer) return not null access constant Object
+   is (P);
 
    ------------
    -- Create --
@@ -71,7 +71,8 @@ is
    -- Deref --
    -----------
 
-   function Deref (Memory : Memory_Type; P : Pointer) return Object is (P.all);
+   function Deref (Memory : Memory_Type; P : Pointer) return Object
+   is (P.all);
 
    -----------------
    -- Move_Memory --
@@ -84,14 +85,14 @@ is
    -- Null_Pointer --
    ------------------
 
-   function Null_Pointer return Pointer is (null);
+   function Null_Pointer return Pointer
+   is (null);
 
    ---------------
    -- Reference --
    ---------------
 
-   function Reference (Memory : Memory_Type; P : Pointer)
-                       return   not null access Object
-   is
-     (P);
+   function Reference
+     (Memory : Memory_Type; P : Pointer) return not null access Object
+   is (P);
 end SPARK.Pointers.Pointers_With_Aliasing_Separate_Memory;

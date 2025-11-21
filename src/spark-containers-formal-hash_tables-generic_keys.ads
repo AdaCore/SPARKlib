@@ -15,42 +15,35 @@ generic
 
    with function Next (Node : Node_Type) return Count_Type;
 
-   with procedure Set_Next
-     (Node : in out Node_Type;
-      Next : Count_Type);
+   with procedure Set_Next (Node : in out Node_Type; Next : Count_Type);
 
    type Key_Type (<>) is limited private;
 
    with function Hash (Key : Key_Type) return Hash_Type;
 
-   with function Equivalent_Keys
-     (Key  : Key_Type;
-      Node : Node_Type) return Boolean;
+   with
+     function Equivalent_Keys
+       (Key : Key_Type; Node : Node_Type) return Boolean;
 
-package SPARK.Containers.Formal.Hash_Tables.Generic_Keys is
+package SPARK.Containers.Formal.Hash_Tables.Generic_Keys
+is
    pragma Pure;
 
-   function Index
-     (HT  : Hash_Table_Type;
-      Key : Key_Type) return Hash_Type;
+   function Index (HT : Hash_Table_Type; Key : Key_Type) return Hash_Type;
    pragma Inline (Index);
    --  Returns the bucket number (array index value) for the given key
 
    procedure Delete_Key_Sans_Free
-     (HT  : in out Hash_Table_Type;
-      Key : Key_Type;
-      X   : out Count_Type);
+     (HT : in out Hash_Table_Type; Key : Key_Type; X : out Count_Type);
    --  Removes the node (if any) with the given key from the hash table
 
-   function Find
-     (HT  : Hash_Table_Type;
-      Key : Key_Type) return Count_Type;
+   function Find (HT : Hash_Table_Type; Key : Key_Type) return Count_Type;
    --  Returns the node (if any) corresponding to the given key
 
    generic
-      with procedure New_Node
-        (HT   : in out Hash_Table_Type;
-         Node : out Count_Type);
+      with
+        procedure New_Node
+          (HT : in out Hash_Table_Type; Node : out Count_Type);
    procedure Generic_Conditional_Insert
      (HT       : in out Hash_Table_Type;
       Key      : Key_Type;
@@ -65,9 +58,7 @@ package SPARK.Containers.Formal.Hash_Tables.Generic_Keys is
       with function Hash (Node : Node_Type) return Hash_Type;
       with procedure Assign (Node : in out Node_Type; Key : Key_Type);
    procedure Generic_Replace_Element
-     (HT   : in out Hash_Table_Type;
-      Node : Count_Type;
-      Key  : Key_Type);
+     (HT : in out Hash_Table_Type; Node : Count_Type; Key : Key_Type);
    --  Assigns Key to Node, possibly changing its equivalence class. Procedure
    --  Assign is called to assign Key to Node. If Node is not in the same
    --  bucket as Key before the assignment, it is moved from its current bucket

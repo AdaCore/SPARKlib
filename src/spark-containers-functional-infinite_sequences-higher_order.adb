@@ -15,21 +15,18 @@ is
       Last : Big_Natural;
       Test : not null access function (E : Element_Type) return Boolean)
       return Big_Natural
-   --  Recursive version of Count
-
    with
      Ghost              => SPARKlib_Full,
      Subprogram_Variant => (Decreases => Last),
      Pre                => Last <= Length (S),
      Post               => Count_Rec'Result <= Last;
+   --  Recursive version of Count
 
    function Filter_Rec
      (S    : Sequence;
       Last : Big_Natural;
       Test : not null access function (E : Element_Type) return Boolean)
       return Sequence
-   --  Recursive version of Filter
-
    with
      Ghost              => SPARKlib_Full,
      Subprogram_Variant => (Decreases => Last),
@@ -37,18 +34,18 @@ is
      Post               =>
        Length (Filter_Rec'Result) = Count_Rec (S, Last, Test)
        and then (for all E of Filter_Rec'Result => Test (E));
+   --  Recursive version of Filter
 
    function Sum_Rec
      (S     : Sequence;
       Last  : Big_Natural;
       Value : not null access function (E : Element_Type) return Big_Integer)
       return Big_Integer
-   --  Recursive version of Sum
-
    with
      Ghost              => SPARKlib_Full,
      Subprogram_Variant => (Decreases => Last),
      Pre                => Last <= Length (S);
+   --  Recursive version of Sum
 
    -----------
    -- Count --
@@ -58,15 +55,15 @@ is
      (S    : Sequence;
       Test : not null access function (E : Element_Type) return Boolean)
       return Big_Natural
-   is
-     (Count (S, Length (S), Test));
+   is (Count (S, Length (S), Test));
 
    function Count
      (S    : Sequence;
       Last : Big_Natural;
       Test : not null access function (E : Element_Type) return Boolean)
       return Big_Natural
-   with Refined_Post =>
+   with
+     Refined_Post =>
        (SPARKlib_Full => Count'Result = Count_Rec (S, Last, Test))
    is
    begin
@@ -89,10 +86,11 @@ is
       Last : Big_Natural;
       Test : not null access function (E : Element_Type) return Boolean)
       return Big_Natural
-   is
-     (if Last = 0 then 0
-      else Count_Rec (S, Last - 1, Test) +
-        (if Test (Get (S, Last)) then 1 else Big_Natural'(0)));
+   is (if Last = 0
+       then 0
+       else
+         Count_Rec (S, Last - 1, Test)
+         + (if Test (Get (S, Last)) then 1 else Big_Natural'(0)));
 
    ------------
    -- Create --
@@ -100,18 +98,18 @@ is
 
    function Create
      (New_Length : Big_Natural;
-      New_Item   : not null access
-        function (I : Big_Positive) return Element_Type)
-      return Sequence
-   is
+      New_Item   :
+        not null access function (I : Big_Positive) return Element_Type)
+      return Sequence is
    begin
       return Res : Sequence do
          for I in Interval'(1, New_Length) loop
             Res := Add (Res, New_Item (I));
             pragma Loop_Invariant (Static => Length (Res) = I);
-            pragma Loop_Invariant
-              (Static =>
-                 (for all J in Interval'(1, I) =>
+            pragma
+              Loop_Invariant
+                (Static =>
+                   (for all J in Interval'(1, I) =>
                       Element_Logic_Equal (Get (Res, J), New_Item (J))));
          end loop;
       end return;
@@ -132,10 +130,11 @@ is
       Last : Big_Natural;
       Test : not null access function (E : Element_Type) return Boolean)
       return Sequence
-   with Refined_Post =>
+   with
+     Refined_Post =>
        (SPARKlib_Full =>
           Length (Filter'Result) = Length (Filter_Rec (S, Last, Test))
-        and then Equal_Prefix (Filter'Result, Filter_Rec (S, Last, Test)))
+          and then Equal_Prefix (Filter'Result, Filter_Rec (S, Last, Test)))
    is
    begin
       return Res : Sequence do
@@ -143,10 +142,12 @@ is
             if Test (Get (S, I)) then
                Res := Add (Res, Get (S, I));
             end if;
-            pragma Loop_Invariant
-              (Static => Length (Res) = Length (Filter_Rec (S, I, Test)));
-            pragma Loop_Invariant
-              (Static => Equal_Prefix (Res, Filter_Rec (S, I, Test)));
+            pragma
+              Loop_Invariant
+                (Static => Length (Res) = Length (Filter_Rec (S, I, Test)));
+            pragma
+              Loop_Invariant
+                (Static => Equal_Prefix (Res, Filter_Rec (S, I, Test)));
          end loop;
       end return;
    end Filter;
@@ -160,11 +161,11 @@ is
       Last : Big_Natural;
       Test : not null access function (E : Element_Type) return Boolean)
       return Sequence
-   is
-     (if Last = 0 then Empty_Sequence
-      elsif Test (Get (S, Last))
-      then Add (Filter_Rec (S, Last - 1, Test), Get (S, Last))
-      else Filter_Rec (S, Last - 1, Test));
+   is (if Last = 0
+       then Empty_Sequence
+       elsif Test (Get (S, Last))
+       then Add (Filter_Rec (S, Last - 1, Test), Get (S, Last))
+       else Filter_Rec (S, Last - 1, Test));
 
    ---------------------
    -- Lemma_Count_All --
@@ -176,7 +177,8 @@ is
       Test : not null access function (E : Element_Type) return Boolean)
    is
 
-      procedure Do_Proof with Ghost => Static;
+      procedure Do_Proof
+      with Ghost => Static;
       --  Prove the lemma
 
       --------------
@@ -204,7 +206,8 @@ is
       Test   : not null access function (E : Element_Type) return Boolean)
    is
 
-      procedure Do_Proof with Ghost => Static;
+      procedure Do_Proof
+      with Ghost => Static;
       --  Prove the lemma
 
       --------------
@@ -214,8 +217,9 @@ is
       procedure Do_Proof is
       begin
          for I in Interval'(1, Last) loop
-            pragma Loop_Invariant
-              (Count_Rec (S1, I, Test) = Count_Rec (S2, I, Test));
+            pragma
+              Loop_Invariant
+                (Count_Rec (S1, I, Test) = Count_Rec (S2, I, Test));
          end loop;
       end Do_Proof;
 
@@ -243,7 +247,8 @@ is
       Test : not null access function (E : Element_Type) return Boolean)
    is
 
-      procedure Do_Proof with Ghost => Static;
+      procedure Do_Proof
+      with Ghost => Static;
       --  Prove the lemma
 
       --------------
@@ -271,7 +276,8 @@ is
       Test : not null access function (E : Element_Type) return Boolean)
    is
 
-      procedure Do_Proof with Ghost => Static;
+      procedure Do_Proof
+      with Ghost => Static;
       --  Prove the lemma
 
       --------------
@@ -300,7 +306,8 @@ is
       Test   : not null access function (E : Element_Type) return Boolean)
    is
 
-      procedure Do_Proof with Ghost => Static;
+      procedure Do_Proof
+      with Ghost => Static;
       --  Prove the lemma
 
       --------------
@@ -310,12 +317,14 @@ is
       procedure Do_Proof is
       begin
          for I in Interval'(1, Last) loop
-            pragma Loop_Invariant
-              (Length (Filter_Rec (S1, I, Test)) =
-                 Length (Filter_Rec (S2, I, Test)));
-            pragma Loop_Invariant
-              (Equal_Prefix
-                 (Filter_Rec (S1, I, Test), Filter_Rec (S2, I, Test)));
+            pragma
+              Loop_Invariant
+                (Length (Filter_Rec (S1, I, Test))
+                   = Length (Filter_Rec (S2, I, Test)));
+            pragma
+              Loop_Invariant
+                (Equal_Prefix
+                   (Filter_Rec (S1, I, Test), Filter_Rec (S2, I, Test)));
          end loop;
       end Do_Proof;
 
@@ -343,7 +352,8 @@ is
       Value  : not null access function (E : Element_Type) return Big_Integer)
    is
 
-      procedure Do_Proof with Ghost => Static;
+      procedure Do_Proof
+      with Ghost => Static;
       --  Prove the lemma
 
       --------------
@@ -353,8 +363,8 @@ is
       procedure Do_Proof is
       begin
          for I in Interval'(1, Last) loop
-            pragma Loop_Invariant
-              (Sum_Rec (S1, I, Value) = Sum_Rec (S2, I, Value));
+            pragma
+              Loop_Invariant (Sum_Rec (S1, I, Value) = Sum_Rec (S2, I, Value));
          end loop;
       end Do_Proof;
 
@@ -387,8 +397,8 @@ is
       Last  : Big_Natural;
       Value : not null access function (E : Element_Type) return Big_Integer)
       return Big_Integer
-   with Refined_Post =>
-       (SPARKlib_Full => Sum'Result = Sum_Rec (S, Last, Value))
+   with
+     Refined_Post => (SPARKlib_Full => Sum'Result = Sum_Rec (S, Last, Value))
    is
    begin
       return Res : Big_Integer := 0 do
@@ -408,9 +418,9 @@ is
       Last  : Big_Natural;
       Value : not null access function (E : Element_Type) return Big_Integer)
       return Big_Integer
-   is
-     (if Last = 0 then Big_Natural'(0)
-      else Sum_Rec (S, Last - 1, Value) + Value (Get (S, Last)));
+   is (if Last = 0
+       then Big_Natural'(0)
+       else Sum_Rec (S, Last - 1, Value) + Value (Get (S, Last)));
 
    ---------------
    -- Transform --
@@ -418,20 +428,20 @@ is
 
    function Transform
      (S              : Sequence;
-      Transform_Item : not null access
-        function (E : Element_Type) return Element_Type)
-      return Sequence
-   is
+      Transform_Item :
+        not null access function (E : Element_Type) return Element_Type)
+      return Sequence is
    begin
       return Res : Sequence do
          for I in Interval'(1, Length (S)) loop
             Res := Add (Res, Transform_Item (Get (S, I)));
             pragma Loop_Invariant (Static => Length (Res) = I);
-            pragma Loop_Invariant
-              (Static =>
-                 (for all J in Interval'(1, I) =>
+            pragma
+              Loop_Invariant
+                (Static =>
+                   (for all J in Interval'(1, I) =>
                       Element_Logic_Equal
-                         (Get (Res, J), Transform_Item (Get (S, J)))));
+                        (Get (Res, J), Transform_Item (Get (S, J)))));
          end loop;
       end return;
    end Transform;

@@ -6,7 +6,9 @@
 
 pragma Ada_2022;
 
-package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
+package body SPARK.Containers.Functional.Maps
+  with SPARK_Mode => Off
+is
    use Key_Containers;
    use Element_Containers;
 
@@ -17,9 +19,8 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
    -- "=" --
    ---------
 
-   function "=" (Left : Map; Right : Map) return Boolean is
-     (Length (Left.Keys) = Length (Right.Keys)
-      and then Left <= Right);
+   function "=" (Left : Map; Right : Map) return Boolean
+   is (Length (Left.Keys) = Length (Right.Keys) and then Left <= Right);
 
    ----------
    -- "<=" --
@@ -39,8 +40,7 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
 
       for I1 in 1 .. Length (Left.Keys) loop
          I2 := Find (Right.Keys, Get (Left.Keys, I1));
-         if I2 = 0
-           or else Get (Right.Elements, I2) /= Get (Left.Elements, I1)
+         if I2 = 0 or else Get (Right.Elements, I2) /= Get (Left.Elements, I1)
          then
             return False;
          end if;
@@ -53,9 +53,7 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
    ---------
 
    function Add
-     (Container : Map;
-      New_Key   : Key_Type;
-      New_Item  : Element_Type) return Map
+     (Container : Map; New_Key : Key_Type; New_Item : Element_Type) return Map
    is
    begin
       return
@@ -71,10 +69,7 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
    ------------------
 
    procedure Aggr_Include
-     (Container : in out Map;
-      New_Key   : Key_Type;
-      New_Item  : Element_Type)
-   is
+     (Container : in out Map; New_Key : Key_Type; New_Item : Element_Type) is
    begin
       Container := Add (Container, New_Key, New_Item);
    end Aggr_Include;
@@ -83,8 +78,8 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
    -- Choose --
    ------------
 
-   function Choose (Container : Map) return Key_Type is
-     (Get (Container.Keys, Length (Container.Keys)));
+   function Choose (Container : Map) return Key_Type
+   is (Get (Container.Keys, Length (Container.Keys)));
 
    -------------------------
    -- Element_Logic_Equal --
@@ -107,8 +102,8 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
          begin
             if Find (Right.Keys, K) = 0
               or else not Element_Logic_Equal
-                (Get (Right.Elements, Find (Right.Keys, K)),
-                 Get (Left.Elements, J))
+                            (Get (Right.Elements, Find (Right.Keys, K)),
+                             Get (Left.Elements, J))
             then
                return False;
             end if;
@@ -122,21 +117,19 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
    ---------------------------
 
    function Elements_Equal_Except
-     (Left    : Map;
-      Right   : Map;
-      New_Key : Key_Type) return Boolean
-   is
+     (Left : Map; Right : Map; New_Key : Key_Type) return Boolean is
    begin
       for J in 1 .. Length (Left.Keys) loop
          declare
             K : constant Key_Type := Get (Left.Keys, J);
          begin
             if not Equivalent_Keys (K, New_Key)
-              and then
-                (Find (Right.Keys, K) = 0
-                  or else not Element_Logic_Equal
-                    (Get (Right.Elements, Find (Right.Keys, K)),
-                     Get (Left.Elements, J)))
+              and then (Find (Right.Keys, K) = 0
+                        or else not Element_Logic_Equal
+                                      (Get
+                                         (Right.Elements,
+                                          Find (Right.Keys, K)),
+                                       Get (Left.Elements, J)))
             then
                return False;
             end if;
@@ -146,11 +139,7 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
    end Elements_Equal_Except;
 
    function Elements_Equal_Except
-     (Left  : Map;
-      Right : Map;
-      X     : Key_Type;
-      Y     : Key_Type) return Boolean
-   is
+     (Left : Map; Right : Map; X : Key_Type; Y : Key_Type) return Boolean is
    begin
       for J in 1 .. Length (Left.Keys) loop
          declare
@@ -158,11 +147,12 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
          begin
             if not Equivalent_Keys (K, X)
               and then not Equivalent_Keys (K, Y)
-              and then
-                (Find (Right.Keys, K) = 0
-                  or else not Element_Logic_Equal
-                    (Get (Right.Elements, Find (Right.Keys, K)),
-                     Get (Left.Elements, J)))
+              and then (Find (Right.Keys, K) = 0
+                        or else not Element_Logic_Equal
+                                      (Get
+                                         (Right.Elements,
+                                          Find (Right.Keys, K)),
+                                       Get (Left.Elements, J)))
             then
                return False;
             end if;
@@ -175,8 +165,8 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
    -- Empty_Map --
    ---------------
 
-   function Empty_Map return Map is
-      ((others =>  <>));
+   function Empty_Map return Map
+   is ((others => <>));
 
    -----------
    -- Equal --
@@ -198,8 +188,8 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
          begin
             if Find (Right.Keys, K) = 0
               or else not Element_Logic_Equal
-                (Get (Right.Elements, Find (Right.Keys, K)),
-                 Get (Left.Elements, J))
+                            (Get (Right.Elements, Find (Right.Keys, K)),
+                             Get (Left.Elements, J))
             then
                return False;
             end if;
@@ -228,7 +218,7 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
          I2 := Find (Right.Keys, Get (Left.Keys, I1));
          if I2 = 0
            or else not Equivalent_Elements
-             (Get (Right.Elements, I2), Get (Left.Elements, I1))
+                         (Get (Right.Elements, I2), Get (Left.Elements, I1))
          then
             return False;
          end if;
@@ -267,9 +257,7 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
    -- Iter_Element --
    ------------------
 
-   function Iter_Element
-     (Container : Map;
-      Key       : Private_Key) return Key_Type
+   function Iter_Element (Container : Map; Key : Private_Key) return Key_Type
    is
    begin
       return Key_Containers.Get (Container.Keys, Count_Type (Key));
@@ -290,9 +278,7 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
    ----------------------
 
    function Iter_Has_Element
-     (Container : Map;
-      Key       : Private_Key) return Boolean
-   is
+     (Container : Map; Key : Private_Key) return Boolean is
    begin
       return Count_Type (Key) in 1 .. Key_Containers.Length (Container.Keys);
    end Iter_Has_Element;
@@ -301,9 +287,7 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
    -- Iter_Next --
    ---------------
 
-   function Iter_Next
-     (Container : Map;
-      Key       : Private_Key) return Private_Key
+   function Iter_Next (Container : Map; Key : Private_Key) return Private_Key
    is
       pragma Unreferenced (Container);
    begin
@@ -334,10 +318,7 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
    --------------------------
 
    function Keys_Included_Except
-     (Left    : Map;
-      Right   : Map;
-      New_Key : Key_Type) return Boolean
-   is
+     (Left : Map; Right : Map; New_Key : Key_Type) return Boolean is
    begin
       for J in 1 .. Length (Left.Keys) loop
          declare
@@ -355,11 +336,7 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
    end Keys_Included_Except;
 
    function Keys_Included_Except
-     (Left  : Map;
-      Right : Map;
-      X     : Key_Type;
-      Y     : Key_Type) return Boolean
-   is
+     (Left : Map; Right : Map; X : Key_Type; Y : Key_Type) return Boolean is
    begin
       for J in 1 .. Length (Left.Keys) loop
          declare
@@ -381,18 +358,14 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
    -- Lemma_Get_Equivalent --
    --------------------------
 
-   procedure Lemma_Get_Equivalent
-     (Container    : Map;
-      Key_1, Key_2 : Key_Type)
+   procedure Lemma_Get_Equivalent (Container : Map; Key_1, Key_2 : Key_Type)
    is null;
 
    ------------------------------
    -- Lemma_Has_Key_Equivalent --
    ------------------------------
 
-   procedure Lemma_Has_Key_Equivalent
-     (Container : Map;
-      Key       : Key_Type)
+   procedure Lemma_Has_Key_Equivalent (Container : Map; Key : Key_Type)
    is null;
 
    ------------
@@ -421,8 +394,8 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
    -- Same_Keys --
    ---------------
 
-   function Same_Keys (Left : Map; Right : Map) return Boolean is
-     (Keys_Included (Left, Right)
+   function Same_Keys (Left : Map; Right : Map) return Boolean
+   is (Keys_Included (Left, Right)
        and Keys_Included (Left => Right, Right => Left));
 
    ---------
@@ -430,12 +403,9 @@ package body SPARK.Containers.Functional.Maps with SPARK_Mode => Off is
    ---------
 
    function Set
-     (Container : Map;
-      Key       : Key_Type;
-      New_Item  : Element_Type) return Map
-   is
-     (Keys     => Container.Keys,
-      Elements =>
-        Set (Container.Elements, Find (Container.Keys, Key), New_Item));
+     (Container : Map; Key : Key_Type; New_Item : Element_Type) return Map
+   is (Keys     => Container.Keys,
+       Elements =>
+         Set (Container.Elements, Find (Container.Keys, Key), New_Item));
 
 end SPARK.Containers.Functional.Maps;

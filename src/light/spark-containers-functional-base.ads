@@ -26,12 +26,13 @@ private generic
    with function "=" (Left, Right : Element_Type) return Boolean is <>;
 
 package SPARK.Containers.Functional.Base with
-  SPARK_Mode => Off,
-  Ghost      => SPARKlib_Logic
+    SPARK_Mode => Off,
+    Ghost      => SPARKlib_Logic
 is
 
-   subtype Extended_Index is Index_Type'Base range
-     Index_Type'Pred (Index_Type'First) .. Index_Type'Last;
+   subtype Extended_Index is
+     Index_Type'Base
+       range Index_Type'Pred (Index_Type'First) .. Index_Type'Last;
 
    type Container is private;
 
@@ -48,16 +49,12 @@ is
    --  Access to the element at index I in C
 
    function Set
-     (C : Container;
-      I : Index_Type;
-      E : Element_Type) return Container;
+     (C : Container; I : Index_Type; E : Element_Type) return Container;
    --  Return a new container which is equal to C except for the element at
    --  index I, which is set to E.
 
    function Add
-     (C : Container;
-      I : Index_Type;
-      E : Element_Type) return Container;
+     (C : Container; I : Index_Type; E : Element_Type) return Container;
    --  Return a new container that is C with E inserted at index I
 
    function Remove (C : Container; I : Index_Type) return Container;
@@ -124,8 +121,8 @@ private
 
    subtype Positive_Count_Type is Count_Type range 1 .. Count_Type'Last;
 
-   package Element_Holders is new SPARK.Containers.Functional.Holder
-     (Element_Type);
+   package Element_Holders is new
+     SPARK.Containers.Functional.Holder (Element_Type);
    use Element_Holders;
 
    type Element_Array is
@@ -138,9 +135,9 @@ private
    type Reference_Count_Type is new Natural;
 
    type Array_Base is record
-     Reference_Count : Reference_Count_Type;
-     Max_Length      : Count_Type;
-     Elements        : Element_Array_Access;
+      Reference_Count : Reference_Count_Type;
+      Max_Length      : Count_Type;
+      Elements        : Element_Array_Access;
    end record;
 
    type Array_Base_Access is access Array_Base;
@@ -149,18 +146,15 @@ private
       Base : Array_Base_Access;
    end record;
 
-   function Create (B :  Array_Base_Access) return Array_Base_Controlled_Access
-   is
-     (Base => B);
+   function Create (B : Array_Base_Access) return Array_Base_Controlled_Access
+   is (Base => B);
 
-   procedure Adjust
-     (Controlled_Base : in out Array_Base_Controlled_Access);
+   procedure Adjust (Controlled_Base : in out Array_Base_Controlled_Access);
 
-   procedure Finalize
-     (Controlled_Base : in out Array_Base_Controlled_Access);
+   procedure Finalize (Controlled_Base : in out Array_Base_Controlled_Access);
 
-   function Content_Init (L : Count_Type := 0)
-                          return Array_Base_Controlled_Access;
+   function Content_Init
+     (L : Count_Type := 0) return Array_Base_Controlled_Access;
    --  Used to initialize the content of an array base with length L
 
    type Container is record

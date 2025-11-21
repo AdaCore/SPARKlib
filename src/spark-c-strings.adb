@@ -5,8 +5,8 @@
 
 pragma Assertion_Policy (Ignore);
 
-package body SPARK.C.Strings with
-  SPARK_Mode => Off
+package body SPARK.C.Strings
+  with SPARK_Mode => Off
 is
 
    --------------------
@@ -53,8 +53,7 @@ is
 
    function From_Chars_Ptr
      (Item : chars_ptr) return Interfaces.C.Strings.chars_ptr
-   is
-     (Interfaces.C.Strings.chars_ptr (Item));
+   is (Interfaces.C.Strings.chars_ptr (Item));
 
    -----------------------------
    -- Is_Nul_Terminated_Ghost --
@@ -75,22 +74,22 @@ is
    -- New_Char_Array --
    --------------------
 
-   function New_Char_Array (Chars : char_array) return chars_ptr is
-      (chars_ptr (Interfaces.C.Strings.New_Char_Array (Chars)));
+   function New_Char_Array (Chars : char_array) return chars_ptr
+   is (chars_ptr (Interfaces.C.Strings.New_Char_Array (Chars)));
 
    ----------------
    -- New_String --
    ----------------
 
-   function New_String (Str : String) return chars_ptr is
-      (chars_ptr (Interfaces.C.Strings.New_String (Str)));
+   function New_String (Str : String) return chars_ptr
+   is (chars_ptr (Interfaces.C.Strings.New_String (Str)));
 
    ------------
    -- Strlen --
    ------------
 
-   function Strlen (Item : chars_ptr) return size_t is
-      (Interfaces.C.Strings.Strlen (Interfaces.C.Strings.chars_ptr (Item)));
+   function Strlen (Item : chars_ptr) return size_t
+   is (Interfaces.C.Strings.Strlen (Interfaces.C.Strings.chars_ptr (Item)));
 
    ------------------
    -- To_Chars_Ptr --
@@ -99,13 +98,11 @@ is
    function To_Chars_Ptr
      (Item      : Interfaces.C.Strings.char_array_access;
       Nul_Check : Boolean := False) return chars_ptr
-   is
-     (chars_ptr (Interfaces.C.Strings.To_Chars_Ptr (Item, Nul_Check)));
+   is (chars_ptr (Interfaces.C.Strings.To_Chars_Ptr (Item, Nul_Check)));
 
    function To_Chars_Ptr
      (Item : Interfaces.C.Strings.chars_ptr) return chars_ptr
-   is
-     (chars_ptr (Item));
+   is (chars_ptr (Item));
 
    ------------
    -- Update --
@@ -115,8 +112,7 @@ is
      (Item   : in out chars_ptr;
       Offset : size_t;
       Chars  : char_array;
-      Check  : Boolean := True)
-   is
+      Check  : Boolean := True) is
    begin
       Interfaces.C.Strings.Update
         (Item   => Interfaces.C.Strings.chars_ptr (Item),
@@ -129,8 +125,7 @@ is
      (Item   : in out chars_ptr;
       Offset : size_t;
       Str    : String;
-      Check  : Boolean := True)
-   is
+      Check  : Boolean := True) is
    begin
       Interfaces.C.Strings.Update
         (Item   => Interfaces.C.Strings.chars_ptr (Item),
@@ -143,21 +138,18 @@ is
    -- Value --
    -----------
 
-   function Value (Item : chars_ptr) return char_array is
-      (Interfaces.C.Strings.Value (Interfaces.C.Strings.chars_ptr (Item)));
+   function Value (Item : chars_ptr) return char_array
+   is (Interfaces.C.Strings.Value (Interfaces.C.Strings.chars_ptr (Item)));
 
-   function Value
-     (Item   : chars_ptr;
-      Length : size_t) return char_array
-   is
-     (Interfaces.C.Strings.Value
-       (Interfaces.C.Strings.chars_ptr (Item), Length));
+   function Value (Item : chars_ptr; Length : size_t) return char_array
+   is (Interfaces.C.Strings.Value
+         (Interfaces.C.Strings.chars_ptr (Item), Length));
 
-   function Value (Item : chars_ptr) return String is
-      (Interfaces.C.Strings.Value (Interfaces.C.Strings.chars_ptr (Item)));
+   function Value (Item : chars_ptr) return String
+   is (Interfaces.C.Strings.Value (Interfaces.C.Strings.chars_ptr (Item)));
 
-   function Value (Item : chars_ptr; Length : size_t) return String is
-     (Interfaces.C.Strings.Value
-       (Interfaces.C.Strings.chars_ptr (Item), Length));
+   function Value (Item : chars_ptr; Length : size_t) return String
+   is (Interfaces.C.Strings.Value
+         (Interfaces.C.Strings.chars_ptr (Item), Length));
 
 end SPARK.C.Strings;

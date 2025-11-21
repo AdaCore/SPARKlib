@@ -4,16 +4,16 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
-package body SPARK.Big_Integers with
-   SPARK_Mode => Off
+package body SPARK.Big_Integers
+  with SPARK_Mode => Off
 is
 
    ------------------------
    -- Signed_Conversions --
    ------------------------
 
-   package body Signed_Conversions with
-     SPARK_Mode => Off
+   package body Signed_Conversions
+     with SPARK_Mode => Off
    is
 
       ----------------------
@@ -40,8 +40,8 @@ is
    -- Unsigned_Conversions --
    --------------------------
 
-   package body Unsigned_Conversions with
-     SPARK_Mode => Off
+   package body Unsigned_Conversions
+     with SPARK_Mode => Off
    is
 
       ----------------------
@@ -77,10 +77,10 @@ is
    -- "**" --
    ----------
 
-   function "**"
-     (L : Valid_Big_Integer; R : Natural) return Valid_Big_Integer is
+   function "**" (L : Valid_Big_Integer; R : Natural) return Valid_Big_Integer
+   is
    begin
-      return (V => L.V ** R);
+      return (V => L.V**R);
    end "**";
 
    ---------
@@ -217,22 +217,22 @@ is
    -- Is_Valid --
    --------------
 
-   function Is_Valid (Arg : Big_Integer) return Boolean is
-     (True);
+   function Is_Valid (Arg : Big_Integer) return Boolean
+   is (True);
 
    ---------
    -- Max --
    ---------
 
-   function Max (L, R : Valid_Big_Integer) return Valid_Big_Integer is
-     (if L > R then L else R);
+   function Max (L, R : Valid_Big_Integer) return Valid_Big_Integer
+   is (if L > R then L else R);
 
    ---------
    -- Min --
    ---------
 
-   function Min (L, R : Valid_Big_Integer) return Valid_Big_Integer is
-     (if L < R then L else R);
+   function Min (L, R : Valid_Big_Integer) return Valid_Big_Integer
+   is (if L < R then L else R);
 
    --------------------
    -- To_Big_Integer --

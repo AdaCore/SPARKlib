@@ -4,7 +4,8 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
-package body SPARK.Containers.Parameter_Checks with SPARK_Mode
+package body SPARK.Containers.Parameter_Checks
+  with SPARK_Mode
 is
 
    ------------------------
@@ -46,8 +47,8 @@ is
             pragma
               Warnings (Off, "actuals for this call may be in wrong order");
             Eq_Logical_Eq (Y, X);
-            pragma Warnings
-              (On, "actuals for this call may be in wrong order");
+            pragma
+              Warnings (On, "actuals for this call may be in wrong order");
          else
             Param_Eq_Symmetric (X, Y);
          end if;

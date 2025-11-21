@@ -8,7 +8,7 @@ package body SPARK.Containers.Stable_Sorting is
    package body List_Descriptors is
       procedure Doubly_Linked_List_Sort (List : List_Descriptor) is
 
-         Empty  : constant List_Descriptor := (Nil, Nil, 0);
+         Empty : constant List_Descriptor := (Nil, Nil, 0);
 
          function Merge_Sort (Arg : List_Descriptor) return List_Descriptor;
          --  Sort list of given length using MergeSort; length must be >= 2.
@@ -18,8 +18,7 @@ package body SPARK.Containers.Stable_Sorting is
          -- Merge_Sort --
          ----------------
 
-         function Merge_Sort (Arg : List_Descriptor) return List_Descriptor
-         is
+         function Merge_Sort (Arg : List_Descriptor) return List_Descriptor is
             procedure Split_List
               (Unsplit : List_Descriptor; Part1, Part2 : out List_Descriptor);
             --  Split list into two parts for divide-and-conquer.
@@ -36,8 +35,8 @@ package body SPARK.Containers.Stable_Sorting is
             function Merge_Parts
               (Part1, Part2 : List_Descriptor) return List_Descriptor
             is
-               procedure Detach_First (Source   : in out List_Descriptor;
-                                       Detached : out Node_Ref);
+               procedure Detach_First
+                 (Source : in out List_Descriptor; Detached : out Node_Ref);
                --  Detach the first element from a non-empty list and
                --  return the detached node via the Detached parameter.
 
@@ -45,17 +44,16 @@ package body SPARK.Containers.Stable_Sorting is
                -- Detach_First --
                ------------------
 
-               procedure Detach_First (Source   : in out List_Descriptor;
-                                       Detached : out Node_Ref) is
+               procedure Detach_First
+                 (Source : in out List_Descriptor; Detached : out Node_Ref) is
                begin
                   Detached := Source.First;
 
                   if Source.Length = 1 then
                      Source := Empty;
                   else
-                     Source := (Next (Source.First),
-                                Source.Last,
-                                Source.Length - 1);
+                     Source :=
+                       (Next (Source.First), Source.Last, Source.Length - 1);
 
                      Set_Prev (Next (Detached), Nil);
                      Set_Next (Detached, Nil);
@@ -69,7 +67,7 @@ package body SPARK.Containers.Stable_Sorting is
                Take_From_P2 : Boolean;
                Detached     : Node_Ref;
 
-            --  Start of processing for Merge_Parts
+               --  Start of processing for Merge_Parts
 
             begin
                while P1.Length /= 0 or P2.Length /= 0 loop
@@ -109,27 +107,29 @@ package body SPARK.Containers.Stable_Sorting is
             procedure Split_List
               (Unsplit : List_Descriptor; Part1, Part2 : out List_Descriptor)
             is
-               Rover : Node_Ref := Unsplit.First;
+               Rover      : Node_Ref := Unsplit.First;
                Bump_Count : constant Count_Type := (Unsplit.Length - 1) / 2;
             begin
                for Iter in 1 .. Bump_Count loop
                   Rover := Next (Rover);
                end loop;
 
-               Part1 := (First  => Unsplit.First,
-                         Last   => Rover,
-                         Length => Bump_Count + 1);
+               Part1 :=
+                 (First  => Unsplit.First,
+                  Last   => Rover,
+                  Length => Bump_Count + 1);
 
-               Part2 := (First => Next (Rover),
-                         Last  => Unsplit.Last,
-                         Length => Unsplit.Length - Part1.Length);
+               Part2 :=
+                 (First  => Next (Rover),
+                  Last   => Unsplit.Last,
+                  Length => Unsplit.Length - Part1.Length);
 
                --  Detach
                Set_Next (Part1.Last, Nil);
                Set_Prev (Part2.First, Nil);
             end Split_List;
 
-         --  Start of processing for Merge_Sort
+            --  Start of processing for Merge_Sort
 
          begin
             if Positive (Arg.Length) < 2 then
@@ -149,7 +149,7 @@ package body SPARK.Containers.Stable_Sorting is
             end;
          end Merge_Sort;
 
-      --  Start of processing for Sort
+         --  Start of processing for Sort
 
       begin
          if List.Length > 1 then

@@ -17,92 +17,70 @@
 
 generic
    type Uint is mod <>;
-package SPARK.Lemmas.Mod_Arithmetic
-  with SPARK_Mode,
-       Pure,
-       Ghost,
-       Always_Terminates
+package SPARK.Lemmas.Mod_Arithmetic with
+    SPARK_Mode,
+    Pure,
+    Ghost,
+    Always_Terminates
 is
 
-   pragma Warnings
-     (Off, "postcondition does not check the outcome of calling");
+   pragma
+     Warnings (Off, "postcondition does not check the outcome of calling");
 
    subtype Pos is Uint range 1 .. Uint'Last;
 
-   procedure Lemma_Div_Is_Monotonic
-     (Val1  : Uint;
-      Val2  : Uint;
-      Denom : Pos)
+   procedure Lemma_Div_Is_Monotonic (Val1 : Uint; Val2 : Uint; Denom : Pos)
    with
      Global => null,
-     Pre  => Val1 <= Val2,
-     Post => Val1 / Denom <= Val2 / Denom;  --  MANUAL PROOF
+     Pre    => Val1 <= Val2,
+     Post   => Val1 / Denom <= Val2 / Denom;  --  MANUAL PROOF
 
-   procedure Lemma_Div_Then_Mult_Bounds
-     (Arg1 : Uint;
-      Arg2 : Pos;
-      Res  : Uint)
+   procedure Lemma_Div_Then_Mult_Bounds (Arg1 : Uint; Arg2 : Pos; Res : Uint)
    with
      Global => null,
-     Pre  => Res = (Arg1 / Arg2) * Arg2,
-     Post => Res <= Arg1 and then
-             Arg1 - Res < Arg2;
+     Pre    => Res = (Arg1 / Arg2) * Arg2,
+     Post   => Res <= Arg1 and then Arg1 - Res < Arg2;
 
-   procedure Lemma_Mult_Is_Monotonic
-     (Val1   : Uint;
-      Val2   : Uint;
-      Factor : Uint)
+   procedure Lemma_Mult_Is_Monotonic (Val1 : Uint; Val2 : Uint; Factor : Uint)
    with
      Global => null,
-     Pre  => Val1 <= Val2 and then
-             (Factor = 0 or else Val2 <= Uint'Last / Factor),
-     Post => Val1 * Factor <= Val2 * Factor;  --  MANUAL PROOF
+     Pre    =>
+       Val1 <= Val2 and then (Factor = 0 or else Val2 <= Uint'Last / Factor),
+     Post   => Val1 * Factor <= Val2 * Factor;  --  MANUAL PROOF
 
    procedure Lemma_Mult_Is_Strictly_Monotonic
-     (Val1   : Uint;
-      Val2   : Uint;
-      Factor : Pos)
+     (Val1 : Uint; Val2 : Uint; Factor : Pos)
    with
      Global => null,
-     Pre  => Val1 < Val2 and then
-             Val2 <= Uint'Last / Factor,
-     Post => Val1 * Factor < Val2 * Factor;  --  MANUAL PROOF
+     Pre    => Val1 < Val2 and then Val2 <= Uint'Last / Factor,
+     Post   => Val1 * Factor < Val2 * Factor;  --  MANUAL PROOF
 
-   procedure Lemma_Mult_Protect
-     (Arg1        : Uint;
-      Arg2        : Uint;
-      Upper_Bound : Uint)
+   procedure Lemma_Mult_Protect (Arg1 : Uint; Arg2 : Uint; Upper_Bound : Uint)
    with
      Global => null,
-     Pre  => Arg2 = 0 or else Arg1 <= Upper_Bound / Arg2,
-     Post => Arg1 * Arg2 <= Upper_Bound;  --  MANUAL PROOF
+     Pre    => Arg2 = 0 or else Arg1 <= Upper_Bound / Arg2,
+     Post   => Arg1 * Arg2 <= Upper_Bound;  --  MANUAL PROOF
 
    procedure Lemma_Mult_Scale
-     (Val         : Uint;
-      Scale_Num   : Uint;
-      Scale_Denom : Pos;
-      Res         : Uint)
+     (Val : Uint; Scale_Num : Uint; Scale_Denom : Pos; Res : Uint)
    with
      Global => null,
-     Pre  => Scale_Num <= Scale_Denom and then
-             (Scale_Num = 0 or else Val <= Uint'Last / Scale_Num) and then
-             Res = (Val * Scale_Num) / Scale_Denom,
-     Post => Res <= Val;  --  MANUAL PROOF
+     Pre    =>
+       Scale_Num <= Scale_Denom
+       and then (Scale_Num = 0 or else Val <= Uint'Last / Scale_Num)
+       and then Res = (Val * Scale_Num) / Scale_Denom,
+     Post   => Res <= Val;  --  MANUAL PROOF
 
-   procedure Lemma_Mult_Then_Div_Is_Ident
-     (Arg1 : Uint;
-      Arg2 : Pos)
+   procedure Lemma_Mult_Then_Div_Is_Ident (Arg1 : Uint; Arg2 : Pos)
    with
      Global => null,
-     Pre  => Arg1 <= Uint'Last / Arg2,
-     Post => (Arg1 * Arg2) / Arg2 = Arg1;  --  MANUAL PROOF
+     Pre    => Arg1 <= Uint'Last / Arg2,
+     Post   => (Arg1 * Arg2) / Arg2 = Arg1;  --  MANUAL PROOF
 
-   procedure Lemma_Mult_Then_Mod_Is_Zero
-     (Arg1 : Uint;
-      Arg2 : Pos)
+   procedure Lemma_Mult_Then_Mod_Is_Zero (Arg1 : Uint; Arg2 : Pos)
    with
      Global => null,
-     Pre  => Arg1 <= Uint'Last / Arg2,
-     Post => (Arg1 * Arg2) mod Arg2 = 0;  --  MANUAL PROOF
+     Pre    => Arg1 <= Uint'Last / Arg2,
+     Post   => (Arg1 * Arg2) mod Arg2 = 0;  --  MANUAL PROOF
 
 end SPARK.Lemmas.Mod_Arithmetic;
