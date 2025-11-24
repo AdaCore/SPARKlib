@@ -1064,12 +1064,13 @@ is
 
    function First_Element (Container : Map) return Element_Type
    with
-     Global => null,
-     Pre    => (SPARKlib_Defensive => not Is_Empty (Container)),
-     Post   =>
+     Global   => null,
+     Pre      => (SPARKlib_Defensive => not Is_Empty (Container)),
+     Post     =>
        (SPARKlib_Full =>
           First_Element'Result
-          = Element (Model (Container), First_Key (Container)));
+          = Element (Model (Container), First_Key (Container))),
+     Annotate => (GNATprove, Inline_For_Proof);
 
    function First_Key (Container : Map) return Key_Type
    with
@@ -1077,7 +1078,7 @@ is
      Pre    => (SPARKlib_Defensive => not Is_Empty (Container)),
      Post   =>
        (SPARKlib_Full =>
-          First_Key'Result = K.Get (Keys (Container), 1)
+          K.Element_Logic_Equal (First_Key'Result, K.Get (Keys (Container), 1))
           and K_Smaller_Than_Range
                 (Keys (Container), 2, Length (Container), First_Key'Result));
 
@@ -1095,12 +1096,13 @@ is
 
    function Last_Element (Container : Map) return Element_Type
    with
-     Global => null,
-     Pre    => (SPARKlib_Defensive => not Is_Empty (Container)),
-     Post   =>
+     Global   => null,
+     Pre      => (SPARKlib_Defensive => not Is_Empty (Container)),
+     Post     =>
        (SPARKlib_Full =>
           Last_Element'Result
-          = Element (Model (Container), Last_Key (Container)));
+          = Element (Model (Container), Last_Key (Container))),
+     Annotate => (GNATprove, Inline_For_Proof);
 
    function Last_Key (Container : Map) return Key_Type
    with
@@ -1108,7 +1110,8 @@ is
      Pre    => (SPARKlib_Defensive => not Is_Empty (Container)),
      Post   =>
        (SPARKlib_Full =>
-          Last_Key'Result = K.Get (Keys (Container), Length (Container))
+          K.Element_Logic_Equal
+            (Last_Key'Result, K.Get (Keys (Container), Length (Container)))
           and K_Bigger_Than_Range
                 (Keys (Container),
                  1,
