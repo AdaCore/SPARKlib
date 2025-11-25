@@ -1033,7 +1033,10 @@ is
 
              --  Last cursor has been removed from Container
 
-             and Positions (Container) <= Positions (Container)'Old));
+             and P_Positions_Shifted
+                   (Positions (Container),
+                    Positions (Container)'Old,
+                    Cut => Length (Container)'Old)));
 
    function First (Container : Map) return Cursor
    with
