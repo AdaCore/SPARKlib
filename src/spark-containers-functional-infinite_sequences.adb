@@ -109,7 +109,8 @@ is
       Lst       : Big_Natural;
       Item      : Element_Type) return Boolean
    is
-      Count_Fst : constant Count_Type := To_Count (Fst);
+      Count_Fst : constant Count_Type :=
+        To_Count (if Fst <= Lst then Fst else Lst + 1);
       Count_Lst : constant Count_Type := To_Count (Lst);
 
    begin
