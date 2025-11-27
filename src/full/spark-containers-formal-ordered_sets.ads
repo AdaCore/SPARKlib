@@ -1988,7 +1988,7 @@ is
    function Aggr_Capacity (Container : Set) return Count_Type
    is (Container.Capacity)
    with
-     Ghost    => SPARKlib_Full,
+     Ghost    => Static,
      Global   => null,
      Annotate => (GNATprove, Inline_For_Proof),
      Annotate => (GNATprove, Container_Aggregates, "Capacity");
@@ -1996,7 +1996,7 @@ is
    function Aggr_Model (Container : Set) return M.Set
    is (Model (Container))
    with
-     Ghost    => SPARKlib_Full,
+     Ghost    => Static,
      Global   => null,
      Annotate => (GNATprove, Inline_For_Proof),
      Annotate => (GNATprove, Container_Aggregates, "Model");
@@ -2004,7 +2004,7 @@ is
    function Iter_Model (Container : Set) return E.Sequence
    is (Elements (Container))
    with
-     Ghost    => SPARKlib_Full,
+     Ghost    => Static,
      Global   => null,
      Annotate => (GNATprove, Inline_For_Proof),
      Annotate => (GNATprove, Iterable_For_Proof, "Model");

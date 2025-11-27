@@ -142,19 +142,41 @@ procedure Test with SPARK_Mode is
    end Test_Assign;
 
    procedure Test_Copy with Pre => True is
-      X : Set (1000, Default_Modulus (1000));
+      procedure Test_No_Capacity is
+         X : Set (1000, Default_Modulus (1000));
+      begin
+         declare
+            Y : constant Set := Copy (X);
+         begin
+            Assert (Is_Empty (Y), "Copy no capacity of empty set");
+         end;
+         Create_Non_Empty_Set (X);
+         declare
+            Y : constant Set := Copy (X);
+         begin
+            Assert (Y = X, "Copy no capacity of non-empty set");
+         end;
+      end Test_No_Capacity;
+
+      procedure Test_With_Capacity is
+         X : Set (100, Default_Modulus (100));
+      begin
+         declare
+            Y : constant Set := Copy (X, 200);
+         begin
+            Assert (Is_Empty (Y), "Copy with capacity of empty set");
+         end;
+         Create_Non_Empty_Set (X);
+         declare
+            Y : constant Set := Copy (X, 200);
+         begin
+            Assert (Y.Capacity = 200, "Copy with capacity, correct capacity");
+            Assert (Y = X, "Copy with capacity of non-empty set");
+         end;
+      end Test_With_Capacity;
    begin
-      declare
-         Y : constant Set := Copy (X);
-      begin
-         Assert (Is_Empty (Y), "Copy of empty set");
-      end;
-      Create_Non_Empty_Set (X);
-      declare
-         Y : constant Set := Copy (X);
-      begin
-         Assert (Y = X, "Copy of non-empty set");
-      end;
+      Test_No_Capacity;
+      Test_With_Capacity;
    end Test_Copy;
 
    procedure Test_Element with Pre => True is
