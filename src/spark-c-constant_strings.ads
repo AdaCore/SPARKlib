@@ -94,9 +94,9 @@ is
           --  Strlen returns the number of elements before the first occurrence
           --  of nul in Item.all.
 
-          and then (for all I in 0 .. Strlen (To_Chars_Ptr'Result) =>
-                      Value (To_Chars_Ptr'Result) (I)
-                      = Item (Item'First + I))),
+          and then
+            (for all I in 0 .. Strlen (To_Chars_Ptr'Result) =>
+               Value (To_Chars_Ptr'Result) (I) = Item (Item'First + I))),
      --  Value returns the prefix of Item.all up to and including the
      --  first occurrence of nul.
 
@@ -109,8 +109,9 @@ is
        Value'Result'First = 0
        and then Value'Result'Last = Strlen (Item)
        and then Value'Result (Strlen (Item)) = nul
-       and then (for all I in 0 .. Strlen (Item) =>
-                   (if I < Strlen (Item) then Value'Result (I) /= nul)),
+       and then
+         (for all I in 0 .. Strlen (Item) =>
+            (if I < Strlen (Item) then Value'Result (I) /= nul)),
      Global => null;
    --  Value returns the prefix of the value pointed by Item up to and
    --  including the first occurrence of nul.
@@ -121,8 +122,9 @@ is
      Post   =>
        Value'Result'First = 0
        and then Value'Result'Last = size_t'Min (Length - 1, Strlen (Item))
-       and then (for all I in 0 .. size_t'(Value'Result'Length - 1) =>
-                   Value'Result (I) = char_array'(Value (Item)) (I)),
+       and then
+         (for all I in 0 .. size_t'(Value'Result'Length - 1) =>
+            Value'Result (I) = char_array'(Value (Item)) (I)),
      Global => null;
    --  Value returns the longest prefix of Value (Item) containing at most
    --  Length elements.
@@ -134,10 +136,11 @@ is
      Post   =>
        Value'Result'First = 1
        and then Value'Result'Length = Strlen (Item)
-       and then (for all I in Value'Result'Range =>
-                   Value'Result (I) /= To_Ada (nul))
-       and then (for all I in Value'Result'Range =>
-                   Value'Result (I) = To_Ada (Value (Item) (size_t (I - 1)))),
+       and then
+         (for all I in Value'Result'Range => Value'Result (I) /= To_Ada (nul))
+       and then
+         (for all I in Value'Result'Range =>
+            Value'Result (I) = To_Ada (Value (Item) (size_t (I - 1)))),
      Global => null;
    --  Value returns the prefix of the value pointed by Item up to but
    --  excluding the first occurrence of nul.
@@ -147,17 +150,20 @@ is
      Pre    =>
        Item /= Null_Ptr
        and then Length /= 0
-       and then (Strlen (Item) <= size_t (Natural'Last)
-                 or else Length <= size_t (Natural'Last)),
+       and then
+         (Strlen (Item) <= size_t (Natural'Last)
+          or else Length <= size_t (Natural'Last)),
      Post   =>
        Value'Result'First = 1
        and then Value'Result'Length = size_t'Min (Length, Strlen (Item))
-       and then (for all I in Value'Result'Range =>
-                   Value'Result (I) = To_Ada (Value (Item) (size_t (I - 1))))
-       and then (if Strlen (Item) <= size_t (Natural'Last)
-                 then
-                   (for all I in Value'Result'Range =>
-                      Value'Result (I) = Value (Item) (I))),
+       and then
+         (for all I in Value'Result'Range =>
+            Value'Result (I) = To_Ada (Value (Item) (size_t (I - 1))))
+       and then
+         (if Strlen (Item) <= size_t (Natural'Last)
+          then
+            (for all I in Value'Result'Range =>
+               Value'Result (I) = Value (Item) (I))),
      Global => null;
    --  Value returns the longest prefix of Value (Item) containing at most
    --  Length elements.

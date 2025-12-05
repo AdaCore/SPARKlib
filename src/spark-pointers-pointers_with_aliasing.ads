@@ -75,16 +75,18 @@ is
         (M1, M2 : Memory_Type; Target : Addresses) return Boolean
       is ((for all A in Address_Type =>
              (if Valid (M2, A) then Target (A) or Valid (M1, A)))
-          and (for all A in Address_Type =>
-                 (if Target (A) then not Valid (M1, A) and Valid (M2, A))))
+          and
+            (for all A in Address_Type =>
+               (if Target (A) then not Valid (M1, A) and Valid (M2, A))))
       with Ghost;
 
       function Deallocates
         (M1, M2 : Memory_Type; Target : Addresses) return Boolean
       is ((for all A in Address_Type =>
              (if Valid (M1, A) then Target (A) or Valid (M2, A)))
-          and (for all A in Address_Type =>
-                 (if Target (A) then not Valid (M2, A) and Valid (M1, A))))
+          and
+            (for all A in Address_Type =>
+               (if Target (A) then not Valid (M2, A) and Valid (M1, A))))
       with Ghost;
 
    end Memory_Model;
@@ -145,9 +147,10 @@ is
      Post   =>
        P = Null_Pointer
        and then Allocates (Memory'Old, Memory, None)
-       and then (if P'Old = Null_Pointer
-                 then Deallocates (Memory'Old, Memory, None)
-                 else Deallocates (Memory'Old, Memory, Only (Address (P)'Old)))
+       and then
+         (if P'Old = Null_Pointer
+          then Deallocates (Memory'Old, Memory, None)
+          else Deallocates (Memory'Old, Memory, Only (Address (P)'Old)))
        and then Writes (Memory'Old, Memory, None);
 
    --  Primitives to access the content of a memory cell directly. Ownership is

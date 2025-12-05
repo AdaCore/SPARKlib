@@ -39,8 +39,8 @@ is
 
          elsif Left.T_Access = null
            or else Right.T_Access = null
-           or else Get (Left.T_Access.Value).all
-                   /= Get (Right.T_Access.Value).all
+           or else
+             Get (Left.T_Access.Value).all /= Get (Right.T_Access.Value).all
            or else Left.T_Access.Count /= Right.T_Access.Count
            or else Left.T_Access.Height /= Right.T_Access.Height
          then

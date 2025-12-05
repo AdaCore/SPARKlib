@@ -63,10 +63,11 @@ is
      Post =>
        C_Length_Ghost'Result <= Item'Last - Item'First
        and then Item (Item'First + C_Length_Ghost'Result) = To_Ada (nul)
-       and then (for all J in
-                   Item'First .. Item'First + C_Length_Ghost'Result
-                   when J /= Item'First + C_Length_Ghost'Result =>
-                   Item (J) /= To_Ada (nul));
+       and then
+         (for all J in
+            Item'First .. Item'First + C_Length_Ghost'Result
+            when J /= Item'First + C_Length_Ghost'Result =>
+            Item (J) /= To_Ada (nul));
    --  Ghost function to compute the length of a string up to the first nul
    --  character.
 
@@ -100,20 +101,21 @@ is
 
      Post   =>
        New_Char_Array'Result /= Null_Ptr
-       and then Strlen (New_Char_Array'Result)
-                = (if Is_Nul_Terminated (Chars)
-                   then C_Length_Ghost (Chars)
-                   else Chars'Length)
+       and then
+         Strlen (New_Char_Array'Result)
+         = (if Is_Nul_Terminated (Chars)
+            then C_Length_Ghost (Chars)
+            else Chars'Length)
        --  Strlen returns the number of elements before the first occurrence of
        --  nul in Chars & nul.
 
-       and then Value (New_Char_Array'Result) (Strlen (New_Char_Array'Result))
-                = nul
-       and then (if Strlen (New_Char_Array'Result) > 0
-                 then
-                   (for all I in 0 .. Strlen (New_Char_Array'Result) - 1 =>
-                      Value (New_Char_Array'Result) (I)
-                      = Chars (Chars'First + I))),
+       and then
+         Value (New_Char_Array'Result) (Strlen (New_Char_Array'Result)) = nul
+       and then
+         (if Strlen (New_Char_Array'Result) > 0
+          then
+            (for all I in 0 .. Strlen (New_Char_Array'Result) - 1 =>
+               Value (New_Char_Array'Result) (I) = Chars (Chars'First + I))),
      --  Value returns the prefix of Chars & nul up to and including the first
      --  occurrence of nul.
 
@@ -123,15 +125,17 @@ is
    with
      Post   =>
        New_String'Result /= Null_Ptr
-       and then Strlen (New_String'Result)
-                = (if Is_Nul_Terminated_Ghost (Str)
-                   then size_t (C_Length_Ghost (Str))
-                   else Str'Length)
+       and then
+         Strlen (New_String'Result)
+         = (if Is_Nul_Terminated_Ghost (Str)
+            then size_t (C_Length_Ghost (Str))
+            else Str'Length)
        --  Strlen returns the number of elements before the first occurrence of
        --  nul in Str & nul.
 
-       and then (for all I in 1 .. Natural (Strlen (New_String'Result)) =>
-                   Value (New_String'Result) (I) = Str (Str'First + (I - 1))),
+       and then
+         (for all I in 1 .. Natural (Strlen (New_String'Result)) =>
+            Value (New_String'Result) (I) = Str (Str'First + (I - 1))),
      --  Value returns the prefix of Str & nul up to but excluding the first
      --  occurrence of nul.
 
@@ -152,8 +156,9 @@ is
        Value'Result'First = 0
        and then Value'Result'Last = Strlen (Item)
        and then Value'Result (Strlen (Item)) = nul
-       and then (for all I in 0 .. Strlen (Item) =>
-                   (if I < Strlen (Item) then Value'Result (I) /= nul)),
+       and then
+         (for all I in 0 .. Strlen (Item) =>
+            (if I < Strlen (Item) then Value'Result (I) /= nul)),
      Global => null;
    --  Value returns the prefix of the value pointed by Item up to and
    --  including the first occurrence of nul.
@@ -164,8 +169,9 @@ is
      Post   =>
        Value'Result'First = 0
        and then Value'Result'Last = size_t'Min (Length - 1, Strlen (Item))
-       and then (for all I in 0 .. size_t'(Value'Result'Length - 1) =>
-                   Value'Result (I) = char_array'(Value (Item)) (I)),
+       and then
+         (for all I in 0 .. size_t'(Value'Result'Length - 1) =>
+            Value'Result (I) = char_array'(Value (Item)) (I)),
      Global => null;
    --  Value returns the longest prefix of Value (Item) containing at most
    --  Length elements.
@@ -177,10 +183,11 @@ is
      Post   =>
        Value'Result'First = 1
        and then Value'Result'Length = Strlen (Item)
-       and then (for all I in Value'Result'Range =>
-                   Value'Result (I) /= To_Ada (nul))
-       and then (for all I in Value'Result'Range =>
-                   Value'Result (I) = To_Ada (Value (Item) (size_t (I - 1)))),
+       and then
+         (for all I in Value'Result'Range => Value'Result (I) /= To_Ada (nul))
+       and then
+         (for all I in Value'Result'Range =>
+            Value'Result (I) = To_Ada (Value (Item) (size_t (I - 1)))),
      Global => null;
    --  Value returns the prefix of the value pointed by Item up to but
    --  excluding the first occurrence of nul.
@@ -190,17 +197,20 @@ is
      Pre    =>
        Item /= Null_Ptr
        and then Length /= 0
-       and then (Strlen (Item) <= size_t (Natural'Last)
-                 or else Length <= size_t (Natural'Last)),
+       and then
+         (Strlen (Item) <= size_t (Natural'Last)
+          or else Length <= size_t (Natural'Last)),
      Post   =>
        Value'Result'First = 1
        and then Value'Result'Length = size_t'Min (Length, Strlen (Item))
-       and then (for all I in Value'Result'Range =>
-                   Value'Result (I) = To_Ada (Value (Item) (size_t (I - 1))))
-       and then (if Strlen (Item) <= size_t (Natural'Last)
-                 then
-                   (for all I in Value'Result'Range =>
-                      Value'Result (I) = Value (Item) (I))),
+       and then
+         (for all I in Value'Result'Range =>
+            Value'Result (I) = To_Ada (Value (Item) (size_t (I - 1))))
+       and then
+         (if Strlen (Item) <= size_t (Natural'Last)
+          then
+            (for all I in Value'Result'Range =>
+               Value'Result (I) = Value (Item) (I))),
      Global => null;
    --  Value returns the longest prefix of Value (Item) containing at most
    --  Length elements.
@@ -223,23 +233,24 @@ is
        and then Chars'Length + Offset <= Strlen (Item),
      Post   =>
        Item /= Null_Ptr
-       and then Strlen (Item)
-                = (if Is_Nul_Terminated (Chars)
-                   then Offset + C_Length_Ghost (Chars)
-                   else Strlen (Item)'Old)
+       and then
+         Strlen (Item)
+         = (if Is_Nul_Terminated (Chars)
+            then Offset + C_Length_Ghost (Chars)
+            else Strlen (Item)'Old)
        --  Strlen returns the number of elements before the first occurrence of
        --  nul in the value pointed by Item, updated starting at position
        --  Offset, using Chars as the data to be copied into the array.
 
-       and then (for all I in 0 .. Strlen (Item) =>
-                   (if Chars'Length > 0
-                      and then I in Offset .. Offset + Chars'Length - 1
-                    then
-                      char_array'(Value (Item)) (I)
-                      = Chars (I - Offset + Chars'First)
-                    else
-                      char_array'(Value (Item)) (I)
-                      = char_array'(Value (Item))'Old (I))),
+       and then
+         (for all I in 0 .. Strlen (Item) =>
+            (if Chars'Length > 0
+               and then I in Offset .. Offset + Chars'Length - 1
+             then
+               char_array'(Value (Item)) (I) = Chars (I - Offset + Chars'First)
+             else
+               char_array'(Value (Item)) (I)
+               = char_array'(Value (Item))'Old (I))),
      --  Value returns a prefix of the value pointed by Item, updated
      --  starting at position Offset, using Chars as the data to be copied
      --  into the array.
@@ -258,23 +269,24 @@ is
        and then Str'Length + Offset <= Strlen (Item),
      Post           =>
        Item /= Null_Ptr
-       and then Strlen (Item)
-                = (if Is_Nul_Terminated_Ghost (Str)
-                   then Offset + size_t (C_Length_Ghost (Str))
-                   else Strlen (Item)'Old)
+       and then
+         Strlen (Item)
+         = (if Is_Nul_Terminated_Ghost (Str)
+            then Offset + size_t (C_Length_Ghost (Str))
+            else Strlen (Item)'Old)
        --  Strlen returns the number of elements before the first occurrence of
        --  nul in the value pointed by Item, updated starting at position
        --  Offset, using Str as the data to be copied into the array.
 
-       and then (for all I in 0 .. Strlen (Item) =>
-                   (if Str'Length > 0
-                      and then I in Offset .. Offset + Str'Length - 1
-                    then
-                      char_array'(Value (Item)) (I)
-                      = To_C (Str (Natural (I - Offset) + Str'First))
-                    else
-                      char_array'(Value (Item)) (I)
-                      = char_array'(Value (Item))'Old (I))),
+       and then
+         (for all I in 0 .. Strlen (Item) =>
+            (if Str'Length > 0 and then I in Offset .. Offset + Str'Length - 1
+             then
+               char_array'(Value (Item)) (I)
+               = To_C (Str (Natural (I - Offset) + Str'First))
+             else
+               char_array'(Value (Item)) (I)
+               = char_array'(Value (Item))'Old (I))),
      --  Value returns a prefix of the value pointed by Item, updated
      --  starting at position Offset, using Str as the data to be copied
      --  into the array.
@@ -283,9 +295,8 @@ is
        (Strlen (Item) <= size_t (Natural'Last) =>
           (for all I in 1 .. Natural (Strlen (Item)) =>
              (if Str'Length > 0
-                and then I
-                         in Natural (Offset + 1)
-                          .. Natural (Offset + Str'Length)
+                and then
+                  I in Natural (Offset + 1) .. Natural (Offset + Str'Length)
               then
                 String'(Value (Item)) (I)
                 = Str (I - Natural (Offset + 1) + Str'First)

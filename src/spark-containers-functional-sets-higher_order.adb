@@ -155,13 +155,16 @@ is
      Refined_Post =>
        (Static =>
           Length (Create'Result) <= New_Length
-          and then (if All_Distinct (New_Length, New_Item)
-                    then Length (Create'Result) = New_Length)
-          and then (for all I in Interval'(1, New_Length) =>
-                      Contains (Create'Result, New_Item (I)))
-          and then (for all E of Create'Result =>
-                      (for some I in Interval'(1, New_Length) =>
-                         Equivalent_Elements (E, New_Item (I)))))
+          and then
+            (if All_Distinct (New_Length, New_Item)
+             then Length (Create'Result) = New_Length)
+          and then
+            (for all I in Interval'(1, New_Length) =>
+               Contains (Create'Result, New_Item (I)))
+          and then
+            (for all E of Create'Result =>
+               (for some I in Interval'(1, New_Length) =>
+                  Equivalent_Elements (E, New_Item (I)))))
    is
       I : Big_Natural := 0;
    begin
@@ -542,13 +545,15 @@ is
      Refined_Post =>
        (Static =>
           Length (Transform'Result) <= Length (S)
-          and then (if All_Distinct (S, Transform_Item)
-                    then Length (Transform'Result) = Length (S))
-          and then (for all E of S =>
-                      Contains (Transform'Result, Transform_Item (E)))
-          and then (for all E of Transform'Result =>
-                      (for some F of S =>
-                         Equivalent_Elements (E, Transform_Item (F)))))
+          and then
+            (if All_Distinct (S, Transform_Item)
+             then Length (Transform'Result) = Length (S))
+          and then
+            (for all E of S => Contains (Transform'Result, Transform_Item (E)))
+          and then
+            (for all E of Transform'Result =>
+               (for some F of S =>
+                  Equivalent_Elements (E, Transform_Item (F)))))
    is
    begin
       return Res : Set do
@@ -573,8 +578,8 @@ is
                    (for all E of Res =>
                       (for some F of S =>
                          not Contains (Subset, F)
-                         and then Equivalent_Elements
-                                    (E, Transform_Item (F)))));
+                         and then
+                           Equivalent_Elements (E, Transform_Item (F)))));
 
             declare
                E : constant Element_Type := Transform_Item (Choose (Subset));
@@ -614,8 +619,8 @@ is
                    (for all E of Res =>
                       (for some F of S =>
                          not Contains (Subset, F)
-                         and then Equivalent_Elements
-                                    (E, Transform_Item (F)))));
+                         and then
+                           Equivalent_Elements (E, Transform_Item (F)))));
 
             Res := Add (Res, Transform_Item (Choose (Subset)));
          end loop;

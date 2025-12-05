@@ -148,8 +148,8 @@ is
           "<="'Result
           = (for all Item of Left =>
                Nb_Occurence (Left, Item) <= Nb_Occurence (Right, Item))
-          and then (if "<="'Result
-                    then Cardinality (Left) <= Cardinality (Right)));
+          and then
+            (if "<="'Result then Cardinality (Left) <= Cardinality (Right)));
 
    function "=" (Left, Right : Multiset) return Boolean
    with
@@ -159,11 +159,12 @@ is
           "="'Result
           = ((for all Element of Left =>
                 Nb_Occurence (Left, Element) = Nb_Occurence (Right, Element))
-             and then (for all Element of Right =>
-                         Nb_Occurence (Left, Element)
-                         = Nb_Occurence (Right, Element)))
-          and then (if "="'Result
-                    then (Cardinality (Left) = Cardinality (Right))));
+             and then
+               (for all Element of Right =>
+                  Nb_Occurence (Left, Element)
+                  = Nb_Occurence (Right, Element)))
+          and then
+            (if "="'Result then (Cardinality (Left) = Cardinality (Right))));
    --  Two Multiset are equal if and only if all the Element_Type have the same
    --  number of occurences for both Multisets (possibly 0).
 
@@ -193,11 +194,10 @@ is
           = ((for all E of Left =>
                 (if not Equivalent_Elements (E, Element)
                  then Nb_Occurence (Left, E) = Nb_Occurence (Right, E)))
-             and then (for all E of Right =>
-                         (if not Equivalent_Elements (E, Element)
-                          then
-                            Nb_Occurence (Left, E)
-                            = Nb_Occurence (Right, E)))));
+             and then
+               (for all E of Right =>
+                  (if not Equivalent_Elements (E, Element)
+                   then Nb_Occurence (Left, E) = Nb_Occurence (Right, E)))));
 
    ----------------------------
    -- Construction Functions --
@@ -220,8 +220,9 @@ is
        (SPARKlib_Full =>
           Contains (Add'Result, Element)
           and then Cardinality (Add'Result) = Cardinality (Container) + 1
-          and then Nb_Occurence (Add'Result, Element)
-                   = Nb_Occurence (Container, Element) + 1
+          and then
+            Nb_Occurence (Add'Result, Element)
+            = Nb_Occurence (Container, Element) + 1
           and then Equal_Except (Container, Add'Result, Element));
    --  Returns Container with the number of occurences of the equivalence class
    --  of Element incremented by one.
@@ -235,8 +236,9 @@ is
        (SPARKlib_Full =>
           Contains (Add'Result, Element)
           and then Cardinality (Add'Result) = Cardinality (Container) + Count
-          and then Nb_Occurence (Add'Result, Element)
-                   = Nb_Occurence (Container, Element) + Count
+          and then
+            Nb_Occurence (Add'Result, Element)
+            = Nb_Occurence (Container, Element) + Count
           and then Equal_Except (Container, Add'Result, Element));
    --  Returns Container with the number of occurences of the equivalence class
    --  of Element incremented by Count.
@@ -249,9 +251,9 @@ is
      Post   =>
        (SPARKlib_Full =>
           not Contains (Remove_All'Result, Element)
-          and then Cardinality (Remove_All'Result)
-                   = Cardinality (Container)
-                     - Nb_Occurence (Container, Element)
+          and then
+            Cardinality (Remove_All'Result)
+            = Cardinality (Container) - Nb_Occurence (Container, Element)
           and then Equal_Except (Container, Remove_All'Result, Element));
    --  Returns Container with no occurences of the equivalence class of Element
 
@@ -266,8 +268,8 @@ is
        (SPARKlib_Full =>
           Nb_Occurence (Remove'Result, Element)
           = Nb_Occurence (Container, Element) - Count
-          and then Cardinality (Remove'Result)
-                   = Cardinality (Container) - Count
+          and then
+            Cardinality (Remove'Result) = Cardinality (Container) - Count
           and then Equal_Except (Container, Remove'Result, Element));
    --  Returns Container with the number of occurences of the equivalence class
    --  of Element decremented by Count.
@@ -280,10 +282,11 @@ is
           Cardinality (Sum'Result) = Cardinality (Left) + Cardinality (Right)
           and Left <= Sum'Result
           and Right <= Sum'Result
-          and (for all Element of Sum'Result =>
-                 Nb_Occurence (Sum'Result, Element)
-                 = Nb_Occurence (Left, Element)
-                   + Nb_Occurence (Right, Element)));
+          and
+            (for all Element of Sum'Result =>
+               Nb_Occurence (Sum'Result, Element)
+               = Nb_Occurence (Left, Element)
+                 + Nb_Occurence (Right, Element)));
    --  Returns the sum of Left and Right, in which the number of occurences of
    --  an element E is the sum of its number of occurences in Left and its
    --  number of occurences in Right.
@@ -303,11 +306,10 @@ is
           (for all E of Left =>
              (if Nb_Occurence (Left, E) > Nb_Occurence (Right, E)
               then Contains (Difference'Result, E)))
-          and then (for all E of Difference'Result =>
-                      Nb_Occurence (Difference'Result, E)
-                      = Max
-                          (0,
-                           Nb_Occurence (Left, E) - Nb_Occurence (Right, E))));
+          and then
+            (for all E of Difference'Result =>
+               Nb_Occurence (Difference'Result, E)
+               = Max (0, Nb_Occurence (Left, E) - Nb_Occurence (Right, E))));
 
    function "-" (Left : Multiset; Right : Multiset) return Multiset
    renames Difference;
@@ -322,11 +324,12 @@ is
           (for all Element of Left =>
              (if Contains (Right, Element)
               then Contains (Intersection'Result, Element)))
-          and then (for all Element of Intersection'Result =>
-                      Nb_Occurence (Intersection'Result, Element)
-                      = Min
-                          (Nb_Occurence (Left, Element),
-                           Nb_Occurence (Right, Element))));
+          and then
+            (for all Element of Intersection'Result =>
+               Nb_Occurence (Intersection'Result, Element)
+               = Min
+                   (Nb_Occurence (Left, Element),
+                    Nb_Occurence (Right, Element))));
 
    function Union (Left : Multiset; Right : Multiset) return Multiset
    with
@@ -338,11 +341,12 @@ is
        (SPARKlib_Full =>
           Left <= Union'Result
           and then Right <= Union'Result
-          and then (for all Element of Union'Result =>
-                      Nb_Occurence (Union'Result, Element)
-                      = Max
-                          (Nb_Occurence (Left, Element),
-                           Nb_Occurence (Right, Element))));
+          and then
+            (for all Element of Union'Result =>
+               Nb_Occurence (Union'Result, Element)
+               = Max
+                   (Nb_Occurence (Left, Element),
+                    Nb_Occurence (Right, Element))));
 
    ------------
    -- Lemmas --
@@ -464,8 +468,9 @@ is
      Post   =>
        (SPARKlib_Full =>
           Valid_Subset (Iterator, Next'Result)
-          and then Multiset_Logic_Equal
-                     (Next'Result, Remove_All (Cursor, Choose (Cursor))));
+          and then
+            Multiset_Logic_Equal
+              (Next'Result, Remove_All (Cursor, Choose (Cursor))));
    --  At each iteration, remove the equivalence class of considered element
    --  from the Cursor set.
 
@@ -558,16 +563,18 @@ is
      Post   =>
        (SPARKlib_Full =>
           Nb_Occurence (Container, Element) = Count
-          and then (for all E of Container =>
-                      (if not Equivalent_Elements (E, Element)
-                       then
-                         Nb_Occurence (Container, E)
-                         = Nb_Occurence (Container'Old, E)))
-          and then (for all E of Container'Old =>
-                      (if not Equivalent_Elements (E, Element)
-                       then
-                         Nb_Occurence (Container, E)
-                         = Nb_Occurence (Container'Old, E))));
+          and then
+            (for all E of Container =>
+               (if not Equivalent_Elements (E, Element)
+                then
+                  Nb_Occurence (Container, E)
+                  = Nb_Occurence (Container'Old, E)))
+          and then
+            (for all E of Container'Old =>
+               (if not Equivalent_Elements (E, Element)
+                then
+                  Nb_Occurence (Container, E)
+                  = Nb_Occurence (Container'Old, E))));
 
 private
    pragma SPARK_Mode (Off); --  #BODYMODE

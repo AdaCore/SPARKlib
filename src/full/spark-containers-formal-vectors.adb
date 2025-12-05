@@ -529,10 +529,10 @@ is
          return Boolean is
       begin
          if M.Length (Left) /= M.Length (Right)
-           or else not Element_Logic_Equal
-                         (Element (Left, X), Element (Right, Y))
-           or else not Element_Logic_Equal
-                         (Element (Left, Y), Element (Right, X))
+           or else
+             not Element_Logic_Equal (Element (Left, X), Element (Right, Y))
+           or else
+             not Element_Logic_Equal (Element (Left, Y), Element (Right, X))
          then
             return False;
          end if;
@@ -540,8 +540,8 @@ is
          for I in Index_Type'First .. M.Last (Left) loop
             if I /= X
               and then I /= Y
-              and then not Element_Logic_Equal
-                             (Element (Left, I), Element (Right, I))
+              and then
+                not Element_Logic_Equal (Element (Left, I), Element (Right, I))
             then
                return False;
             end if;

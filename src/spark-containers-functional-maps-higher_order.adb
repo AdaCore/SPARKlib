@@ -532,9 +532,10 @@ is
                 (Static =>
                    (for all K of M =>
                       Has_Key (Submap, K)
-                      or else Element_Logic_Equal
-                                (Get (Res, Transform_Key (K)),
-                                 Transform_Item (Get (M, K)))));
+                      or else
+                        Element_Logic_Equal
+                          (Get (Res, Transform_Key (K)),
+                           Transform_Item (Get (M, K)))));
 
             declare
                K : Key_Type renames Choose (Submap);

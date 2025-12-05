@@ -80,18 +80,20 @@ is
         (M1, M2 : Memory_Map; Target : Footprint) return Boolean
       is ((for all A in Address_Type =>
              (if Valid (M2, A) then Contains (Target, A) or Valid (M1, A)))
-          and (for all A in Address_Type =>
-                 (if Contains (Target, A)
-                  then not Valid (M1, A) and Valid (M2, A))))
+          and
+            (for all A in Address_Type =>
+               (if Contains (Target, A)
+                then not Valid (M1, A) and Valid (M2, A))))
       with Ghost;
 
       function Deallocates
         (M1, M2 : Memory_Map; Target : Footprint) return Boolean
       is ((for all A in Address_Type =>
              (if Valid (M1, A) then Contains (Target, A) or Valid (M2, A)))
-          and (for all A in Address_Type =>
-                 (if Contains (Target, A)
-                  then not Valid (M2, A) and Valid (M1, A))))
+          and
+            (for all A in Address_Type =>
+               (if Contains (Target, A)
+                then not Valid (M2, A) and Valid (M1, A))))
       with Ghost;
    end Memory_Model;
 
@@ -115,8 +117,8 @@ is
      Global => null,
      Post   =>
        Valid (+Memory, Address (P))
-       and then Allocates
-                  (Memory_Map'(+Memory)'Old, +Memory, Only (Address (P)))
+       and then
+         Allocates (Memory_Map'(+Memory)'Old, +Memory, Only (Address (P)))
        and then Deallocates (Memory_Map'(+Memory)'Old, +Memory, None)
        and then Writes (Memory_Map'(+Memory)'Old, +Memory, None)
        and then Object_Logic_Equal (Deref (Memory, P), Copy (O));
@@ -148,13 +150,12 @@ is
      Post   =>
        P = Null_Pointer
        and then Allocates (Memory_Map'(+Memory)'Old, +Memory, None)
-       and then (if P'Old = Null_Pointer
-                 then Deallocates (Memory_Map'(+Memory)'Old, +Memory, None)
-                 else
-                   Deallocates
-                     (Memory_Map'(+Memory)'Old,
-                      +Memory,
-                      Only (Address (P)'Old)))
+       and then
+         (if P'Old = Null_Pointer
+          then Deallocates (Memory_Map'(+Memory)'Old, +Memory, None)
+          else
+            Deallocates
+              (Memory_Map'(+Memory)'Old, +Memory, Only (Address (P)'Old)))
        and then Writes (Memory_Map'(+Memory)'Old, +Memory, None);
 
    procedure Move_Memory (Source, Target : in out Memory_Type; F : Footprint)
@@ -172,8 +173,9 @@ is
        and then Allocates (Memory_Map'(+Target)'Old, +Target, F)
        and then Deallocates (Memory_Map'(+Target)'Old, +Target, None)
        and then Writes (Memory_Map'(+Target)'Old, +Target, None)
-       and then (for all A in F =>
-                   Get (+Target, A) = Get (Memory_Map'(+Source)'Old, A));
+       and then
+         (for all A in F =>
+            Get (+Target, A) = Get (Memory_Map'(+Source)'Old, A));
 
    --  Primitives to access the content of a memory cell directly. Ownership is
    --  used to preserve the link between the dereferenced value and the

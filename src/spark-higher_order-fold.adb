@@ -138,10 +138,11 @@ is
            Pre  =>
              I in A'Range (1)
              and then J in A'Range (2)
-             and then (if J > A'First (2)
-                       then Count_Length (I, J - 1)
-                       elsif I > A'First (1)
-                       then Count_Length (I - 1)),
+             and then
+               (if J > A'First (2)
+                then Count_Length (I, J - 1)
+                elsif I > A'First (1)
+                then Count_Length (I - 1)),
            Post => Count_Length (I, J);
 
          ----------------
@@ -190,8 +191,9 @@ is
                                (for all K in A'First (1) .. I - 1 =>
                                   (for all L in A'Range (2) =>
                                      not Choose (A (K, L)))))
-                            and (for all L in A'First (2) .. J =>
-                                   not Choose (A (I, L)))));
+                            and
+                              (for all L in A'First (2) .. J =>
+                                 not Choose (A (I, L)))));
                end loop;
             end loop;
          end if;
@@ -246,14 +248,15 @@ is
              and then A1'Last (1) = A2'Last (1)
              and then A1'First (2) = A2'First (2)
              and then A1'Last (2) = A2'Last (2)
-             and then (for all K in A1'Range (1) =>
-                         (for all L in A2'Range (2) =>
-                            (if K /= I or else L /= J
-                             then A1 (K, L) = A2 (K, L))))
-             and then (if L > A1'First (2)
-                       then Update_Count (K, L - 1)
-                       elsif K > A1'First (1)
-                       then Update_Count (K - 1, A1'Last (2))),
+             and then
+               (for all K in A1'Range (1) =>
+                  (for all L in A2'Range (2) =>
+                     (if K /= I or else L /= J then A1 (K, L) = A2 (K, L))))
+             and then
+               (if L > A1'First (2)
+                then Update_Count (K, L - 1)
+                elsif K > A1'First (1)
+                then Update_Count (K - 1, A1'Last (2))),
            Post => Update_Count (K, L);
 
          ----------------
@@ -295,14 +298,15 @@ is
                   pragma
                     Loop_Invariant
                       (Ind_Prop (A, R, I, A'First (2))
-                         and then F (A (I, A'First (2)), R)
-                                  = Acc.Fold (A, Init) (I, A'First (2)));
+                         and then
+                           F (A (I, A'First (2)), R)
+                           = Acc.Fold (A, Init) (I, A'First (2)));
                   for J in A'Range (2) loop
                      pragma
                        Loop_Invariant
                          (Ind_Prop (A, R, I, J)
-                            and then F (A (I, J), R)
-                                     = Acc.Fold (A, Init) (I, J));
+                            and then
+                              F (A (I, J), R) = Acc.Fold (A, Init) (I, J));
                      if J /= A'Last (2) then
                         Acc.Prove_Ind_Col (A, R, I, J);
                      elsif I /= A'Last (1) then
@@ -348,18 +352,18 @@ is
                    (if I > A'First (1)
                       then
                         Ind_Prop (A, Init, A'First (1), A'First (2))
-                        and then R (A'First (1), A'First (2))
-                                 = F (A (A'First (1), A'First (2)), Init));
+                        and then
+                          R (A'First (1), A'First (2))
+                          = F (A (A'First (1), A'First (2)), Init));
                pragma
                  Loop_Invariant
                    (for all K in A'Range (1) =>
                       (if K < I and then K > A'First (1)
                        then
                          Ind_Prop (A, R (K - 1, A'Last (2)), K, A'First (2))
-                         and then R (K, A'First (2))
-                                  = F
-                                      (A (K, A'First (2)),
-                                       R (K - 1, A'Last (2)))));
+                         and then
+                           R (K, A'First (2))
+                           = F (A (K, A'First (2)), R (K - 1, A'Last (2)))));
                pragma
                  Loop_Invariant
                    (for all K in A'Range (1) =>
@@ -374,20 +378,22 @@ is
                       (if I > A'First (1) or else J > A'First (2)
                          then
                            Ind_Prop (A, Init, A'First (1), A'First (2))
-                           and then R (A'First (1), A'First (2))
-                                    = F (A (A'First (1), A'First (2)), Init));
+                           and then
+                             R (A'First (1), A'First (2))
+                             = F (A (A'First (1), A'First (2)), Init));
                   pragma
                     Loop_Invariant
                       (for all K in A'Range (1) =>
                          (if K > A'First (1)
-                            and then (K < I
-                                      or else (K = I and then J > A'First (2)))
+                            and then
+                              (K < I or else (K = I and then J > A'First (2)))
                           then
                             Ind_Prop (A, R (K - 1, A'Last (2)), K, A'First (2))
-                            and then R (K, A'First (2))
-                                     = F
-                                         (A (K, A'First (2)),
-                                          R (K - 1, A'Last (2)))));
+                            and then
+                              R (K, A'First (2))
+                              = F
+                                  (A (K, A'First (2)),
+                                   R (K - 1, A'Last (2)))));
                   pragma
                     Loop_Invariant
                       (for all K in A'Range (1) =>
@@ -396,8 +402,8 @@ is
                                and then (K < I or else (K = I and then L < J))
                              then
                                Ind_Prop (A, R (K, L - 1), K, L)
-                               and then R (K, L)
-                                        = F (A (K, L), R (K, L - 1)))));
+                               and then
+                                 R (K, L) = F (A (K, L), R (K, L - 1)))));
                   pragma
                     Loop_Invariant
                       (if J /= A'First (2)
@@ -423,10 +429,9 @@ is
                    (if K > A'First (1)
                     then
                       Ind_Prop (A, R (K - 1, A'Last (2)), K, A'First (2))
-                      and then R (K, A'First (2))
-                               = F
-                                   (A (K, A'First (2)),
-                                    R (K - 1, A'Last (2)))));
+                      and then
+                        R (K, A'First (2))
+                        = F (A (K, A'First (2)), R (K - 1, A'Last (2)))));
          end return;
       end Fold;
 
@@ -854,9 +859,10 @@ is
                   pragma
                     Loop_Invariant
                       (I = A'First (1)
-                         or else (for all K in A'First (1) .. I - 1 =>
-                                    (for all L in A'Range (2) =>
-                                       Value (A (K, L)) = C)));
+                         or else
+                           (for all K in A'First (1) .. I - 1 =>
+                              (for all L in A'Range (2) =>
+                                 Value (A (K, L)) = C)));
                   pragma
                     Loop_Invariant
                       (I = A'First (1) or else Sum_Cst (I - 1, A'Last (2)));

@@ -144,8 +144,9 @@ is
            Find (Right, KHT.Element (Left.Content.Nodes (Node).K_Holder)).Node;
 
          if ENode = 0
-           or else EHT.Element (Left.Content.Nodes (Node).E_Holder)
-                   /= EHT.Element (Right.Content.Nodes (ENode).E_Holder)
+           or else
+             EHT.Element (Left.Content.Nodes (Node).E_Holder)
+             /= EHT.Element (Right.Content.Nodes (ENode).E_Holder)
          then
             return False;
          end if;
@@ -509,8 +510,8 @@ is
          begin
             Container.Content := Empty_Tree'Access;
             Finalize_Content (Tree);
-         --  The elements are in Controlled Holder_Type and thus will be
-         --  deallocated properly.
+            --  The elements are in Controlled Holder_Type and thus will be
+            --  deallocated properly.
 
          end;
       end if;
