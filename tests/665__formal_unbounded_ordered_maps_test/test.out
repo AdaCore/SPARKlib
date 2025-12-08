@@ -4,7 +4,7 @@ test.adb:10:23: info: division check proved (CVC5: 1 VC)
 test.adb:12:13: info: implicit aspect Always_Terminates on "Eq" has been proved, subprogram will terminate
 test.adb:13:10: info: division check proved (CVC5: 1 VC)
 test.adb:13:23: info: division check proved (CVC5: 1 VC)
-test.adb:32:29: medium: postcondition might fail, cannot prove K in 1 .. 5 [provers gave up before completing the proof]
+test.adb:32:29: medium: postcondition might fail, cannot prove K in 1 .. 5 [provers reached step limit before completing the proof]
 test.adb:34:29: info: precondition proved (CVC5: 1 VC)
 test.adb:37:23: info: unrolling loop [info-unrolling-inlining]
 test.adb:38:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC)
@@ -21,14 +21,14 @@ test.adb:64:07: info: precondition proved (CVC5: 2 VC)
 test.adb:65:07: info: precondition proved (Z3: 1 VC)
 test.adb:68:07: info: precondition proved (CVC5: 1 VC)
 test.adb:69:07: info: precondition proved (CVC5: 1 VC)
-test.adb:72:07: medium: precondition might fail, cannot prove not Contains (Container, Key) [provers gave up before completing the proof]
+test.adb:72:07: medium: precondition might fail, cannot prove not Contains (Container, Key) [provers reached step limit before completing the proof]
 test.adb:73:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
 test.adb:74:07: info: precondition proved (Z3: 1 VC)
-test.adb:78:07: medium: precondition might fail, cannot prove not Contains (Container, Key) [provers gave up before completing the proof]
-test.adb:79:07: medium: precondition might fail, cannot prove not Contains (Container, Key) [provers gave up before completing the proof]
+test.adb:78:07: medium: precondition might fail, cannot prove not Contains (Container, Key) [provers reached step limit before completing the proof]
+test.adb:79:07: medium: precondition might fail, cannot prove not Contains (Container, Key) [provers reached step limit before completing the proof]
 test.adb:80:07: info: precondition proved (Z3: 1 VC)
 test.adb:84:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
-test.adb:85:07: medium: precondition might fail, cannot prove not Contains (Container, Key) [provers gave up before completing the proof]
+test.adb:85:07: medium: precondition might fail, cannot prove not Contains (Container, Key) [provers reached step limit before completing the proof]
 test.adb:86:07: info: precondition proved (Z3: 1 VC)
 test.adb:90:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
 test.adb:91:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)

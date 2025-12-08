@@ -15,7 +15,7 @@ test_string.adb:46:37: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
 test_string.adb:53:10: info: absence of resource or memory leak at end of scope proved (CVC5: 1 VC)
 test_string.adb:55:10: medium: precondition might fail [provers reached step limit before completing the proof]
 test_string.adb:55:18: info: precondition proved (CVC5: 1 VC)
-test_string.adb:55:37: medium: precondition might fail, cannot prove Strlen (Item) <= size_t (Natural'Last) [provers gave up before completing the proof]
+test_string.adb:55:37: medium: precondition might fail, cannot prove Strlen (Item) <= size_t (Natural'Last) [provers reached step limit before completing the proof]
 test_string.adb:62:07: info: absence of resource or memory leak at end of scope proved (CVC5: 1 VC)
 test_string.adb:62:24: info: precondition proved (CVC5: 1 VC)
 test_string.adb:65:07: info: precondition proved (CVC5: 1 VC)
@@ -60,12 +60,12 @@ test_string.adb:162:10: info: precondition proved (Z3: 1 VC)
 test_string.adb:162:18: info: precondition proved (CVC5: 1 VC)
 test_string.adb:162:43: info: precondition proved (CVC5: 1 VC)
 test_string.adb:174:10: info: absence of resource or memory leak at end of scope proved (CVC5: 1 VC)
-test_string.adb:176:10: medium: precondition might fail, cannot prove Str'Length + Offset <= Strlen (Item) [provers gave up before completing the proof]
+test_string.adb:176:10: medium: precondition might fail, cannot prove Str'Length + Offset <= Strlen (Item) [provers reached step limit before completing the proof]
 test_string.adb:177:10: medium: precondition might fail [provers reached step limit before completing the proof]
 test_string.adb:177:18: info: precondition proved (CVC5: 1 VC)
 test_string.adb:177:42: info: precondition proved (CVC5: 2 VC)
 test_string.adb:185:10: info: absence of resource or memory leak at end of scope proved (CVC5: 1 VC)
-test_string.adb:187:10: medium: precondition might fail, cannot prove Str'Length + Offset <= Strlen (Item) [provers gave up before completing the proof]
+test_string.adb:187:10: medium: precondition might fail, cannot prove Str'Length + Offset <= Strlen (Item) [provers reached step limit before completing the proof]
 test_string.adb:188:10: medium: precondition might fail [provers reached step limit before completing the proof]
 test_string.adb:188:18: info: precondition proved (CVC5: 1 VC)
 test_string.adb:188:43: info: precondition proved (CVC5: 2 VC)
