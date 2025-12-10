@@ -101,9 +101,10 @@ is
             K : constant Key_Type := Get (Left.Keys, J);
          begin
             if Find (Right.Keys, K) = 0
-              or else not Element_Logic_Equal
-                            (Get (Right.Elements, Find (Right.Keys, K)),
-                             Get (Left.Elements, J))
+              or else
+                not Element_Logic_Equal
+                      (Get (Right.Elements, Find (Right.Keys, K)),
+                       Get (Left.Elements, J))
             then
                return False;
             end if;
@@ -124,12 +125,12 @@ is
             K : constant Key_Type := Get (Left.Keys, J);
          begin
             if not Equivalent_Keys (K, New_Key)
-              and then (Find (Right.Keys, K) = 0
-                        or else not Element_Logic_Equal
-                                      (Get
-                                         (Right.Elements,
-                                          Find (Right.Keys, K)),
-                                       Get (Left.Elements, J)))
+              and then
+                (Find (Right.Keys, K) = 0
+                 or else
+                   not Element_Logic_Equal
+                         (Get (Right.Elements, Find (Right.Keys, K)),
+                          Get (Left.Elements, J)))
             then
                return False;
             end if;
@@ -147,12 +148,12 @@ is
          begin
             if not Equivalent_Keys (K, X)
               and then not Equivalent_Keys (K, Y)
-              and then (Find (Right.Keys, K) = 0
-                        or else not Element_Logic_Equal
-                                      (Get
-                                         (Right.Elements,
-                                          Find (Right.Keys, K)),
-                                       Get (Left.Elements, J)))
+              and then
+                (Find (Right.Keys, K) = 0
+                 or else
+                   not Element_Logic_Equal
+                         (Get (Right.Elements, Find (Right.Keys, K)),
+                          Get (Left.Elements, J)))
             then
                return False;
             end if;
@@ -187,9 +188,10 @@ is
             K : constant Key_Type := Get (Left.Keys, J);
          begin
             if Find (Right.Keys, K) = 0
-              or else not Element_Logic_Equal
-                            (Get (Right.Elements, Find (Right.Keys, K)),
-                             Get (Left.Elements, J))
+              or else
+                not Element_Logic_Equal
+                      (Get (Right.Elements, Find (Right.Keys, K)),
+                       Get (Left.Elements, J))
             then
                return False;
             end if;
@@ -217,8 +219,9 @@ is
       for I1 in 1 .. Length (Left.Keys) loop
          I2 := Find (Right.Keys, Get (Left.Keys, I1));
          if I2 = 0
-           or else not Equivalent_Elements
-                         (Get (Right.Elements, I2), Get (Left.Elements, I1))
+           or else
+             not Equivalent_Elements
+                   (Get (Right.Elements, I2), Get (Left.Elements, I1))
          then
             return False;
          end if;

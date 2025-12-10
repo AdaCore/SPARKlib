@@ -82,11 +82,13 @@ is
        (SPARKlib_Full =>
           "="'Result
           = (Is_Empty (Left) = Is_Empty (Right)
-             and then (if not Is_Empty (Left)
-                       then
-                         Get (Left) = Get (Right)
-                         and then (for all W in Way_Type =>
-                                     Child (Left, W) = Child (Right, W)))));
+             and then
+               (if not Is_Empty (Left)
+                then
+                  Get (Left) = Get (Right)
+                  and then
+                    (for all W in Way_Type =>
+                       Child (Left, W) = Child (Right, W)))));
 
    procedure Lemma_Eq_Reflexive (X : Tree)
    with
@@ -126,13 +128,14 @@ is
      Post   =>
        (SPARKlib_Full =>
           (Height'Result = 0) = Is_Empty (Container)
-          and then (if not Is_Empty (Container)
-                    then
-                      (for all W in Way_Type =>
-                         Height'Result > Height (Child (Container, W)))
-                      and (for some W in Way_Type =>
-                             Height'Result
-                             = Height (Child (Container, W)) + 1)));
+          and then
+            (if not Is_Empty (Container)
+             then
+               (for all W in Way_Type =>
+                  Height'Result > Height (Child (Container, W)))
+               and
+                 (for some W in Way_Type =>
+                    Height'Result = Height (Child (Container, W)) + 1)));
 
    function Count (Container : Tree) return Big_Natural
    with
@@ -140,10 +143,10 @@ is
      Post   =>
        (SPARKlib_Full =>
           (Count'Result = 0) = Is_Empty (Container)
-          and then (if not Is_Empty (Container)
-                    then
-                      Count'Result
-                      = 1 + Count_Children (Container, Way_Type'First)));
+          and then
+            (if not Is_Empty (Container)
+             then
+               Count'Result = 1 + Count_Children (Container, Way_Type'First)));
 
    ----------------------------
    -- Construction Functions --
@@ -160,10 +163,10 @@ is
      Post   =>
        (SPARKlib_Full =>
           not Is_Empty (Create'Result)
-          and then Element_Logic_Equal
-                     (Get (Create'Result), Copy_Element (Item))
-          and then (for all W in Way_Type =>
-                      Is_Empty (Child (Create'Result, W))));
+          and then
+            Element_Logic_Equal (Get (Create'Result), Copy_Element (Item))
+          and then
+            (for all W in Way_Type => Is_Empty (Child (Create'Result, W))));
 
    function Create (Item : Element_Type; Children : Tree_Array) return Tree
    with
@@ -171,14 +174,13 @@ is
      Post   =>
        (SPARKlib_Full =>
           not Is_Empty (Create'Result)
-          and then Element_Logic_Equal
-                     (Get (Create'Result), Copy_Element (Item))
-          and then (for all W in Way_Type =>
-                      (if W in Children'Range
-                       then
-                         Tree_Logic_Equal
-                           (Child (Create'Result, W), Children (W))
-                       else Is_Empty (Child (Create'Result, W)))));
+          and then
+            Element_Logic_Equal (Get (Create'Result), Copy_Element (Item))
+          and then
+            (for all W in Way_Type =>
+               (if W in Children'Range
+                then Tree_Logic_Equal (Child (Create'Result, W), Children (W))
+                else Is_Empty (Child (Create'Result, W)))));
 
    function Set_Child
      (Container : Tree; Way : Way_Type; New_Child : Tree) return Tree
@@ -188,15 +190,15 @@ is
      Post   =>
        (SPARKlib_Full =>
           not Is_Empty (Set_Child'Result)
-          and then Element_Logic_Equal
-                     (Get (Set_Child'Result), Get (Container))
+          and then
+            Element_Logic_Equal (Get (Set_Child'Result), Get (Container))
           and then Tree_Logic_Equal (Child (Set_Child'Result, Way), New_Child)
-          and then (for all W in Way_Type =>
-                      (if Way /= W
-                       then
-                         Tree_Logic_Equal
-                           (Child (Set_Child'Result, W),
-                            Child (Container, W)))));
+          and then
+            (for all W in Way_Type =>
+               (if Way /= W
+                then
+                  Tree_Logic_Equal
+                    (Child (Set_Child'Result, W), Child (Container, W)))));
 
    function Set_Root (Container : Tree; Item : Element_Type) return Tree
    with
@@ -205,11 +207,12 @@ is
      Post   =>
        (SPARKlib_Full =>
           not Is_Empty (Set_Root'Result)
-          and then Element_Logic_Equal
-                     (Get (Set_Root'Result), Copy_Element (Item))
-          and then (for all W in Way_Type =>
-                      Tree_Logic_Equal
-                        (Child (Set_Root'Result, W), Child (Container, W))));
+          and then
+            Element_Logic_Equal (Get (Set_Root'Result), Copy_Element (Item))
+          and then
+            (for all W in Way_Type =>
+               Tree_Logic_Equal
+                 (Child (Set_Root'Result, W), Child (Container, W))));
 
    -------------------------------------------------------------------------
    -- Ghost non-executable properties used only in internal specification --
@@ -253,8 +256,9 @@ is
      Global   => null,
      Pre      =>
        not Is_Empty (Container)
-       and then (for all W in Way .. Way_Type'Last =>
-                   Is_Empty (Child (Container, W))),
+       and then
+         (for all W in Way .. Way_Type'Last =>
+            Is_Empty (Child (Container, W))),
      Post     => Count_Children (Container, Way) = 0,
      Annotate => (GNATprove, Automatic_Instantiation);
 

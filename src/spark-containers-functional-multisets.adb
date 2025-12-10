@@ -415,8 +415,8 @@ is
              (Static =>
                 (for all E of Left =>
                    (if not Contains (Buffer, E)
-                      and then Nb_Occurence (Left, E) - Nb_Occurence (Right, E)
-                               > 0
+                      and then
+                        Nb_Occurence (Left, E) - Nb_Occurence (Right, E) > 0
                     then Contains (Set, E))));
 
       end loop;
@@ -449,8 +449,9 @@ is
                 (for all E of Left.Map =>
                    Has_Key (S, E)
                    or else Equivalent_Elements (E, Element)
-                   or else (Has_Key (Right.Map, E)
-                            and then Get (Right.Map, E) = Get (Left.Map, E))));
+                   or else
+                     (Has_Key (Right.Map, E)
+                      and then Get (Right.Map, E) = Get (Left.Map, E))));
          declare
             E : constant Element_Type := Choose (S);
          begin
@@ -476,8 +477,9 @@ is
                 (for all E of Right.Map =>
                    Has_Key (S, E)
                    or else Equivalent_Elements (E, Element)
-                   or else (Has_Key (Left.Map, E)
-                            and then Get (Right.Map, E) = Get (Left.Map, E))));
+                   or else
+                     (Has_Key (Left.Map, E)
+                      and then Get (Right.Map, E) = Get (Left.Map, E))));
          declare
             E : constant Element_Type := Choose (S);
          begin
@@ -539,8 +541,8 @@ is
              (Static =>
                 (for all Element of Set =>
                    Has_Key (Right.Map, Element)
-                   and then Get (Set.Map, Element)
-                            <= Get (Right.Map, Element)));
+                   and then
+                     Get (Set.Map, Element) <= Get (Right.Map, Element)));
          Lemma_Leq_Cardinality (Set.Map, Right.Map);
 
          pragma Loop_Variant (Decreases => Cardinality (Buffer));
@@ -999,12 +1001,13 @@ is
        (Static =>
           Invariant (Remove_All'Result.Map, Remove_All'Result.Card)
           and then not Contains (Remove_All'Result, Element)
-          and then Cardinality (Remove_All'Result)
-                   = Cardinality (Container)
-                     - Nb_Occurence (Container, Element)
+          and then
+            Cardinality (Remove_All'Result)
+            = Cardinality (Container) - Nb_Occurence (Container, Element)
           and then Equal_Except (Container, Remove_All'Result, Element)
-          and then Map_Logic_Equal
-                     (Remove_All'Result.Map, Remove (Container.Map, Element)))
+          and then
+            Map_Logic_Equal
+              (Remove_All'Result.Map, Remove (Container.Map, Element)))
    is
    begin
       return Set : Multiset do

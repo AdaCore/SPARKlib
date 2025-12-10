@@ -48,8 +48,9 @@ is
      (if Index_Type'Last < Index_Type'First
       then 0
       elsif Index_Type'Last < -1
-        or else Index_Type'Pos (Index_Type'First)
-                > Index_Type'Pos (Index_Type'Last) - Count_Type'Last
+        or else
+          Index_Type'Pos (Index_Type'First)
+          > Index_Type'Pos (Index_Type'Last) - Count_Type'Last
       then
         Index_Type'Pos (Index_Type'Last)
         - Index_Type'Pos (Index_Type'First)
@@ -177,9 +178,10 @@ is
                (for some J in Index_Type'First .. M.Last (Left) =>
                   Element_Logic_Equal
                     (Element (Container, I), Element (Left, J)))
-               or (for some J in Index_Type'First .. M.Last (Right) =>
-                     Element_Logic_Equal
-                       (Element (Container, I), Element (Right, J))));
+               or
+                 (for some J in Index_Type'First .. M.Last (Right) =>
+                    Element_Logic_Equal
+                      (Element (Container, I), Element (Right, J))));
       pragma
         Annotate (GNATprove, Inline_For_Proof, Entity => M_Elements_In_Union);
       --  The elements of Container are contained in either Left or Right
@@ -214,14 +216,16 @@ is
         Post   =>
           M_Elements_Reversed'Result
           = (M.Length (Left) = M.Length (Right)
-             and (for all I in Index_Type'First .. M.Last (Left) =>
-                    Element_Logic_Equal
-                      (Element (Left, I),
-                       Element (Right, M.Last (Left) - I + 1)))
-             and (for all I in Index_Type'First .. M.Last (Right) =>
-                    Element_Logic_Equal
-                      (Element (Right, I),
-                       Element (Left, M.Last (Left) - I + 1))));
+             and
+               (for all I in Index_Type'First .. M.Last (Left) =>
+                  Element_Logic_Equal
+                    (Element (Left, I),
+                     Element (Right, M.Last (Left) - I + 1)))
+             and
+               (for all I in Index_Type'First .. M.Last (Right) =>
+                  Element_Logic_Equal
+                    (Element (Right, I),
+                     Element (Left, M.Last (Left) - I + 1))));
       pragma
         Annotate (GNATprove, Inline_For_Proof, Entity => M_Elements_Reversed);
       --  Right is Left in reverse order
@@ -294,11 +298,12 @@ is
      Post   =>
        (SPARKlib_Full =>
           Vectors.Length (To_Vector'Result) = Length
-          and M.Constant_Range
-                (Container => Model (To_Vector'Result),
-                 Fst       => Index_Type'First,
-                 Lst       => Last_Index (To_Vector'Result),
-                 Item      => New_Item));
+          and
+            M.Constant_Range
+              (Container => Model (To_Vector'Result),
+               Fst       => Index_Type'First,
+               Lst       => Last_Index (To_Vector'Result),
+               Item      => New_Item));
 
    function Capacity (Container : Vector) return Capacity_Range
    with
@@ -337,9 +342,10 @@ is
      Post   =>
        (SPARKlib_Full =>
           M.Equal (Model (Copy'Result), Model (Source))
-          and (if Capacity = 0
-               then Copy'Result.Capacity = Length (Source)
-               else Copy'Result.Capacity = Capacity));
+          and
+            (if Capacity = 0
+             then Copy'Result.Capacity = Length (Source)
+             else Copy'Result.Capacity = Capacity));
 
    procedure Move (Target : in out Vector; Source : in out Vector)
    with
@@ -375,15 +381,17 @@ is
 
             --  Container now has New_Item at index Index
 
-          and Element_Logic_Equal
-                (Element (Model (Container), Index), M.Copy_Element (New_Item))
+          and
+            Element_Logic_Equal
+              (Element (Model (Container), Index), M.Copy_Element (New_Item))
 
           --  All other elements are preserved
 
-          and M.Equal_Except
-                (Left     => Model (Container)'Old,
-                 Right    => Model (Container),
-                 Position => Index));
+          and
+            M.Equal_Except
+              (Left     => Model (Container)'Old,
+               Right    => Model (Container),
+               Position => Index));
 
    function At_End (E : Vector) return Vector
    is (E)
@@ -422,16 +430,18 @@ is
 
           --  Container will have Result.all at index Index
 
-          and Element_Logic_Equal
-                (At_End (Reference'Result).all,
-                 Element (Model (At_End (Container)), Index))
+          and
+            Element_Logic_Equal
+              (At_End (Reference'Result).all,
+               Element (Model (At_End (Container)), Index))
 
           --  All other elements are preserved
 
-          and M.Equal_Except
-                (Left     => Model (Container),
-                 Right    => Model (At_End (Container)),
-                 Position => Index));
+          and
+            M.Equal_Except
+              (Left     => Model (Container),
+               Right    => Model (At_End (Container)),
+               Position => Index));
 
    procedure Insert_Vector
      (Container : in out Vector; Before : Extended_Index; New_Item : Vector)
@@ -440,40 +450,45 @@ is
      Pre    =>
        (SPARKlib_Defensive =>
           Length (Container) <= Capacity (Container) - Length (New_Item)
-          and (Before in Index_Type'First .. Last_Index (Container)
-               or (Before /= No_Index
-                   and then Before - 1 = Last_Index (Container)))),
+          and
+            (Before in Index_Type'First .. Last_Index (Container)
+             or
+               (Before /= No_Index
+                and then Before - 1 = Last_Index (Container)))),
      Post   =>
        (SPARKlib_Full =>
           Length (Container) = Length (Container)'Old + Length (New_Item)
 
           --  Elements located before Before in Container are preserved
 
-          and M.Range_Equal
-                (Left  => Model (Container)'Old,
-                 Right => Model (Container),
-                 Fst   => Index_Type'First,
-                 Lst   => Before - 1)
+          and
+            M.Range_Equal
+              (Left  => Model (Container)'Old,
+               Right => Model (Container),
+               Fst   => Index_Type'First,
+               Lst   => Before - 1)
 
           --  Elements of New_Item are inserted at position Before
 
-          and (if Length (New_Item) > 0
-               then
-                 M.Range_Shifted
-                   (Left   => Model (New_Item),
-                    Right  => Model (Container),
-                    Fst    => Index_Type'First,
-                    Lst    => Last_Index (New_Item),
-                    Offset => M.Big (Before) - M.Big (Index_Type'First)))
+          and
+            (if Length (New_Item) > 0
+             then
+               M.Range_Shifted
+                 (Left   => Model (New_Item),
+                  Right  => Model (Container),
+                  Fst    => Index_Type'First,
+                  Lst    => Last_Index (New_Item),
+                  Offset => M.Big (Before) - M.Big (Index_Type'First)))
 
           --  Elements located after Before in Container are shifted
 
-          and M.Range_Shifted
-                (Left   => Model (Container)'Old,
-                 Right  => Model (Container),
-                 Fst    => Before,
-                 Lst    => Last_Index (Container)'Old,
-                 Offset => Big (Length (New_Item))));
+          and
+            M.Range_Shifted
+              (Left   => Model (Container)'Old,
+               Right  => Model (Container),
+               Fst    => Before,
+               Lst    => Last_Index (Container)'Old,
+               Offset => Big (Length (New_Item))));
 
    procedure Insert
      (Container : in out Vector;
@@ -491,26 +506,28 @@ is
 
           --  Elements located before Before in Container are preserved
 
-          and M.Range_Equal
-                (Left  => Model (Container)'Old,
-                 Right => Model (Container),
-                 Fst   => Index_Type'First,
-                 Lst   => Before - 1)
+          and
+            M.Range_Equal
+              (Left  => Model (Container)'Old,
+               Right => Model (Container),
+               Fst   => Index_Type'First,
+               Lst   => Before - 1)
 
           --  Container now has New_Item at index Before
 
-          and Element_Logic_Equal
-                (Element (Model (Container), Before),
-                 M.Copy_Element (New_Item))
+          and
+            Element_Logic_Equal
+              (Element (Model (Container), Before), M.Copy_Element (New_Item))
 
           --  Elements located after Before in Container are shifted by 1
 
-          and M.Range_Shifted
-                (Left   => Model (Container)'Old,
-                 Right  => Model (Container),
-                 Fst    => Before,
-                 Lst    => Last_Index (Container)'Old,
-                 Offset => 1));
+          and
+            M.Range_Shifted
+              (Left   => Model (Container)'Old,
+               Right  => Model (Container),
+               Fst    => Before,
+               Lst    => Last_Index (Container)'Old,
+               Offset => 1));
 
    procedure Insert
      (Container : in out Vector;
@@ -522,39 +539,44 @@ is
      Pre    =>
        (SPARKlib_Defensive =>
           Length (Container) <= Capacity (Container) - Count
-          and (Before in Index_Type'First .. Last_Index (Container)
-               or (Before /= No_Index
-                   and then Before - 1 = Last_Index (Container)))),
+          and
+            (Before in Index_Type'First .. Last_Index (Container)
+             or
+               (Before /= No_Index
+                and then Before - 1 = Last_Index (Container)))),
      Post   =>
        (SPARKlib_Full =>
           Length (Container) = Length (Container)'Old + Count
 
           --  Elements located before Before in Container are preserved
 
-          and M.Range_Equal
-                (Left  => Model (Container)'Old,
-                 Right => Model (Container),
-                 Fst   => Index_Type'First,
-                 Lst   => Before - 1)
+          and
+            M.Range_Equal
+              (Left  => Model (Container)'Old,
+               Right => Model (Container),
+               Fst   => Index_Type'First,
+               Lst   => Before - 1)
 
           --  New_Item is inserted Count times at position Before
 
-          and (if Count > 0
-               then
-                 M.Constant_Range
-                   (Container => Model (Container),
-                    Fst       => Before,
-                    Lst       => Before + Index_Type'Base (Count - 1),
-                    Item      => New_Item))
+          and
+            (if Count > 0
+             then
+               M.Constant_Range
+                 (Container => Model (Container),
+                  Fst       => Before,
+                  Lst       => Before + Index_Type'Base (Count - 1),
+                  Item      => New_Item))
 
           --  Elements located after Before in Container are shifted
 
-          and M.Range_Shifted
-                (Left   => Model (Container)'Old,
-                 Right  => Model (Container),
-                 Fst    => Before,
-                 Lst    => Last_Index (Container)'Old,
-                 Offset => Big (Count)));
+          and
+            M.Range_Shifted
+              (Left   => Model (Container)'Old,
+               Right  => Model (Container),
+               Fst    => Before,
+               Lst    => Last_Index (Container)'Old,
+               Offset => Big (Count)));
 
    procedure Prepend_Vector (Container : in out Vector; New_Item : Vector)
    with
@@ -568,20 +590,22 @@ is
 
           --  Elements of New_Item are inserted at the beginning of Container
 
-          and M.Range_Equal
-                (Left  => Model (New_Item),
-                 Right => Model (Container),
-                 Fst   => Index_Type'First,
-                 Lst   => Last_Index (New_Item))
+          and
+            M.Range_Equal
+              (Left  => Model (New_Item),
+               Right => Model (Container),
+               Fst   => Index_Type'First,
+               Lst   => Last_Index (New_Item))
 
           --  Elements of Container are shifted
 
-          and M.Range_Shifted
-                (Left   => Model (Container)'Old,
-                 Right  => Model (Container),
-                 Fst    => Index_Type'First,
-                 Lst    => Last_Index (Container)'Old,
-                 Offset => Big (Length (New_Item))));
+          and
+            M.Range_Shifted
+              (Left   => Model (Container)'Old,
+               Right  => Model (Container),
+               Fst    => Index_Type'First,
+               Lst    => Last_Index (Container)'Old,
+               Offset => Big (Length (New_Item))));
 
    procedure Prepend (Container : in out Vector; New_Item : Element_Type)
    with
@@ -594,18 +618,20 @@ is
 
           --  Container now has New_Item at Index_Type'First
 
-          and Element_Logic_Equal
-                (Element (Model (Container), Index_Type'First),
-                 M.Copy_Element (New_Item))
+          and
+            Element_Logic_Equal
+              (Element (Model (Container), Index_Type'First),
+               M.Copy_Element (New_Item))
 
           --  Elements of Container are shifted by 1
 
-          and M.Range_Shifted
-                (Left   => Model (Container)'Old,
-                 Right  => Model (Container),
-                 Fst    => Index_Type'First,
-                 Lst    => Last_Index (Container)'Old,
-                 Offset => 1));
+          and
+            M.Range_Shifted
+              (Left   => Model (Container)'Old,
+               Right  => Model (Container),
+               Fst    => Index_Type'First,
+               Lst    => Last_Index (Container)'Old,
+               Offset => 1));
 
    procedure Prepend
      (Container : in out Vector; New_Item : Element_Type; Count : Count_Type)
@@ -620,20 +646,22 @@ is
 
           --  New_Item is inserted Count times at the beginning of Container
 
-          and M.Constant_Range
-                (Container => Model (Container),
-                 Fst       => Index_Type'First,
-                 Lst       => Index_Type'First + Index_Type'Base (Count - 1),
-                 Item      => New_Item)
+          and
+            M.Constant_Range
+              (Container => Model (Container),
+               Fst       => Index_Type'First,
+               Lst       => Index_Type'First + Index_Type'Base (Count - 1),
+               Item      => New_Item)
 
           --  Elements of Container are shifted
 
-          and M.Range_Shifted
-                (Left   => Model (Container)'Old,
-                 Right  => Model (Container),
-                 Fst    => Index_Type'First,
-                 Lst    => Last_Index (Container)'Old,
-                 Offset => Big (Count)));
+          and
+            M.Range_Shifted
+              (Left   => Model (Container)'Old,
+               Right  => Model (Container),
+               Fst    => Index_Type'First,
+               Lst    => Last_Index (Container)'Old,
+               Offset => Big (Count)));
 
    procedure Append_Vector (Container : in out Vector; New_Item : Vector)
    with
@@ -651,14 +679,15 @@ is
 
           --  Elements of New_Item are inserted at the end of Container
 
-          and (if Length (New_Item) > 0
-               then
-                 M.Range_Shifted
-                   (Left   => Model (New_Item),
-                    Right  => Model (Container),
-                    Fst    => Index_Type'First,
-                    Lst    => Last_Index (New_Item),
-                    Offset => Big (Length (Container)'Old))));
+          and
+            (if Length (New_Item) > 0
+             then
+               M.Range_Shifted
+                 (Left   => Model (New_Item),
+                  Right  => Model (Container),
+                  Fst    => Index_Type'First,
+                  Lst    => Last_Index (New_Item),
+                  Offset => Big (Length (Container)'Old))));
 
    procedure Append (Container : in out Vector; New_Item : Element_Type)
    with
@@ -675,9 +704,10 @@ is
 
           --  Container now has New_Item at the end of Container
 
-          and Element_Logic_Equal
-                (Element (Model (Container), Last_Index (Container)'Old + 1),
-                 M.Copy_Element (New_Item)));
+          and
+            Element_Logic_Equal
+              (Element (Model (Container), Last_Index (Container)'Old + 1),
+               M.Copy_Element (New_Item)));
 
    procedure Append
      (Container : in out Vector; New_Item : Element_Type; Count : Count_Type)
@@ -696,14 +726,15 @@ is
 
           --  New_Item is inserted Count times at the end of Container
 
-          and (if Count > 0
-               then
-                 M.Constant_Range
-                   (Container => Model (Container),
-                    Fst       => Last_Index (Container)'Old + 1,
-                    Lst       =>
-                      Last_Index (Container)'Old + Index_Type'Base (Count),
-                    Item      => New_Item)));
+          and
+            (if Count > 0
+             then
+               M.Constant_Range
+                 (Container => Model (Container),
+                  Fst       => Last_Index (Container)'Old + 1,
+                  Lst       =>
+                    Last_Index (Container)'Old + Index_Type'Base (Count),
+                  Item      => New_Item)));
 
    procedure Delete (Container : in out Vector; Index : Extended_Index)
    with
@@ -717,20 +748,22 @@ is
 
           --  Elements located before Index in Container are preserved
 
-          and M.Range_Equal
-                (Left  => Model (Container)'Old,
-                 Right => Model (Container),
-                 Fst   => Index_Type'First,
-                 Lst   => Index - 1)
+          and
+            M.Range_Equal
+              (Left  => Model (Container)'Old,
+               Right => Model (Container),
+               Fst   => Index_Type'First,
+               Lst   => Index - 1)
 
           --  Elements located after Index in Container are shifted by 1
 
-          and M.Range_Shifted
-                (Left   => Model (Container),
-                 Right  => Model (Container)'Old,
-                 Fst    => Index,
-                 Lst    => Last_Index (Container),
-                 Offset => 1));
+          and
+            M.Range_Shifted
+              (Left   => Model (Container),
+               Right  => Model (Container)'Old,
+               Fst    => Index,
+               Lst    => Last_Index (Container),
+               Offset => 1));
 
    procedure Delete
      (Container : in out Vector; Index : Extended_Index; Count : Count_Type)
@@ -746,11 +779,12 @@ is
 
           --  The elements of Container located before Index are preserved.
 
-          and M.Range_Equal
-                (Left  => Model (Container)'Old,
-                 Right => Model (Container),
-                 Fst   => Index_Type'First,
-                 Lst   => Index - 1)),
+          and
+            M.Range_Equal
+              (Left  => Model (Container)'Old,
+               Right => Model (Container),
+               Fst   => Index_Type'First,
+               Lst   => Index - 1)),
 
      Contract_Cases =>
        (SPARKlib_Full =>
@@ -766,12 +800,13 @@ is
 
              --  Other elements are shifted by Count
 
-             and M.Range_Shifted
-                   (Left   => Model (Container),
-                    Right  => Model (Container)'Old,
-                    Fst    => Index,
-                    Lst    => Last_Index (Container),
-                    Offset => Big (Count))));
+             and
+               M.Range_Shifted
+                 (Left   => Model (Container),
+                  Right  => Model (Container)'Old,
+                  Fst    => Index,
+                  Lst    => Last_Index (Container),
+                  Offset => Big (Count))));
 
    procedure Delete_First (Container : in out Vector)
    with
@@ -783,12 +818,13 @@ is
 
           --  Elements of Container are shifted by 1
 
-          and M.Range_Shifted
-                (Left   => Model (Container),
-                 Right  => Model (Container)'Old,
-                 Fst    => Index_Type'First,
-                 Lst    => Last_Index (Container),
-                 Offset => 1));
+          and
+            M.Range_Shifted
+              (Left   => Model (Container),
+               Right  => Model (Container)'Old,
+               Fst    => Index_Type'First,
+               Lst    => Last_Index (Container),
+               Offset => 1));
 
    procedure Delete_First (Container : in out Vector; Count : Count_Type)
    with
@@ -805,12 +841,13 @@ is
 
              --  Elements of Container are shifted by Count
 
-             and M.Range_Shifted
-                   (Left   => Model (Container),
-                    Right  => Model (Container)'Old,
-                    Fst    => Index_Type'First,
-                    Lst    => Last_Index (Container),
-                    Offset => Big (Count))));
+             and
+               M.Range_Shifted
+                 (Left   => Model (Container),
+                  Right  => Model (Container)'Old,
+                  Fst    => Index_Type'First,
+                  Lst    => Last_Index (Container),
+                  Offset => Big (Count))));
 
    procedure Delete_Last (Container : in out Vector)
    with
@@ -892,15 +929,16 @@ is
           --  returns No_Index.
 
           (Index > Last_Index (Container)
-           or else not M.Contains
-                         (Container => Model (Container),
-                          Fst       => Index,
-                          Lst       => Last_Index (Container),
-                          Item      => Item) => Find_Index'Result = No_Index,
+           or else
+             not M.Contains
+                   (Container => Model (Container),
+                    Fst       => Index,
+                    Lst       => Last_Index (Container),
+                    Item      => Item) => Find_Index'Result = No_Index,
 
            --  Otherwise, Find_Index returns a valid index greater than Index
 
-           others                            =>
+           others                      =>
              Find_Index'Result in Index .. Last_Index (Container)
 
              --  The element at this index in Container is Item
@@ -909,11 +947,12 @@ is
 
              --  It is the first occurrence of Item after Index in Container
 
-             and not M.Contains
-                       (Container => Model (Container),
-                        Fst       => Index,
-                        Lst       => Find_Index'Result - 1,
-                        Item      => Item)));
+             and
+               not M.Contains
+                     (Container => Model (Container),
+                      Fst       => Index,
+                      Lst       => Find_Index'Result - 1,
+                      Item      => Item)));
 
    function Reverse_Find_Index
      (Container : Vector;
@@ -949,14 +988,15 @@ is
 
              --  It is the last occurrence of Item before Index in Container
 
-             and not M.Contains
-                       (Container => Model (Container),
-                        Fst       => Reverse_Find_Index'Result + 1,
-                        Lst       =>
-                          (if Index <= Last_Index (Container)
-                           then Index
-                           else Last_Index (Container)),
-                        Item      => Item)));
+             and
+               not M.Contains
+                     (Container => Model (Container),
+                      Fst       => Reverse_Find_Index'Result + 1,
+                      Lst       =>
+                        (if Index <= Last_Index (Container)
+                         then Index
+                         else Last_Index (Container)),
+                      Item      => Item)));
 
    function Contains (Container : Vector; Item : Element_Type) return Boolean
    with
@@ -1056,16 +1096,18 @@ is
           (SPARKlib_Full =>
              Length (Container) = Length (Container)'Old
              and M_Elements_Sorted (Model (Container))
-             and M_Elements_Included
-                   (Left  => Model (Container)'Old,
-                    L_Lst => Last_Index (Container),
-                    Right => Model (Container),
-                    R_Lst => Last_Index (Container))
-             and M_Elements_Included
-                   (Left  => Model (Container),
-                    L_Lst => Last_Index (Container),
-                    Right => Model (Container)'Old,
-                    R_Lst => Last_Index (Container)));
+             and
+               M_Elements_Included
+                 (Left  => Model (Container)'Old,
+                  L_Lst => Last_Index (Container),
+                  Right => Model (Container),
+                  R_Lst => Last_Index (Container))
+             and
+               M_Elements_Included
+                 (Left  => Model (Container),
+                  L_Lst => Last_Index (Container),
+                  Right => Model (Container)'Old,
+                  R_Lst => Last_Index (Container)));
 
       procedure Merge (Target : in out Vector; Source : in out Vector)
       with
@@ -1078,21 +1120,25 @@ is
           (SPARKlib_Full =>
              Length (Target) = Length (Target)'Old + Length (Source)'Old
              and Length (Source) = 0
-             and (if M_Elements_Sorted (Model (Target)'Old)
-                    and M_Elements_Sorted (Model (Source)'Old)
-                  then M_Elements_Sorted (Model (Target)))
-             and M_Elements_Included
-                   (Left  => Model (Target)'Old,
-                    L_Lst => Last_Index (Target)'Old,
-                    Right => Model (Target),
-                    R_Lst => Last_Index (Target))
-             and M_Elements_Included
-                   (Left  => Model (Source)'Old,
-                    L_Lst => Last_Index (Source)'Old,
-                    Right => Model (Target),
-                    R_Lst => Last_Index (Target))
-             and M_Elements_In_Union
-                   (Model (Target), Model (Source)'Old, Model (Target)'Old));
+             and
+               (if M_Elements_Sorted (Model (Target)'Old)
+                  and M_Elements_Sorted (Model (Source)'Old)
+                then M_Elements_Sorted (Model (Target)))
+             and
+               M_Elements_Included
+                 (Left  => Model (Target)'Old,
+                  L_Lst => Last_Index (Target)'Old,
+                  Right => Model (Target),
+                  R_Lst => Last_Index (Target))
+             and
+               M_Elements_Included
+                 (Left  => Model (Source)'Old,
+                  L_Lst => Last_Index (Source)'Old,
+                  Right => Model (Target),
+                  R_Lst => Last_Index (Target))
+             and
+               M_Elements_In_Union
+                 (Model (Target), Model (Source)'Old, Model (Target)'Old));
    end Generic_Sorting;
 
    ---------------------------

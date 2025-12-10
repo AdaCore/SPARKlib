@@ -206,8 +206,9 @@ is
        (SPARKlib_Full =>
           Is_Singleton'Result
           = (Contains (Container, New_Item)
-             and then (for all Item of Container =>
-                         Equivalent_Elements (Item, New_Item))));
+             and then
+               (for all Item of Container =>
+                  Equivalent_Elements (Item, New_Item))));
 
    function Not_In_Both
      (Container : Set; Left : Set; Right : Set) return Boolean
@@ -239,12 +240,14 @@ is
      Post   =>
        (SPARKlib_Full =>
           Num_Overlaps'Result = Length (Intersection (Left, Right))
-          and (if Left <= Right
-               then Num_Overlaps'Result = Length (Left)
-               else Num_Overlaps'Result < Length (Left))
-          and (if Right <= Left
-               then Num_Overlaps'Result = Length (Right)
-               else Num_Overlaps'Result < Length (Right))
+          and
+            (if Left <= Right
+             then Num_Overlaps'Result = Length (Left)
+             else Num_Overlaps'Result < Length (Left))
+          and
+            (if Right <= Left
+             then Num_Overlaps'Result = Length (Right)
+             else Num_Overlaps'Result < Length (Right))
           and (Num_Overlaps'Result = 0) = No_Overlap (Left, Right));
 
    ----------------------------
@@ -400,8 +403,8 @@ is
      Post   =>
        (SPARKlib_Full =>
           Valid_Subset (Iterator, Next'Result)
-          and then Set_Logic_Equal
-                     (Next'Result, Remove (Cursor, Choose (Cursor))));
+          and then
+            Set_Logic_Equal (Next'Result, Remove (Cursor, Choose (Cursor))));
    --  At each iteration, remove the equivalence class of the considered
    --  element from the Cursor set.
 
@@ -544,7 +547,7 @@ private
 
    function Valid_Subset (Iterator : Iterable_Set; Cursor : Set) return Boolean
    is (Ptr_Eq (Cursor.Content, Iterator.Container.Content)
-       and then Length (Cursor.Content)
-                <= Length (Iterator.Container.Content));
+       and then
+         Length (Cursor.Content) <= Length (Iterator.Container.Content));
 
 end SPARK.Containers.Functional.Sets;

@@ -161,8 +161,8 @@ is
      Pre      =>
        Enable_Handling_Of_Equivalence
        and then Equivalent_Keys (Key_1, Key_2)
-       and then (Has_Key (Container, Key_1)
-                 or else Has_Key (Container, Key_2)),
+       and then
+         (Has_Key (Container, Key_1) or else Has_Key (Container, Key_2)),
      Post     =>
        Element_Logic_Equal (Get (Container, Key_1), Get (Container, Key_2));
    --  Get returns the same result on all equivalent keys
@@ -283,8 +283,8 @@ is
           Equivalent_Maps'Result
           = ((for all Key of Left =>
                 Has_Key (Right, Key)
-                and then Equivalent_Elements
-                           (Get (Right, Key), Get (Left, Key)))
+                and then
+                  Equivalent_Elements (Get (Right, Key), Get (Left, Key)))
              and (for all Key of Right => Has_Key (Left, Key))));
 
    ----------------------------
@@ -310,8 +310,9 @@ is
        (SPARKlib_Full =>
           Length (Container) + 1 = Length (Add'Result)
           and Has_Key (Add'Result, New_Key)
-          and Element_Logic_Equal
-                (Get (Add'Result, New_Key), Copy_Element (New_Item))
+          and
+            Element_Logic_Equal
+              (Get (Add'Result, New_Key), Copy_Element (New_Item))
           and Elements_Equal (Container, Add'Result)
           and Keys_Included_Except (Add'Result, Container, New_Key));
    --  Returns Container augmented with the mapping K -> New_Item for all
@@ -337,8 +338,9 @@ is
      Post   =>
        (SPARKlib_Full =>
           Length (Container) = Length (Set'Result)
-          and Element_Logic_Equal
-                (Get (Set'Result, Key), Copy_Element (New_Item))
+          and
+            Element_Logic_Equal
+              (Get (Set'Result, Key), Copy_Element (New_Item))
           and Same_Keys (Container, Set'Result)
           and Elements_Equal_Except (Container, Set'Result, Key));
    --  Returns Container, where the element associated with the equivalence
@@ -432,8 +434,8 @@ is
      Post   =>
        (SPARKlib_Full =>
           Valid_Submap (Iterator, Next'Result)
-          and then Map_Logic_Equal
-                     (Next'Result, Remove (Cursor, Choose (Cursor))));
+          and then
+            Map_Logic_Equal (Next'Result, Remove (Cursor, Choose (Cursor))));
    --  At each iteration, remove the considered the equivalence class of the
    --  considered key from the Cursor map.
 
@@ -484,8 +486,8 @@ is
             (if not Equivalent_Keys (Key, New_Key)
              then
                Has_Key (Right, Key)
-               and then Element_Logic_Equal
-                          (Get (Left, Key), Get (Right, Key))));
+               and then
+                 Element_Logic_Equal (Get (Left, Key), Get (Right, Key))));
    --  Returns True if all the keys of Left are mapped to the same elements in
    --  Left and Right except the equivalence class of New_Key.
 
@@ -500,8 +502,8 @@ is
             (if not Equivalent_Keys (Key, X) and not Equivalent_Keys (Key, Y)
              then
                Has_Key (Right, Key)
-               and then Element_Logic_Equal
-                          (Get (Left, Key), Get (Right, Key))));
+               and then
+                 Element_Logic_Equal (Get (Left, Key), Get (Right, Key))));
    --  Returns True if all the keys of Left are mapped to the same elements in
    --  Left and Right except the equivalence classes of X and Y.
 
@@ -616,8 +618,9 @@ is
        (SPARKlib_Full =>
           Length (Container'Old) + 1 = Length (Container)
           and Has_Key (Container, New_Key)
-          and Element_Logic_Equal
-                (Get (Container, New_Key), Copy_Element (New_Item))
+          and
+            Element_Logic_Equal
+              (Get (Container, New_Key), Copy_Element (New_Item))
           and Elements_Equal (Container'Old, Container)
           and Keys_Included_Except (Container, Container'Old, New_Key));
 

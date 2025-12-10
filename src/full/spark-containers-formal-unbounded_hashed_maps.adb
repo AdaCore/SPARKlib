@@ -70,11 +70,12 @@ is
      Post   =>
        (SPARKlib_Full =>
           M.Equal (Model (Container), Model (Container)'Old)
-          and Mapping_Preserved
-                (K_Left  => Keys (Container)'Old,
-                 K_Right => Keys (Container),
-                 P_Left  => Positions (Container)'Old,
-                 P_Right => Positions (Container)));
+          and
+            Mapping_Preserved
+              (K_Left  => Keys (Container)'Old,
+               K_Right => Keys (Container),
+               P_Left  => Positions (Container)'Old,
+               P_Right => Positions (Container)));
 
    --------------------------
    -- Local Instantiations --
@@ -130,8 +131,9 @@ is
                 .Node;
 
             if ENode = 0
-              or else EHT.Element (Right.Content.Nodes (ENode).E_Holder)
-                      /= EHT.Element (Left.Content.Nodes (Node).E_Holder)
+              or else
+                EHT.Element (Right.Content.Nodes (ENode).E_Holder)
+                /= EHT.Element (Left.Content.Nodes (Node).E_Holder)
             then
                return False;
             end if;
@@ -505,8 +507,9 @@ is
             if not P.Has_Key (P_Right, C)
               or else P.Get (P_Left, C) > K.Last (K_Left)
               or else P.Get (P_Right, C) > K.Last (K_Right)
-              or else K.Get (K_Left, P.Get (P_Left, C))
-                      /= K.Get (K_Right, P.Get (P_Right, C))
+              or else
+                K.Get (K_Left, P.Get (P_Left, C))
+                /= K.Get (K_Right, P.Get (P_Right, C))
             then
                return False;
             end if;
@@ -894,8 +897,7 @@ is
          return;
       end if;
 
-      Rehash :
-      declare
+      Rehash : declare
          Next_Size : constant Count_Type :=
            Count_Type'Max
              (New_Size,

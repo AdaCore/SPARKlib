@@ -15,7 +15,7 @@ package SPARK.Lemmas.Long_Float_Arithmetic is new
   SPARK.Lemmas.Floating_Point_Arithmetic
     (Fl           => Long_Float,
      Int          => Long_Integer,
-     Fl_Last_Sqrt => 2.0**511,
+     Fl_Last_Sqrt => 2.0 ** 511,
      Max_Int      => Long_Float_Max_Int,
      Epsilon      => Long_Float_Epsilon,
      Eta          => Long_Float_Eta,
