@@ -26,7 +26,7 @@ test.adb:17:07: info: in instantiation at test_gen.adb:141
 test.adb:17:07: info: in instantiation at test_gen.adb:157
 test.adb:17:07: info: no contextual analysis of "Test_No_Capacity" (call returns unconstrained type)
 test.adb:17:07: info: no contextual analysis of "Test_With_Capacity" (call returns unconstrained type)
-test_gen.adb:24:29: medium: postcondition might fail, cannot prove K in 1 .. 5, in instantiation at test.adb:11 [provers gave up before completing the proof]
+test_gen.adb:24:29: medium: postcondition might fail, cannot prove K in 1 .. 5, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
 test_gen.adb:26:29: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
 test_gen.adb:30:10: info: precondition proved (CVC5: 7 VC; Z3: 3 VC), in instantiation at test.adb:11
 test_gen.adb:37:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
@@ -54,7 +54,7 @@ test_gen.adb:59:12: info: discriminant check proved (CVC5: 1 VC), in instantiati
 test_gen.adb:60:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
 test_gen.adb:61:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
 test_gen.adb:63:12: info: discriminant check proved (CVC5: 1 VC), in instantiation at test.adb:11
-test_gen.adb:64:07: medium: precondition might fail, cannot prove not Contains (Container, Key), in instantiation at test.adb:11 [provers gave up before completing the proof]
+test_gen.adb:64:07: medium: precondition might fail, cannot prove not Contains (Container, Key), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
 test_gen.adb:65:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC), in instantiation at test.adb:11
 test_gen.adb:66:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
 test_gen.adb:68:12: info: discriminant check proved (CVC5: 1 VC), in instantiation at test.adb:11
@@ -65,7 +65,7 @@ test_gen.adb:72:07: medium: precondition might fail, in instantiation at test.ad
 test_gen.adb:74:12: info: discriminant check proved (CVC5: 1 VC), in instantiation at test.adb:11
 test_gen.adb:75:12: info: discriminant check proved (CVC5: 1 VC), in instantiation at test.adb:11
 test_gen.adb:76:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC), in instantiation at test.adb:11
-test_gen.adb:77:07: medium: precondition might fail, cannot prove not Contains (Container, Key), in instantiation at test.adb:11 [provers gave up before completing the proof]
+test_gen.adb:77:07: medium: precondition might fail, cannot prove not Contains (Container, Key), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
 test_gen.adb:78:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
 test_gen.adb:80:12: info: discriminant check proved (CVC5: 1 VC), in instantiation at test.adb:11
 test_gen.adb:81:12: info: discriminant check proved (CVC5: 1 VC), in instantiation at test.adb:11
