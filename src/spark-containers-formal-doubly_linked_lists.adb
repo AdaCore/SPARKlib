@@ -918,9 +918,9 @@ is
             pragma
               Assert
                 (RN (RI.Node).Next = 0
-                   or else
-                     not (RN (RN (RI.Node).Next).Element
-                          < RN (RI.Node).Element));
+                 or else
+                   not (RN (RN (RI.Node).Next).Element
+                        < RN (RI.Node).Element));
 
             if LI.Node = 0 then
                Splice (Target, No_Element, Source);
@@ -930,9 +930,9 @@ is
             pragma
               Assert
                 (LN (LI.Node).Next = 0
-                   or else
-                     not (LN (LN (LI.Node).Next).Element
-                          < LN (LI.Node).Element));
+                 or else
+                   not (LN (LN (LI.Node).Next).Element
+                        < LN (LI.Node).Element));
 
             if RN (RI.Node).Element < LN (LI.Node).Element then
                declare

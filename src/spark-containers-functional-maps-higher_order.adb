@@ -275,7 +275,7 @@ is
             pragma
               Loop_Invariant
                 (if Count_Rec (Submap, Test) = Length (Submap)
-                   then Count_Rec (M, Test) = Length (M));
+                 then Count_Rec (M, Test) = Length (M));
          end loop;
       end Do_Proof;
 
