@@ -134,7 +134,7 @@ def kill_and_regenerate(check):
             shutil.rmtree(d)
     os.makedirs("./temp")
     os.system("make clean")
-    for envvar in ["SPARKLIB_INSTALLED", "SPARKLIB_BODY_MODE"]:
+    for envvar in ["SPARKLIB_INSTALLED"]:
         if envvar not in os.environ:
             print(f"{envvar} not set; make sure to run 'source setup.sh'")
             exit(1)
