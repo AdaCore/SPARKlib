@@ -1,5 +1,6 @@
 variables:
   GIT_CLONE_BASE: https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}:${CI_SERVER_PORT}
+  GNATFORMAT_DATE: 20251215
 
 workflow:
   rules:
@@ -31,7 +32,10 @@ pre-commit:
     - . /tmp/ci_env.sh
     - cd $ANOD_DEFAULT_SANDBOX_DIR
     - anod install gnat --latest
-    - eval $(anod printenv gnat)
+    - anod install gnatformat -Qdate=$GNATFORMAT_DATE
+    - eval $(anod printenv gnat -Qdate)
+    - eval $(anod printenv gnatformat -Qdate)
+    - gnatformat --version
     - cd $CI_PROJECT_DIR
     - . setup.sh
 
