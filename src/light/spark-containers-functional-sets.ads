@@ -62,8 +62,8 @@ is
         Exempt_On,
         "Restrictions:No_Specification_Of_Aspect => Iterable",
         "The following usage of aspect Iterable has been reviewed"
-          & "for compliance with GNATprove assumption"
-          & " [SPARK_ITERABLE]");
+        & "for compliance with GNATprove assumption"
+        & " [SPARK_ITERABLE]");
    type Set is private
    with
      Default_Initial_Condition => (SPARKlib_Full => Is_Empty (Set)),
@@ -336,8 +336,8 @@ is
         Exempt_On,
         "Restrictions:No_Specification_Of_Aspect => Iterable",
         "The following usage of aspect Iterable has been reviewed"
-          & "for compliance with GNATprove assumption"
-          & " [SPARK_ITERABLE]");
+        & "for compliance with GNATprove assumption"
+        & " [SPARK_ITERABLE]");
    type Iterable_Set is private
    with
      Iterable =>

@@ -663,19 +663,19 @@ is
          pragma
            Assert
              (Nb_Occurence (Container, Element_1)
-                = Nb_Occurence (Container, Element_2));
+              = Nb_Occurence (Container, Element_2));
       elsif not Has_Key (Container.Map, Element_2) then
          Lemma_Has_Key_Equivalent (Container.Map, Element_2);
          pragma
            Assert
              (Nb_Occurence (Container, Element_1)
-                = Nb_Occurence (Container, Element_2));
+              = Nb_Occurence (Container, Element_2));
       else
          Lemma_Get_Equivalent (Container.Map, Element_1, Element_2);
          pragma
            Assert
              (Nb_Occurence (Container, Element_1)
-                = Nb_Occurence (Container, Element_2));
+              = Nb_Occurence (Container, Element_2));
       end if;
    end Lemma_Nb_Occurence_Equivalent;
 
@@ -872,7 +872,7 @@ is
             pragma
               Assert
                 (Cardinality (Intersection (Left, Right))
-                   = Cardinality (Intersection (Right, Left)));
+                 = Cardinality (Intersection (Right, Left)));
             pragma
               Warnings (On, "actuals for this call may be in wrong order");
          else

@@ -26,7 +26,7 @@ is
             pragma
               Loop_Invariant
                 ((Count_Left.Acc.Fold (A, 0) (I) = Natural (I - A'First) + 1)
-                   = (for all K in A'First .. I => Choose (A (K))));
+                 = (for all K in A'First .. I => Choose (A (K))));
          end loop;
       end Count_Length;
 
@@ -42,7 +42,7 @@ is
             pragma
               Loop_Invariant
                 ((Count_Left.Acc.Fold (A, 0) (I) = 0)
-                   = (for all K in A'First .. I => not Choose (A (K))));
+                 = (for all K in A'First .. I => not Choose (A (K))));
          end loop;
       end Count_Zero;
 
@@ -65,17 +65,17 @@ is
             pragma
               Loop_Invariant
                 (if K < I
-                   then
-                     Count_Left.Acc.Fold (A1, 0) (K)
-                     = Count_Left.Acc.Fold (A2, 0) (K)
-                   else
-                     Count_Left.Acc.Fold (A1, 0) (K)
-                     = Count_Left.Acc.Fold (A2, 0) (K) + C);
+                 then
+                   Count_Left.Acc.Fold (A1, 0) (K)
+                   = Count_Left.Acc.Fold (A2, 0) (K)
+                 else
+                   Count_Left.Acc.Fold (A1, 0) (K)
+                   = Count_Left.Acc.Fold (A2, 0) (K) + C);
          end loop;
          pragma
            Assert
              (Count_Left.Acc.Fold (A1, 0) (A1'Last)
-                = Count_Left.Acc.Fold (A2, 0) (A1'Last) + C);
+              = Count_Left.Acc.Fold (A2, 0) (A1'Last) + C);
       end Update_Count;
 
    end Count;
@@ -177,23 +177,23 @@ is
                pragma
                  Loop_Invariant
                    (if I > A'First (1)
-                      then
-                        (Fold_Count.Acc.Fold (A, 0) (I - 1, A'Last (2)) = 0)
-                        = (for all K in A'First (1) .. I - 1 =>
-                             (for all L in A'Range (2) =>
-                                not Choose (A (K, L)))));
+                    then
+                      (Fold_Count.Acc.Fold (A, 0) (I - 1, A'Last (2)) = 0)
+                      = (for all K in A'First (1) .. I - 1 =>
+                           (for all L in A'Range (2) =>
+                              not Choose (A (K, L)))));
                for J in A'Range (2) loop
                   pragma
                     Loop_Invariant
                       ((Fold_Count.Acc.Fold (A, 0) (I, J) = 0)
-                         = ((if I > A'First (1)
-                             then
-                               (for all K in A'First (1) .. I - 1 =>
-                                  (for all L in A'Range (2) =>
-                                     not Choose (A (K, L)))))
-                            and
-                              (for all L in A'First (2) .. J =>
-                                 not Choose (A (I, L)))));
+                       = ((if I > A'First (1)
+                           then
+                             (for all K in A'First (1) .. I - 1 =>
+                                (for all L in A'Range (2) =>
+                                   not Choose (A (K, L)))))
+                          and
+                            (for all L in A'First (2) .. J =>
+                               not Choose (A (I, L)))));
                end loop;
             end loop;
          end if;
@@ -298,15 +298,15 @@ is
                   pragma
                     Loop_Invariant
                       (Ind_Prop (A, R, I, A'First (2))
-                         and then
-                           F (A (I, A'First (2)), R)
-                           = Acc.Fold (A, Init) (I, A'First (2)));
+                       and then
+                         F (A (I, A'First (2)), R)
+                         = Acc.Fold (A, Init) (I, A'First (2)));
                   for J in A'Range (2) loop
                      pragma
                        Loop_Invariant
                          (Ind_Prop (A, R, I, J)
-                            and then
-                              F (A (I, J), R) = Acc.Fold (A, Init) (I, J));
+                          and then
+                            F (A (I, J), R) = Acc.Fold (A, Init) (I, J));
                      if J /= A'Last (2) then
                         Acc.Prove_Ind_Col (A, R, I, J);
                      elsif I /= A'Last (1) then
@@ -344,17 +344,17 @@ is
                pragma
                  Loop_Invariant
                    (if I = A'First (1)
-                      then Acc = Init
-                      else Acc = R (I - 1, A'Last (2)));
+                    then Acc = Init
+                    else Acc = R (I - 1, A'Last (2)));
                pragma Loop_Invariant (Ind_Prop (A, Acc, I, A'First (2)));
                pragma
                  Loop_Invariant
                    (if I > A'First (1)
-                      then
-                        Ind_Prop (A, Init, A'First (1), A'First (2))
-                        and then
-                          R (A'First (1), A'First (2))
-                          = F (A (A'First (1), A'First (2)), Init));
+                    then
+                      Ind_Prop (A, Init, A'First (1), A'First (2))
+                      and then
+                        R (A'First (1), A'First (2))
+                        = F (A (A'First (1), A'First (2)), Init));
                pragma
                  Loop_Invariant
                    (for all K in A'Range (1) =>
@@ -376,11 +376,11 @@ is
                   pragma
                     Loop_Invariant
                       (if I > A'First (1) or else J > A'First (2)
-                         then
-                           Ind_Prop (A, Init, A'First (1), A'First (2))
-                           and then
-                             R (A'First (1), A'First (2))
-                             = F (A (A'First (1), A'First (2)), Init));
+                       then
+                         Ind_Prop (A, Init, A'First (1), A'First (2))
+                         and then
+                           R (A'First (1), A'First (2))
+                           = F (A (A'First (1), A'First (2)), Init));
                   pragma
                     Loop_Invariant
                       (for all K in A'Range (1) =>
@@ -407,10 +407,10 @@ is
                   pragma
                     Loop_Invariant
                       (if J /= A'First (2)
-                         then Acc = R (I, J - 1)
-                         elsif I /= A'First (1)
-                         then Acc = R (I - 1, A'Last (2))
-                         else Acc = Init);
+                       then Acc = R (I, J - 1)
+                       elsif I /= A'First (1)
+                       then Acc = R (I - 1, A'Last (2))
+                       else Acc = Init);
                   pragma Loop_Invariant (Ind_Prop (A, Acc, I, J));
                   R (I, J) := F (A (I, J), Acc);
                   if J < A'Last (2) then
@@ -477,7 +477,7 @@ is
                pragma
                  Loop_Invariant
                    (Ind_Prop (A, R, I)
-                      and then F (A (I), R) = Acc.Fold (A, Init) (I));
+                    and then F (A (I), R) = Acc.Fold (A, Init) (I));
                if I /= A'Last then
                   Acc.Prove_Ind (A, R, I);
                end if;
@@ -509,7 +509,7 @@ is
                pragma
                  Loop_Invariant
                    (Ind_Prop (A, Init, A'First)
-                      and then R (A'First) = F (A (A'First), Init));
+                    and then R (A'First) = F (A (A'First), Init));
                pragma
                  Loop_Invariant
                    (for all K in A'First .. I =>
@@ -564,7 +564,7 @@ is
                pragma
                  Loop_Invariant
                    (Ind_Prop (A, R, I)
-                      and then F (A (I), I, R) = Acc.Fold (A, Init) (I));
+                    and then F (A (I), I, R) = Acc.Fold (A, Init) (I));
                if I /= A'Last then
                   Acc.Prove_Ind (A, R, I);
                end if;
@@ -596,7 +596,7 @@ is
                pragma
                  Loop_Invariant
                    (Ind_Prop (A, Init, A'First)
-                      and then R (A'First) = F (A (A'First), A'First, Init));
+                    and then R (A'First) = F (A (A'First), A'First, Init));
                pragma
                  Loop_Invariant
                    (for all K in A'First .. I =>
@@ -651,7 +651,7 @@ is
                pragma
                  Loop_Invariant
                    (Ind_Prop (A, R, I)
-                      and then F (A (I), R) = Acc.Fold (A, Init) (I));
+                    and then F (A (I), R) = Acc.Fold (A, Init) (I));
                if I /= A'First then
                   Acc.Prove_Ind (A, R, I);
                end if;
@@ -683,7 +683,7 @@ is
                pragma
                  Loop_Invariant
                    (Ind_Prop (A, Init, A'Last)
-                      and then R (A'Last) = F (A (A'Last), Init));
+                    and then R (A'Last) = F (A (A'Last), Init));
                pragma
                  Loop_Invariant
                    (for all K in I .. A'Last =>
@@ -746,9 +746,9 @@ is
                pragma
                  Loop_Invariant
                    (Sum_Left.Acc.Fold (A, 0) (I)
-                      = To_Big (C)
-                        * (To_Big_I (I) - To_Big_I (A'First))
-                        + To_Big (C));
+                    = To_Big (C)
+                      * (To_Big_I (I) - To_Big_I (A'First))
+                      + To_Big (C));
                pragma
                  Loop_Invariant
                    (for all K in A'First .. I => Value (A (K)) = C);
@@ -768,20 +768,20 @@ is
                pragma
                  Loop_Invariant
                    (if K < I
-                      then
-                        Sum_Left.Acc.Fold (A1, 0) (K)
-                        = Sum_Left.Acc.Fold (A2, 0) (K)
-                      else
-                        Sum_Left.Acc.Fold (A1, 0) (K) - To_Big (Value (A1 (I)))
-                        = Sum_Left.Acc.Fold (A2, 0) (K)
-                          - To_Big (Value (A2 (I))));
+                    then
+                      Sum_Left.Acc.Fold (A1, 0) (K)
+                      = Sum_Left.Acc.Fold (A2, 0) (K)
+                    else
+                      Sum_Left.Acc.Fold (A1, 0) (K) - To_Big (Value (A1 (I)))
+                      = Sum_Left.Acc.Fold (A2, 0) (K)
+                        - To_Big (Value (A2 (I))));
             end loop;
 
             pragma
               Assert
                 (Sum_Left.Acc.Fold (A1, 0) (A1'Last) - To_Big (Value (A1 (I)))
-                   = Sum_Left.Acc.Fold (A2, 0) (A1'Last)
-                     - To_Big (Value (A2 (I))));
+                 = Sum_Left.Acc.Fold (A2, 0) (A1'Last)
+                   - To_Big (Value (A2 (I))));
          end Update_Sum;
       end Big_Integer_Sum;
 
@@ -812,10 +812,10 @@ is
             pragma
               Loop_Invariant
                 (if I = A'First
-                   then To_Big (R) = 0
-                   else
-                     To_Big (R)
-                     = Big_Integer_Sum.Sum_Left.Acc.Fold (A, 0) (I - 1));
+                 then To_Big (R) = 0
+                 else
+                   To_Big (R)
+                   = Big_Integer_Sum.Sum_Left.Acc.Fold (A, 0) (I - 1));
             Prove_Add (R, Value (A (I)));
             R := R + Value (A (I));
          end loop;
@@ -859,10 +859,10 @@ is
                   pragma
                     Loop_Invariant
                       (I = A'First (1)
-                         or else
-                           (for all K in A'First (1) .. I - 1 =>
-                              (for all L in A'Range (2) =>
-                                 Value (A (K, L)) = C)));
+                       or else
+                         (for all K in A'First (1) .. I - 1 =>
+                            (for all L in A'Range (2) =>
+                               Value (A (K, L)) = C)));
                   pragma
                     Loop_Invariant
                       (I = A'First (1) or else Sum_Cst (I - 1, A'Last (2)));
@@ -892,14 +892,14 @@ is
                pragma
                  Loop_Invariant
                    (if K < I or else (K = I and then A1'First (2) < J)
-                      then
-                        Fold_Sum.Acc.Fold (A1, 0) (K, A1'First (2))
-                        = Fold_Sum.Acc.Fold (A2, 0) (K, A1'First (2))
-                      else
-                        Fold_Sum.Acc.Fold (A1, 0) (K, A1'First (2))
-                        - To_Big (Value (A1 (I, J)))
-                        = Fold_Sum.Acc.Fold (A2, 0) (K, A1'First (2))
-                          - To_Big (Value (A2 (I, J))));
+                    then
+                      Fold_Sum.Acc.Fold (A1, 0) (K, A1'First (2))
+                      = Fold_Sum.Acc.Fold (A2, 0) (K, A1'First (2))
+                    else
+                      Fold_Sum.Acc.Fold (A1, 0) (K, A1'First (2))
+                      - To_Big (Value (A1 (I, J)))
+                      = Fold_Sum.Acc.Fold (A2, 0) (K, A1'First (2))
+                        - To_Big (Value (A2 (I, J))));
                for L in A1'Range (2) loop
                   if K /= I or else L /= J then
                      pragma Assert (Value (A1 (K, L)) = Value (A2 (K, L)));
@@ -907,23 +907,23 @@ is
                   pragma
                     Loop_Invariant
                       (if K < I or else (K = I and then L < J)
-                         then
-                           Fold_Sum.Acc.Fold (A1, 0) (K, L)
-                           = Fold_Sum.Acc.Fold (A2, 0) (K, L)
-                         else
-                           Fold_Sum.Acc.Fold (A1, 0) (K, L)
-                           - To_Big (Value (A1 (I, J)))
-                           = Fold_Sum.Acc.Fold (A2, 0) (K, L)
-                             - To_Big (Value (A2 (I, J))));
+                       then
+                         Fold_Sum.Acc.Fold (A1, 0) (K, L)
+                         = Fold_Sum.Acc.Fold (A2, 0) (K, L)
+                       else
+                         Fold_Sum.Acc.Fold (A1, 0) (K, L)
+                         - To_Big (Value (A1 (I, J)))
+                         = Fold_Sum.Acc.Fold (A2, 0) (K, L)
+                           - To_Big (Value (A2 (I, J))));
                end loop;
             end loop;
 
             pragma
               Assert
                 (Fold_Sum.Acc.Fold (A1, 0) (A1'Last (1), A1'Last (2))
-                   - To_Big (Value (A1 (I, J)))
-                   = Fold_Sum.Acc.Fold (A2, 0) (A1'Last (1), A1'Last (2))
-                     - To_Big (Value (A2 (I, J))));
+                 - To_Big (Value (A1 (I, J)))
+                 = Fold_Sum.Acc.Fold (A2, 0) (A1'Last (1), A1'Last (2))
+                   - To_Big (Value (A2 (I, J))));
          end Update_Sum;
 
       end Big_Integer_Sum;
@@ -959,25 +959,25 @@ is
             pragma
               Loop_Invariant
                 (if I = A'First (1)
-                   then To_Big (R) = 0
-                   else
-                     To_Big (R)
-                     = Big_Integer_Sum.Fold_Sum.Acc.Fold (A, 0)
-                         (I - 1, A'Last (2)));
+                 then To_Big (R) = 0
+                 else
+                   To_Big (R)
+                   = Big_Integer_Sum.Fold_Sum.Acc.Fold (A, 0)
+                       (I - 1, A'Last (2)));
             for J in A'Range (2) loop
                pragma Loop_Invariant (No_Overflows (A, R, I, J));
                pragma
                  Loop_Invariant
                    (if I = A'First (1) and J = A'First (2)
-                      then To_Big (R) = 0
-                      elsif J = A'First (2)
-                      then
-                        To_Big (R)
-                        = Big_Integer_Sum.Fold_Sum.Acc.Fold (A, 0)
-                            (I - 1, A'Last (2))
-                      else
-                        To_Big (R)
-                        = Big_Integer_Sum.Fold_Sum.Acc.Fold (A, 0) (I, J - 1));
+                    then To_Big (R) = 0
+                    elsif J = A'First (2)
+                    then
+                      To_Big (R)
+                      = Big_Integer_Sum.Fold_Sum.Acc.Fold (A, 0)
+                          (I - 1, A'Last (2))
+                    else
+                      To_Big (R)
+                      = Big_Integer_Sum.Fold_Sum.Acc.Fold (A, 0) (I, J - 1));
                Prove_Add (R, Value (A (I, J)));
                R := R + Value (A (I, J));
             end loop;

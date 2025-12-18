@@ -42,8 +42,8 @@ is
         Exempt_On,
         "Restrictions:No_Specification_Of_Aspect => Iterable",
         "The following usage of aspect Iterable has been reviewed"
-          & "for compliance with GNATprove assumption"
-          & " [SPARK_ITERABLE]");
+        & "for compliance with GNATprove assumption"
+        & " [SPARK_ITERABLE]");
    type List is private
    with
      Iterable                  =>
