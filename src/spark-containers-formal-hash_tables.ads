@@ -1,4 +1,4 @@
---  Copyright (C) 2004-2025, Free Software Foundation, Inc.
+--  Copyright (C) 2004-2026, Free Software Foundation, Inc.
 --
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
