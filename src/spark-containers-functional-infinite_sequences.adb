@@ -33,9 +33,9 @@ is
 
    function "<" (Left : Sequence; Right : Sequence) return Boolean
    is (Length (Left) < Length (Right)
-       and then (Ptr_Eq (Left.Content, Right.Content)
-                 or else (for all N in Left =>
-                            Get (Left, N) = Get (Right, N))));
+       and then
+         (Ptr_Eq (Left.Content, Right.Content)
+          or else (for all N in Left => Get (Left, N) = Get (Right, N))));
 
    ----------
    -- "<=" --
@@ -43,9 +43,9 @@ is
 
    function "<=" (Left : Sequence; Right : Sequence) return Boolean
    is (Length (Left) <= Length (Right)
-       and then (Ptr_Eq (Left.Content, Right.Content)
-                 or else (for all N in Left =>
-                            Get (Left, N) = Get (Right, N))));
+       and then
+         (Ptr_Eq (Left.Content, Right.Content)
+          or else (for all N in Left => Get (Left, N) = Get (Right, N))));
 
    ---------
    -- "=" --
@@ -159,8 +159,9 @@ is
 
       for J in 1 .. Count_Lst loop
          if J /= Count_Pos
-           and then not Element_Logic_Equal
-                          (Get (Left.Content, J), Get (Right.Content, J))
+           and then
+             not Element_Logic_Equal
+                   (Get (Left.Content, J), Get (Right.Content, J))
          then
             return False;
          end if;
@@ -187,8 +188,9 @@ is
       for J in 1 .. Count_Lst loop
          if J /= Count_X
            and then J /= Count_Y
-           and then not Element_Logic_Equal
-                          (Get (Left.Content, J), Get (Right.Content, J))
+           and then
+             not Element_Logic_Equal
+                   (Get (Left.Content, J), Get (Right.Content, J))
          then
             return False;
          end if;
@@ -203,10 +205,11 @@ is
 
    function Equal_Prefix (Left, Right : Sequence) return Boolean
    is (Length (Left) <= Length (Right)
-       and then (Ptr_Eq (Left.Content, Right.Content)
-                 or else (for all N in Left =>
-                            Element_Logic_Equal
-                              (Get (Left, N), Get (Right, N)))));
+       and then
+         (Ptr_Eq (Left.Content, Right.Content)
+          or else
+            (for all N in Left =>
+               Element_Logic_Equal (Get (Left, N), Get (Right, N)))));
 
    --------------------------
    -- Equivalent_Sequences --
@@ -214,10 +217,11 @@ is
 
    function Equivalent_Sequences (Left, Right : Sequence) return Boolean
    is (Length (Left) = Length (Right)
-       and then (Ptr_Eq (Left.Content, Right.Content)
-                 or else (for all N in Left =>
-                            Equivalent_Elements
-                              (Get (Left, N), Get (Right, N)))));
+       and then
+         (Ptr_Eq (Left.Content, Right.Content)
+          or else
+            (for all N in Left =>
+               Equivalent_Elements (Get (Left, N), Get (Right, N)))));
 
    ----------
    -- Find --

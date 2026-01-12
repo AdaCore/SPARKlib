@@ -72,8 +72,8 @@ is
         Exempt_On,
         "Restrictions:No_Specification_Of_Aspect => Iterable",
         "The following usage of aspect Iterable has been reviewed"
-          & "for compliance with GNATprove assumption"
-          & " [SPARK_ITERABLE]");
+        & "for compliance with GNATprove assumption"
+        & " [SPARK_ITERABLE]");
    type Set is private
    with
      Iterable                  =>
@@ -200,8 +200,8 @@ is
              (if Find'Result > 0
               then
                 Find'Result <= E.Last (Container)
-                and Equivalent_Elements
-                      (Item, E.Get (Container, Find'Result))));
+                and
+                  Equivalent_Elements (Item, E.Get (Container, Find'Result))));
       --  Search for Item in Container
 
       function E_Elements_Equal
@@ -214,8 +214,9 @@ is
              E_Elements_Equal'Result
              = (for all I in 1 .. E.Last (Left) =>
                   Find (Right, E.Get (Left, I)) > 0
-                  and then E.Get (Right, Find (Right, E.Get (Left, I)))
-                           = E.Get (Left, I)));
+                  and then
+                    E.Get (Right, Find (Right, E.Get (Left, I)))
+                    = E.Get (Left, I)));
       --  The elements of Left are "=" to the equivalent element in Right
       pragma
         Annotate (GNATprove, Inline_For_Proof, Entity => E_Elements_Equal);
@@ -229,9 +230,10 @@ is
           E_Elements_Included'Result
           = (for all I in 1 .. E.Last (Left) =>
                Find (Right, E.Get (Left, I)) > 0
-               and then Element_Logic_Equal
-                          (E.Get (Right, Find (Right, E.Get (Left, I))),
-                           E.Get (Left, I)));
+               and then
+                 Element_Logic_Equal
+                   (E.Get (Right, Find (Right, E.Get (Left, I))),
+                    E.Get (Left, I)));
       --  The elements of Left are contained in Right
       pragma
         Annotate (GNATprove, Inline_For_Proof, Entity => E_Elements_Included);
@@ -247,9 +249,10 @@ is
                (if M.Contains (Model, E.Get (Left, I))
                 then
                   Find (Right, E.Get (Left, I)) > 0
-                  and then Element_Logic_Equal
-                             (E.Get (Right, Find (Right, E.Get (Left, I))),
-                              E.Get (Left, I))));
+                  and then
+                    Element_Logic_Equal
+                      (E.Get (Right, Find (Right, E.Get (Left, I))),
+                       E.Get (Left, I))));
       --  The elements of Container contained in Model are in Right
       pragma
         Annotate (GNATprove, Inline_For_Proof, Entity => E_Elements_Included);
@@ -268,15 +271,16 @@ is
                (if M.Contains (Model, E.Get (Container, I))
                 then
                   Find (Left, E.Get (Container, I)) > 0
-                  and then Element_Logic_Equal
-                             (E.Get (Left, Find (Left, E.Get (Container, I))),
-                              E.Get (Container, I))
+                  and then
+                    Element_Logic_Equal
+                      (E.Get (Left, Find (Left, E.Get (Container, I))),
+                       E.Get (Container, I))
                 else
                   Find (Right, E.Get (Container, I)) > 0
-                  and then Element_Logic_Equal
-                             (E.Get
-                                (Right, Find (Right, E.Get (Container, I))),
-                              E.Get (Container, I))));
+                  and then
+                    Element_Logic_Equal
+                      (E.Get (Right, Find (Right, E.Get (Container, I))),
+                       E.Get (Container, I))));
       --  The elements of Container contained in Model are in Left and others
       --  are in Right.
       pragma
@@ -311,10 +315,11 @@ is
 
              and E_Elements_Included (E_Left, E_Right)
 
-             and (for all C of P_Left =>
-                    Element_Logic_Equal
-                      (E.Get (E_Left, P.Get (P_Left, C)),
-                       E.Get (E_Right, P.Get (P_Right, C)))));
+             and
+               (for all C of P_Left =>
+                  Element_Logic_Equal
+                    (E.Get (E_Left, P.Get (P_Left, C)),
+                     E.Get (E_Right, P.Get (P_Right, C)))));
       --  Right contains all the cursors of Left
       --  Right contains all the elements of Left
       --  Mappings from cursors to elements induced by E_Left, P_Left
@@ -334,12 +339,13 @@ is
            then
              P.Keys_Included (P_Left, P_Right)
 
-             and (for all C of P_Left =>
-                    (if C /= Position
-                     then
-                       Element_Logic_Equal
-                         (E.Get (E_Left, P.Get (P_Left, C)),
-                          E.Get (E_Right, P.Get (P_Right, C))))));
+             and
+               (for all C of P_Left =>
+                  (if C /= Position
+                   then
+                     Element_Logic_Equal
+                       (E.Get (E_Left, P.Get (P_Left, C)),
+                        E.Get (E_Right, P.Get (P_Right, C))))));
       --  Right contains all the cursors of Left
       --  Mappings from cursors to elements induced by E_Left, P_Left
       --  and E_Right, P_Right are the same except for Position.
@@ -368,30 +374,33 @@ is
 
              --  It only contains keys contained in Model
 
-             and (for all Item of Elements'Result =>
-                    M.Contains (Model (Container), Item))
+             and
+               (for all Item of Elements'Result =>
+                  M.Contains (Model (Container), Item))
 
              --  It contains all the elements contained in Model
 
-             and (for all Item of Model (Container) =>
-                    (Find (Elements'Result, Item) > 0
-                     and then Equivalent_Elements
-                                (E.Get
-                                   (Elements'Result,
-                                    Find (Elements'Result, Item)),
-                                 Item)))
+             and
+               (for all Item of Model (Container) =>
+                  (Find (Elements'Result, Item) > 0
+                   and then
+                     Equivalent_Elements
+                       (E.Get (Elements'Result, Find (Elements'Result, Item)),
+                        Item)))
 
              --  It has no duplicate
 
-             and (for all I in 1 .. Length (Container) =>
-                    Find (Elements'Result, E.Get (Elements'Result, I)) = I)
+             and
+               (for all I in 1 .. Length (Container) =>
+                  Find (Elements'Result, E.Get (Elements'Result, I)) = I)
 
-             and (for all I in 1 .. Length (Container) =>
-                    (for all J in 1 .. Length (Container) =>
-                       (if Equivalent_Elements
-                             (E.Get (Elements'Result, I),
-                              E.Get (Elements'Result, J))
-                        then I = J))));
+             and
+               (for all I in 1 .. Length (Container) =>
+                  (for all J in 1 .. Length (Container) =>
+                     (if Equivalent_Elements
+                           (E.Get (Elements'Result, I),
+                            E.Get (Elements'Result, J))
+                      then I = J))));
 
       function Positions (Container : Set) return P.Map
       with
@@ -402,13 +411,15 @@ is
         Post   =>
           (SPARKlib_Full =>
              not P.Has_Key (Positions'Result, No_Element)
-             and then (for all I of Positions'Result =>
-                         P.Get (Positions'Result, I) in 1 .. Length (Container)
+             and then
+               (for all I of Positions'Result =>
+                  P.Get (Positions'Result, I) in 1 .. Length (Container)
 
-                         and then (for all J of Positions'Result =>
-                                     (if P.Get (Positions'Result, I)
-                                        = P.Get (Positions'Result, J)
-                                      then I = J))));
+                  and then
+                    (for all J of Positions'Result =>
+                       (if P.Get (Positions'Result, I)
+                          = P.Get (Positions'Result, J)
+                        then I = J))));
       --  Positions of cursors are smaller than the container's length
       --  No two cursors have the same position. Note that we do not
       --  state that there is a cursor in the map for each position,
@@ -452,9 +463,10 @@ is
           "="'Result
           = (Length (Left) = Length (Right)
              and E_Elements_Equal (Elements (Left), Elements (Right)))
-          and "="'Result
-              = (E_Elements_Equal (Elements (Left), Elements (Right))
-                 and E_Elements_Equal (Elements (Right), Elements (Left))));
+          and
+            "="'Result
+            = (E_Elements_Equal (Elements (Left), Elements (Right))
+               and E_Elements_Equal (Elements (Right), Elements (Left))));
    --  For each element in Left, set equality attempts to find the equal
    --  element in Right; if a search fails, then set equality immediately
    --  returns False. The search works by calling Hash to find the bucket in
@@ -484,9 +496,10 @@ is
        (SPARKlib_Full =>
           M.Is_Singleton (Model (To_Set'Result), New_Item)
           and Length (To_Set'Result) = 1
-          and Element_Logic_Equal
-                (E.Get (Elements (To_Set'Result), 1),
-                 E.Copy_Element (New_Item)));
+          and
+            Element_Logic_Equal
+              (E.Get (Elements (To_Set'Result), 1),
+               E.Copy_Element (New_Item)));
    --  Constructs a singleton set comprising New_Element. To_Set calls Hash to
    --  determine the bucket for New_Item.
 
@@ -557,8 +570,9 @@ is
 
             --  Position now maps to New_Item
 
-          and Element_Logic_Equal
-                (Element (Container, Position), E.Copy_Element (New_Item))
+          and
+            Element_Logic_Equal
+              (Element (Container, Position), E.Copy_Element (New_Item))
 
           --  New_Item is contained in Container
 
@@ -566,21 +580,24 @@ is
 
           --  Other elements are preserved
 
-          and M.Included_Except
-                (Model (Container)'Old,
-                 Model (Container),
-                 Element (Container, Position)'Old)
-          and M.Included_Except
-                (Model (Container), Model (Container)'Old, New_Item)
+          and
+            M.Included_Except
+              (Model (Container)'Old,
+               Model (Container),
+               Element (Container, Position)'Old)
+          and
+            M.Included_Except
+              (Model (Container), Model (Container)'Old, New_Item)
 
           --  Mapping from cursors to elements is preserved
 
-          and Mapping_Preserved_Except
-                (E_Left   => Elements (Container)'Old,
-                 E_Right  => Elements (Container),
-                 P_Left   => Positions (Container)'Old,
-                 P_Right  => Positions (Container),
-                 Position => Position));
+          and
+            Mapping_Preserved_Except
+              (E_Left   => Elements (Container)'Old,
+               E_Right  => Elements (Container),
+               P_Left   => Positions (Container)'Old,
+               P_Right  => Positions (Container),
+               Position => Position));
 
    function Constant_Reference
      (Container : Set; Position : Cursor)
@@ -648,26 +665,30 @@ is
 
              --  Position now maps to New_Item
 
-             and Element_Logic_Equal
-                   (Element (Container, Position), E.Copy_Element (New_Item))
+             and
+               Element_Logic_Equal
+                 (Element (Container, Position), E.Copy_Element (New_Item))
 
              --  Other elements are preserved
 
              and Model (Container)'Old <= Model (Container)
-             and M.Included_Except
-                   (Model (Container), Model (Container)'Old, New_Item)
+             and
+               M.Included_Except
+                 (Model (Container), Model (Container)'Old, New_Item)
 
              --  Mapping from cursors to elements is preserved
 
-             and Mapping_Preserved
-                   (E_Left  => Elements (Container)'Old,
-                    E_Right => Elements (Container),
-                    P_Left  => Positions (Container)'Old,
-                    P_Right => Positions (Container))
-             and P.Keys_Included_Except
-                   (Positions (Container),
-                    Positions (Container)'Old,
-                    Position)));
+             and
+               Mapping_Preserved
+                 (E_Left  => Elements (Container)'Old,
+                  E_Right => Elements (Container),
+                  P_Left  => Positions (Container)'Old,
+                  P_Right => Positions (Container))
+             and
+               P.Keys_Included_Except
+                 (Positions (Container),
+                  Positions (Container)'Old,
+                  Position)));
    --  Conditionally inserts New_Item into the set. If New_Item is already in
    --  the set, then Inserted returns False and Position designates the node
    --  containing the existing element (which is not modified). If New_Item is
@@ -692,27 +713,31 @@ is
        (SPARKlib_Full =>
           Length (Container) = Length (Container)'Old + 1
           and Contains (Container, New_Item)
-          and Element_Logic_Equal
-                (Element (Container, Find (Container, New_Item)),
-                 E.Copy_Element (New_Item))
+          and
+            Element_Logic_Equal
+              (Element (Container, Find (Container, New_Item)),
+               E.Copy_Element (New_Item))
 
           --  Other elements are preserved
 
           and Model (Container)'Old <= Model (Container)
-          and M.Included_Except
-                (Model (Container), Model (Container)'Old, New_Item)
+          and
+            M.Included_Except
+              (Model (Container), Model (Container)'Old, New_Item)
 
           --  Mapping from cursors to elements is preserved
 
-          and Mapping_Preserved
-                (E_Left  => Elements (Container)'Old,
-                 E_Right => Elements (Container),
-                 P_Left  => Positions (Container)'Old,
-                 P_Right => Positions (Container))
-          and P.Keys_Included_Except
-                (Positions (Container),
-                 Positions (Container)'Old,
-                 Find (Container, New_Item)));
+          and
+            Mapping_Preserved
+              (E_Left  => Elements (Container)'Old,
+               E_Right => Elements (Container),
+               P_Left  => Positions (Container)'Old,
+               P_Right => Positions (Container))
+          and
+            P.Keys_Included_Except
+              (Positions (Container),
+               Positions (Container)'Old,
+               Find (Container, New_Item)));
    --  Attempts to insert New_Item into the set, performing the usual insertion
    --  search (which involves calling both Hash and Equivalent_Elements); if
    --  the search succeeds (New_Item is equivalent to an element already in the
@@ -731,33 +756,38 @@ is
      Post           =>
        (SPARKlib_Full =>
           Contains (Container, New_Item)
-          and Element_Logic_Equal
-                (Element (Container, Find (Container, New_Item)),
-                 E.Copy_Element (New_Item))),
+          and
+            Element_Logic_Equal
+              (Element (Container, Find (Container, New_Item)),
+               E.Copy_Element (New_Item))),
      Contract_Cases =>
        (SPARKlib_Full =>
 
           (Contains (Container, New_Item) =>
              Model (Container) = Model (Container)'Old
              and Positions (Container) = Positions (Container)'Old
-             and E.Equal_Except
-                   (Elements (Container)'Old,
-                    Elements (Container),
-                    P.Get (Positions (Container), Find (Container, New_Item))),
+             and
+               E.Equal_Except
+                 (Elements (Container)'Old,
+                  Elements (Container),
+                  P.Get (Positions (Container), Find (Container, New_Item))),
            others                         =>
              Length (Container) = Length (Container)'Old + 1
              and Model (Container)'Old <= Model (Container)
-             and M.Included_Except
-                   (Model (Container), Model (Container)'Old, New_Item)
-             and Mapping_Preserved
-                   (E_Left  => Elements (Container)'Old,
-                    E_Right => Elements (Container),
-                    P_Left  => Positions (Container)'Old,
-                    P_Right => Positions (Container))
-             and P.Keys_Included_Except
-                   (Positions (Container),
-                    Positions (Container)'Old,
-                    Find (Container, New_Item))));
+             and
+               M.Included_Except
+                 (Model (Container), Model (Container)'Old, New_Item)
+             and
+               Mapping_Preserved
+                 (E_Left  => Elements (Container)'Old,
+                  E_Right => Elements (Container),
+                  P_Left  => Positions (Container)'Old,
+                  P_Right => Positions (Container))
+             and
+               P.Keys_Included_Except
+                 (Positions (Container),
+                  Positions (Container)'Old,
+                  Find (Container, New_Item))));
    --  Attempts to insert New_Item into the set. If an element equivalent to
    --  New_Item is already in the set (the insertion search succeeded, and
    --  hence New_Item was not inserted), then the value of New_Item is assigned
@@ -776,13 +806,15 @@ is
           and Contains (Container, New_Item)
 
           and Positions (Container) = Positions (Container)'Old
-          and Element_Logic_Equal
-                (Element (Container, Find (Container, New_Item)),
-                 E.Copy_Element (New_Item))
-          and E.Equal_Except
-                (Elements (Container)'Old,
-                 Elements (Container),
-                 P.Get (Positions (Container), Find (Container, New_Item))));
+          and
+            Element_Logic_Equal
+              (Element (Container, Find (Container, New_Item)),
+               E.Copy_Element (New_Item))
+          and
+            E.Equal_Except
+              (Elements (Container)'Old,
+               Elements (Container),
+               P.Get (Positions (Container), Find (Container, New_Item))));
    --  Searches for New_Item in the set; if the search fails (because an
    --  equivalent element was not in the set), then it raises
    --  Constraint_Error. Otherwise, the existing element is assigned the value
@@ -812,20 +844,23 @@ is
              --  Other elements are preserved
 
              and Model (Container) <= Model (Container)'Old
-             and M.Included_Except
-                   (Model (Container)'Old, Model (Container), Item)
+             and
+               M.Included_Except
+                 (Model (Container)'Old, Model (Container), Item)
 
              --  Mapping from cursors to elements is preserved
 
-             and Mapping_Preserved
-                   (E_Left  => Elements (Container),
-                    E_Right => Elements (Container)'Old,
-                    P_Left  => Positions (Container),
-                    P_Right => Positions (Container)'Old)
-             and P.Keys_Included_Except
-                   (Positions (Container)'Old,
-                    Positions (Container),
-                    Find (Container, Item)'Old)));
+             and
+               Mapping_Preserved
+                 (E_Left  => Elements (Container),
+                  E_Right => Elements (Container)'Old,
+                  P_Left  => Positions (Container),
+                  P_Right => Positions (Container)'Old)
+             and
+               P.Keys_Included_Except
+                 (Positions (Container)'Old,
+                  Positions (Container),
+                  Find (Container, Item)'Old)));
    --  Searches for Item in the set, and if found, removes its node from the
    --  set and then deallocates it. The search works as follows. The operation
    --  calls Hash to determine the item's bucket; if the bucket is not empty,
@@ -849,20 +884,22 @@ is
           --  Other elements are preserved
 
           and Model (Container) <= Model (Container)'Old
-          and M.Included_Except
-                (Model (Container)'Old, Model (Container), Item)
+          and
+            M.Included_Except (Model (Container)'Old, Model (Container), Item)
 
           --  Mapping from cursors to elements is preserved
 
-          and Mapping_Preserved
-                (E_Left  => Elements (Container),
-                 E_Right => Elements (Container)'Old,
-                 P_Left  => Positions (Container),
-                 P_Right => Positions (Container)'Old)
-          and P.Keys_Included_Except
-                (Positions (Container)'Old,
-                 Positions (Container),
-                 Find (Container, Item)'Old));
+          and
+            Mapping_Preserved
+              (E_Left  => Elements (Container),
+               E_Right => Elements (Container)'Old,
+               P_Left  => Positions (Container),
+               P_Right => Positions (Container)'Old)
+          and
+            P.Keys_Included_Except
+              (Positions (Container)'Old,
+               Positions (Container),
+               Find (Container, Item)'Old));
    --  Searches for Item in the set (which involves calling both Hash and
    --  Equivalent_Elements). If the search fails, then the operation raises
    --  Constraint_Error. Otherwise it removes the node from the set and then
@@ -890,22 +927,25 @@ is
           --  Other elements are preserved
 
           and Model (Container) <= Model (Container)'Old
-          and M.Included_Except
-                (Model (Container)'Old,
-                 Model (Container),
-                 Element (Container, Position)'Old)
+          and
+            M.Included_Except
+              (Model (Container)'Old,
+               Model (Container),
+               Element (Container, Position)'Old)
 
           --  Mapping from cursors to elements is preserved
 
-          and Mapping_Preserved
-                (E_Left  => Elements (Container),
-                 E_Right => Elements (Container)'Old,
-                 P_Left  => Positions (Container),
-                 P_Right => Positions (Container)'Old)
-          and P.Keys_Included_Except
-                (Positions (Container)'Old,
-                 Positions (Container),
-                 Position'Old));
+          and
+            Mapping_Preserved
+              (E_Left  => Elements (Container),
+               E_Right => Elements (Container)'Old,
+               P_Left  => Positions (Container),
+               P_Right => Positions (Container)'Old)
+          and
+            P.Keys_Included_Except
+              (Positions (Container)'Old,
+               Positions (Container),
+               Position'Old));
    --  Removes the node designated by Position from the set, and then
    --  deallocates the node. The operation calls Hash to determine the bucket,
    --  and then compares Position to each node in the bucket until there's a
@@ -935,33 +975,38 @@ is
 
           --  Elements of Target come from either Source or Target
 
-          and M.Included_In_Union
-                (Model (Target), Model (Source), Model (Target)'Old)
+          and
+            M.Included_In_Union
+              (Model (Target), Model (Source), Model (Target)'Old)
 
           --  Actual value of elements come from either Left or Right
 
-          and E_Elements_Included
-                (Elements (Target),
-                 Model (Target)'Old,
-                 Elements (Target)'Old,
-                 Elements (Source))
+          and
+            E_Elements_Included
+              (Elements (Target),
+               Model (Target)'Old,
+               Elements (Target)'Old,
+               Elements (Source))
 
-          and E_Elements_Included
-                (Elements (Target)'Old, Model (Target)'Old, Elements (Target))
+          and
+            E_Elements_Included
+              (Elements (Target)'Old, Model (Target)'Old, Elements (Target))
 
-          and E_Elements_Included
-                (Elements (Source),
-                 Model (Target)'Old,
-                 Elements (Source),
-                 Elements (Target))
+          and
+            E_Elements_Included
+              (Elements (Source),
+               Model (Target)'Old,
+               Elements (Source),
+               Elements (Target))
 
           --  Mapping from cursors of Target to elements is preserved
 
-          and Mapping_Preserved
-                (E_Left  => Elements (Target)'Old,
-                 E_Right => Elements (Target),
-                 P_Left  => Positions (Target)'Old,
-                 P_Right => Positions (Target)));
+          and
+            Mapping_Preserved
+              (E_Left  => Elements (Target)'Old,
+               E_Right => Elements (Target),
+               P_Left  => Positions (Target)'Old,
+               P_Right => Positions (Target)));
    --  Iterates over the Source set, and conditionally inserts each element
    --  into Target.
 
@@ -985,25 +1030,29 @@ is
 
           --  Elements of the result of union come from either Left or Right
 
-          and M.Included_In_Union
-                (Model (Union'Result), Model (Left), Model (Right))
+          and
+            M.Included_In_Union
+              (Model (Union'Result), Model (Left), Model (Right))
 
           --  Actual value of elements come from either Left or Right
 
-          and E_Elements_Included
-                (Elements (Union'Result),
-                 Model (Left),
-                 Elements (Left),
-                 Elements (Right))
+          and
+            E_Elements_Included
+              (Elements (Union'Result),
+               Model (Left),
+               Elements (Left),
+               Elements (Right))
 
-          and E_Elements_Included
-                (Elements (Left), Model (Left), Elements (Union'Result))
+          and
+            E_Elements_Included
+              (Elements (Left), Model (Left), Elements (Union'Result))
 
-          and E_Elements_Included
-                (Elements (Right),
-                 Model (Left),
-                 Elements (Right),
-                 Elements (Union'Result)));
+          and
+            E_Elements_Included
+              (Elements (Right),
+               Model (Left),
+               Elements (Right),
+               Elements (Union'Result)));
    --  The operation first copies the Left set to the result, and then iterates
    --  over the Right set to conditionally insert each element into the result.
 
@@ -1025,22 +1074,25 @@ is
 
           --  Elements both in Source and Target are in the intersection
 
-          and M.Includes_Intersection
-                (Model (Target), Model (Source), Model (Target)'Old)
+          and
+            M.Includes_Intersection
+              (Model (Target), Model (Source), Model (Target)'Old)
 
           --  Actual value of elements of Target is preserved
 
           and E_Elements_Included (Elements (Target), Elements (Target)'Old)
-          and E_Elements_Included
-                (Elements (Target)'Old, Model (Source), Elements (Target))
+          and
+            E_Elements_Included
+              (Elements (Target)'Old, Model (Source), Elements (Target))
 
           --  Mapping from cursors of Target to elements is preserved
 
-          and Mapping_Preserved
-                (E_Left  => Elements (Target),
-                 E_Right => Elements (Target)'Old,
-                 P_Left  => Positions (Target),
-                 P_Right => Positions (Target)'Old));
+          and
+            Mapping_Preserved
+              (E_Left  => Elements (Target),
+               E_Right => Elements (Target)'Old,
+               P_Left  => Positions (Target),
+               P_Right => Positions (Target)'Old));
    --  Iterates over the Target set (calling First and Next), calling Find to
    --  determine whether the element is in Source. If an equivalent element is
    --  not found in Source, the element is deleted from Target.
@@ -1061,18 +1113,21 @@ is
           --  Elements both in Left and Right are in the result of
           --  Intersection.
 
-          and M.Includes_Intersection
-                (Model (Intersection'Result), Model (Left), Model (Right))
+          and
+            M.Includes_Intersection
+              (Model (Intersection'Result), Model (Left), Model (Right))
 
           --  Actual value of elements come from Left
 
-          and E_Elements_Included
-                (Elements (Intersection'Result), Elements (Left))
+          and
+            E_Elements_Included
+              (Elements (Intersection'Result), Elements (Left))
 
-          and E_Elements_Included
-                (Elements (Left),
-                 Model (Right),
-                 Elements (Intersection'Result)));
+          and
+            E_Elements_Included
+              (Elements (Left),
+               Model (Right),
+               Elements (Intersection'Result)));
    --  Iterates over the Left set, calling Find to determine whether the
    --  element is in Right. If an equivalent element is found, it is inserted
    --  into the result set.
@@ -1096,22 +1151,25 @@ is
 
           --  Elements in Target but not in Source are in the difference
 
-          and M.Included_In_Union
-                (Model (Target)'Old, Model (Target), Model (Source))
+          and
+            M.Included_In_Union
+              (Model (Target)'Old, Model (Target), Model (Source))
 
           --  Actual value of elements of Target is preserved
 
           and E_Elements_Included (Elements (Target), Elements (Target)'Old)
-          and E_Elements_Included
-                (Elements (Target)'Old, Model (Target), Elements (Target))
+          and
+            E_Elements_Included
+              (Elements (Target)'Old, Model (Target), Elements (Target))
 
           --  Mapping from cursors of Target to elements is preserved
 
-          and Mapping_Preserved
-                (E_Left  => Elements (Target),
-                 E_Right => Elements (Target)'Old,
-                 P_Left  => Positions (Target),
-                 P_Right => Positions (Target)'Old));
+          and
+            Mapping_Preserved
+              (E_Left  => Elements (Target),
+               E_Right => Elements (Target)'Old,
+               P_Left  => Positions (Target),
+               P_Right => Positions (Target)'Old));
    --  Iterates over the Source (calling First and Next), calling Find to
    --  determine whether the element is in Target. If an equivalent element is
    --  found, it is deleted from Target.
@@ -1135,18 +1193,20 @@ is
 
           --  Elements in Left but not in Right are in the difference
 
-          and M.Included_In_Union
-                (Model (Left), Model (Difference'Result), Model (Right))
+          and
+            M.Included_In_Union
+              (Model (Left), Model (Difference'Result), Model (Right))
 
           --  Actual value of elements come from Left
 
-          and E_Elements_Included
-                (Elements (Difference'Result), Elements (Left))
+          and
+            E_Elements_Included (Elements (Difference'Result), Elements (Left))
 
-          and E_Elements_Included
-                (Elements (Left),
-                 Model (Difference'Result),
-                 Elements (Difference'Result)));
+          and
+            E_Elements_Included
+              (Elements (Left),
+               Model (Difference'Result),
+               Elements (Difference'Result)));
    --  Iterates over the Left set, calling Find to determine whether the
    --  element is in the Right set. If an equivalent element is not found, the
    --  element is inserted into the result set.
@@ -1170,32 +1230,37 @@ is
           --  Elements of the difference were not both in Source and in
           --  Target.
 
-          and M.Not_In_Both
-                (Model (Target), Model (Target)'Old, Model (Source))
+          and
+            M.Not_In_Both (Model (Target), Model (Target)'Old, Model (Source))
 
           --  Elements in Target but not in Source are in the difference
 
-          and M.Included_In_Union
-                (Model (Target)'Old, Model (Target), Model (Source))
+          and
+            M.Included_In_Union
+              (Model (Target)'Old, Model (Target), Model (Source))
 
           --  Elements in Source but not in Target are in the difference
 
-          and M.Included_In_Union
-                (Model (Source), Model (Target), Model (Target)'Old)
+          and
+            M.Included_In_Union
+              (Model (Source), Model (Target), Model (Target)'Old)
 
           --  Actual value of elements come from either Left or Right
 
-          and E_Elements_Included
-                (Elements (Target),
-                 Model (Target)'Old,
-                 Elements (Target)'Old,
-                 Elements (Source))
+          and
+            E_Elements_Included
+              (Elements (Target),
+               Model (Target)'Old,
+               Elements (Target)'Old,
+               Elements (Source))
 
-          and E_Elements_Included
-                (Elements (Target)'Old, Model (Target), Elements (Target))
+          and
+            E_Elements_Included
+              (Elements (Target)'Old, Model (Target), Elements (Target))
 
-          and E_Elements_Included
-                (Elements (Source), Model (Target), Elements (Target)));
+          and
+            E_Elements_Included
+              (Elements (Source), Model (Target), Elements (Target)));
    --  The operation iterates over the Source set, searching for the element
    --  in Target (calling Hash and Equivalent_Elements). If an equivalent
    --  element is found, it is removed from Target; otherwise it is inserted
@@ -1216,42 +1281,48 @@ is
 
           --  Elements of the difference were not both in Left and Right
 
-          and M.Not_In_Both
-                (Model (Symmetric_Difference'Result),
-                 Model (Left),
-                 Model (Right))
+          and
+            M.Not_In_Both
+              (Model (Symmetric_Difference'Result),
+               Model (Left),
+               Model (Right))
 
           --  Elements in Left but not in Right are in the difference
 
-          and M.Included_In_Union
-                (Model (Left),
-                 Model (Symmetric_Difference'Result),
-                 Model (Right))
+          and
+            M.Included_In_Union
+              (Model (Left),
+               Model (Symmetric_Difference'Result),
+               Model (Right))
 
           --  Elements in Right but not in Left are in the difference
 
-          and M.Included_In_Union
-                (Model (Right),
-                 Model (Symmetric_Difference'Result),
-                 Model (Left))
+          and
+            M.Included_In_Union
+              (Model (Right),
+               Model (Symmetric_Difference'Result),
+               Model (Left))
 
           --  Actual value of elements come from either Left or Right
 
-          and E_Elements_Included
-                (Elements (Symmetric_Difference'Result),
-                 Model (Left),
-                 Elements (Left),
-                 Elements (Right))
+          and
+            E_Elements_Included
+              (Elements (Symmetric_Difference'Result),
+               Model (Left),
+               Elements (Left),
+               Elements (Right))
 
-          and E_Elements_Included
-                (Elements (Left),
-                 Model (Symmetric_Difference'Result),
-                 Elements (Symmetric_Difference'Result))
+          and
+            E_Elements_Included
+              (Elements (Left),
+               Model (Symmetric_Difference'Result),
+               Elements (Symmetric_Difference'Result))
 
-          and E_Elements_Included
-                (Elements (Right),
-                 Model (Symmetric_Difference'Result),
-                 Elements (Symmetric_Difference'Result)));
+          and
+            E_Elements_Included
+              (Elements (Right),
+               Model (Symmetric_Difference'Result),
+               Elements (Symmetric_Difference'Result)));
    --  The operation first iterates over the Left set. It calls Find to
    --  determine whether the element is in the Right set. If no equivalent
    --  element is found, the element from Left is inserted into the result. The
@@ -1314,8 +1385,9 @@ is
            others
            =>
              Has_Element (Container, Next'Result)
-             and then P.Get (Positions (Container), Next'Result)
-                      = P.Get (Positions (Container), Position) + 1));
+             and then
+               P.Get (Positions (Container), Next'Result)
+               = P.Get (Positions (Container), Position) + 1));
    --  Returns a cursor that designates the node that follows the current one
    --  designated by Position. If Position designates the last node in its
    --  bucket, the operation calls Hash to compute the index of this bucket,
@@ -1338,8 +1410,9 @@ is
            others
            =>
              Has_Element (Container, Position)
-             and then P.Get (Positions (Container), Position)
-                      = P.Get (Positions (Container), Position'Old) + 1));
+             and then
+               P.Get (Positions (Container), Position)
+               = P.Get (Positions (Container), Position'Old) + 1));
    --  Equivalent to Position := Next (Position)
 
    function Find (Container : Set; Item : Element_Type) return Cursor
@@ -1356,13 +1429,14 @@ is
 
            others                                 =>
              P.Has_Key (Positions (Container), Find'Result)
-             and P.Get (Positions (Container), Find'Result)
-                 = Find (Elements (Container), Item)
+             and
+               P.Get (Positions (Container), Find'Result)
+               = Find (Elements (Container), Item)
 
              --  The element designated by the result of Find is Item
 
-             and Equivalent_Elements
-                   (Element (Container, Find'Result), Item)));
+             and
+               Equivalent_Elements (Element (Container, Find'Result), Item)));
    --  Searches for Item in the set. Find calls Hash to determine the item's
    --  bucket; if the bucket is not empty, it calls Equivalent_Elements to
    --  compare Item to each element in the bucket. If the search succeeds, Find
@@ -1485,8 +1559,9 @@ is
 
                --  Key now maps to New_Item
 
-             and Element_Logic_Equal
-                   (Element (Container, Key), E.Copy_Element (New_Item))
+             and
+               Element_Logic_Equal
+                 (Element (Container, Key), E.Copy_Element (New_Item))
 
              --  New_Item is contained in Container
 
@@ -1494,19 +1569,22 @@ is
 
              --  Other elements are preserved
 
-             and M_Included_Except
-                   (Model (Container)'Old, Model (Container), Key)
-             and M.Included_Except
-                   (Model (Container), Model (Container)'Old, New_Item)
+             and
+               M_Included_Except
+                 (Model (Container)'Old, Model (Container), Key)
+             and
+               M.Included_Except
+                 (Model (Container), Model (Container)'Old, New_Item)
 
              --  Mapping from cursors to elements is preserved
 
-             and Mapping_Preserved_Except
-                   (E_Left   => Elements (Container)'Old,
-                    E_Right  => Elements (Container),
-                    P_Left   => Positions (Container)'Old,
-                    P_Right  => Positions (Container),
-                    Position => Find (Container, Key))
+             and
+               Mapping_Preserved_Except
+                 (E_Left   => Elements (Container)'Old,
+                  E_Right  => Elements (Container),
+                  P_Left   => Positions (Container)'Old,
+                  P_Right  => Positions (Container),
+                  Position => Find (Container, Key))
              and Positions (Container) = Positions (Container)'Old);
 
       procedure Exclude (Container : in out Set; Key : Key_Type)
@@ -1531,20 +1609,23 @@ is
                 --  Other elements are preserved
 
                 and Model (Container) <= Model (Container)'Old
-                and M_Included_Except
-                      (Model (Container)'Old, Model (Container), Key)
+                and
+                  M_Included_Except
+                    (Model (Container)'Old, Model (Container), Key)
 
                 --  Mapping from cursors to elements is preserved
 
-                and Mapping_Preserved
-                      (E_Left  => Elements (Container),
-                       E_Right => Elements (Container)'Old,
-                       P_Left  => Positions (Container),
-                       P_Right => Positions (Container)'Old)
-                and P.Keys_Included_Except
-                      (Positions (Container)'Old,
-                       Positions (Container),
-                       Find (Container, Key)'Old)));
+                and
+                  Mapping_Preserved
+                    (E_Left  => Elements (Container),
+                     E_Right => Elements (Container)'Old,
+                     P_Left  => Positions (Container),
+                     P_Right => Positions (Container)'Old)
+                and
+                  P.Keys_Included_Except
+                    (Positions (Container)'Old,
+                     Positions (Container),
+                     Find (Container, Key)'Old)));
 
       procedure Delete (Container : in out Set; Key : Key_Type)
       with
@@ -1561,20 +1642,23 @@ is
              --  Other elements are preserved
 
              and Model (Container) <= Model (Container)'Old
-             and M_Included_Except
-                   (Model (Container)'Old, Model (Container), Key)
+             and
+               M_Included_Except
+                 (Model (Container)'Old, Model (Container), Key)
 
              --  Mapping from cursors to elements is preserved
 
-             and Mapping_Preserved
-                   (E_Left  => Elements (Container),
-                    E_Right => Elements (Container)'Old,
-                    P_Left  => Positions (Container),
-                    P_Right => Positions (Container)'Old)
-             and P.Keys_Included_Except
-                   (Positions (Container)'Old,
-                    Positions (Container),
-                    Find (Container, Key)'Old));
+             and
+               Mapping_Preserved
+                 (E_Left  => Elements (Container),
+                  E_Right => Elements (Container)'Old,
+                  P_Left  => Positions (Container),
+                  P_Right => Positions (Container)'Old)
+             and
+               P.Keys_Included_Except
+                 (Positions (Container)'Old,
+                  Positions (Container),
+                  Find (Container, Key)'Old));
 
       function Find (Container : Set; Key : Key_Type) return Cursor
       with
@@ -1595,8 +1679,9 @@ is
 
                 --  The key designated by the result of Find is Key
 
-                and Equivalent_Keys
-                      (Generic_Keys.Key (Container, Find'Result), Key)));
+                and
+                  Equivalent_Keys
+                    (Generic_Keys.Key (Container, Find'Result), Key)));
 
       function Contains (Container : Set; Key : Key_Type) return Boolean
       with

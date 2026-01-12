@@ -1,574 +1,631 @@
-inst.ads:5:13: info: implicit aspect Always_Terminates on "Witness" has been proved, subprogram will terminate
-inst.ads:5:56: info: division check proved (CVC5: 1 VC)
-inst.ads:6:13: info: implicit aspect Always_Terminates on "Hash" has been proved, subprogram will terminate
-inst.ads:6:66: info: division check proved (CVC5: 1 VC)
-inst.ads:6:66: info: range check proved (CVC5: 1 VC)
-inst.ads:7:13: info: implicit aspect Always_Terminates on "Eq" has been proved, subprogram will terminate
-inst.ads:7:55: info: division check proved (CVC5: 1 VC)
-inst.ads:7:70: info: division check proved (CVC5: 1 VC)
-inst.ads:8:13: info: implicit aspect Always_Terminates on "Equivalent" has been proved, subprogram will terminate
-spark-containers-parameter_checks.ads:274:50: medium: postcondition might fail, in instantiation at spark-containers-formal-hashed_maps.ads:165, in instantiation at inst.ads:9
-test.adb:26:14: info: postcondition proved (CVC5: 1 VC; Z3: 4 VC)
-test.adb:29:29: info: precondition proved (CVC5: 1 VC)
-test.adb:32:23: info: unrolling loop [info-unrolling-inlining]
-test.adb:33:10: info: precondition proved (CVC5: 7 VC; Z3: 3 VC)
-test.adb:39:14: info: postcondition proved (CVC5: 2 VC; Z3: 6 VC)
-test.adb:42:29: info: precondition proved (CVC5: 1 VC)
-test.adb:45:23: info: unrolling loop [info-unrolling-inlining]
-test.adb:46:10: info: precondition proved (CVC5: 7 VC; Z3: 3 VC)
-test.adb:53:07: info: precondition proved (CVC5: 1 VC)
-test.adb:57:07: info: initialization of "X" proved
-test.adb:57:16: info: range check proved (CVC5: 2 VC)
-test.adb:57:22: info: range check proved (CVC5: 2 VC)
-test.adb:59:07: info: precondition proved (CVC5: 1 VC)
-test.adb:60:07: info: precondition proved (CVC5: 1 VC)
-test.adb:61:07: info: precondition proved (CVC5: 1 VC)
-test.adb:65:07: info: initialization of "X" proved
-test.adb:65:10: info: initialization of "Y" proved
-test.adb:65:13: info: initialization of "Z" proved
-test.adb:65:22: info: range check proved (CVC5: 2 VC)
-test.adb:65:28: info: range check proved (CVC5: 2 VC)
-test.adb:67:07: info: precondition proved (CVC5: 1 VC)
-test.adb:69:07: info: precondition proved (CVC5: 1 VC)
-test.adb:70:07: info: precondition proved (Z3: 1 VC)
-test.adb:72:07: info: precondition proved (CVC5: 2 VC)
-test.adb:73:07: info: precondition proved (Z3: 1 VC)
-test.adb:75:12: info: discriminant check proved (CVC5: 1 VC)
-test.adb:76:07: info: precondition proved (Z3: 1 VC)
-test.adb:77:07: info: precondition proved (Z3: 1 VC)
-test.adb:79:12: info: discriminant check proved (CVC5: 1 VC)
-test.adb:80:07: medium: precondition might fail, cannot prove not Contains (Container, Key)
-test.adb:81:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
-test.adb:82:07: info: precondition proved (Z3: 1 VC)
-test.adb:84:12: info: discriminant check proved (CVC5: 1 VC)
-test.adb:85:12: info: discriminant check proved (CVC5: 1 VC)
-test.adb:86:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
-test.adb:87:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
-test.adb:88:07: medium: precondition might fail
-test.adb:90:12: info: discriminant check proved (CVC5: 1 VC)
-test.adb:91:12: info: discriminant check proved (CVC5: 1 VC)
-test.adb:92:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
-test.adb:93:07: medium: precondition might fail, cannot prove not Contains (Container, Key)
-test.adb:94:07: info: precondition proved (Z3: 1 VC)
-test.adb:96:12: info: discriminant check proved (CVC5: 1 VC)
-test.adb:97:12: info: discriminant check proved (CVC5: 1 VC)
-test.adb:98:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
-test.adb:99:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
-test.adb:100:07: info: precondition proved (Z3: 1 VC)
-test.adb:104:07: info: initialization of "X" proved
-test.adb:104:16: info: range check proved (CVC5: 2 VC)
-test.adb:104:22: info: range check proved (CVC5: 2 VC)
-test.adb:106:07: info: precondition proved (CVC5: 1 VC)
-test.adb:110:07: info: initialization of "X" proved
-test.adb:110:16: info: range check proved (CVC5: 2 VC)
-test.adb:110:22: info: range check proved (CVC5: 2 VC)
-test.adb:112:07: info: precondition proved (CVC5: 1 VC)
-test.adb:113:07: info: precondition proved (CVC5: 1 VC)
-test.adb:114:07: info: precondition proved (CVC5: 1 VC)
-test.adb:115:07: info: precondition proved (CVC5: 1 VC)
-test.adb:116:07: info: precondition proved (CVC5: 1 VC)
-test.adb:117:07: info: precondition proved (CVC5: 1 VC)
-test.adb:121:07: info: initialization of "X" proved
-test.adb:121:16: info: range check proved (CVC5: 2 VC)
-test.adb:121:22: info: range check proved (CVC5: 2 VC)
-test.adb:123:07: info: precondition proved (CVC5: 1 VC)
-test.adb:124:07: info: precondition proved (CVC5: 1 VC)
-test.adb:125:07: info: precondition proved (CVC5: 1 VC)
-test.adb:129:07: info: initialization of "X" proved
-test.adb:129:16: info: range check proved (CVC5: 2 VC)
-test.adb:129:22: info: range check proved (CVC5: 2 VC)
-test.adb:132:07: info: precondition proved (CVC5: 1 VC)
-test.adb:133:07: info: precondition proved (CVC5: 1 VC)
-test.adb:135:07: info: precondition proved (CVC5: 1 VC)
-test.adb:139:07: info: initialization of "X" proved
-test.adb:139:10: info: initialization of "Y" proved
-test.adb:139:19: info: range check proved (CVC5: 2 VC)
-test.adb:139:25: info: range check proved (CVC5: 2 VC)
-test.adb:141:07: info: precondition proved (CVC5: 1 VC)
-test.adb:142:07: info: precondition proved (CVC5: 1 VC)
-test.adb:143:07: info: precondition proved (CVC5: 1 VC)
-test.adb:144:07: info: precondition proved (CVC5: 1 VC)
-test.adb:145:23: info: unrolling loop [info-unrolling-inlining]
-test.adb:146:10: info: precondition proved (CVC5: 4 VC; Z3: 2 VC)
-test.adb:148:07: info: precondition proved (CVC5: 1 VC)
-test.adb:149:07: info: precondition proved (Z3: 1 VC)
-test.adb:154:10: info: initialization of "X" proved
-test.adb:154:19: info: range check proved (CVC5: 2 VC)
-test.adb:154:25: info: range check proved (CVC5: 2 VC)
-test.adb:157:33: info: no contextual analysis of "Test_No_Capacity" (call returns unconstrained type)
-test.adb:157:33: info: precondition proved (CVC5: 1 VC)
-test.adb:159:13: info: precondition proved (CVC5: 1 VC)
-test.adb:161:10: info: precondition proved (CVC5: 1 VC)
-test.adb:163:33: info: precondition proved (CVC5: 1 VC)
-test.adb:165:13: info: precondition proved (Z3: 1 VC)
-test.adb:170:10: info: initialization of "X" proved
-test.adb:170:19: info: range check proved (CVC5: 2 VC)
-test.adb:170:24: info: range check proved (CVC5: 2 VC)
-test.adb:173:33: info: no contextual analysis of "Test_With_Capacity" (call returns unconstrained type)
-test.adb:173:33: info: precondition proved (CVC5: 1 VC)
-test.adb:175:13: info: precondition proved (CVC5: 1 VC)
-test.adb:177:10: info: precondition proved (CVC5: 1 VC)
-test.adb:179:33: info: precondition proved (CVC5: 1 VC)
-test.adb:181:13: info: precondition proved (CVC5: 1 VC)
-test.adb:182:13: info: precondition proved (Z3: 1 VC)
-test.adb:191:07: info: initialization of "X" proved
-test.adb:191:16: info: range check proved (CVC5: 2 VC)
-test.adb:191:22: info: range check proved (CVC5: 2 VC)
-test.adb:193:07: info: precondition proved (CVC5: 1 VC)
-test.adb:194:07: info: precondition proved (CVC5: 1 VC)
-test.adb:194:15: info: precondition proved (CVC5: 1 VC)
-test.adb:199:07: info: initialization of "X" proved
-test.adb:199:16: info: range check proved (CVC5: 2 VC)
-test.adb:199:22: info: range check proved (CVC5: 2 VC)
-test.adb:201:07: info: precondition proved (CVC5: 1 VC)
-test.adb:202:07: info: precondition proved (CVC5: 1 VC)
-test.adb:202:15: info: precondition proved (CVC5: 1 VC)
-test.adb:202:49: info: precondition proved (CVC5: 1 VC)
-test.adb:207:07: info: initialization of "X" proved
-test.adb:207:16: info: range check proved (CVC5: 2 VC)
-test.adb:207:22: info: range check proved (CVC5: 2 VC)
-test.adb:209:07: info: precondition proved (CVC5: 1 VC)
-test.adb:210:07: info: precondition proved (CVC5: 1 VC)
-test.adb:210:15: info: precondition proved (CVC5: 1 VC)
-test.adb:214:07: info: initialization of "X" proved
-test.adb:214:21: info: range check proved (CVC5: 2 VC)
-test.adb:214:27: info: range check proved (CVC5: 2 VC)
-test.adb:215:07: info: initialization of "P1" proved
-test.adb:215:11: info: initialization of "P2" proved
-test.adb:216:07: info: initialization of "E1" proved
-test.adb:217:07: info: initialization of "K1" proved
-test.adb:217:11: info: initialization of "K2" proved
-test.adb:219:07: info: precondition proved (CVC5: 1 VC)
-test.adb:221:13: info: precondition proved (CVC5: 1 VC)
-test.adb:222:13: info: precondition proved (CVC5: 1 VC)
-test.adb:223:13: info: precondition proved (CVC5: 1 VC)
-test.adb:224:13: info: precondition proved (CVC5: 1 VC)
-test.adb:226:07: info: precondition proved (CVC5: 1 VC)
-test.adb:228:07: info: precondition proved (CVC5: 1 VC)
-test.adb:228:15: info: precondition proved (CVC5: 1 VC)
-test.adb:229:07: info: precondition proved (CVC5: 1 VC)
-test.adb:230:07: info: precondition proved (CVC5: 1 VC)
-test.adb:230:15: info: precondition proved (CVC5: 1 VC)
-test.adb:230:36: info: precondition proved (CVC5: 1 VC)
-test.adb:231:07: info: precondition proved (Z3: 1 VC)
-test.adb:231:15: info: precondition proved (CVC5: 1 VC)
-test.adb:236:07: info: initialization of "X" proved
-test.adb:236:25: info: range check proved (CVC5: 2 VC)
-test.adb:236:31: info: range check proved (CVC5: 2 VC)
-test.adb:237:07: info: initialization of "P1" proved
-test.adb:238:07: info: initialization of "E1" proved
-test.adb:240:07: info: precondition proved (CVC5: 1 VC)
-test.adb:242:13: info: precondition proved (CVC5: 1 VC)
-test.adb:244:07: info: precondition proved (CVC5: 1 VC)
-test.adb:244:15: info: precondition proved (CVC5: 1 VC)
-test.adb:249:07: info: initialization of "X" proved
-test.adb:249:25: info: range check proved (CVC5: 2 VC)
-test.adb:249:31: info: range check proved (CVC5: 2 VC)
-test.adb:250:07: warning: unused variable "P1"
-test.adb:252:07: info: precondition proved (CVC5: 1 VC)
-test.adb:254:07: info: precondition proved (CVC5: 1 VC)
-test.adb:254:15: info: precondition proved (CVC5: 1 VC)
-test.adb:259:07: info: initialization of "X" proved
-test.adb:259:29: info: range check proved (CVC5: 2 VC)
-test.adb:259:35: info: range check proved (CVC5: 2 VC)
-test.adb:260:07: info: initialization of "P2" proved
-test.adb:261:07: info: initialization of "P4" proved
-test.adb:262:07: info: initialization of "K2" proved
-test.adb:262:11: info: initialization of "K4" proved
-test.adb:263:07: info: initialization of "E2" proved
-test.adb:263:11: info: initialization of "E4" proved
-test.adb:265:07: info: precondition proved (CVC5: 1 VC)
-test.adb:266:13: info: precondition proved (CVC5: 1 VC)
-test.adb:267:13: info: precondition proved (CVC5: 1 VC)
-test.adb:268:13: info: precondition proved (CVC5: 1 VC)
-test.adb:269:13: info: precondition proved (CVC5: 1 VC)
-test.adb:269:22: info: precondition proved (CVC5: 1 VC)
-test.adb:270:13: info: precondition proved (CVC5: 1 VC)
-test.adb:271:13: info: precondition proved (CVC5: 1 VC)
-test.adb:274:32: info: precondition proved (CVC5: 1 VC)
-test.adb:274:43: info: discriminant check proved (CVC5: 1 VC)
-test.adb:274:43: info: in reconstructed value at the end of the borrow at test.adb:274
-test.adb:276:10: info: precondition proved (CVC5: 1 VC)
-test.adb:276:20: info: pointer dereference check proved (CVC5: 1 VC)
-test.adb:277:12: info: pointer dereference check proved (CVC5: 1 VC)
-test.adb:282:07: info: precondition proved (Z3: 1 VC)
-test.adb:282:44: info: precondition proved (CVC5: 1 VC)
-test.adb:283:07: info: precondition proved (Z3: 1 VC)
-test.adb:283:15: info: precondition proved (Z3: 1 VC)
-test.adb:284:07: info: precondition proved (Z3: 1 VC)
-test.adb:285:07: info: precondition proved (Z3: 1 VC)
-test.adb:285:44: info: precondition proved (CVC5: 1 VC)
-test.adb:285:70: info: precondition proved (CVC5: 1 VC)
-test.adb:286:07: info: precondition proved (Z3: 1 VC)
-test.adb:286:20: info: precondition proved (CVC5: 1 VC)
-test.adb:286:49: info: precondition proved (CVC5: 1 VC)
-test.adb:286:58: info: precondition proved (Z3: 1 VC)
-test.adb:291:07: info: initialization of "X" proved
-test.adb:291:24: info: range check proved (CVC5: 2 VC)
-test.adb:291:30: info: range check proved (CVC5: 2 VC)
-test.adb:293:07: info: precondition proved (CVC5: 1 VC)
-test.adb:296:32: info: precondition proved (CVC5: 1 VC)
-test.adb:296:43: info: discriminant check proved (CVC5: 1 VC)
-test.adb:296:43: info: in reconstructed value at the end of the borrow at test.adb:296
-test.adb:298:10: info: precondition proved (Z3: 1 VC)
-test.adb:298:20: info: pointer dereference check proved (CVC5: 1 VC)
-test.adb:299:12: info: pointer dereference check proved (CVC5: 1 VC)
-test.adb:304:07: info: precondition proved (CVC5: 1 VC)
-test.adb:304:15: info: precondition proved (Z3: 1 VC)
-test.adb:305:07: info: precondition proved (Z3: 1 VC)
-test.adb:306:07: info: precondition proved (Z3: 1 VC)
-test.adb:306:15: info: precondition proved (Z3: 1 VC)
-test.adb:310:07: info: initialization of "X" proved
-test.adb:310:10: info: initialization of "Y" proved
-test.adb:310:19: info: range check proved (CVC5: 2 VC)
-test.adb:310:25: info: range check proved (CVC5: 2 VC)
-test.adb:312:07: info: precondition proved (CVC5: 1 VC)
-test.adb:313:07: info: precondition proved (CVC5: 1 VC)
-test.adb:314:07: info: precondition proved (CVC5: 1 VC)
-test.adb:315:07: info: precondition proved (CVC5: 1 VC)
-test.adb:316:23: info: unrolling loop [info-unrolling-inlining]
-test.adb:317:10: info: precondition proved (CVC5: 4 VC; Z3: 2 VC)
-test.adb:319:07: info: precondition proved (CVC5: 1 VC)
-test.adb:320:07: info: precondition proved (CVC5: 1 VC)
-test.adb:325:07: info: initialization of "X" proved
-test.adb:325:10: info: initialization of "Y" proved
-test.adb:325:36: info: range check proved (CVC5: 2 VC)
-test.adb:325:42: info: range check proved (CVC5: 2 VC)
-test.adb:326:07: info: initialization of "P1" proved
-test.adb:326:11: info: initialization of "P11" proved
-test.adb:326:16: info: initialization of "P21" proved
-test.adb:326:21: info: initialization of "P31" proved
-test.adb:326:26: info: initialization of "P2" proved
-test.adb:327:07: info: initialization of "B1" proved
-test.adb:327:11: info: initialization of "B2" proved
-test.adb:327:15: info: initialization of "B3" proved
-test.adb:329:07: info: precondition proved (CVC5: 1 VC)
-test.adb:330:07: info: precondition proved (CVC5: 1 VC)
-test.adb:331:07: info: precondition proved (Z3: 1 VC)
-test.adb:332:07: info: precondition proved (Z3: 1 VC)
-test.adb:332:15: info: precondition proved (CVC5: 1 VC)
-test.adb:333:07: info: precondition proved (Z3: 1 VC)
-test.adb:333:15: info: precondition proved (CVC5: 1 VC)
-test.adb:334:12: info: discriminant check proved (CVC5: 1 VC)
-test.adb:336:07: info: precondition proved (Z3: 1 VC)
-test.adb:337:07: info: precondition proved (Z3: 1 VC)
-test.adb:338:07: info: precondition proved (Z3: 1 VC)
-test.adb:339:07: medium: precondition might fail
-test.adb:340:07: medium: precondition might fail
-test.adb:341:07: medium: precondition might fail
-test.adb:341:15: info: precondition proved (Z3: 1 VC)
-test.adb:341:38: info: precondition proved (Z3: 1 VC)
-test.adb:341:61: info: precondition proved (CVC5: 1 VC)
-test.adb:342:07: medium: precondition might fail
-test.adb:342:15: info: precondition proved (Z3: 1 VC)
-test.adb:342:42: info: precondition proved (Z3: 1 VC)
-test.adb:342:69: info: precondition proved (CVC5: 1 VC)
-test.adb:344:07: info: precondition proved (Z3: 1 VC)
-test.adb:345:07: medium: precondition might fail [possible fix: postcondition of call at line 344 should mention Inserted (for argument B1)]
-test.adb:346:07: medium: precondition might fail
-test.adb:347:07: medium: precondition might fail
-test.adb:347:15: info: precondition proved (CVC5: 1 VC)
-test.adb:348:07: medium: precondition might fail
-test.adb:348:15: info: precondition proved (CVC5: 1 VC)
-test.adb:349:07: info: precondition proved (Z3: 1 VC)
-test.adb:349:15: info: precondition proved (Z3: 1 VC)
-test.adb:350:07: medium: precondition might fail
-test.adb:350:15: info: precondition proved (Z3: 1 VC)
-test.adb:352:07: info: precondition proved (Z3: 1 VC)
-test.adb:353:07: medium: precondition might fail
-test.adb:354:07: medium: precondition might fail
-test.adb:355:07: medium: precondition might fail
-test.adb:356:07: medium: precondition might fail
-test.adb:356:15: info: precondition proved (CVC5: 1 VC)
-test.adb:356:35: info: precondition proved (CVC5: 1 VC)
-test.adb:361:07: info: initialization of "X" proved
-test.adb:361:10: info: initialization of "Y" proved
-test.adb:361:22: info: range check proved (CVC5: 2 VC)
-test.adb:361:28: info: range check proved (CVC5: 2 VC)
-test.adb:362:07: info: initialization of "P21" proved
-test.adb:362:12: info: initialization of "P2" proved
-test.adb:364:07: info: precondition proved (CVC5: 2 VC)
-test.adb:365:07: info: precondition proved (CVC5: 1 VC)
-test.adb:366:07: info: precondition proved (CVC5: 1 VC)
-test.adb:367:07: info: precondition proved (CVC5: 1 VC)
-test.adb:367:15: info: precondition proved (CVC5: 1 VC)
-test.adb:369:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
-test.adb:370:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
-test.adb:371:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
-test.adb:372:07: info: precondition proved (Z3: 1 VC)
-test.adb:373:07: info: precondition proved (Z3: 1 VC)
-test.adb:374:07: info: precondition proved (Z3: 1 VC)
-test.adb:374:15: info: precondition proved (Z3: 1 VC)
-test.adb:374:42: info: precondition proved (Z3: 1 VC)
-test.adb:374:69: info: precondition proved (CVC5: 1 VC)
-test.adb:376:07: info: precondition proved (Z3: 2 VC)
-test.adb:377:07: info: precondition proved (Z3: 2 VC)
-test.adb:378:07: info: precondition proved (Z3: 1 VC)
-test.adb:379:07: info: precondition proved (CVC5: 1 VC)
-test.adb:380:07: info: precondition proved (CVC5: 1 VC)
-test.adb:380:15: info: precondition proved (CVC5: 1 VC)
-test.adb:381:07: info: precondition proved (Z3: 1 VC)
-test.adb:381:15: info: precondition proved (Z3: 1 VC)
-test.adb:385:07: info: precondition proved (Z3: 1 VC)
-test.adb:385:15: info: precondition proved (CVC5: 1 VC)
-test.adb:385:35: info: precondition proved (Z3: 1 VC)
-test.adb:389:07: info: initialization of "X" proved
-test.adb:389:10: info: initialization of "Y" proved
-test.adb:389:22: info: range check proved (CVC5: 2 VC)
-test.adb:389:28: info: range check proved (CVC5: 2 VC)
-test.adb:390:07: info: initialization of "P21" proved
-test.adb:390:12: info: initialization of "P2" proved
-test.adb:392:07: info: precondition proved (CVC5: 1 VC)
-test.adb:393:07: info: precondition proved (CVC5: 1 VC)
-test.adb:394:07: info: precondition proved (CVC5: 1 VC)
-test.adb:395:07: info: precondition proved (CVC5: 1 VC)
-test.adb:395:15: info: precondition proved (CVC5: 1 VC)
-test.adb:397:07: info: precondition proved (CVC5: 1 VC)
-test.adb:398:07: info: precondition proved (CVC5: 1 VC)
-test.adb:399:07: info: precondition proved (Z3: 1 VC)
-test.adb:400:07: medium: precondition might fail
-test.adb:401:07: info: precondition proved (Z3: 1 VC)
-test.adb:402:07: info: precondition proved (Z3: 1 VC)
-test.adb:402:15: info: precondition proved (Z3: 1 VC)
-test.adb:402:42: info: precondition proved (Z3: 1 VC)
-test.adb:402:69: info: precondition proved (CVC5: 1 VC)
-test.adb:404:07: info: precondition proved (Z3: 1 VC)
-test.adb:405:07: info: precondition proved (Z3: 1 VC)
-test.adb:406:07: medium: precondition might fail
-test.adb:407:07: info: precondition proved (CVC5: 1 VC)
-test.adb:408:07: info: precondition proved (CVC5: 1 VC)
-test.adb:408:15: info: precondition proved (CVC5: 1 VC)
-test.adb:409:07: info: precondition proved (Z3: 1 VC)
-test.adb:413:07: medium: precondition might fail
-test.adb:413:15: info: precondition proved (Z3: 1 VC)
-test.adb:413:35: info: precondition proved (Z3: 1 VC)
-test.adb:415:07: info: precondition proved (Z3: 1 VC)
-test.adb:416:07: info: precondition proved (Z3: 1 VC)
-test.adb:417:07: medium: precondition might fail
-test.adb:418:07: info: precondition proved (Z3: 1 VC)
-test.adb:418:15: info: precondition proved (CVC5: 1 VC)
-test.adb:418:44: info: precondition proved (CVC5: 1 VC)
-test.adb:419:07: medium: precondition might fail
-test.adb:419:15: info: precondition proved (Z3: 1 VC)
-test.adb:419:38: info: precondition proved (Z3: 1 VC)
-test.adb:423:07: info: initialization of "X" proved
-test.adb:423:10: info: initialization of "Y" proved
-test.adb:423:19: info: range check proved (CVC5: 2 VC)
-test.adb:423:25: info: range check proved (CVC5: 2 VC)
-test.adb:424:07: info: initialization of "P" proved
-test.adb:424:10: info: initialization of "Q" proved
-test.adb:426:07: info: precondition proved (CVC5: 1 VC)
-test.adb:429:07: info: precondition proved (Z3: 1 VC)
-test.adb:431:07: info: precondition proved (CVC5: 1 VC)
-test.adb:432:07: info: precondition proved (Z3: 1 VC)
-test.adb:432:15: info: precondition proved (CVC5: 1 VC)
-test.adb:433:07: info: precondition proved (CVC5: 1 VC)
-test.adb:433:15: info: precondition proved (Z3: 1 VC)
-test.adb:434:07: info: precondition proved (Z3: 1 VC)
-test.adb:434:15: info: precondition proved (CVC5: 1 VC)
-test.adb:434:34: info: precondition proved (Z3: 1 VC)
-test.adb:436:07: info: precondition proved (CVC5: 1 VC)
-test.adb:439:07: info: precondition proved (Z3: 1 VC)
-test.adb:441:07: info: precondition proved (Z3: 1 VC)
-test.adb:442:07: info: precondition proved (Z3: 1 VC)
-test.adb:442:15: info: precondition proved (CVC5: 1 VC)
-test.adb:443:07: info: precondition proved (CVC5: 1 VC)
-test.adb:443:15: info: precondition proved (Z3: 1 VC)
-test.adb:444:07: medium: precondition might fail
-test.adb:444:15: info: precondition proved (CVC5: 1 VC)
-test.adb:444:36: info: precondition proved (Z3: 1 VC)
-test.adb:448:07: info: initialization of "X" proved
-test.adb:448:10: info: initialization of "Y" proved
-test.adb:448:19: info: range check proved (CVC5: 2 VC)
-test.adb:448:25: info: range check proved (CVC5: 2 VC)
-test.adb:449:07: info: initialization of "Q" proved
-test.adb:452:07: info: precondition proved (CVC5: 1 VC)
-test.adb:454:07: info: precondition proved (CVC5: 1 VC)
-test.adb:457:07: info: precondition proved (Z3: 1 VC)
-test.adb:460:22: info: assertion proved (Z3: 1 VC)
-test.adb:463:07: medium: precondition might fail
-test.adb:464:07: info: precondition proved (Z3: 1 VC)
-test.adb:465:07: medium: precondition might fail
-test.adb:465:15: info: precondition proved (Z3: 1 VC)
-test.adb:466:07: medium: precondition might fail
-test.adb:466:15: info: precondition proved (Z3: 1 VC)
-test.adb:468:07: info: precondition proved (CVC5: 1 VC)
-test.adb:471:07: medium: precondition might fail
-test.adb:474:22: info: assertion proved (Z3: 1 VC)
-test.adb:477:07: medium: precondition might fail
-test.adb:478:07: info: precondition proved (Z3: 1 VC)
-test.adb:479:07: medium: precondition might fail
-test.adb:479:15: info: precondition proved (Z3: 1 VC)
-test.adb:480:07: medium: precondition might fail
-test.adb:480:15: info: precondition proved (Z3: 1 VC)
-test.adb:485:07: info: initialization of "X" proved
-test.adb:485:10: info: initialization of "Y" proved
-test.adb:485:19: info: range check proved (CVC5: 2 VC)
-test.adb:485:25: info: range check proved (CVC5: 2 VC)
-test.adb:486:07: info: initialization of "Q" proved
-test.adb:488:07: info: precondition proved (CVC5: 1 VC)
-test.adb:490:07: medium: precondition might fail
-test.adb:492:07: info: precondition proved (CVC5: 1 VC)
-test.adb:493:07: info: precondition proved (Z3: 1 VC)
-test.adb:494:07: info: precondition proved (Z3: 1 VC)
-test.adb:494:15: info: precondition proved (Z3: 1 VC)
-test.adb:495:07: info: precondition proved (Z3: 1 VC)
-test.adb:495:15: info: precondition proved (Z3: 1 VC)
-test.adb:497:07: info: precondition proved (CVC5: 1 VC)
-test.adb:499:07: info: precondition proved (Z3: 1 VC)
-test.adb:501:07: info: precondition proved (CVC5: 1 VC)
-test.adb:502:07: info: precondition proved (Z3: 1 VC)
-test.adb:503:07: info: precondition proved (Z3: 1 VC)
-test.adb:503:15: info: precondition proved (Z3: 1 VC)
-test.adb:504:07: info: precondition proved (Z3: 1 VC)
-test.adb:504:15: info: precondition proved (Z3: 1 VC)
-test.adb:509:07: info: initialization of "X" proved
-test.adb:509:10: info: initialization of "Y" proved
-test.adb:509:19: info: range check proved (CVC5: 2 VC)
-test.adb:509:25: info: range check proved (CVC5: 2 VC)
-test.adb:510:07: info: initialization of "P" proved
-test.adb:510:10: info: initialization of "Q" proved
-test.adb:512:07: info: precondition proved (CVC5: 1 VC)
-test.adb:515:07: medium: precondition might fail
-test.adb:517:07: info: precondition proved (CVC5: 1 VC)
-test.adb:518:07: info: precondition proved (Z3: 1 VC)
-test.adb:519:07: info: precondition proved (Z3: 1 VC)
-test.adb:519:15: info: precondition proved (Z3: 1 VC)
-test.adb:520:07: info: precondition proved (Z3: 1 VC)
-test.adb:520:15: info: precondition proved (Z3: 1 VC)
-test.adb:522:07: info: precondition proved (CVC5: 1 VC)
-test.adb:525:07: info: precondition proved (Z3: 1 VC)
-test.adb:527:07: info: precondition proved (CVC5: 1 VC)
-test.adb:528:07: info: precondition proved (Z3: 1 VC)
-test.adb:529:07: info: precondition proved (Z3: 1 VC)
-test.adb:529:15: info: precondition proved (Z3: 1 VC)
-test.adb:530:07: info: precondition proved (Z3: 1 VC)
-test.adb:530:15: info: precondition proved (Z3: 1 VC)
-test.adb:534:07: info: initialization of "X" proved
-test.adb:534:16: info: range check proved (CVC5: 2 VC)
-test.adb:534:22: info: range check proved (CVC5: 2 VC)
-test.adb:536:07: info: precondition proved (CVC5: 1 VC)
-test.adb:537:07: info: precondition proved (CVC5: 1 VC)
-test.adb:538:07: info: precondition proved (CVC5: 1 VC)
-test.adb:538:46: info: precondition proved (CVC5: 1 VC)
-test.adb:542:07: info: initialization of "X" proved
-test.adb:542:10: info: initialization of "Y" proved
-test.adb:542:19: info: range check proved (CVC5: 2 VC)
-test.adb:542:25: info: range check proved (CVC5: 2 VC)
-test.adb:545:07: info: precondition proved (CVC5: 1 VC)
-test.adb:547:07: info: precondition proved (CVC5: 1 VC)
-test.adb:547:15: info: precondition proved (CVC5: 1 VC)
-test.adb:548:07: info: precondition proved (CVC5: 1 VC)
-test.adb:549:07: info: precondition proved (CVC5: 1 VC)
-test.adb:552:07: info: precondition proved (CVC5: 1 VC)
-test.adb:552:31: info: precondition proved (CVC5: 1 VC)
-test.adb:553:07: info: precondition proved (CVC5: 1 VC)
-test.adb:554:07: info: precondition proved (CVC5: 1 VC)
-test.adb:556:07: info: precondition proved (CVC5: 1 VC)
-test.adb:559:07: info: precondition proved (Z3: 1 VC)
-test.adb:559:31: info: precondition proved (CVC5: 1 VC)
-test.adb:560:07: info: precondition proved (CVC5: 1 VC)
-test.adb:561:07: info: precondition proved (Z3: 1 VC)
-test.adb:565:07: info: initialization of "X" proved
-test.adb:565:10: info: initialization of "Y" proved
-test.adb:565:19: info: range check proved (CVC5: 2 VC)
-test.adb:565:25: info: range check proved (CVC5: 2 VC)
-test.adb:567:07: info: precondition proved (CVC5: 1 VC)
-test.adb:569:07: info: precondition proved (CVC5: 1 VC)
-test.adb:571:07: info: precondition proved (Z3: 1 VC)
-test.adb:572:07: info: precondition proved (Z3: 1 VC)
-test.adb:573:07: medium: precondition might fail
-test.adb:575:07: info: precondition proved (CVC5: 1 VC)
-test.adb:577:07: info: precondition proved (Z3: 1 VC)
-test.adb:578:07: info: precondition proved (Z3: 1 VC)
-test.adb:579:07: info: precondition proved (Z3: 1 VC)
-test.adb:583:07: info: initialization of "X" proved
-test.adb:583:10: info: initialization of "Y" proved
-test.adb:583:19: info: range check proved (CVC5: 2 VC)
-test.adb:583:25: info: range check proved (CVC5: 2 VC)
-test.adb:585:07: info: precondition proved (CVC5: 1 VC)
-test.adb:587:07: info: precondition proved (CVC5: 1 VC)
-test.adb:589:07: info: precondition proved (CVC5: 1 VC)
-test.adb:590:07: info: precondition proved (CVC5: 1 VC)
-test.adb:591:07: medium: precondition might fail
-test.adb:593:07: info: precondition proved (CVC5: 1 VC)
-test.adb:595:07: info: precondition proved (CVC5: 1 VC)
-test.adb:596:07: info: precondition proved (Z3: 1 VC)
-test.adb:597:07: info: precondition proved (CVC5: 1 VC)
-test.adb:601:07: info: initialization of "X" proved
-test.adb:601:16: info: range check proved (CVC5: 2 VC)
-test.adb:601:22: info: range check proved (CVC5: 2 VC)
-test.adb:602:07: info: initialization of "P" proved
-test.adb:604:07: info: precondition proved (CVC5: 1 VC)
-test.adb:605:07: info: precondition proved (CVC5: 1 VC)
-test.adb:607:07: info: precondition proved (CVC5: 1 VC)
-test.adb:608:07: info: precondition proved (CVC5: 1 VC)
-test.adb:609:07: info: precondition proved (Z3: 1 VC)
-test.adb:612:14: warning: subprogram "Test_Default_Modulus" has no effect
-test.adb:621:07: info: initialization of "X" proved
-test.adb:621:10: info: initialization of "Y" proved
-test.adb:621:19: info: range check proved (CVC5: 2 VC)
-test.adb:621:25: info: range check proved (CVC5: 2 VC)
-test.adb:623:07: info: precondition proved (CVC5: 1 VC)
-test.adb:623:34: info: precondition proved (CVC5: 1 VC)
-test.adb:624:07: info: precondition proved (CVC5: 1 VC)
-test.adb:626:07: info: precondition proved (CVC5: 1 VC)
-test.adb:627:07: info: precondition proved (CVC5: 1 VC)
-test.adb:627:34: info: precondition proved (CVC5: 1 VC)
-test.adb:628:07: medium: precondition might fail
-test.adb:628:35: info: precondition proved (CVC5: 1 VC)
-test.adb:630:07: info: precondition proved (CVC5: 1 VC)
-test.adb:631:07: info: precondition proved (Z3: 1 VC)
-test.adb:631:34: info: precondition proved (CVC5: 1 VC)
-test.adb:632:07: info: precondition proved (Z3: 1 VC)
-test.adb:632:35: info: precondition proved (CVC5: 1 VC)
-test.adb:636:18: info: keys shall be distinct and all elements shall fit in "Count_Type" for maps aggregates at spark-containers-formal-hashed_maps.ads:95, in instantiation at inst.ads:9
-test.adb:636:18: info: precondition proved (CVC5: 11 VC)
-test.adb:638:07: info: precondition proved (CVC5: 1 VC)
-test.adb:639:07: info: precondition proved (CVC5: 1 VC)
-test.adb:640:07: info: precondition proved (CVC5: 1 VC)
-test.adb:640:15: info: precondition proved (CVC5: 1 VC)
-test.adb:640:38: info: precondition proved (CVC5: 1 VC)
-test.adb:644:04: info: precondition proved (Trivial: 1 VC)
-test.adb:645:04: info: precondition proved (Trivial: 1 VC)
-test.adb:646:04: info: precondition proved (Trivial: 1 VC)
-test.adb:647:04: info: precondition proved (Trivial: 1 VC)
-test.adb:648:04: info: precondition proved (Trivial: 1 VC)
-test.adb:649:04: info: precondition proved (Trivial: 1 VC)
-test.adb:650:04: info: precondition proved (Trivial: 1 VC)
-test.adb:651:04: info: precondition proved (Trivial: 1 VC)
-test.adb:652:04: info: precondition proved (Trivial: 1 VC)
-test.adb:653:04: info: precondition proved (Trivial: 1 VC)
-test.adb:654:04: info: precondition proved (Trivial: 1 VC)
-test.adb:655:04: info: precondition proved (Trivial: 1 VC)
-test.adb:656:04: info: precondition proved (Trivial: 1 VC)
-test.adb:657:04: info: precondition proved (Trivial: 1 VC)
-test.adb:658:04: info: precondition proved (Trivial: 1 VC)
-test.adb:659:04: info: precondition proved (Trivial: 1 VC)
-test.adb:660:04: info: precondition proved (Trivial: 1 VC)
-test.adb:661:04: info: precondition proved (Trivial: 1 VC)
-test.adb:662:04: info: precondition proved (Trivial: 1 VC)
-test.adb:663:04: info: precondition proved (Trivial: 1 VC)
-test.adb:664:04: info: precondition proved (Trivial: 1 VC)
-test.adb:665:04: info: precondition proved (Trivial: 1 VC)
-test.adb:666:04: info: precondition proved (Trivial: 1 VC)
-test.adb:667:04: info: precondition proved (Trivial: 1 VC)
-test.adb:668:04: info: precondition proved (Trivial: 1 VC)
-test.adb:669:04: info: precondition proved (Trivial: 1 VC)
-test.adb:670:04: info: precondition proved (Trivial: 1 VC)
-test.adb:671:04: info: precondition proved (Trivial: 1 VC)
-test.adb:672:04: info: precondition proved (Trivial: 1 VC)
-test.adb:673:04: info: precondition proved (Trivial: 1 VC)
-test.adb:674:04: info: precondition proved (Trivial: 1 VC)
-test.adb:675:04: info: precondition proved (Trivial: 1 VC)
-test.adb:676:04: info: precondition proved (Trivial: 1 VC)
-inst.ads:9:04: warning: check will fail at run time [-gnatw.a]
-inst.ads:9:04: warning: check will fail at run time [-gnatw.a]
-inst.ads:9:04: warning: check will fail at run time [-gnatw.a]
-inst.ads:9:04: warning: in instantiation at spark-containers-formal-hashed_maps.ads:205 [-gnatw.a]
-inst.ads:9:04: warning: in instantiation at spark-containers-formal-hashed_maps.ads:255 [-gnatw.a]
-inst.ads:9:04: warning: in instantiation at spark-containers-formal-hashed_maps.ads:255 [-gnatw.a]
-inst.ads:9:04: warning: in instantiation at spark-containers-functional-maps.ads:144 [-gnatw.a]
-inst.ads:9:04: warning: in instantiation at spark-containers-functional-maps.ads:162 [-gnatw.a]
-inst.ads:9:04: warning: in instantiation at spark-containers-functional-vectors.ads:175 [-gnatw.a]
-test.adb:104:07: warning: variable "X" is read but never assigned [-gnatwv]
+inst_gen.ads:8:13: info: implicit aspect Always_Terminates on "Witness" has been proved, subprogram will terminate, in instantiation at test_gen.adb:6, in instantiation at test.adb:11
+inst_gen.ads:8:13: info: implicit aspect Always_Terminates on "Witness" has been proved, subprogram will terminate, in instantiation at test_gen.adb:6, in instantiation at test.adb:17
+inst_gen.ads:8:56: info: division check proved (CVC5: 1 VC), in instantiation at test_gen.adb:6, in instantiation at test.adb:11
+inst_gen.ads:9:13: info: implicit aspect Always_Terminates on "Hash" has been proved, subprogram will terminate, in instantiation at test_gen.adb:6, in instantiation at test.adb:11
+inst_gen.ads:9:13: info: implicit aspect Always_Terminates on "Hash" has been proved, subprogram will terminate, in instantiation at test_gen.adb:6, in instantiation at test.adb:17
+inst_gen.ads:9:66: info: division check proved (CVC5: 1 VC), in instantiation at test_gen.adb:6, in instantiation at test.adb:11
+inst_gen.ads:9:66: info: range check proved (CVC5: 1 VC), in instantiation at test_gen.adb:6, in instantiation at test.adb:11
+inst_gen.ads:10:13: info: implicit aspect Always_Terminates on "Eq" has been proved, subprogram will terminate, in instantiation at test_gen.adb:6, in instantiation at test.adb:11
+inst_gen.ads:10:13: info: implicit aspect Always_Terminates on "Eq" has been proved, subprogram will terminate, in instantiation at test_gen.adb:6, in instantiation at test.adb:17
+inst_gen.ads:10:55: info: division check proved (CVC5: 1 VC), in instantiation at test_gen.adb:6, in instantiation at test.adb:11
+inst_gen.ads:10:70: info: division check proved (CVC5: 1 VC), in instantiation at test_gen.adb:6, in instantiation at test.adb:11
+inst_gen.ads:11:13: info: implicit aspect Always_Terminates on "Equivalent" has been proved, subprogram will terminate, in instantiation at test_gen.adb:6, in instantiation at test.adb:11
+inst_gen.ads:11:13: info: implicit aspect Always_Terminates on "Equivalent" has been proved, subprogram will terminate, in instantiation at test_gen.adb:6, in instantiation at test.adb:17
+spark-containers-parameter_checks.ads:274:50: medium: postcondition might fail, in instantiation at spark-containers-formal-hashed_maps.ads:165, in instantiation at inst_gen.ads:12, in instantiation at test_gen.adb:6, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test.adb:11:04: info: in instantiation at test_gen.adb:129
+test.adb:11:04: info: in instantiation at test_gen.adb:141
+test.adb:11:04: info: in instantiation at test_gen.adb:157
+test.adb:11:04: info: in instantiation at test_gen.adb:29
+test.adb:11:04: info: in instantiation at test_gen.adb:300
+test.adb:11:04: info: no contextual analysis of "Test_No_Capacity" (call returns unconstrained type)
+test.adb:11:04: info: no contextual analysis of "Test_With_Capacity" (call returns unconstrained type)
+test.adb:11:04: info: unrolling loop [info-unrolling-inlining]
+test.adb:11:04: info: unrolling loop [info-unrolling-inlining]
+test.adb:11:04: info: unrolling loop [info-unrolling-inlining]
+test.adb:17:07: info: in instantiation at test_gen.adb:141
+test.adb:17:07: info: in instantiation at test_gen.adb:157
+test.adb:17:07: info: no contextual analysis of "Test_No_Capacity" (call returns unconstrained type)
+test.adb:17:07: info: no contextual analysis of "Test_With_Capacity" (call returns unconstrained type)
+test_gen.adb:24:29: medium: postcondition might fail, cannot prove K in 1 .. 5, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:26:29: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:30:10: info: precondition proved (CVC5: 7 VC; Z3: 3 VC), in instantiation at test.adb:11
+test_gen.adb:37:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:41:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:41:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:41:16: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:41:22: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:43:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:44:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:45:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:49:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:49:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:49:10: info: initialization of "Y" proved, in instantiation at test.adb:11
+test_gen.adb:49:10: info: initialization of "Y" proved, in instantiation at test.adb:17
+test_gen.adb:49:13: info: initialization of "Z" proved, in instantiation at test.adb:11
+test_gen.adb:49:13: info: initialization of "Z" proved, in instantiation at test.adb:17
+test_gen.adb:49:22: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:49:28: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:51:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:53:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:54:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:56:07: info: precondition proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:57:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:59:12: info: discriminant check proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:60:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:61:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:63:12: info: discriminant check proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:64:07: medium: precondition might fail, cannot prove not Contains (Container, Key), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:65:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:66:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:68:12: info: discriminant check proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:69:12: info: discriminant check proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:70:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:71:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:72:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:74:12: info: discriminant check proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:75:12: info: discriminant check proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:76:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:77:07: medium: precondition might fail, cannot prove not Contains (Container, Key), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:78:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:80:12: info: discriminant check proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:81:12: info: discriminant check proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:82:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:83:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:84:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:88:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:88:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:88:16: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:88:22: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:90:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:94:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:94:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:94:16: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:94:22: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:96:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:97:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:98:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:99:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:100:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:101:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:105:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:105:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:105:16: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:105:22: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:107:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:108:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:109:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:113:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:113:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:113:16: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:113:22: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:116:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:117:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:119:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:123:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:123:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:123:10: info: initialization of "Y" proved, in instantiation at test.adb:11
+test_gen.adb:123:10: info: initialization of "Y" proved, in instantiation at test.adb:17
+test_gen.adb:123:19: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:123:25: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:125:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:126:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:127:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:128:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:130:10: info: precondition proved (CVC5: 4 VC; Z3: 2 VC), in instantiation at test.adb:11
+test_gen.adb:132:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:133:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:138:10: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:138:10: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:138:19: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:138:25: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:141:33: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:143:13: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:145:10: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:147:33: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:149:13: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:154:10: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:154:10: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:154:19: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:154:24: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:157:33: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:159:13: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:161:10: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:163:33: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:165:13: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:166:13: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:175:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:175:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:175:16: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:175:22: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:177:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:178:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:178:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:183:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:183:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:183:16: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:183:22: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:185:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:186:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:186:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:186:49: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:191:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:191:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:191:16: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:191:22: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:193:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:194:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:194:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:198:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:198:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:198:21: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:198:27: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:199:07: info: initialization of "P1" proved, in instantiation at test.adb:11
+test_gen.adb:199:07: info: initialization of "P1" proved, in instantiation at test.adb:17
+test_gen.adb:199:11: info: initialization of "P2" proved, in instantiation at test.adb:11
+test_gen.adb:199:11: info: initialization of "P2" proved, in instantiation at test.adb:17
+test_gen.adb:200:07: info: initialization of "E1" proved, in instantiation at test.adb:11
+test_gen.adb:200:07: info: initialization of "E1" proved, in instantiation at test.adb:17
+test_gen.adb:201:07: info: initialization of "K1" proved, in instantiation at test.adb:11
+test_gen.adb:201:07: info: initialization of "K1" proved, in instantiation at test.adb:17
+test_gen.adb:201:11: info: initialization of "K2" proved, in instantiation at test.adb:11
+test_gen.adb:201:11: info: initialization of "K2" proved, in instantiation at test.adb:17
+test_gen.adb:203:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:205:13: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:206:13: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:207:13: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:208:13: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:210:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:212:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:212:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:213:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:214:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:214:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:214:36: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:215:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:215:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:220:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:220:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:220:25: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:220:31: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:221:07: info: initialization of "P1" proved, in instantiation at test.adb:11
+test_gen.adb:221:07: info: initialization of "P1" proved, in instantiation at test.adb:17
+test_gen.adb:222:07: info: initialization of "E1" proved, in instantiation at test.adb:11
+test_gen.adb:222:07: info: initialization of "E1" proved, in instantiation at test.adb:17
+test_gen.adb:224:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:226:13: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:228:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:228:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:233:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:233:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:233:25: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:233:31: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:234:07: warning: unused variable "P1", in instantiation at test.adb:11
+test_gen.adb:234:07: warning: unused variable "P1", in instantiation at test.adb:17
+test_gen.adb:236:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:238:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:238:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:243:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:243:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:243:29: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:243:35: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:244:07: info: initialization of "P2" proved, in instantiation at test.adb:11
+test_gen.adb:244:07: info: initialization of "P2" proved, in instantiation at test.adb:17
+test_gen.adb:245:07: info: initialization of "P4" proved, in instantiation at test.adb:11
+test_gen.adb:245:07: info: initialization of "P4" proved, in instantiation at test.adb:17
+test_gen.adb:246:07: info: initialization of "K2" proved, in instantiation at test.adb:11
+test_gen.adb:246:07: info: initialization of "K2" proved, in instantiation at test.adb:17
+test_gen.adb:246:11: info: initialization of "K4" proved, in instantiation at test.adb:11
+test_gen.adb:246:11: info: initialization of "K4" proved, in instantiation at test.adb:17
+test_gen.adb:247:07: info: initialization of "E2" proved, in instantiation at test.adb:11
+test_gen.adb:247:07: info: initialization of "E2" proved, in instantiation at test.adb:17
+test_gen.adb:247:11: info: initialization of "E4" proved, in instantiation at test.adb:11
+test_gen.adb:247:11: info: initialization of "E4" proved, in instantiation at test.adb:17
+test_gen.adb:249:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:250:13: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:251:13: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:252:13: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:253:13: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:253:22: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:254:13: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:255:13: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:258:32: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:258:43: info: discriminant check proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:258:43: info: in reconstructed value at the end of the borrow at test_gen.adb:258, in instantiation at test.adb:11
+test_gen.adb:260:10: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:260:20: info: pointer dereference check proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:261:12: info: pointer dereference check proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:266:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:266:44: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:267:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:267:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:268:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:269:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:269:44: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:269:70: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:270:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:270:20: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:270:49: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:270:58: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:275:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:275:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:275:24: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:275:30: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:277:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:280:32: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:280:43: info: discriminant check proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:280:43: info: in reconstructed value at the end of the borrow at test_gen.adb:280, in instantiation at test.adb:11
+test_gen.adb:282:10: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:282:20: info: pointer dereference check proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:283:12: info: pointer dereference check proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:288:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:288:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:289:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:290:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:290:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:294:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:294:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:294:10: info: initialization of "Y" proved, in instantiation at test.adb:11
+test_gen.adb:294:10: info: initialization of "Y" proved, in instantiation at test.adb:17
+test_gen.adb:294:19: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:294:25: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:296:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:297:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:298:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:299:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:301:10: info: precondition proved (CVC5: 4 VC; Z3: 2 VC), in instantiation at test.adb:11
+test_gen.adb:303:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:304:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:309:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:309:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:309:10: info: initialization of "Y" proved, in instantiation at test.adb:11
+test_gen.adb:309:10: info: initialization of "Y" proved, in instantiation at test.adb:17
+test_gen.adb:309:36: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:309:42: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:310:07: info: initialization of "P1" proved, in instantiation at test.adb:11
+test_gen.adb:310:07: info: initialization of "P1" proved, in instantiation at test.adb:17
+test_gen.adb:310:11: info: initialization of "P11" proved, in instantiation at test.adb:11
+test_gen.adb:310:11: info: initialization of "P11" proved, in instantiation at test.adb:17
+test_gen.adb:310:16: info: initialization of "P21" proved, in instantiation at test.adb:11
+test_gen.adb:310:16: info: initialization of "P21" proved, in instantiation at test.adb:17
+test_gen.adb:310:21: info: initialization of "P31" proved, in instantiation at test.adb:11
+test_gen.adb:310:21: info: initialization of "P31" proved, in instantiation at test.adb:17
+test_gen.adb:310:26: info: initialization of "P2" proved, in instantiation at test.adb:11
+test_gen.adb:310:26: info: initialization of "P2" proved, in instantiation at test.adb:17
+test_gen.adb:311:07: info: initialization of "B1" proved, in instantiation at test.adb:11
+test_gen.adb:311:07: info: initialization of "B1" proved, in instantiation at test.adb:17
+test_gen.adb:311:11: info: initialization of "B2" proved, in instantiation at test.adb:11
+test_gen.adb:311:11: info: initialization of "B2" proved, in instantiation at test.adb:17
+test_gen.adb:311:15: info: initialization of "B3" proved, in instantiation at test.adb:11
+test_gen.adb:311:15: info: initialization of "B3" proved, in instantiation at test.adb:17
+test_gen.adb:313:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:314:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:315:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:316:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:316:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:317:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:317:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:318:12: info: discriminant check proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:320:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:321:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:322:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:323:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:324:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:325:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:325:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:325:38: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:325:61: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:326:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:326:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:326:42: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:326:69: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:328:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:329:07: medium: precondition might fail, in instantiation at test.adb:11 [possible fix: postcondition of call at line 328 should mention Inserted (for argument B1)] [provers reached step limit before completing the proof]
+test_gen.adb:330:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:331:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:331:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:332:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:332:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:333:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:333:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:334:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:334:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:336:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:337:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:338:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:339:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:340:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:340:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:340:35: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:345:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:345:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:345:10: info: initialization of "Y" proved, in instantiation at test.adb:11
+test_gen.adb:345:10: info: initialization of "Y" proved, in instantiation at test.adb:17
+test_gen.adb:345:22: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:345:28: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:346:07: info: initialization of "P21" proved, in instantiation at test.adb:11
+test_gen.adb:346:07: info: initialization of "P21" proved, in instantiation at test.adb:17
+test_gen.adb:346:12: info: initialization of "P2" proved, in instantiation at test.adb:11
+test_gen.adb:346:12: info: initialization of "P2" proved, in instantiation at test.adb:17
+test_gen.adb:348:07: info: precondition proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:349:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:350:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:351:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:351:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:353:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:354:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:355:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:356:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:357:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:358:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:358:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:358:42: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:358:69: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:360:07: info: precondition proved (Z3: 2 VC), in instantiation at test.adb:11
+test_gen.adb:361:07: info: precondition proved (Z3: 2 VC), in instantiation at test.adb:11
+test_gen.adb:362:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:363:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:364:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:364:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:365:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:365:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:369:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:369:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:369:35: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:373:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:373:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:373:10: info: initialization of "Y" proved, in instantiation at test.adb:11
+test_gen.adb:373:10: info: initialization of "Y" proved, in instantiation at test.adb:17
+test_gen.adb:373:22: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:373:28: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:374:07: info: initialization of "P21" proved, in instantiation at test.adb:11
+test_gen.adb:374:07: info: initialization of "P21" proved, in instantiation at test.adb:17
+test_gen.adb:374:12: info: initialization of "P2" proved, in instantiation at test.adb:11
+test_gen.adb:374:12: info: initialization of "P2" proved, in instantiation at test.adb:17
+test_gen.adb:376:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:377:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:378:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:379:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:379:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:381:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:382:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:383:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:384:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:385:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:386:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:386:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:386:42: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:386:69: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:388:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:389:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:390:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:391:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:392:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:392:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:393:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:397:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:397:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:397:35: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:399:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:400:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:401:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:402:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:402:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:402:44: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:403:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:403:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:403:38: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:407:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:407:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:407:10: info: initialization of "Y" proved, in instantiation at test.adb:11
+test_gen.adb:407:10: info: initialization of "Y" proved, in instantiation at test.adb:17
+test_gen.adb:407:19: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:407:25: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:408:07: info: initialization of "P" proved, in instantiation at test.adb:11
+test_gen.adb:408:07: info: initialization of "P" proved, in instantiation at test.adb:17
+test_gen.adb:408:10: info: initialization of "Q" proved, in instantiation at test.adb:11
+test_gen.adb:408:10: info: initialization of "Q" proved, in instantiation at test.adb:17
+test_gen.adb:410:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:413:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:415:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:416:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:416:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:417:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:417:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:418:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:418:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:418:34: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:422:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:422:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:422:10: info: initialization of "Y" proved, in instantiation at test.adb:11
+test_gen.adb:422:10: info: initialization of "Y" proved, in instantiation at test.adb:17
+test_gen.adb:422:19: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:422:25: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:423:07: info: initialization of "Q" proved, in instantiation at test.adb:11
+test_gen.adb:423:07: info: initialization of "Q" proved, in instantiation at test.adb:17
+test_gen.adb:426:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:428:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:431:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:434:22: info: assertion proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:437:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:438:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:439:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:439:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:440:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:440:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:445:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:445:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:445:10: info: initialization of "Y" proved, in instantiation at test.adb:11
+test_gen.adb:445:10: info: initialization of "Y" proved, in instantiation at test.adb:17
+test_gen.adb:445:19: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:445:25: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:446:07: info: initialization of "Q" proved, in instantiation at test.adb:11
+test_gen.adb:446:07: info: initialization of "Q" proved, in instantiation at test.adb:17
+test_gen.adb:448:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:450:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:452:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:453:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:454:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:454:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:455:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:455:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:460:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:460:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:460:10: info: initialization of "Y" proved, in instantiation at test.adb:11
+test_gen.adb:460:10: info: initialization of "Y" proved, in instantiation at test.adb:17
+test_gen.adb:460:19: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:460:25: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:461:07: info: initialization of "P" proved, in instantiation at test.adb:11
+test_gen.adb:461:07: info: initialization of "P" proved, in instantiation at test.adb:17
+test_gen.adb:461:10: info: initialization of "Q" proved, in instantiation at test.adb:11
+test_gen.adb:461:10: info: initialization of "Q" proved, in instantiation at test.adb:17
+test_gen.adb:463:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:466:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:468:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:469:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:470:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:470:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:471:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:471:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:476:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:476:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:476:16: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:476:22: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:478:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:479:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:480:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:480:46: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:484:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:484:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:484:10: info: initialization of "Y" proved, in instantiation at test.adb:11
+test_gen.adb:484:10: info: initialization of "Y" proved, in instantiation at test.adb:17
+test_gen.adb:484:19: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:484:25: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:487:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:489:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:489:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:490:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:491:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:494:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:494:31: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:495:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:496:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:500:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:500:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:500:10: info: initialization of "Y" proved, in instantiation at test.adb:11
+test_gen.adb:500:10: info: initialization of "Y" proved, in instantiation at test.adb:17
+test_gen.adb:500:19: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:500:25: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:502:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:504:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:506:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:507:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:508:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:512:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:512:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:512:10: info: initialization of "Y" proved, in instantiation at test.adb:11
+test_gen.adb:512:10: info: initialization of "Y" proved, in instantiation at test.adb:17
+test_gen.adb:512:19: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:512:25: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:514:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:516:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:518:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:519:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:520:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:524:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:524:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:524:16: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:524:22: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:525:07: info: initialization of "P" proved, in instantiation at test.adb:11
+test_gen.adb:525:07: info: initialization of "P" proved, in instantiation at test.adb:17
+test_gen.adb:527:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:528:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:530:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:531:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:532:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:535:14: warning: subprogram "Test_Default_Modulus" has no effect, in instantiation at test.adb:11
+test_gen.adb:535:14: warning: subprogram "Test_Default_Modulus" has no effect, in instantiation at test.adb:17
+test_gen.adb:544:07: info: initialization of "X" proved, in instantiation at test.adb:11
+test_gen.adb:544:07: info: initialization of "X" proved, in instantiation at test.adb:17
+test_gen.adb:544:10: info: initialization of "Y" proved, in instantiation at test.adb:11
+test_gen.adb:544:10: info: initialization of "Y" proved, in instantiation at test.adb:17
+test_gen.adb:544:19: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:544:25: info: range check proved (CVC5: 2 VC), in instantiation at test.adb:11
+test_gen.adb:546:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:546:34: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:547:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:549:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:550:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:550:34: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:551:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:11
+test_gen.adb:551:35: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:555:18: info: keys shall be distinct and all elements shall fit in type "Count_Type" for maps aggregates at spark-containers-formal-hashed_maps.ads:95, in instantiation at inst_gen.ads:12, in instantiation at test_gen.adb:6, in instantiation at test.adb:11
+test_gen.adb:555:18: info: precondition proved (CVC5: 11 VC), in instantiation at test.adb:11
+test_gen.adb:557:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:558:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:559:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:559:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:559:38: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:11
+test_gen.adb:563:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:564:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:565:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:566:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:567:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:568:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:569:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:570:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:571:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:572:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:573:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:574:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:575:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:576:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:577:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:578:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:579:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:580:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:581:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:582:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:583:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:584:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:585:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:586:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:587:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:588:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:589:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:590:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:591:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:592:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:593:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:594:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test_gen.adb:595:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:11
+test.adb:11:04: warning: check will fail at run time [-gnatw.a]
+test.adb:11:04: warning: check will fail at run time [-gnatw.a]
+test.adb:11:04: warning: check will fail at run time [-gnatw.a]
+test.adb:11:04: warning: in instantiation at inst_gen.ads:12 [-gnatw.a]
+test.adb:11:04: warning: in instantiation at inst_gen.ads:12 [-gnatw.a]
+test.adb:11:04: warning: in instantiation at inst_gen.ads:12 [-gnatw.a]
+test.adb:11:04: warning: in instantiation at spark-containers-formal-hashed_maps.ads:205 [-gnatw.a]
+test.adb:11:04: warning: in instantiation at spark-containers-formal-hashed_maps.ads:256 [-gnatw.a]
+test.adb:11:04: warning: in instantiation at spark-containers-formal-hashed_maps.ads:256 [-gnatw.a]
+test.adb:11:04: warning: in instantiation at spark-containers-functional-maps.ads:144 [-gnatw.a]
+test.adb:11:04: warning: in instantiation at spark-containers-functional-maps.ads:162 [-gnatw.a]
+test.adb:11:04: warning: in instantiation at spark-containers-functional-vectors.ads:176 [-gnatw.a]
+test.adb:11:04: warning: in instantiation at test_gen.adb:6 [-gnatw.a]
+test.adb:11:04: warning: in instantiation at test_gen.adb:6 [-gnatw.a]
+test.adb:11:04: warning: in instantiation at test_gen.adb:6 [-gnatw.a]
+test.adb:17:07: warning: check will fail at run time [-gnatw.a]
+test.adb:17:07: warning: check will fail at run time [-gnatw.a]
+test.adb:17:07: warning: check will fail at run time [-gnatw.a]
+test.adb:17:07: warning: in instantiation at inst_gen.ads:12 [-gnatw.a]
+test.adb:17:07: warning: in instantiation at inst_gen.ads:12 [-gnatw.a]
+test.adb:17:07: warning: in instantiation at inst_gen.ads:12 [-gnatw.a]
+test.adb:17:07: warning: in instantiation at spark-containers-formal-hashed_maps.ads:205 [-gnatw.a]
+test.adb:17:07: warning: in instantiation at spark-containers-formal-hashed_maps.ads:256 [-gnatw.a]
+test.adb:17:07: warning: in instantiation at spark-containers-formal-hashed_maps.ads:256 [-gnatw.a]
+test.adb:17:07: warning: in instantiation at spark-containers-functional-maps.ads:144 [-gnatw.a]
+test.adb:17:07: warning: in instantiation at spark-containers-functional-maps.ads:162 [-gnatw.a]
+test.adb:17:07: warning: in instantiation at spark-containers-functional-vectors.ads:176 [-gnatw.a]
+test.adb:17:07: warning: in instantiation at test_gen.adb:6 [-gnatw.a]
+test.adb:17:07: warning: in instantiation at test_gen.adb:6 [-gnatw.a]
+test.adb:17:07: warning: in instantiation at test_gen.adb:6 [-gnatw.a]
+test_gen.adb:88:07: warning: variable "X" is read but never assigned [-gnatwv]

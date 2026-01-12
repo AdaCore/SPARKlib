@@ -24,9 +24,9 @@ is
      Post     =>
        (SPARKlib_Full =>
           Length (Create'Result) = New_Length
-          and then (for all I in Interval'(1, New_Length) =>
-                      Element_Logic_Equal
-                        (Get (Create'Result, I), New_Item (I))));
+          and then
+            (for all I in Interval'(1, New_Length) =>
+               Element_Logic_Equal (Get (Create'Result, I), New_Item (I))));
    --  Return a new sequence with New_Length elements. Each element is created
    --  by calling New_Item.
 
@@ -41,10 +41,10 @@ is
      Post     =>
        (SPARKlib_Full =>
           Length (Transform'Result) = Length (S)
-          and then (for all I in Interval'(1, Length (S)) =>
-                      Element_Logic_Equal
-                        (Get (Transform'Result, I),
-                         Transform_Item (Get (S, I)))));
+          and then
+            (for all I in Interval'(1, Length (S)) =>
+               Element_Logic_Equal
+                 (Get (Transform'Result, I), Transform_Item (Get (S, I)))));
    --  Return a new sequence with the same length as S. Its elements are
    --  obtained using Transform_Item on the elements of S.
    function Count
@@ -179,12 +179,13 @@ is
      Pre      =>
        Last <= Length (S1)
        and then Last <= Length (S2)
-       and then (for all I in Interval'(1, Last) =>
-                   Element_Logic_Equal (Get (S1, I), Get (S2, I))),
+       and then
+         (for all I in Interval'(1, Last) =>
+            Element_Logic_Equal (Get (S1, I), Get (S2, I))),
      Post     =>
        Length (Filter (S1, Last, Test)) = Length (Filter (S2, Last, Test))
-       and then Equal_Prefix
-                  (Filter (S1, Last, Test), Filter (S2, Last, Test));
+       and then
+         Equal_Prefix (Filter (S1, Last, Test), Filter (S2, Last, Test));
    --  Automatically instantiated lemma:
    --  Filter returns the same value on sequences containing the same elements.
 
@@ -207,11 +208,10 @@ is
        (Test (Get (S, Last)) =>
           Length (Filter (S, Last, Test))
           = Length (Filter (S, Last - 1, Test)) + 1
-          and then Element_Logic_Equal
-                     (Get (S, Last),
-                      Get
-                        (Filter (S, Last, Test),
-                         Length (Filter (S, Last, Test)))),
+          and then
+            Element_Logic_Equal
+              (Get (S, Last),
+               Get (Filter (S, Last, Test), Length (Filter (S, Last, Test)))),
         others               =>
           Length (Filter (S, Last, Test))
           = Length (Filter (S, Last - 1, Test)));

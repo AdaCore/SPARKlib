@@ -15,7 +15,7 @@ package SPARK.Lemmas.Float_Arithmetic is new
   SPARK.Lemmas.Floating_Point_Arithmetic
     (Fl           => Float,
      Int          => Integer,
-     Fl_Last_Sqrt => 2.0**63,
+     Fl_Last_Sqrt => 2.0 ** 63,
      Max_Int      => Float_Max_Int,
      Epsilon      => Float_Epsilon,
      Eta          => Float_Eta,

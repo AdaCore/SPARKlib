@@ -196,7 +196,7 @@ is
             pragma
               Loop_Invariant
                 (Count_Rec (S, I, Test)
-                   = Big (I) - Big (Extended_Index'First));
+                 = Big (I) - Big (Extended_Index'First));
          end loop;
       end Do_Proof;
 
@@ -328,7 +328,7 @@ is
             pragma
               Loop_Invariant
                 (Length (Filter_Rec (S1, I, Test))
-                   = Length (Filter_Rec (S2, I, Test)));
+                 = Length (Filter_Rec (S2, I, Test)));
             pragma
               Loop_Invariant
                 (Equal_Prefix
