@@ -28,8 +28,8 @@ test.adb:12:04: info: in instantiation at test_gen.adb:28
 test.adb:12:04: info: unrolling loop [info-unrolling-inlining]
 test.adb:12:04: info: unrolling loop [info-unrolling-inlining]
 test.adb:12:04: info: unrolling loop [info-unrolling-inlining]
-test_gen.adb:23:29: medium: postcondition might fail, cannot prove K in 1 .. 5, in instantiation at test.adb:12 [provers reached step limit before completing the proof]
 test_gen.adb:25:29: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
+test_gen.adb:25:29: medium: postcondition might fail, cannot prove Element (X, K) = Integer'(K), in instantiation at test.adb:12 [provers reached step limit before completing the proof]
 test_gen.adb:29:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC), in instantiation at test.adb:12
 test_gen.adb:36:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
 test_gen.adb:40:07: info: initialization of "X" proved, in instantiation at test.adb:12
@@ -115,7 +115,7 @@ test_gen.adb:173:07: info: precondition proved (CVC5: 1 VC), in instantiation at
 test_gen.adb:174:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
 test_gen.adb:174:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
 test_gen.adb:174:36: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
-test_gen.adb:175:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:12
+test_gen.adb:175:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
 test_gen.adb:175:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
 test_gen.adb:180:07: info: initialization of "X" proved, in instantiation at test.adb:12
 test_gen.adb:180:07: info: initialization of "X" proved, in instantiation at test.adb:18
@@ -157,10 +157,10 @@ test_gen.adb:218:32: info: precondition proved (CVC5: 1 VC), in instantiation at
 test_gen.adb:220:10: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
 test_gen.adb:220:20: info: pointer dereference check proved (CVC5: 1 VC), in instantiation at test.adb:12
 test_gen.adb:221:12: info: pointer dereference check proved (CVC5: 1 VC), in instantiation at test.adb:12
-test_gen.adb:226:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:12
+test_gen.adb:226:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
 test_gen.adb:226:44: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
 test_gen.adb:227:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:12
-test_gen.adb:227:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
+test_gen.adb:227:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:12
 test_gen.adb:228:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
 test_gen.adb:229:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:12
 test_gen.adb:229:44: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
@@ -240,7 +240,7 @@ test_gen.adb:294:07: medium: precondition might fail, in instantiation at test.a
 test_gen.adb:294:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:12
 test_gen.adb:296:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:12
 test_gen.adb:297:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:12
-test_gen.adb:298:07: medium: precondition might fail, in instantiation at test.adb:12 [provers reached step limit before completing the proof]
+test_gen.adb:298:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:12
 test_gen.adb:299:07: medium: precondition might fail, in instantiation at test.adb:12 [provers reached step limit before completing the proof]
 test_gen.adb:300:07: medium: precondition might fail, in instantiation at test.adb:12 [provers reached step limit before completing the proof]
 test_gen.adb:300:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
@@ -302,7 +302,7 @@ test_gen.adb:346:42: info: precondition proved (Z3: 1 VC), in instantiation at t
 test_gen.adb:346:69: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
 test_gen.adb:348:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
 test_gen.adb:349:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
-test_gen.adb:350:07: medium: precondition might fail, in instantiation at test.adb:12 [provers reached step limit before completing the proof]
+test_gen.adb:350:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:12
 test_gen.adb:351:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
 test_gen.adb:352:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
 test_gen.adb:352:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
@@ -349,7 +349,7 @@ test_gen.adb:397:07: medium: precondition might fail, in instantiation at test.a
 test_gen.adb:398:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:12
 test_gen.adb:399:07: medium: precondition might fail, in instantiation at test.adb:12 [provers reached step limit before completing the proof]
 test_gen.adb:399:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:12
-test_gen.adb:400:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:12
+test_gen.adb:400:07: medium: precondition might fail, in instantiation at test.adb:12 [provers reached step limit before completing the proof]
 test_gen.adb:400:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:12
 test_gen.adb:405:07: info: initialization of "X" proved, in instantiation at test.adb:12
 test_gen.adb:405:07: info: initialization of "X" proved, in instantiation at test.adb:18
@@ -357,13 +357,13 @@ test_gen.adb:405:10: info: initialization of "Y" proved, in instantiation at tes
 test_gen.adb:405:10: info: initialization of "Y" proved, in instantiation at test.adb:18
 test_gen.adb:406:07: info: initialization of "Q" proved, in instantiation at test.adb:12
 test_gen.adb:406:07: info: initialization of "Q" proved, in instantiation at test.adb:18
-test_gen.adb:410:07: medium: precondition might fail, in instantiation at test.adb:12 [provers reached step limit before completing the proof]
+test_gen.adb:410:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:12
 test_gen.adb:412:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
 test_gen.adb:413:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
-test_gen.adb:414:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:12
-test_gen.adb:414:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:12
-test_gen.adb:415:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:12
-test_gen.adb:415:15: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:12
+test_gen.adb:414:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
+test_gen.adb:414:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
+test_gen.adb:415:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
+test_gen.adb:415:15: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
 test_gen.adb:420:07: info: initialization of "X" proved, in instantiation at test.adb:12
 test_gen.adb:420:07: info: initialization of "X" proved, in instantiation at test.adb:18
 test_gen.adb:420:10: info: initialization of "Y" proved, in instantiation at test.adb:12
@@ -403,7 +403,7 @@ test_gen.adb:459:10: info: initialization of "Y" proved, in instantiation at tes
 test_gen.adb:461:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
 test_gen.adb:465:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
 test_gen.adb:466:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
-test_gen.adb:467:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:12
+test_gen.adb:467:07: medium: precondition might fail, in instantiation at test.adb:12 [provers reached step limit before completing the proof]
 test_gen.adb:471:07: info: initialization of "X" proved, in instantiation at test.adb:12
 test_gen.adb:471:07: info: initialization of "X" proved, in instantiation at test.adb:18
 test_gen.adb:471:10: info: initialization of "Y" proved, in instantiation at test.adb:12
@@ -429,7 +429,7 @@ test_gen.adb:497:34: info: precondition proved (CVC5: 1 VC), in instantiation at
 test_gen.adb:498:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
 test_gen.adb:501:07: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
 test_gen.adb:501:34: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
-test_gen.adb:502:07: info: precondition proved (Z3: 1 VC), in instantiation at test.adb:12
+test_gen.adb:502:07: medium: precondition might fail, in instantiation at test.adb:12 [provers reached step limit before completing the proof]
 test_gen.adb:502:35: info: precondition proved (CVC5: 1 VC), in instantiation at test.adb:12
 test_gen.adb:506:18: info: keys shall be distinct and all elements shall be smaller than "Aggr_Capacity" for maps aggregates at spark-containers-formal-unbounded_hashed_maps.ads:88, in instantiation at inst_gen.ads:12, in instantiation at test_gen.adb:6, in instantiation at test.adb:12
 test_gen.adb:506:18: info: precondition proved (CVC5: 11 VC), in instantiation at test.adb:12
