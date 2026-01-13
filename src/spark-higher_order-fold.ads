@@ -57,12 +57,12 @@ is
           and then Fold'Result'Last = A'Last
           and then Ind_Prop (A, Init, A'First)
           and then Fold'Result (A'First) = F (A (A'First), Init)
-          and then (for all I in A'Range =>
-                      (if I > A'First
-                       then
-                         Ind_Prop (A, Fold'Result (I - 1), I)
-                         and then Fold'Result (I)
-                                  = F (A (I), Fold'Result (I - 1))))
+          and then
+            (for all I in A'Range =>
+               (if I > A'First
+                then
+                  Ind_Prop (A, Fold'Result (I - 1), I)
+                  and then Fold'Result (I) = F (A (I), Fold'Result (I - 1))))
           and then Final_Prop (A, Fold'Result (A'Last));
    end Fold_Left_Acc;
 
@@ -155,12 +155,13 @@ is
           and then Fold'Result'Last = A'Last
           and then Ind_Prop (A, Init, A'First)
           and then Fold'Result (A'First) = F (A (A'First), A'First, Init)
-          and then (for all I in A'Range =>
-                      (if I > A'First
-                       then
-                         Ind_Prop (A, Fold'Result (I - 1), I)
-                         and then Fold'Result (I)
-                                  = F (A (I), I, Fold'Result (I - 1))))
+          and then
+            (for all I in A'Range =>
+               (if I > A'First
+                then
+                  Ind_Prop (A, Fold'Result (I - 1), I)
+                  and then
+                    Fold'Result (I) = F (A (I), I, Fold'Result (I - 1))))
           and then Final_Prop (A, Fold'Result (A'Last));
    end Fold_Left_I_Acc;
 
@@ -253,12 +254,12 @@ is
           and then Fold'Result'Last = A'Last
           and then Ind_Prop (A, Init, A'Last)
           and then Fold'Result (A'Last) = F (A (A'Last), Init)
-          and then (for all I in A'Range =>
-                      (if I < A'Last
-                       then
-                         Ind_Prop (A, Fold'Result (I + 1), I)
-                         and then Fold'Result (I)
-                                  = F (A (I), Fold'Result (I + 1))))
+          and then
+            (for all I in A'Range =>
+               (if I < A'Last
+                then
+                  Ind_Prop (A, Fold'Result (I + 1), I)
+                  and then Fold'Result (I) = F (A (I), Fold'Result (I + 1))))
           and then Final_Prop (A, Fold'Result (A'First));
    end Fold_Right_Acc;
 
@@ -379,8 +380,8 @@ is
              I in A1'Range
              and then A1'First = A2'First
              and then A1'Last = A2'Last
-             and then (for all K in A1'Range =>
-                         (if K /= I then A1 (K) = A2 (K))),
+             and then
+               (for all K in A1'Range => (if K /= I then A1 (K) = A2 (K))),
            Post =>
              Sum (A2) - To_Big (Value (A2 (I)))
              = Sum (A1) - To_Big (Value (A1 (I)));
@@ -411,8 +412,8 @@ is
       function No_Overflows
         (A : Array_Type; X : Element_Out; I : Index_Type) return Boolean
       is (In_Range (To_Big (X) + To_Big (Value (A (I))))
-          and then (if I < A'Last
-                    then No_Overflows (A, X + Value (A (I)), I + 1)));
+          and then
+            (if I < A'Last then No_Overflows (A, X + Value (A (I)), I + 1)));
 
       function No_Overflows (A : Array_Type) return Boolean
       is (if A'Length > 0 then No_Overflows (A, Zero, A'First))
@@ -565,24 +566,26 @@ is
           and then Fold'Result'First (2) = A'First (2)
           and then Fold'Result'Last (2) = A'Last (2)
           and then Ind_Prop (A, Init, A'First (1), A'First (2))
-          and then Fold'Result (A'First (1), A'First (2))
-                   = F (A (A'First (1), A'First (2)), Init)
-          and then (for all I in A'Range (1) =>
-                      (if I > A'First (1)
-                       then
-                         Ind_Prop
-                           (A, Fold'Result (I - 1, A'Last (2)), I, A'First (2))
-                         and then Fold'Result (I, A'First (2))
-                                  = F
-                                      (A (I, A'First (2)),
-                                       Fold'Result (I - 1, A'Last (2)))))
-          and then (for all I in A'Range (1) =>
-                      (for all J in A'Range (2) =>
-                         (if J > A'First (2)
-                          then
-                            Ind_Prop (A, Fold'Result (I, J - 1), I, J)
-                            and then Fold'Result (I, J)
-                                     = F (A (I, J), Fold'Result (I, J - 1)))))
+          and then
+            Fold'Result (A'First (1), A'First (2))
+            = F (A (A'First (1), A'First (2)), Init)
+          and then
+            (for all I in A'Range (1) =>
+               (if I > A'First (1)
+                then
+                  Ind_Prop (A, Fold'Result (I - 1, A'Last (2)), I, A'First (2))
+                  and then
+                    Fold'Result (I, A'First (2))
+                    = F (A (I, A'First (2)), Fold'Result (I - 1, A'Last (2)))))
+          and then
+            (for all I in A'Range (1) =>
+               (for all J in A'Range (2) =>
+                  (if J > A'First (2)
+                   then
+                     Ind_Prop (A, Fold'Result (I, J - 1), I, J)
+                     and then
+                       Fold'Result (I, J)
+                       = F (A (I, J), Fold'Result (I, J - 1)))))
           and then Final_Prop (A, Fold'Result (A'Last (1), A'Last (2)));
    end Fold_2_Acc;
 
@@ -724,10 +727,10 @@ is
              and then A1'Last (1) = A2'Last (1)
              and then A1'First (2) = A2'First (2)
              and then A1'Last (2) = A2'Last (2)
-             and then (for all K in A1'Range (1) =>
-                         (for all L in A2'Range (2) =>
-                            (if K /= I or else L /= J
-                             then A1 (K, L) = A2 (K, L)))),
+             and then
+               (for all K in A1'Range (1) =>
+                  (for all L in A2'Range (2) =>
+                     (if K /= I or else L /= J then A1 (K, L) = A2 (K, L)))),
            Post =>
              Sum (A2) - To_Big (Value (A2 (I, J)))
              = Sum (A1) - To_Big (Value (A1 (I, J)));
@@ -770,12 +773,11 @@ is
         (A : Array_Type; X : Element_Out; I : Index_1; J : Index_2)
          return Boolean
       is (In_Range (To_Big (X) + To_Big (Value (A (I, J))))
-          and then (if J < A'Last (2)
-                    then No_Overflows (A, X + Value (A (I, J)), I, J + 1)
-                    elsif I < A'Last (1)
-                    then
-                      No_Overflows
-                        (A, X + Value (A (I, J)), I + 1, A'First (2))));
+          and then
+            (if J < A'Last (2)
+             then No_Overflows (A, X + Value (A (I, J)), I, J + 1)
+             elsif I < A'Last (1)
+             then No_Overflows (A, X + Value (A (I, J)), I + 1, A'First (2))));
 
       function No_Overflows (A : Array_Type) return Boolean
       is (if A'Length (1) > 0 and A'Length (2) > 0
@@ -845,10 +847,10 @@ is
           and then A1'Last (1) = A2'Last (1)
           and then A1'First (2) = A2'First (2)
           and then A1'Last (2) = A2'Last (2)
-          and then (for all K in A1'Range (1) =>
-                      (for all L in A2'Range (2) =>
-                         (if K /= I or else L /= J
-                          then A1 (K, L) = A2 (K, L)))),
+          and then
+            (for all K in A1'Range (1) =>
+               (for all L in A2'Range (2) =>
+                  (if K /= I or else L /= J then A1 (K, L) = A2 (K, L)))),
         Contract_Cases =>
           (Choose (A1 (I, J)) = Choose (A2 (I, J))       =>
              Count (A1) = Count (A2),

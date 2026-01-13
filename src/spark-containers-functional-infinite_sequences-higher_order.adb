@@ -320,7 +320,7 @@ is
             pragma
               Loop_Invariant
                 (Length (Filter_Rec (S1, I, Test))
-                   = Length (Filter_Rec (S2, I, Test)));
+                 = Length (Filter_Rec (S2, I, Test)));
             pragma
               Loop_Invariant
                 (Equal_Prefix

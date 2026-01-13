@@ -129,10 +129,12 @@ is
      Global => null,
      Pre    =>
        Val1 in 0.0 .. Fl_Last_Sqrt
-       and then ((Val2 in 1.0 / Fl_Last_Sqrt .. Fl'Last
-                  and then Val3 in 1.0 / Fl_Last_Sqrt .. Fl'Last)
-                 or else (Val2 in Fl'First .. -1.0 / Fl_Last_Sqrt
-                          and then Val3 in Fl'First .. -1.0 / Fl_Last_Sqrt))
+       and then
+         ((Val2 in 1.0 / Fl_Last_Sqrt .. Fl'Last
+           and then Val3 in 1.0 / Fl_Last_Sqrt .. Fl'Last)
+          or else
+            (Val2 in Fl'First .. -1.0 / Fl_Last_Sqrt
+             and then Val3 in Fl'First .. -1.0 / Fl_Last_Sqrt))
        and then Val2 <= Val3,
      Post   => Val1 / Val3 <= Val1 / Val2; --  COLIBRI
 
@@ -140,8 +142,8 @@ is
    -- Conversions between floats and integers --
    ---------------------------------------------
 
-   type Integer_32 is range -2**31 .. 2**31 - 1;
-   type Integer_64 is range -2**63 .. 2**63 - 1;
+   type Integer_32 is range -2 ** 31 .. 2 ** 31 - 1;
+   type Integer_64 is range -2 ** 63 .. 2 ** 63 - 1;
 
    Fl_32 : constant Boolean := Fl'Size = 32;
    Fl_64 : constant Boolean := Fl'Size = 64;
@@ -165,20 +167,20 @@ is
    --  X = 31 - 24 = 7, hence the value 2.0**31 - 2.0**7 below. Other values
    --  are computed similarly.
 
-   Max_Fl_32_As_Integer_32 : constant := 2.0**31 - 2.0**7;
-   Max_Fl_64_As_Integer_32 : constant := 2.0**31 - 1.0;
-   Max_Fl_32_As_Integer_64 : constant := 2.0**63 - 2.0**39;
-   Max_Fl_64_As_Integer_64 : constant := 2.0**63 - 2.0**10;
+   Max_Fl_32_As_Integer_32 : constant := 2.0 ** 31 - 2.0 ** 7;
+   Max_Fl_64_As_Integer_32 : constant := 2.0 ** 31 - 1.0;
+   Max_Fl_32_As_Integer_64 : constant := 2.0 ** 63 - 2.0 ** 39;
+   Max_Fl_64_As_Integer_64 : constant := 2.0 ** 63 - 2.0 ** 10;
 
    Max_Fl_As_Integer_32 : constant Fl :=
      (if Fl_32 then Max_Fl_32_As_Integer_32 else Max_Fl_64_As_Integer_32);
    Max_Fl_As_Integer_64 : constant Fl :=
      (if Fl_32 then Max_Fl_32_As_Integer_64 else Max_Fl_64_As_Integer_64);
 
-   Max_Fl_32_As_Integer_32_Int : constant := 2**31 - 2**7;
-   Max_Fl_64_As_Integer_32_Int : constant := 2**31 - 1;
-   Max_Fl_32_As_Integer_64_Int : constant := 2**63 - 2**39;
-   Max_Fl_64_As_Integer_64_Int : constant := 2**63 - 2**10;
+   Max_Fl_32_As_Integer_32_Int : constant := 2 ** 31 - 2 ** 7;
+   Max_Fl_64_As_Integer_32_Int : constant := 2 ** 31 - 1;
+   Max_Fl_32_As_Integer_64_Int : constant := 2 ** 63 - 2 ** 39;
+   Max_Fl_64_As_Integer_64_Int : constant := 2 ** 63 - 2 ** 10;
 
    Max_Fl_As_Integer_32_Int : constant Integer_32 :=
      (if Fl_32
@@ -232,7 +234,7 @@ is
    is
       --  Either the magnitude of F is such that there cannot be a fractional
       --  part that fits in the 24-bits or 53-bits significand/mantissa.
-      (abs F >= 2.0**52
+      (abs F >= 2.0 ** 52
        --  Or rounding is the identity on F, obtained here by converting to a
        --  64-bits signed integer. Note the use of a lazy connective to avoid
        --  converting F to an integer if it is too large.
@@ -331,9 +333,9 @@ is
      Ghost => Static,
      Pre   =>
        Val1 in -Fl_Last_Sqrt .. Fl_Last_Sqrt
-       and then Val2
-                in Fl'First .. -1.0 / Fl_Last_Sqrt
-                 | 1.0 / Fl_Last_Sqrt .. Fl'Last,
+       and then
+         Val2
+         in Fl'First .. -1.0 / Fl_Last_Sqrt | 1.0 / Fl_Last_Sqrt .. Fl'Last,
      Post  =>
        abs (Real (Val1 / Val2) - (Real (Val1) / Real (Val2)))
        <= Epsilon * abs (Real (Val1) / Real (Val2)) + Eta;

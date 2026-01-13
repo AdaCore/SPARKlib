@@ -115,8 +115,9 @@ is
                 .Node;
 
             if ENode = 0
-              or else Right.Content.Nodes (ENode).Element
-                      /= Left.Content.Nodes (Node).Element
+              or else
+                Right.Content.Nodes (ENode).Element
+                /= Left.Content.Nodes (Node).Element
             then
                return False;
             end if;
@@ -551,8 +552,8 @@ is
                J : constant Count_Type := E.Find (Right, E.Get (Left, I));
             begin
                if J = 0
-                 or else not Element_Logic_Equal
-                               (E.Get (Left, I), E.Get (Right, J))
+                 or else
+                   not Element_Logic_Equal (E.Get (Left, I), E.Get (Right, J))
                then
                   return False;
                end if;
@@ -682,9 +683,10 @@ is
             if not P.Has_Key (P_Right, C)
               or else P.Get (P_Left, C) > E.Last (E_Left)
               or else P.Get (P_Right, C) > E.Last (E_Right)
-              or else not Element_Logic_Equal
-                            (E.Get (E_Left, P.Get (P_Left, C)),
-                             E.Get (E_Right, P.Get (P_Right, C)))
+              or else
+                not Element_Logic_Equal
+                      (E.Get (E_Left, P.Get (P_Left, C)),
+                       E.Get (E_Right, P.Get (P_Right, C)))
             then
                return False;
             end if;
@@ -706,12 +708,14 @@ is
       begin
          for C of P_Left loop
             if C /= Position
-              and (not P.Has_Key (P_Right, C)
-                   or else P.Get (P_Left, C) > E.Last (E_Left)
-                   or else P.Get (P_Right, C) > E.Last (E_Right)
-                   or else not Element_Logic_Equal
-                                 (E.Get (E_Left, P.Get (P_Left, C)),
-                                  E.Get (E_Right, P.Get (P_Right, C))))
+              and
+                (not P.Has_Key (P_Right, C)
+                 or else P.Get (P_Left, C) > E.Last (E_Left)
+                 or else P.Get (P_Right, C) > E.Last (E_Right)
+                 or else
+                   not Element_Logic_Equal
+                         (E.Get (E_Left, P.Get (P_Left, C)),
+                          E.Get (E_Right, P.Get (P_Right, C))))
             then
                return False;
             end if;

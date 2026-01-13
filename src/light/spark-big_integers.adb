@@ -80,7 +80,7 @@ is
    function "**" (L : Valid_Big_Integer; R : Natural) return Valid_Big_Integer
    is
    begin
-      return (V => L.V**R);
+      return (V => L.V ** R);
    end "**";
 
    ---------

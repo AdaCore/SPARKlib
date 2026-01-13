@@ -69,8 +69,8 @@ is
         Exempt_On,
         "Restrictions:No_Specification_Of_Aspect => Iterable",
         "The following usage of aspect Iterable has been reviewed"
-          & "for compliance with GNATprove assumption"
-          & " [SPARK_ITERABLE]");
+        & "for compliance with GNATprove assumption"
+        & " [SPARK_ITERABLE]");
    type Sequence is private
    with
      Default_Initial_Condition => (SPARKlib_Full => Length (Sequence) = 0),
@@ -200,9 +200,9 @@ is
        (SPARKlib_Full =>
           Equivalent_Sequences'Result
           = (Length (Left) = Length (Right)
-             and then (for all N in Left =>
-                         Equivalent_Elements
-                           (Get (Left, N), Get (Right, N)))));
+             and then
+               (for all N in Left =>
+                  Equivalent_Elements (Get (Left, N), Get (Right, N)))));
    pragma
      Annotate (GNATprove, Inline_For_Proof, Entity => Equivalent_Sequences);
 
@@ -272,9 +272,9 @@ is
      Post   =>
        (SPARKlib_Full =>
           Length (Add'Result) = Length (Container) + 1
-          and then Element_Logic_Equal
-                     (Get (Add'Result, Last (Add'Result)),
-                      Copy_Element (New_Item))
+          and then
+            Element_Logic_Equal
+              (Get (Add'Result, Last (Add'Result)), Copy_Element (New_Item))
           and then Equal_Prefix (Container, Add'Result));
    --  Returns a new sequence which contains the same elements as Container
    --  plus New_Item at the end.
@@ -291,19 +291,22 @@ is
      Post   =>
        (SPARKlib_Full =>
           Length (Add'Result) = Length (Container) + 1
-          and then Element_Logic_Equal
-                     (Get (Add'Result, Position), Copy_Element (New_Item))
-          and then Range_Equal
-                     (Left  => Container,
-                      Right => Add'Result,
-                      Fst   => 1,
-                      Lst   => Position - 1)
-          and then Range_Shifted
-                     (Left   => Container,
-                      Right  => Add'Result,
-                      Fst    => Position,
-                      Lst    => Last (Container),
-                      Offset => 1));
+          and then
+            Element_Logic_Equal
+              (Get (Add'Result, Position), Copy_Element (New_Item))
+          and then
+            Range_Equal
+              (Left  => Container,
+               Right => Add'Result,
+               Fst   => 1,
+               Lst   => Position - 1)
+          and then
+            Range_Shifted
+              (Left   => Container,
+               Right  => Add'Result,
+               Fst    => Position,
+               Lst    => Last (Container),
+               Offset => 1));
 
    function Remove
      (Container : Sequence; Position : Big_Positive) return Sequence
@@ -313,17 +316,19 @@ is
      Post   =>
        (SPARKlib_Full =>
           Length (Remove'Result) = Length (Container) - 1
-          and then Range_Equal
-                     (Left  => Container,
-                      Right => Remove'Result,
-                      Fst   => 1,
-                      Lst   => Position - 1)
-          and then Range_Shifted
-                     (Left   => Remove'Result,
-                      Right  => Container,
-                      Fst    => Position,
-                      Lst    => Last (Remove'Result),
-                      Offset => 1));
+          and then
+            Range_Equal
+              (Left  => Container,
+               Right => Remove'Result,
+               Fst   => 1,
+               Lst   => Position - 1)
+          and then
+            Range_Shifted
+              (Left   => Remove'Result,
+               Right  => Container,
+               Fst    => Position,
+               Lst    => Last (Remove'Result),
+               Offset => 1));
    --  Returns a new sequence which contains the same elements as Container
    --  except that the element at position Position has been removed.
 
@@ -437,8 +442,9 @@ is
      Post   =>
        Equal_Prefix'Result
        = (Length (Left) <= Length (Right)
-          and then (for all N in Left =>
-                      Element_Logic_Equal (Get (Left, N), Get (Right, N))));
+          and then
+            (for all N in Left =>
+               Element_Logic_Equal (Get (Left, N), Get (Right, N))));
    pragma Annotate (GNATprove, Inline_For_Proof, Entity => Equal_Prefix);
 
    function Equal_Except
@@ -451,11 +457,10 @@ is
      Post   =>
        Equal_Except'Result
        = (Length (Left) = Length (Right)
-          and then (for all J in Left =>
-                      (if J /= Position
-                       then
-                         Element_Logic_Equal
-                           (Get (Left, J), Get (Right, J)))));
+          and then
+            (for all J in Left =>
+               (if J /= Position
+                then Element_Logic_Equal (Get (Left, J), Get (Right, J)))));
    pragma Annotate (GNATprove, Inline_For_Proof, Entity => Equal_Except);
    --  Returns True is Left and Right are the same except at position Position
 
@@ -469,11 +474,10 @@ is
      Post   =>
        Equal_Except'Result
        = (Length (Left) = Length (Right)
-          and then (for all J in Left =>
-                      (if J /= X and J /= Y
-                       then
-                         Element_Logic_Equal
-                           (Get (Left, J), Get (Right, J)))));
+          and then
+            (for all J in Left =>
+               (if J /= X and J /= Y
+                then Element_Logic_Equal (Get (Left, J), Get (Right, J)))));
    pragma Annotate (GNATprove, Inline_For_Proof, Entity => Equal_Except);
    --  Returns True is Left and Right are the same except at positions X and Y
 
@@ -504,19 +508,21 @@ is
      Global => null,
      Pre    =>
        Lst <= Last (Left)
-       and then (if Fst <= Lst
-                 then Offset + Fst >= 1 and Offset + Lst <= Length (Right)),
+       and then
+         (if Fst <= Lst
+          then Offset + Fst >= 1 and Offset + Lst <= Length (Right)),
      Post   =>
        Range_Shifted'Result
        = ((for all J in Left =>
              (if Fst <= J and J <= Lst
               then
                 Element_Logic_Equal (Get (Left, J), Get (Right, J + Offset))))
-          and (for all J in Right =>
-                 (if Fst + Offset <= J and J <= Lst + Offset
-                  then
-                    Element_Logic_Equal
-                      (Get (Left, J - Offset), Get (Right, J)))));
+          and
+            (for all J in Right =>
+               (if Fst + Offset <= J and J <= Lst + Offset
+                then
+                  Element_Logic_Equal
+                    (Get (Left, J - Offset), Get (Right, J)))));
    pragma Annotate (GNATprove, Inline_For_Proof, Entity => Range_Shifted);
    --  Returns True if the range from Fst to Lst in Left contains the same
    --  elements as the range from Fst + Offset to Lst + Offset in Right.
@@ -531,9 +537,9 @@ is
      Post   =>
        (SPARKlib_Full =>
           Last (Container) = Last (Container'Old) + 1
-          and then Element_Logic_Equal
-                     (Get (Container, Last (Container)),
-                      Copy_Element (New_Item))
+          and then
+            Element_Logic_Equal
+              (Get (Container, Last (Container)), Copy_Element (New_Item))
           and then Equal_Prefix (Container'Old, Container));
 
 private

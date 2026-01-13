@@ -64,11 +64,13 @@ is
      Post     =>
        (SPARKlib_Full =>
           Length (Create_Distinct'Result) = New_Length
-          and then (for all I in Interval'(1, New_Length) =>
-                      Contains (Create_Distinct'Result, New_Item (I)))
-          and then (for all E of Create_Distinct'Result =>
-                      (for some I in Interval'(1, New_Length) =>
-                         Equivalent_Elements (E, New_Item (I)))));
+          and then
+            (for all I in Interval'(1, New_Length) =>
+               Contains (Create_Distinct'Result, New_Item (I)))
+          and then
+            (for all E of Create_Distinct'Result =>
+               (for some I in Interval'(1, New_Length) =>
+                  Equivalent_Elements (E, New_Item (I)))));
    --  Return a new set created by calling New_Item New_Length times.
    --  Create_Distinct can only be used on New_Item functions which create
    --  distinct elements for all integers up to New_Length. Use Create
@@ -85,11 +87,13 @@ is
      Post     =>
        (SPARKlib_Full =>
           Length (Create'Result) <= New_Length
-          and then (for all I in Interval'(1, New_Length) =>
-                      Contains (Create'Result, New_Item (I)))
-          and then (for all E of Create'Result =>
-                      (for some I in Interval'(1, New_Length) =>
-                         Equivalent_Elements (E, New_Item (I)))));
+          and then
+            (for all I in Interval'(1, New_Length) =>
+               Contains (Create'Result, New_Item (I)))
+          and then
+            (for all E of Create'Result =>
+               (for some I in Interval'(1, New_Length) =>
+                  Equivalent_Elements (E, New_Item (I)))));
    --  Return a new set created by calling New_Item New_Length times. Create
    --  is less efficient than Create_Distinct as it needs to check for
    --  duplicated values before inclusion.
@@ -128,11 +132,13 @@ is
      Post     =>
        (SPARKlib_Full =>
           Length (Transform_Distinct'Result) = Length (S)
-          and then (for all E of S =>
-                      Contains (Transform_Distinct'Result, Transform_Item (E)))
-          and then (for all E of Transform_Distinct'Result =>
-                      (for some F of S =>
-                         Equivalent_Elements (E, Transform_Item (F)))));
+          and then
+            (for all E of S =>
+               Contains (Transform_Distinct'Result, Transform_Item (E)))
+          and then
+            (for all E of Transform_Distinct'Result =>
+               (for some F of S =>
+                  Equivalent_Elements (E, Transform_Item (F)))));
    --  Return a new set containing elements obtained by applying Transform_Item
    --  to elements of S. Transform_Distinct can only be used with
    --  Transform_Item functions which never collapse elements. Use Transform
@@ -157,11 +163,12 @@ is
      Post     =>
        (SPARKlib_Full =>
           Length (Transform'Result) <= Length (S)
-          and then (for all E of S =>
-                      Contains (Transform'Result, Transform_Item (E)))
-          and then (for all E of Transform'Result =>
-                      (for some F of S =>
-                         Equivalent_Elements (E, Transform_Item (F)))));
+          and then
+            (for all E of S => Contains (Transform'Result, Transform_Item (E)))
+          and then
+            (for all E of Transform'Result =>
+               (for some F of S =>
+                  Equivalent_Elements (E, Transform_Item (F)))));
    --  Return a new set containing elements obtained by applying Transform_Item
    --  to elements of S. Transform can only be used with Transform_Item
    --  functions which return the same equivalent value on equivalent elements.
@@ -271,8 +278,9 @@ is
           Length (Filter'Result) = Count (S, Test)
           and then Filter'Result <= S
           and then (for all E of Filter'Result => Test (E))
-          and then (for all E of S =>
-                      (if Test (E) then Contains (Filter'Result, E))));
+          and then
+            (for all E of S =>
+               (if Test (E) then Contains (Filter'Result, E))));
    --  Return a new set with all elements of S on which the input Test function
    --  returns True. Filter can only be used with Test functions which return
    --  the same value on equivalent elements.

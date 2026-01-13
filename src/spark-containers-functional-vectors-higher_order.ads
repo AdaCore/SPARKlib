@@ -23,9 +23,9 @@ is
      Post     =>
        (SPARKlib_Full =>
           Last (Create'Result) = New_Last
-          and then (for all I in Index_Type'First .. New_Last =>
-                      Element_Logic_Equal
-                        (Get (Create'Result, I), New_Item (I))));
+          and then
+            (for all I in Index_Type'First .. New_Last =>
+               Element_Logic_Equal (Get (Create'Result, I), New_Item (I))));
    --  Return a new sequence with New_Length elements. Each element is created
    --  by calling New_Item.
 
@@ -40,10 +40,10 @@ is
      Post     =>
        (SPARKlib_Full =>
           Length (Transform'Result) = Length (S)
-          and then (for all I in Index_Type'First .. Last (S) =>
-                      Element_Logic_Equal
-                        (Get (Transform'Result, I),
-                         Transform_Item (Get (S, I)))));
+          and then
+            (for all I in Index_Type'First .. Last (S) =>
+               Element_Logic_Equal
+                 (Get (Transform'Result, I), Transform_Item (Get (S, I)))));
    --  Return a new sequence with the same length as S. Its elements are
    --  obtained using Transform_Item on the elements of S.
 
@@ -135,8 +135,8 @@ is
      Annotate => (GNATprove, Higher_Order_Specialization),
      Pre      =>
        Last <= Vectors.Last (S)
-       and then (for all I in Index_Type'First .. Last =>
-                   not Test (Get (S, I))),
+       and then
+         (for all I in Index_Type'First .. Last => not Test (Get (S, I))),
      Post     => Count (S, Last, Test) = 0;
    --  Additional lemma:
    --  Count returns 0 if Test returns False on all elements of S up to Last.
@@ -181,12 +181,13 @@ is
      Pre      =>
        Last <= Vectors.Last (S1)
        and then Last <= Vectors.Last (S2)
-       and then (for all I in Index_Type'First .. Last =>
-                   Element_Logic_Equal (Get (S1, I), Get (S2, I))),
+       and then
+         (for all I in Index_Type'First .. Last =>
+            Element_Logic_Equal (Get (S1, I), Get (S2, I))),
      Post     =>
        Length (Filter (S1, Last, Test)) = Length (Filter (S2, Last, Test))
-       and then Equal_Prefix
-                  (Filter (S1, Last, Test), Filter (S2, Last, Test));
+       and then
+         Equal_Prefix (Filter (S1, Last, Test), Filter (S2, Last, Test));
    --  Automatically instantiated lemma:
    --  Filter returns the same value on sequences containing the same elements.
 
@@ -211,11 +212,12 @@ is
        (Test (Get (S, Last)) =>
           Length (Filter (S, Last, Test)) - 1
           = Length (Filter (S, Extended_Index'Pred (Last), Test))
-          and then Element_Logic_Equal
-                     (Get (S, Last),
-                      Get
-                        (Filter (S, Last, Test),
-                         Vectors.Last (Filter (S, Last, Test)))),
+          and then
+            Element_Logic_Equal
+              (Get (S, Last),
+               Get
+                 (Filter (S, Last, Test),
+                  Vectors.Last (Filter (S, Last, Test)))),
         others               =>
           Length (Filter (S, Last, Test))
           = Length (Filter (S, Extended_Index'Pred (Last), Test)));

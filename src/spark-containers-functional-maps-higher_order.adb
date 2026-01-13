@@ -275,7 +275,7 @@ is
             pragma
               Loop_Invariant
                 (if Count_Rec (Submap, Test) = Length (Submap)
-                   then Count_Rec (M, Test) = Length (M));
+                 then Count_Rec (M, Test) = Length (M));
          end loop;
       end Do_Proof;
 
@@ -532,9 +532,10 @@ is
                 (Static =>
                    (for all K of M =>
                       Has_Key (Submap, K)
-                      or else Element_Logic_Equal
-                                (Get (Res, Transform_Key (K)),
-                                 Transform_Item (Get (M, K)))));
+                      or else
+                        Element_Logic_Equal
+                          (Get (Res, Transform_Key (K)),
+                           Transform_Item (Get (M, K)))));
 
             declare
                K : Key_Type renames Choose (Submap);

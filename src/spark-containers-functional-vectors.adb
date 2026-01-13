@@ -21,9 +21,11 @@ is
 
    function "<" (Left : Sequence; Right : Sequence) return Boolean
    is (Length (Left.Content) < Length (Right.Content)
-       and then (Ptr_Eq (Left.Content, Right.Content)
-                 or else (for all I in Index_Type'First .. Last (Left) =>
-                            Get (Left.Content, I) = Get (Right.Content, I))));
+       and then
+         (Ptr_Eq (Left.Content, Right.Content)
+          or else
+            (for all I in Index_Type'First .. Last (Left) =>
+               Get (Left.Content, I) = Get (Right.Content, I))));
 
    ----------
    -- "<=" --
@@ -31,9 +33,11 @@ is
 
    function "<=" (Left : Sequence; Right : Sequence) return Boolean
    is (Length (Left.Content) <= Length (Right.Content)
-       and then (Ptr_Eq (Left.Content, Right.Content)
-                 or else (for all I in Index_Type'First .. Last (Left) =>
-                            Get (Left.Content, I) = Get (Right.Content, I))));
+       and then
+         (Ptr_Eq (Left.Content, Right.Content)
+          or else
+            (for all I in Index_Type'First .. Last (Left) =>
+               Get (Left.Content, I) = Get (Right.Content, I))));
 
    ---------
    -- "=" --
@@ -129,11 +133,12 @@ is
 
    function Equal (Left : Sequence; Right : Sequence) return Boolean
    is (Length (Left.Content) = Length (Right.Content)
-       and then (Ptr_Eq (Left.Content, Right.Content)
-                 or else (for all I in Index_Type'First .. Last (Left) =>
-                            Element_Logic_Equal
-                              (Get (Left.Content, I),
-                               Get (Right.Content, I)))));
+       and then
+         (Ptr_Eq (Left.Content, Right.Content)
+          or else
+            (for all I in Index_Type'First .. Last (Left) =>
+               Element_Logic_Equal
+                 (Get (Left.Content, I), Get (Right.Content, I)))));
 
    ------------------
    -- Equal_Except --
@@ -151,8 +156,9 @@ is
 
       for I in Index_Type'First .. Last (Left) loop
          if I /= Position
-           and then not Element_Logic_Equal
-                          (Get (Left.Content, I), Get (Right.Content, I))
+           and then
+             not Element_Logic_Equal
+                   (Get (Left.Content, I), Get (Right.Content, I))
          then
             return False;
          end if;
@@ -174,8 +180,9 @@ is
       for I in Index_Type'First .. Last (Left) loop
          if I /= X
            and then I /= Y
-           and then not Element_Logic_Equal
-                          (Get (Left.Content, I), Get (Right.Content, I))
+           and then
+             not Element_Logic_Equal
+                   (Get (Left.Content, I), Get (Right.Content, I))
          then
             return False;
          end if;
@@ -190,11 +197,12 @@ is
 
    function Equal_Prefix (Left : Sequence; Right : Sequence) return Boolean
    is (Length (Left.Content) <= Length (Right.Content)
-       and then (Ptr_Eq (Left.Content, Right.Content)
-                 or else (for all I in Index_Type'First .. Last (Left) =>
-                            Element_Logic_Equal
-                              (Get (Left.Content, I),
-                               Get (Right.Content, I)))));
+       and then
+         (Ptr_Eq (Left.Content, Right.Content)
+          or else
+            (for all I in Index_Type'First .. Last (Left) =>
+               Element_Logic_Equal
+                 (Get (Left.Content, I), Get (Right.Content, I)))));
 
    --------------------------
    -- Equivalent_Sequences --
@@ -202,10 +210,11 @@ is
 
    function Equivalent_Sequences (Left, Right : Sequence) return Boolean
    is (Length (Left) = Length (Right)
-       and then (Ptr_Eq (Left.Content, Right.Content)
-                 or else (for all N in Left =>
-                            Equivalent_Elements
-                              (Get (Left, N), Get (Right, N)))));
+       and then
+         (Ptr_Eq (Left.Content, Right.Content)
+          or else
+            (for all N in Left =>
+               Equivalent_Elements (Get (Left, N), Get (Right, N)))));
 
    ----------
    -- Find --

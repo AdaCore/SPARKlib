@@ -700,10 +700,10 @@ is
          Y     : Positive_Count_Type) return Boolean is
       begin
          if M.Last (Left) /= M.Last (Right)
-           or else not Element_Logic_Equal
-                         (Element (Left, X), Element (Right, Y))
-           or else not Element_Logic_Equal
-                         (Element (Left, Y), Element (Right, X))
+           or else
+             not Element_Logic_Equal (Element (Left, X), Element (Right, Y))
+           or else
+             not Element_Logic_Equal (Element (Left, Y), Element (Right, X))
          then
             return False;
          end if;
@@ -711,8 +711,8 @@ is
          for I in 1 .. M.Last (Left) loop
             if I /= X
               and then I /= Y
-              and then not Element_Logic_Equal
-                             (Element (Left, I), Element (Right, I))
+              and then
+                not Element_Logic_Equal (Element (Left, I), Element (Right, I))
             then
                return False;
             end if;
@@ -735,9 +735,10 @@ is
             if not P.Has_Key (P_Right, C)
               or else P.Get (P_Left, C) > M.Last (M_Left)
               or else P.Get (P_Right, C) > M.Last (M_Right)
-              or else not Element_Logic_Equal
-                            (M.Get (M_Left, P.Get (P_Left, C)),
-                             M.Get (M_Right, P.Get (P_Right, C)))
+              or else
+                not Element_Logic_Equal
+                      (M.Get (M_Left, P.Get (P_Left, C)),
+                       M.Get (M_Right, P.Get (P_Right, C)))
             then
                return False;
             end if;
@@ -846,9 +847,8 @@ is
 
          for C of P.Iterate (Right) loop
             if not P.Has_Key (Left, C)
-              or else (C /= X
-                       and C /= Y
-                       and P.Get (Left, C) /= P.Get (Right, C))
+              or else
+                (C /= X and C /= Y and P.Get (Left, C) /= P.Get (Right, C))
             then
                return False;
             end if;
@@ -1047,8 +1047,9 @@ is
             pragma
               Assert
                 (RN (RI.Node).Next = 0
-                   or else not (RN (RN (RI.Node).Next).Element.all
-                                < RN (RI.Node).Element.all));
+                 or else
+                   not (RN (RN (RI.Node).Next).Element.all
+                        < RN (RI.Node).Element.all));
 
             if LI.Node = 0 then
                Splice (Target, No_Element, Source);
@@ -1058,8 +1059,9 @@ is
             pragma
               Assert
                 (LN (LI.Node).Next = 0
-                   or else not (LN (LN (LI.Node).Next).Element.all
-                                < LN (LI.Node).Element.all));
+                 or else
+                   not (LN (LN (LI.Node).Next).Element.all
+                        < LN (LI.Node).Element.all));
 
             if RN (RI.Node).Element.all < LN (LI.Node).Element.all then
                declare

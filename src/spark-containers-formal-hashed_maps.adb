@@ -91,8 +91,9 @@ is
                 .Node;
 
             if ENode = 0
-              or else Right.Content.Nodes (ENode).Element
-                      /= Left.Content.Nodes (Node).Element
+              or else
+                Right.Content.Nodes (ENode).Element
+                /= Left.Content.Nodes (Node).Element
             then
                return False;
             end if;
@@ -451,9 +452,10 @@ is
             if not P.Has_Key (P_Right, C)
               or else P.Get (P_Left, C) > K.Last (K_Left)
               or else P.Get (P_Right, C) > K.Last (K_Right)
-              or else not Key_Logic_Equal
-                            (K.Get (K_Left, P.Get (P_Left, C)),
-                             K.Get (K_Right, P.Get (P_Right, C)))
+              or else
+                not Key_Logic_Equal
+                      (K.Get (K_Left, P.Get (P_Left, C)),
+                       K.Get (K_Right, P.Get (P_Right, C)))
             then
                return False;
             end if;

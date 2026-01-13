@@ -114,8 +114,9 @@ is
          ENode := Find (Right, Left.Content.Nodes (Node).Key).Node;
 
          if ENode = 0
-           or else Left.Content.Nodes (Node).Element
-                   /= Right.Content.Nodes (ENode).Element
+           or else
+             Left.Content.Nodes (Node).Element
+             /= Right.Content.Nodes (ENode).Element
          then
             return False;
          end if;

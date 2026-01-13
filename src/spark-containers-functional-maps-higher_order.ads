@@ -68,14 +68,17 @@ is
      Post     =>
        (SPARKlib_Full =>
           Length (Create'Result) = New_Length
-          and then (for all I in Interval'(1, New_Length) =>
-                      Has_Key (Create'Result, New_Key (I)))
-          and then (for all K of Create'Result =>
-                      (for some I in Interval'(1, New_Length) =>
-                         Equivalent_Keys (K, New_Key (I))))
-          and then (for all I in Interval'(1, New_Length) =>
-                      Element_Logic_Equal
-                        (Get (Create'Result, New_Key (I)), New_Item (I))));
+          and then
+            (for all I in Interval'(1, New_Length) =>
+               Has_Key (Create'Result, New_Key (I)))
+          and then
+            (for all K of Create'Result =>
+               (for some I in Interval'(1, New_Length) =>
+                  Equivalent_Keys (K, New_Key (I))))
+          and then
+            (for all I in Interval'(1, New_Length) =>
+               Element_Logic_Equal
+                 (Get (Create'Result, New_Key (I)), New_Item (I))));
    --  Return a new map with New_Length associations. Each association is
    --  created by calling New_Key and New_Item.
 
@@ -97,15 +100,16 @@ is
      Post     =>
        (SPARKlib_Full =>
           Length (Transform'Result) = Length (M)
-          and then (for all K of M =>
-                      Has_Key (Transform'Result, Transform_Key (K)))
-          and then (for all K of Transform'Result =>
-                      (for some L of M =>
-                         Equivalent_Keys (K, Transform_Key (L))))
-          and then (for all K of M =>
-                      Element_Logic_Equal
-                        (Get (Transform'Result, Transform_Key (K)),
-                         Transform_Item (Get (M, K)))));
+          and then
+            (for all K of M => Has_Key (Transform'Result, Transform_Key (K)))
+          and then
+            (for all K of Transform'Result =>
+               (for some L of M => Equivalent_Keys (K, Transform_Key (L))))
+          and then
+            (for all K of M =>
+               Element_Logic_Equal
+                 (Get (Transform'Result, Transform_Key (K)),
+                  Transform_Item (Get (M, K)))));
    --  Return a new map containing a mapping per key in M. The new associations
    --  are obtained using Transform_Key and Transform_Item. Transform_Key
    --  shall not collapse keys together.
@@ -122,10 +126,11 @@ is
        (SPARKlib_Full =>
           Length (Transform_Element'Result) = Length (M)
           and then Same_Keys (M, Transform_Element'Result)
-          and then (for all K of M =>
-                      Element_Logic_Equal
-                        (Get (Transform_Element'Result, K),
-                         Transform_Item (Get (M, K)))));
+          and then
+            (for all K of M =>
+               Element_Logic_Equal
+                 (Get (Transform_Element'Result, K),
+                  Transform_Item (Get (M, K)))));
    --  Return a new map containing a mapping per key in M. The new associations
    --  are obtained using Transform_Item on the associated elements.
 
@@ -225,9 +230,9 @@ is
           Length (Filter'Result) = Count (M, Test)
           and then Elements_Equal (Filter'Result, M)
           and then (for all K of Filter'Result => Test (K, Get (M, K)))
-          and then (for all K of M =>
-                      (if Test (K, Get (M, K))
-                       then Has_Key (Filter'Result, K))));
+          and then
+            (for all K of M =>
+               (if Test (K, Get (M, K)) then Has_Key (Filter'Result, K))));
    --  Return a new map with all mappings of M on which the input Test function
    --  returns True. Filter can only be used with Test functions which return
    --  the same value on equivalent keys.
