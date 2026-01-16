@@ -5,9 +5,9 @@ test.adb:12:13: info: implicit aspect Always_Terminates on "Eq" has been proved,
 test.adb:13:10: info: division check proved (CVC5: 1 VC)
 test.adb:13:23: info: division check proved (CVC5: 1 VC)
 test.adb:33:29: medium: postcondition might fail, cannot prove K in 1 .. 5 [provers reached step limit before completing the proof]
-test.adb:35:29: info: precondition proved (Z3: 1 VC)
+test.adb:35:29: info: precondition proved (CVC5: 1 VC)
 test.adb:38:23: info: unrolling loop [info-unrolling-inlining]
-test.adb:39:10: info: precondition proved (CVC5: 7 VC; Z3: 3 VC)
+test.adb:39:10: info: precondition proved (CVC5: 8 VC; Z3: 2 VC)
 test.adb:46:07: info: precondition proved (CVC5: 1 VC)
 test.adb:50:07: info: initialization of "X" proved
 test.adb:50:16: info: range check proved (CVC5: 2 VC)
@@ -22,7 +22,7 @@ test.adb:60:07: info: precondition proved (CVC5: 1 VC)
 test.adb:62:07: info: precondition proved (CVC5: 1 VC)
 test.adb:63:07: info: precondition proved (Z3: 1 VC)
 test.adb:65:07: info: precondition proved (CVC5: 2 VC)
-test.adb:66:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:66:07: info: precondition proved (Z3: 1 VC)
 test.adb:68:12: info: discriminant check proved (CVC5: 1 VC)
 test.adb:69:07: info: precondition proved (CVC5: 1 VC)
 test.adb:70:07: info: precondition proved (CVC5: 1 VC)
@@ -34,7 +34,7 @@ test.adb:77:12: info: discriminant check proved (CVC5: 1 VC)
 test.adb:78:12: info: discriminant check proved (CVC5: 1 VC)
 test.adb:79:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
 test.adb:80:07: medium: precondition might fail, cannot prove not Contains (Container, Key) [provers reached step limit before completing the proof]
-test.adb:81:07: info: precondition proved (Z3: 1 VC)
+test.adb:81:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:83:12: info: discriminant check proved (CVC5: 1 VC)
 test.adb:84:12: info: discriminant check proved (CVC5: 1 VC)
 test.adb:85:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
@@ -65,7 +65,7 @@ test.adb:120:07: info: precondition proved (CVC5: 1 VC)
 test.adb:121:23: info: unrolling loop [info-unrolling-inlining]
 test.adb:122:10: info: precondition proved (CVC5: 5 VC; Z3: 1 VC)
 test.adb:124:07: info: precondition proved (CVC5: 1 VC)
-test.adb:125:07: info: precondition proved (Z3: 1 VC)
+test.adb:125:07: info: precondition proved (CVC5: 1 VC)
 test.adb:130:10: info: initialization of "X" proved
 test.adb:130:19: info: range check proved (CVC5: 2 VC)
 test.adb:133:33: info: no contextual analysis of "Test_No_Capacity" (call returns unconstrained type)
@@ -73,7 +73,7 @@ test.adb:133:33: info: precondition proved (CVC5: 1 VC)
 test.adb:135:13: info: precondition proved (CVC5: 1 VC)
 test.adb:137:10: info: precondition proved (CVC5: 1 VC)
 test.adb:139:33: info: precondition proved (CVC5: 1 VC)
-test.adb:141:13: info: precondition proved (Z3: 1 VC)
+test.adb:141:13: info: precondition proved (CVC5: 1 VC)
 test.adb:146:10: info: initialization of "X" proved
 test.adb:146:19: info: range check proved (CVC5: 2 VC)
 test.adb:149:33: info: no contextual analysis of "Test_With_Capacity" (call returns unconstrained type)
@@ -82,7 +82,7 @@ test.adb:151:13: info: precondition proved (CVC5: 1 VC)
 test.adb:153:10: info: precondition proved (CVC5: 1 VC)
 test.adb:155:33: info: precondition proved (CVC5: 1 VC)
 test.adb:157:13: info: precondition proved (CVC5: 1 VC)
-test.adb:158:13: info: precondition proved (Z3: 1 VC)
+test.adb:158:13: info: precondition proved (CVC5: 1 VC)
 test.adb:167:07: info: initialization of "X" proved
 test.adb:167:16: info: range check proved (CVC5: 2 VC)
 test.adb:169:07: info: precondition proved (CVC5: 1 VC)
@@ -118,14 +118,14 @@ test.adb:199:13: info: range check proved (CVC5: 2 VC)
 test.adb:200:13: info: precondition proved (CVC5: 1 VC)
 test.adb:200:13: info: range check proved (CVC5: 2 VC)
 test.adb:201:13: info: precondition proved (CVC5: 1 VC)
-test.adb:201:13: info: range check proved (CVC5: 1 VC; Z3: 1 VC)
+test.adb:201:13: info: range check proved (CVC5: 2 VC)
 test.adb:202:13: info: precondition proved (CVC5: 1 VC)
 test.adb:203:13: info: precondition proved (CVC5: 1 VC)
 test.adb:205:07: info: precondition proved (CVC5: 1 VC)
 test.adb:207:07: info: precondition proved (CVC5: 1 VC)
 test.adb:207:15: info: precondition proved (CVC5: 1 VC)
 test.adb:208:07: info: precondition proved (CVC5: 1 VC)
-test.adb:209:07: info: precondition proved (Z3: 1 VC)
+test.adb:209:07: info: precondition proved (CVC5: 1 VC)
 test.adb:209:15: info: precondition proved (CVC5: 1 VC)
 test.adb:209:36: info: precondition proved (CVC5: 1 VC)
 test.adb:209:57: info: precondition proved (CVC5: 1 VC)
@@ -172,7 +172,7 @@ test.adb:261:07: info: precondition proved (Z3: 1 VC)
 test.adb:261:44: info: precondition proved (CVC5: 1 VC)
 test.adb:262:07: info: precondition proved (Z3: 1 VC)
 test.adb:262:15: info: precondition proved (Z3: 1 VC)
-test.adb:263:07: info: precondition proved (Z3: 1 VC)
+test.adb:263:07: info: precondition proved (CVC5: 1 VC)
 test.adb:264:07: info: precondition proved (Z3: 1 VC)
 test.adb:264:44: info: precondition proved (CVC5: 1 VC)
 test.adb:264:70: info: precondition proved (CVC5: 1 VC)
@@ -186,14 +186,14 @@ test.adb:272:07: info: precondition proved (CVC5: 1 VC)
 test.adb:275:32: info: precondition proved (CVC5: 1 VC)
 test.adb:275:43: info: discriminant check proved (CVC5: 1 VC)
 test.adb:275:43: info: in reconstructed value at the end of the borrow at test.adb:275
-test.adb:277:10: info: precondition proved (Z3: 1 VC)
+test.adb:277:10: info: precondition proved (CVC5: 1 VC)
 test.adb:277:20: info: pointer dereference check proved (CVC5: 1 VC)
 test.adb:278:12: info: pointer dereference check proved (CVC5: 1 VC)
 test.adb:283:07: info: precondition proved (CVC5: 1 VC)
 test.adb:283:15: info: precondition proved (CVC5: 1 VC)
 test.adb:284:07: info: precondition proved (CVC5: 1 VC)
 test.adb:285:07: info: precondition proved (Z3: 1 VC)
-test.adb:285:15: info: precondition proved (Z3: 1 VC)
+test.adb:285:15: info: precondition proved (CVC5: 1 VC)
 test.adb:289:07: info: initialization of "X" proved
 test.adb:289:10: info: initialization of "Y" proved
 test.adb:289:19: info: range check proved (CVC5: 2 VC)
@@ -213,9 +213,9 @@ test.adb:306:07: info: initialization of "B1" proved
 test.adb:308:07: info: precondition proved (CVC5: 1 VC)
 test.adb:309:07: info: precondition proved (CVC5: 1 VC)
 test.adb:310:07: info: precondition proved (CVC5: 1 VC)
-test.adb:311:07: info: precondition proved (Z3: 1 VC)
+test.adb:311:07: info: precondition proved (CVC5: 1 VC)
 test.adb:311:15: info: precondition proved (CVC5: 1 VC)
-test.adb:312:07: info: precondition proved (Z3: 1 VC)
+test.adb:312:07: info: precondition proved (CVC5: 1 VC)
 test.adb:312:15: info: precondition proved (CVC5: 1 VC)
 test.adb:314:07: info: precondition proved (CVC5: 1 VC)
 test.adb:315:07: info: precondition proved (Z3: 1 VC)
@@ -246,8 +246,8 @@ test.adb:339:07: info: precondition proved (CVC5: 1 VC)
 test.adb:340:07: info: precondition proved (CVC5: 1 VC)
 test.adb:341:07: info: precondition proved (CVC5: 1 VC)
 test.adb:341:15: info: precondition proved (CVC5: 1 VC)
-test.adb:342:07: info: precondition proved (Z3: 1 VC)
-test.adb:342:15: info: precondition proved (Z3: 1 VC)
+test.adb:342:07: info: precondition proved (CVC5: 1 VC)
+test.adb:342:15: info: precondition proved (CVC5: 1 VC)
 test.adb:345:07: info: precondition proved (CVC5: 1 VC)
 test.adb:345:15: info: precondition proved (CVC5: 1 VC)
 test.adb:349:07: info: initialization of "X" proved
@@ -259,14 +259,14 @@ test.adb:354:07: info: precondition proved (CVC5: 1 VC)
 test.adb:355:07: info: precondition proved (CVC5: 1 VC)
 test.adb:355:15: info: precondition proved (CVC5: 1 VC)
 test.adb:357:07: info: precondition proved (CVC5: 1 VC)
-test.adb:358:07: info: precondition proved (Z3: 1 VC)
+test.adb:358:07: info: precondition proved (CVC5: 1 VC)
 test.adb:359:07: info: precondition proved (CVC5: 1 VC)
 test.adb:360:07: info: precondition proved (CVC5: 1 VC)
 test.adb:360:15: info: precondition proved (CVC5: 1 VC)
 test.adb:361:07: info: precondition proved (Z3: 1 VC)
 test.adb:364:07: info: precondition proved (CVC5: 1 VC)
 test.adb:364:15: info: precondition proved (CVC5: 1 VC)
-test.adb:366:07: info: precondition proved (Z3: 1 VC)
+test.adb:366:07: info: precondition proved (CVC5: 1 VC)
 test.adb:367:07: info: precondition proved (Z3: 1 VC)
 test.adb:368:07: info: precondition proved (CVC5: 1 VC)
 test.adb:368:15: info: precondition proved (CVC5: 1 VC)
@@ -284,7 +284,7 @@ test.adb:382:07: info: precondition proved (Z3: 1 VC)
 test.adb:382:15: info: precondition proved (CVC5: 1 VC)
 test.adb:383:07: info: precondition proved (CVC5: 1 VC)
 test.adb:383:15: info: precondition proved (Z3: 1 VC)
-test.adb:384:07: info: precondition proved (Z3: 1 VC)
+test.adb:384:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:384:15: info: precondition proved (CVC5: 1 VC)
 test.adb:384:34: info: precondition proved (Z3: 1 VC)
 test.adb:388:07: info: initialization of "X" proved
@@ -293,11 +293,11 @@ test.adb:388:19: info: range check proved (CVC5: 2 VC)
 test.adb:389:07: info: initialization of "Q" proved
 test.adb:392:07: info: precondition proved (CVC5: 1 VC)
 test.adb:394:07: info: precondition proved (CVC5: 1 VC)
-test.adb:397:07: info: precondition proved (Z3: 1 VC)
+test.adb:397:07: info: precondition proved (CVC5: 1 VC)
 test.adb:402:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:403:07: info: precondition proved (Z3: 1 VC)
 test.adb:404:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:404:15: info: precondition proved (Z3: 1 VC)
+test.adb:404:15: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:405:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:405:15: info: precondition proved (Z3: 1 VC)
 test.adb:410:07: info: initialization of "X" proved
@@ -309,9 +309,9 @@ test.adb:415:07: medium: precondition might fail [provers reached step limit bef
 test.adb:417:07: info: precondition proved (CVC5: 1 VC)
 test.adb:418:07: info: precondition proved (CVC5: 1 VC)
 test.adb:419:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:419:15: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:420:07: info: precondition proved (Z3: 1 VC)
-test.adb:420:15: info: precondition proved (Z3: 1 VC)
+test.adb:419:15: info: precondition proved (Z3: 1 VC)
+test.adb:420:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:420:15: info: precondition proved (CVC5: 1 VC)
 test.adb:425:07: info: initialization of "X" proved
 test.adb:425:10: info: initialization of "Y" proved
 test.adb:425:19: info: range check proved (CVC5: 2 VC)
@@ -321,7 +321,7 @@ test.adb:428:07: info: precondition proved (CVC5: 1 VC)
 test.adb:431:22: info: assertion proved (CVC5: 1 VC)
 test.adb:432:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:434:07: info: precondition proved (CVC5: 1 VC)
-test.adb:435:07: info: precondition proved (Z3: 1 VC)
+test.adb:435:07: info: precondition proved (CVC5: 1 VC)
 test.adb:436:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:436:15: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:437:07: medium: precondition might fail [provers reached step limit before completing the proof]
@@ -333,11 +333,11 @@ test.adb:442:07: info: initialization of "Q" proved
 test.adb:445:07: info: precondition proved (CVC5: 1 VC)
 test.adb:447:07: info: precondition proved (CVC5: 1 VC)
 test.adb:451:07: info: precondition proved (CVC5: 1 VC)
-test.adb:452:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:452:07: info: precondition proved (Z3: 1 VC)
 test.adb:453:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:453:15: info: precondition proved (Z3: 1 VC)
+test.adb:453:15: medium: precondition might fail [possible fix: call at line 449 should mention Container (for argument X) in a postcondition] [provers reached step limit before completing the proof]
 test.adb:454:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:454:15: info: precondition proved (Z3: 1 VC)
+test.adb:454:15: medium: precondition might fail [possible fix: call at line 449 should mention Container (for argument X) in a postcondition] [provers reached step limit before completing the proof]
 test.adb:458:07: info: initialization of "X" proved
 test.adb:458:10: info: initialization of "Y" proved
 test.adb:458:19: info: range check proved (CVC5: 2 VC)
@@ -354,7 +354,7 @@ test.adb:475:07: info: initialization of "X" proved
 test.adb:475:16: info: range check proved (CVC5: 2 VC)
 test.adb:477:07: info: precondition proved (CVC5: 1 VC)
 test.adb:478:07: info: precondition proved (CVC5: 1 VC)
-test.adb:479:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:479:07: info: precondition proved (Z3: 1 VC)
 test.adb:479:46: info: precondition proved (CVC5: 1 VC)
 test.adb:483:07: info: initialization of "X" proved
 test.adb:483:16: info: range check proved (CVC5: 2 VC)
@@ -386,7 +386,7 @@ test.adb:518:07: info: initialization of "X" proved
 test.adb:518:16: info: range check proved (CVC5: 2 VC)
 test.adb:520:07: info: precondition proved (CVC5: 1 VC)
 test.adb:521:07: info: precondition proved (CVC5: 1 VC)
-test.adb:522:07: info: precondition proved (Z3: 1 VC)
+test.adb:522:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:522:45: info: precondition proved (CVC5: 1 VC)
 test.adb:526:07: info: initialization of "X" proved
 test.adb:526:16: info: range check proved (CVC5: 2 VC)
@@ -420,7 +420,7 @@ test.adb:563:07: info: precondition proved (CVC5: 1 VC)
 test.adb:565:07: info: precondition proved (CVC5: 1 VC)
 test.adb:567:07: info: precondition proved (CVC5: 1 VC)
 test.adb:568:07: info: precondition proved (CVC5: 1 VC)
-test.adb:569:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:569:07: info: precondition proved (Z3: 1 VC)
 test.adb:573:07: info: initialization of "X" proved
 test.adb:573:16: info: range check proved (CVC5: 2 VC)
 test.adb:575:07: info: precondition proved (CVC5: 1 VC)
@@ -441,10 +441,10 @@ test.adb:597:16: info: range check proved (CVC5: 2 VC)
 test.adb:599:07: info: precondition proved (CVC5: 1 VC)
 test.adb:601:07: info: precondition proved (CVC5: 1 VC)
 test.adb:603:07: info: precondition proved (CVC5: 1 VC)
-test.adb:604:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:604:07: info: precondition proved (Z3: 1 VC)
 test.adb:605:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:605:54: info: precondition proved (CVC5: 1 VC)
-test.adb:607:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
+test.adb:607:07: info: precondition proved (CVC5: 2 VC)
 test.adb:608:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:608:54: info: precondition proved (CVC5: 1 VC)
 test.adb:612:07: info: initialization of "X" proved
@@ -455,8 +455,8 @@ test.adb:618:07: info: precondition proved (Z3: 1 VC)
 test.adb:619:07: info: precondition proved (CVC5: 1 VC)
 test.adb:620:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:620:56: info: precondition proved (CVC5: 1 VC)
-test.adb:622:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
-test.adb:623:07: info: precondition proved (Z3: 1 VC)
+test.adb:622:07: info: precondition proved (CVC5: 2 VC)
+test.adb:623:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:623:56: info: precondition proved (CVC5: 1 VC)
 test.adb:627:07: info: initialization of "X" proved
 test.adb:627:10: info: initialization of "Y" proved
