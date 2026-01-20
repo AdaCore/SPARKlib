@@ -335,7 +335,7 @@ test.adb:447:07: info: precondition proved (CVC5: 1 VC)
 test.adb:451:07: info: precondition proved (CVC5: 1 VC)
 test.adb:452:07: info: precondition proved (Z3: 1 VC)
 test.adb:453:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:453:15: medium: precondition might fail [possible fix: call at line 449 should mention Container (for argument X) in a postcondition] [provers reached step limit before completing the proof]
+test.adb:453:15: info: precondition proved (Z3: 1 VC)
 test.adb:454:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:454:15: medium: precondition might fail [possible fix: call at line 449 should mention Container (for argument X) in a postcondition] [provers reached step limit before completing the proof]
 test.adb:458:07: info: initialization of "X" proved
@@ -364,7 +364,7 @@ test.adb:486:15: info: precondition proved (CVC5: 1 VC)
 test.adb:490:07: info: initialization of "X" proved
 test.adb:490:16: info: range check proved (CVC5: 2 VC)
 test.adb:492:07: info: precondition proved (CVC5: 1 VC)
-test.adb:493:07: info: precondition proved (Z3: 1 VC)
+test.adb:493:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:493:15: info: precondition proved (CVC5: 1 VC)
 test.adb:497:07: info: initialization of "X" proved
 test.adb:497:10: info: initialization of "Y" proved
@@ -391,7 +391,7 @@ test.adb:522:45: info: precondition proved (CVC5: 1 VC)
 test.adb:526:07: info: initialization of "X" proved
 test.adb:526:16: info: range check proved (CVC5: 2 VC)
 test.adb:528:07: info: precondition proved (CVC5: 1 VC)
-test.adb:529:07: info: precondition proved (Z3: 1 VC)
+test.adb:529:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:529:15: info: precondition proved (CVC5: 1 VC)
 test.adb:533:07: info: initialization of "X" proved
 test.adb:533:16: info: range check proved (CVC5: 2 VC)
