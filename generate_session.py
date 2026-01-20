@@ -22,7 +22,7 @@ projectfile = "sparklib_gen.gpr"
 def run_manual(check_to_prove, option=""):
     cmd = (
         f"gnatprove -j0 -P {projectfile} -U --output=oneline"
-        "--prover=coq --report=provers"
+        " --prover=coq --report=provers"
     )
     if ":" not in check_to_prove:
         run(cmd + " " + option + check_to_prove)
@@ -33,7 +33,7 @@ def run_manual(check_to_prove, option=""):
 def run_automatic(prover, level=4, timeout=None):
     cmd = (
         f"gnatprove -P {projectfile} --counterexamples=off --output=oneline -j0"
-        + f" --prover={prover} --level={level}"
+        f" --prover={prover} --level={level}"
     )
     if timeout is not None:
         cmd += f" --timeout={timeout}"
@@ -41,7 +41,7 @@ def run_automatic(prover, level=4, timeout=None):
 
 
 def run_options(opt):
-    cmd = f"gnatprove -P {projectfile} --counterexamples=off -j0 {opt}"
+    cmd = f"gnatprove -P {projectfile} --counterexamples=off -j0 --output=oneline {opt}"
     run(cmd)
 
 

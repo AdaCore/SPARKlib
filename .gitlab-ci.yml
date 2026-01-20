@@ -40,7 +40,6 @@ pre-commit:
     - eval $(anod printenv gnatformat -Qdate)
     - gnatformat --version
     - cd $CI_PROJECT_DIR
-    - . setup.sh
 
 coverage:
   stage: build
