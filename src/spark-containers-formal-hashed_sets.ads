@@ -613,7 +613,12 @@ is
      (Container : in out Set; Position : Cursor; New_Item : Element_Type)
    with
      Global => null,
-     Pre    => (SPARKlib_Defensive => Has_Element (Container, Position)),
+     Pre    =>
+       (SPARKlib_Defensive =>
+          Has_Element (Container, Position)
+          and then
+            (Equivalent_Elements (Element (Container, Position), New_Item)
+             or else not Contains (Container, New_Item))),
      Post   =>
        (SPARKlib_Full =>
           Length (Container)
