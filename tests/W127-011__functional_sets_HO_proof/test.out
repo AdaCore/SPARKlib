@@ -537,9 +537,15 @@ test_set_ho.adb:49:04: info: in instantiation at spark-containers-functional-set
 test_set_ho.adb:49:04: info: in instantiation at spark-containers-functional-sets-higher_order.adb:363
 test_set_ho.adb:49:04: info: local subprogram "Do_Proof" only analyzed in the context of calls [info-unrolling-inlining]
 test_set_ho.adb:49:04: info: local subprogram "Do_Proof" only analyzed in the context of calls [info-unrolling-inlining]
-test_set_ho.adb:49:04: warning: expression function body of subprograms with a numeric variant might not be available on recursive calls [numeric-variant]
-test_set_ho.adb:49:04: warning: expression function body of subprograms with a numeric variant might not be available on recursive calls [numeric-variant]
-test_set_ho.adb:49:04: warning: function contract might not be available on recursive calls [contracts-recursive]
-test_set_ho.adb:49:04: warning: in instantiation at spark-containers-functional-sets-higher_order.adb:43
+test_set_ho.adb:49:04: warning: "Count_Rec" is recursive; its body and contract might not be available on recursive calls from contracts and assertions [contracts-recursive]
+test_set_ho.adb:49:04: warning: "Sum_Rec" is recursive; its body might not be available on recursive calls from contracts and assertions [contracts-recursive]
 test_set_ho.adb:49:04: warning: in instantiation at spark-containers-functional-sets-higher_order.adb:43
 test_set_ho.adb:49:04: warning: in instantiation at spark-containers-functional-sets-higher_order.adb:78
+test_set_ho.adb:49:04: warning: in instantiation at spark-containers-functional-sets-higher_order.adb:85
+test_set_ho.adb:49:04: warning: in instantiation at spark-containers-functional-sets-higher_order.adb:95
+test_set_ho.adb:49:04: warning: potentially missing automatically instanciated lemma "Lemma_Sum_Eq" declared at spark-containers-functional-sets-higher_order.ads:300, instance at line 49
+test_set_ho.adb:49:04: warning: potentially missing automatically instanciated lemma "Lemma_Sum_Eq" declared at spark-containers-functional-sets-higher_order.ads:300, instance at line 49
+test_set_ho.adb:49:04: warning: potentially missing automatically instanciated lemma "Lemma_Sum_Remove" declared at spark-containers-functional-sets-higher_order.ads:314, instance at line 49
+test_set_ho.adb:49:04: warning: potentially missing automatically instanciated lemma "Lemma_Sum_Remove" declared at spark-containers-functional-sets-higher_order.ads:314, instance at line 49
+test_set_ho.adb:49:04: warning: references between entities introduce a cycle in proof dependencies; (implicit) contract of mutally dependent functions might not be available on calls from contracts and assertions [cyclic-dependency]
+test_set_ho.adb:49:04: warning: references between entities introduce a cycle in proof dependencies; (implicit) contract of mutally dependent functions might not be available on calls from contracts and assertions [cyclic-dependency]

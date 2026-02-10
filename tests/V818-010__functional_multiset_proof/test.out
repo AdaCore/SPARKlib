@@ -1,6 +1,4 @@
-my_multiset.ads:6:01: warning: expression function body of subprograms with a numeric variant might not be available on recursive calls [numeric-variant]
-my_multiset.ads:6:01: warning: function contract might not be available on recursive calls [contracts-recursive]
-my_multiset.ads:6:01: warning: in instantiation at spark-containers-functional-multisets.adb:17
+my_multiset.ads:6:01: warning: "Cardinality_Rec" is recursive; its body and contract might not be available on recursive calls from contracts and assertions [contracts-recursive]
 my_multiset.ads:6:01: warning: in instantiation at spark-containers-functional-multisets.adb:17
 spark-containers-functional-maps.ads:36:16: info: aspect Always_Terminates on "Eq_Reflexive" has been proved, subprogram will terminate, in instantiation at spark-containers-functional-multisets.ads:580, in instantiation at my_multiset.ads:6
 spark-containers-functional-maps.ads:39:16: info: aspect Always_Terminates on "Eq_Symmetric" has been proved, subprogram will terminate, in instantiation at spark-containers-functional-multisets.ads:580, in instantiation at my_multiset.ads:6
