@@ -114,7 +114,7 @@ is
 
    procedure Create (Memory : in out Memory_Type; O : Object; P : out Pointer)
    with
-     Global => null,
+     Global => Memory_Addresses,
      Post   =>
        Valid (+Memory, Address (P))
        and then
