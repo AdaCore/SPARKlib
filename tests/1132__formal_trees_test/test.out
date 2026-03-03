@@ -1,0 +1,562 @@
+test.adb:14:04: warning: "=" is recursive; its contract might not be available on recursive calls from contracts and assertions [contracts-recursive]
+test.adb:14:04: warning: "Count" is recursive; (implicit) contract of mutally recursive functions might not be available on calls from contracts and assertions [contracts-recursive]
+test.adb:14:04: warning: "Count_Children" is recursive; (implicit) contract of mutally recursive functions might not be available on calls from contracts and assertions [contracts-recursive]
+test.adb:14:04: warning: "Height" is recursive; its contract might not be available on recursive calls from contracts and assertions [contracts-recursive]
+test.adb:14:04: warning: in instantiation at spark-containers-formal-trees.ads:65
+test.adb:14:04: warning: in instantiation at spark-containers-formal-trees.ads:65
+test.adb:14:04: warning: in instantiation at spark-containers-formal-trees.ads:65
+test.adb:14:04: warning: in instantiation at spark-containers-formal-trees.ads:65
+test.adb:14:04: warning: in instantiation at spark-containers-functional-trees.ads:125
+test.adb:14:04: warning: in instantiation at spark-containers-functional-trees.ads:140
+test.adb:14:04: warning: in instantiation at spark-containers-functional-trees.ads:233
+test.adb:14:04: warning: in instantiation at spark-containers-functional-trees.ads:78
+test.adb:14:04: warning: its contract might be missing
+test.adb:14:04: warning: its contract might be missing
+test.adb:14:04: warning: potentially missing automatically instanciated lemma "Lemma_Count_Children_Tail" declared at spark-containers-functional-trees.ads:249, instance at spark-containers-formal-trees.ads:65, instance at line 14
+test.adb:14:04: warning: potentially missing contract for "Count" declared at spark-containers-functional-trees.ads:140, instance at spark-containers-formal-trees.ads:65, instance at line 14
+test.adb:14:04: warning: potentially missing contract for "Count_Children" declared at spark-containers-functional-trees.ads:233, instance at spark-containers-formal-trees.ads:65, instance at line 14
+test.adb:24:21: high: "Text_IO.File_System" must be a global output of "Assert" (SPARK RM 6.1.4(18))
+test.adb:25:10: info: only expected exception raised (CVC5: 1 VC)
+test.adb:29:14: warning: subprogram "Test_Empty_Tree" has no effect
+test.adb:32:07: info: precondition proved (CVC5: 1 VC)
+test.adb:33:07: info: precondition proved (CVC5: 1 VC)
+test.adb:36:14: warning: subprogram "Test_Element" has no effect
+test.adb:37:07: info: initialization of "T" proved
+test.adb:37:17: info: range check proved (CVC5: 2 VC)
+test.adb:39:07: info: precondition proved (CVC5: 2 VC)
+test.adb:40:07: info: precondition proved (CVC5: 3 VC)
+test.adb:41:07: info: precondition proved (CVC5: 3 VC)
+test.adb:42:07: info: precondition proved (CVC5: 3 VC)
+test.adb:44:07: info: precondition proved (CVC5: 1 VC)
+test.adb:44:15: info: precondition proved (CVC5: 1 VC)
+test.adb:45:07: info: precondition proved (CVC5: 1 VC)
+test.adb:45:15: info: precondition proved (CVC5: 1 VC)
+test.adb:45:27: info: precondition proved (CVC5: 1 VC)
+test.adb:46:07: info: precondition proved (CVC5: 1 VC)
+test.adb:46:15: info: precondition proved (CVC5: 1 VC)
+test.adb:46:27: info: precondition proved (CVC5: 1 VC)
+test.adb:47:07: info: precondition proved (CVC5: 1 VC)
+test.adb:47:15: info: precondition proved (CVC5: 1 VC)
+test.adb:47:27: info: precondition proved (CVC5: 1 VC)
+test.adb:50:14: warning: subprogram "Test_Child" has no effect
+test.adb:51:07: info: initialization of "T" proved
+test.adb:51:18: info: range check proved (CVC5: 2 VC)
+test.adb:52:07: info: initialization of "C2" proved
+test.adb:53:07: info: initialization of "C7" proved
+test.adb:55:07: info: precondition proved (CVC5: 2 VC)
+test.adb:56:07: info: precondition proved (CVC5: 3 VC)
+test.adb:57:07: info: precondition proved (CVC5: 3 VC)
+test.adb:58:07: info: precondition proved (CVC5: 3 VC)
+test.adb:62:13: info: precondition proved (CVC5: 1 VC)
+test.adb:66:13: info: precondition proved (CVC5: 1 VC)
+test.adb:68:07: info: precondition proved (CVC5: 1 VC)
+test.adb:68:41: info: precondition proved (CVC5: 1 VC)
+test.adb:69:07: info: precondition proved (CVC5: 1 VC)
+test.adb:72:14: warning: subprogram "Test_Is_Root" has no effect
+test.adb:73:07: info: initialization of "T" proved
+test.adb:73:17: info: range check proved (CVC5: 2 VC)
+test.adb:74:07: info: initialization of "C" proved
+test.adb:76:07: info: precondition proved (CVC5: 2 VC)
+test.adb:77:07: info: precondition proved (CVC5: 3 VC)
+test.adb:80:07: info: precondition proved (CVC5: 1 VC)
+test.adb:82:12: info: precondition proved (CVC5: 1 VC)
+test.adb:83:07: info: precondition proved (CVC5: 1 VC)
+test.adb:86:14: warning: subprogram "Test_Is_Leaf" has no effect
+test.adb:87:07: info: initialization of "T" proved
+test.adb:87:17: info: range check proved (CVC5: 2 VC)
+test.adb:88:07: info: initialization of "C" proved
+test.adb:90:07: info: precondition proved (CVC5: 2 VC)
+test.adb:91:07: info: precondition proved (CVC5: 3 VC)
+test.adb:94:07: info: precondition proved (CVC5: 1 VC)
+test.adb:94:19: info: precondition proved (CVC5: 1 VC)
+test.adb:96:12: info: precondition proved (CVC5: 1 VC)
+test.adb:97:07: info: precondition proved (CVC5: 1 VC)
+test.adb:97:15: info: precondition proved (CVC5: 1 VC)
+test.adb:100:14: warning: subprogram "Test_Is_Ancestor_Of" has no effect
+test.adb:101:07: info: initialization of "T" proved
+test.adb:101:18: info: range check proved (CVC5: 2 VC)
+test.adb:102:07: info: initialization of "CR" proved
+test.adb:103:07: info: initialization of "C1" proved
+test.adb:104:07: info: initialization of "C2" proved
+test.adb:106:07: info: precondition proved (CVC5: 2 VC)
+test.adb:107:07: info: precondition proved (CVC5: 3 VC)
+test.adb:108:07: info: precondition proved (CVC5: 3 VC)
+test.adb:108:27: info: precondition proved (CVC5: 1 VC)
+test.adb:111:13: info: precondition proved (CVC5: 1 VC)
+test.adb:112:13: info: precondition proved (CVC5: 1 VC)
+test.adb:114:07: info: precondition proved (CVC5: 1 VC)
+test.adb:114:15: info: precondition proved (CVC5: 2 VC)
+test.adb:115:07: info: precondition proved (CVC5: 1 VC)
+test.adb:115:15: info: precondition proved (CVC5: 2 VC)
+test.adb:116:07: info: precondition proved (CVC5: 1 VC)
+test.adb:116:15: info: precondition proved (CVC5: 2 VC)
+test.adb:117:07: info: precondition proved (CVC5: 1 VC)
+test.adb:117:19: info: precondition proved (CVC5: 2 VC)
+test.adb:118:07: info: precondition proved (CVC5: 1 VC)
+test.adb:118:19: info: precondition proved (CVC5: 2 VC)
+test.adb:121:14: warning: subprogram "Test_In_Subtree" has no effect
+test.adb:122:07: info: initialization of "T" proved
+test.adb:122:18: info: range check proved (CVC5: 2 VC)
+test.adb:123:07: info: initialization of "CR" proved
+test.adb:124:07: info: initialization of "C1" proved
+test.adb:125:07: info: initialization of "C2" proved
+test.adb:127:07: info: precondition proved (CVC5: 2 VC)
+test.adb:128:07: info: precondition proved (CVC5: 3 VC)
+test.adb:129:07: info: precondition proved (CVC5: 3 VC)
+test.adb:129:27: info: precondition proved (CVC5: 1 VC)
+test.adb:132:13: info: precondition proved (CVC5: 1 VC)
+test.adb:133:13: info: precondition proved (CVC5: 1 VC)
+test.adb:135:07: info: precondition proved (CVC5: 1 VC)
+test.adb:135:15: info: precondition proved (CVC5: 1 VC)
+test.adb:136:07: info: precondition proved (CVC5: 1 VC)
+test.adb:136:15: info: precondition proved (CVC5: 1 VC)
+test.adb:137:07: info: precondition proved (CVC5: 1 VC)
+test.adb:137:15: info: precondition proved (CVC5: 1 VC)
+test.adb:138:07: info: precondition proved (CVC5: 1 VC)
+test.adb:138:15: info: precondition proved (CVC5: 1 VC)
+test.adb:139:07: info: precondition proved (CVC5: 1 VC)
+test.adb:139:19: info: precondition proved (CVC5: 1 VC)
+test.adb:142:14: warning: subprogram "Test_Depth" has no effect
+test.adb:143:07: info: initialization of "T" proved
+test.adb:143:18: info: range check proved (CVC5: 2 VC)
+test.adb:144:07: info: initialization of "CR" proved
+test.adb:145:07: info: initialization of "C1" proved
+test.adb:146:07: info: initialization of "C2" proved
+test.adb:148:07: info: precondition proved (CVC5: 2 VC)
+test.adb:149:07: info: precondition proved (CVC5: 3 VC)
+test.adb:150:07: info: precondition proved (CVC5: 3 VC)
+test.adb:150:27: info: precondition proved (CVC5: 1 VC)
+test.adb:153:13: info: precondition proved (CVC5: 1 VC)
+test.adb:154:13: info: precondition proved (CVC5: 1 VC)
+test.adb:156:07: info: precondition proved (CVC5: 1 VC)
+test.adb:156:15: info: precondition proved (CVC5: 1 VC)
+test.adb:157:07: info: precondition proved (CVC5: 1 VC)
+test.adb:157:15: info: precondition proved (CVC5: 1 VC)
+test.adb:158:07: info: precondition proved (CVC5: 1 VC)
+test.adb:158:15: info: precondition proved (CVC5: 1 VC)
+test.adb:161:14: warning: subprogram "Test_Eq_Same_Obj" has no effect
+test.adb:162:07: info: initialization of "T1" proved
+test.adb:162:18: info: range check proved (CVC5: 2 VC)
+test.adb:164:07: info: initialization of "B11" proved
+test.adb:167:07: info: precondition proved (CVC5: 2 VC)
+test.adb:168:07: info: precondition proved (CVC5: 3 VC)
+test.adb:169:07: info: precondition proved (CVC5: 3 VC)
+test.adb:170:07: info: precondition proved (CVC5: 3 VC)
+test.adb:171:07: info: precondition proved (CVC5: 3 VC)
+test.adb:177:07: info: precondition proved (CVC5: 1 VC)
+test.adb:180:14: warning: subprogram "Test_Eq_Empty_Vs_Non_Empty" has no effect
+test.adb:181:07: info: initialization of "T1" proved
+test.adb:181:18: info: range check proved (CVC5: 2 VC)
+test.adb:183:07: info: initialization of "B1E" proved
+test.adb:184:07: info: initialization of "BE1" proved
+test.adb:187:07: info: precondition proved (CVC5: 2 VC)
+test.adb:188:07: info: precondition proved (CVC5: 3 VC)
+test.adb:189:07: info: precondition proved (CVC5: 3 VC)
+test.adb:190:07: info: precondition proved (CVC5: 3 VC)
+test.adb:191:07: info: precondition proved (CVC5: 3 VC)
+test.adb:198:07: info: precondition proved (CVC5: 1 VC)
+test.adb:201:14: warning: subprogram "Test_Eq_Different_Roots" has no effect
+test.adb:202:07: info: initialization of "T1" proved
+test.adb:202:11: info: initialization of "T2" proved
+test.adb:202:22: info: range check proved (CVC5: 2 VC)
+test.adb:204:07: info: initialization of "B12" proved
+test.adb:205:07: info: initialization of "B21" proved
+test.adb:208:07: info: precondition proved (CVC5: 2 VC)
+test.adb:209:07: info: precondition proved (CVC5: 3 VC)
+test.adb:210:07: info: precondition proved (CVC5: 3 VC)
+test.adb:211:07: info: precondition proved (CVC5: 3 VC)
+test.adb:212:07: info: precondition proved (CVC5: 3 VC)
+test.adb:216:07: info: precondition proved (CVC5: 2 VC)
+test.adb:217:07: info: precondition proved (CVC5: 3 VC)
+test.adb:218:07: info: precondition proved (CVC5: 3 VC)
+test.adb:219:07: info: precondition proved (CVC5: 3 VC)
+test.adb:220:07: info: precondition proved (CVC5: 3 VC)
+test.adb:225:07: info: precondition proved (CVC5: 1 VC)
+test.adb:228:14: warning: subprogram "Test_Eq_Different_Depths" has no effect
+test.adb:229:07: info: initialization of "T1" proved
+test.adb:229:11: info: initialization of "T3" proved
+test.adb:229:22: info: range check proved (CVC5: 2 VC)
+test.adb:231:07: info: initialization of "B13" proved
+test.adb:232:07: info: initialization of "B31" proved
+test.adb:235:07: info: precondition proved (CVC5: 2 VC)
+test.adb:236:07: info: precondition proved (CVC5: 3 VC)
+test.adb:237:07: info: precondition proved (CVC5: 3 VC)
+test.adb:238:07: info: precondition proved (CVC5: 3 VC)
+test.adb:239:07: info: precondition proved (CVC5: 3 VC)
+test.adb:243:07: info: precondition proved (CVC5: 2 VC)
+test.adb:244:07: info: precondition proved (CVC5: 3 VC)
+test.adb:245:07: info: precondition proved (CVC5: 3 VC)
+test.adb:246:07: info: precondition proved (CVC5: 3 VC)
+test.adb:247:07: info: precondition proved (CVC5: 3 VC)
+test.adb:247:28: info: precondition proved (CVC5: 1 VC)
+test.adb:252:07: info: precondition proved (Z3: 1 VC)
+test.adb:255:14: warning: subprogram "Test_Eq_Different_Counts" has no effect
+test.adb:256:07: info: initialization of "T1" proved
+test.adb:256:11: info: initialization of "T4" proved
+test.adb:256:22: info: range check proved (CVC5: 2 VC)
+test.adb:258:07: info: initialization of "B14" proved
+test.adb:259:07: info: initialization of "B41" proved
+test.adb:262:07: info: precondition proved (CVC5: 2 VC)
+test.adb:263:07: info: precondition proved (CVC5: 3 VC)
+test.adb:264:07: info: precondition proved (CVC5: 3 VC)
+test.adb:265:07: info: precondition proved (CVC5: 3 VC)
+test.adb:266:07: info: precondition proved (CVC5: 3 VC)
+test.adb:270:07: info: precondition proved (CVC5: 2 VC)
+test.adb:271:07: info: precondition proved (CVC5: 3 VC)
+test.adb:272:07: info: precondition proved (CVC5: 3 VC)
+test.adb:273:07: info: precondition proved (CVC5: 3 VC)
+test.adb:278:07: info: precondition proved (CVC5: 1 VC)
+test.adb:281:14: warning: subprogram "Test_Eq_Same_Insertion_Order" has no effect
+test.adb:282:07: info: initialization of "T1" proved
+test.adb:282:11: info: initialization of "T5" proved
+test.adb:282:22: info: range check proved (CVC5: 2 VC)
+test.adb:284:07: info: precondition proved (CVC5: 2 VC)
+test.adb:285:07: info: precondition proved (CVC5: 3 VC)
+test.adb:286:07: info: precondition proved (CVC5: 3 VC)
+test.adb:287:07: info: precondition proved (CVC5: 3 VC)
+test.adb:292:07: info: precondition proved (CVC5: 2 VC)
+test.adb:293:07: info: precondition proved (CVC5: 3 VC)
+test.adb:294:07: info: precondition proved (CVC5: 3 VC)
+test.adb:295:07: info: precondition proved (CVC5: 3 VC)
+test.adb:297:07: info: precondition proved (Z3: 1 VC)
+test.adb:298:07: info: precondition proved (Z3: 1 VC)
+test.adb:301:14: warning: subprogram "Test_Eq_Different_Insertion_Order" has no effect
+test.adb:302:07: info: initialization of "T1" proved
+test.adb:302:11: info: initialization of "T5" proved
+test.adb:302:22: info: range check proved (CVC5: 2 VC)
+test.adb:304:07: info: precondition proved (CVC5: 2 VC)
+test.adb:305:07: info: precondition proved (CVC5: 3 VC)
+test.adb:306:07: info: precondition proved (CVC5: 3 VC)
+test.adb:307:07: info: precondition proved (CVC5: 3 VC)
+test.adb:312:07: info: precondition proved (CVC5: 2 VC)
+test.adb:313:07: info: precondition proved (CVC5: 3 VC)
+test.adb:314:07: info: precondition proved (CVC5: 3 VC)
+test.adb:315:07: info: precondition proved (CVC5: 3 VC)
+test.adb:317:07: info: precondition proved (Z3: 1 VC)
+test.adb:318:07: info: precondition proved (Z3: 1 VC)
+test.adb:321:14: warning: subprogram "Test_Eq_Different_Capacity" has no effect
+test.adb:322:07: info: initialization of "T1" proved
+test.adb:322:18: info: range check proved (CVC5: 2 VC)
+test.adb:323:07: info: initialization of "T5" proved
+test.adb:323:18: info: range check proved (CVC5: 2 VC)
+test.adb:325:07: info: precondition proved (CVC5: 2 VC)
+test.adb:326:07: info: precondition proved (CVC5: 3 VC)
+test.adb:327:07: info: precondition proved (CVC5: 3 VC)
+test.adb:329:07: info: precondition proved (CVC5: 2 VC)
+test.adb:330:07: info: precondition proved (CVC5: 3 VC)
+test.adb:331:07: info: precondition proved (CVC5: 3 VC)
+test.adb:333:07: info: precondition proved (altergo: 1 VC)
+test.adb:334:07: info: precondition proved (altergo: 1 VC)
+test.adb:339:14: warning: subprogram "Test_Default_Init" has no effect
+test.adb:340:07: info: initialization of "T" proved
+test.adb:340:17: info: range check proved (CVC5: 2 VC)
+test.adb:342:07: info: precondition proved (CVC5: 1 VC)
+test.adb:345:14: warning: subprogram "Test_Insert_Parent_Root" has no effect
+test.adb:346:07: info: initialization of "T" proved
+test.adb:346:17: info: range check proved (CVC5: 2 VC)
+test.adb:347:07: info: initialization of "C" proved
+test.adb:349:07: info: precondition proved (CVC5: 2 VC)
+test.adb:350:07: info: precondition proved (CVC5: 3 VC)
+test.adb:351:07: info: precondition proved (CVC5: 3 VC)
+test.adb:352:07: info: precondition proved (CVC5: 3 VC)
+test.adb:353:07: info: precondition proved (CVC5: 2 VC)
+test.adb:356:07: info: precondition proved (CVC5: 1 VC)
+test.adb:356:15: info: precondition proved (CVC5: 1 VC)
+test.adb:358:12: info: precondition proved (CVC5: 1 VC)
+test.adb:359:07: info: precondition proved (CVC5: 1 VC)
+test.adb:359:15: info: precondition proved (CVC5: 1 VC)
+test.adb:361:12: info: precondition proved (CVC5: 1 VC)
+test.adb:361:22: info: precondition proved (CVC5: 1 VC)
+test.adb:362:07: info: precondition proved (CVC5: 1 VC)
+test.adb:362:15: info: precondition proved (CVC5: 1 VC)
+test.adb:364:12: info: precondition proved (CVC5: 1 VC)
+test.adb:364:22: info: precondition proved (CVC5: 1 VC)
+test.adb:365:07: info: precondition proved (CVC5: 1 VC)
+test.adb:365:15: info: precondition proved (CVC5: 1 VC)
+test.adb:367:12: info: precondition proved (CVC5: 1 VC)
+test.adb:367:22: info: precondition proved (CVC5: 1 VC)
+test.adb:368:07: info: precondition proved (CVC5: 1 VC)
+test.adb:368:15: info: precondition proved (CVC5: 1 VC)
+test.adb:371:14: warning: subprogram "Test_Insert_Parent_Non_Root" has no effect
+test.adb:372:07: info: initialization of "T" proved
+test.adb:372:17: info: range check proved (CVC5: 2 VC)
+test.adb:373:07: info: initialization of "C" proved
+test.adb:375:07: info: precondition proved (CVC5: 2 VC)
+test.adb:376:07: info: precondition proved (CVC5: 3 VC)
+test.adb:377:07: info: precondition proved (CVC5: 3 VC)
+test.adb:378:07: info: precondition proved (CVC5: 3 VC)
+test.adb:379:07: info: precondition proved (CVC5: 2 VC)
+test.adb:379:28: info: precondition proved (CVC5: 1 VC)
+test.adb:382:07: info: precondition proved (CVC5: 1 VC)
+test.adb:382:15: info: precondition proved (CVC5: 1 VC)
+test.adb:384:12: info: precondition proved (CVC5: 1 VC)
+test.adb:385:07: info: precondition proved (CVC5: 1 VC)
+test.adb:385:15: info: precondition proved (CVC5: 1 VC)
+test.adb:387:12: info: precondition proved (CVC5: 1 VC)
+test.adb:387:22: info: precondition proved (CVC5: 1 VC)
+test.adb:388:07: info: precondition proved (CVC5: 1 VC)
+test.adb:388:15: info: precondition proved (CVC5: 1 VC)
+test.adb:390:12: info: precondition proved (CVC5: 1 VC)
+test.adb:391:07: info: precondition proved (CVC5: 1 VC)
+test.adb:391:15: info: precondition proved (CVC5: 1 VC)
+test.adb:393:12: info: precondition proved (CVC5: 1 VC)
+test.adb:394:07: info: precondition proved (CVC5: 1 VC)
+test.adb:394:15: info: precondition proved (CVC5: 1 VC)
+test.adb:397:14: warning: subprogram "Test_Delete_Leaf" has no effect
+test.adb:398:07: info: initialization of "T" proved
+test.adb:398:17: info: range check proved (CVC5: 2 VC)
+test.adb:399:07: info: initialization of "C" proved
+test.adb:401:07: info: precondition proved (CVC5: 2 VC)
+test.adb:402:07: info: precondition proved (CVC5: 3 VC)
+test.adb:403:07: info: precondition proved (CVC5: 3 VC)
+test.adb:404:07: info: precondition proved (CVC5: 3 VC)
+test.adb:406:07: info: precondition proved (CVC5: 1 VC)
+test.adb:406:18: info: precondition proved (CVC5: 1 VC)
+test.adb:409:07: info: precondition proved (CVC5: 1 VC)
+test.adb:410:07: info: precondition proved (CVC5: 1 VC)
+test.adb:410:15: info: precondition proved (CVC5: 1 VC)
+test.adb:412:12: info: precondition proved (CVC5: 1 VC)
+test.adb:413:07: info: precondition proved (CVC5: 1 VC)
+test.adb:414:07: info: precondition proved (CVC5: 1 VC)
+test.adb:414:15: info: precondition proved (CVC5: 1 VC)
+test.adb:416:12: info: precondition proved (CVC5: 1 VC)
+test.adb:417:07: info: precondition proved (CVC5: 1 VC)
+test.adb:419:12: info: precondition proved (CVC5: 1 VC)
+test.adb:420:07: info: precondition proved (CVC5: 1 VC)
+test.adb:421:07: info: precondition proved (CVC5: 1 VC)
+test.adb:421:15: info: precondition proved (CVC5: 1 VC)
+test.adb:424:14: warning: subprogram "Test_Delete_Root" has no effect
+test.adb:425:07: info: initialization of "T" proved
+test.adb:425:17: info: range check proved (CVC5: 2 VC)
+test.adb:427:07: info: precondition proved (CVC5: 2 VC)
+test.adb:428:07: info: precondition proved (CVC5: 3 VC)
+test.adb:429:07: info: precondition proved (CVC5: 3 VC)
+test.adb:430:07: info: precondition proved (CVC5: 3 VC)
+test.adb:432:07: info: precondition proved (CVC5: 1 VC)
+test.adb:434:07: info: precondition proved (CVC5: 1 VC)
+test.adb:435:07: info: precondition proved (CVC5: 1 VC)
+test.adb:438:14: warning: subprogram "Test_Replace_Element" has no effect
+test.adb:439:07: info: initialization of "T" proved
+test.adb:439:17: info: range check proved (CVC5: 2 VC)
+test.adb:440:07: info: initialization of "C" proved
+test.adb:442:07: info: precondition proved (CVC5: 2 VC)
+test.adb:443:07: info: precondition proved (CVC5: 3 VC)
+test.adb:444:07: info: precondition proved (CVC5: 1 VC)
+test.adb:447:07: info: precondition proved (CVC5: 1 VC)
+test.adb:447:15: info: precondition proved (CVC5: 1 VC)
+test.adb:449:12: info: precondition proved (CVC5: 1 VC)
+test.adb:450:07: info: precondition proved (CVC5: 1 VC)
+test.adb:450:15: info: precondition proved (CVC5: 1 VC)
+test.adb:453:14: warning: subprogram "Test_First_Child" has no effect
+test.adb:454:07: info: initialization of "T" proved
+test.adb:454:17: info: range check proved (CVC5: 2 VC)
+test.adb:456:07: info: precondition proved (CVC5: 2 VC)
+test.adb:458:07: info: precondition proved (CVC5: 1 VC)
+test.adb:459:10: info: precondition proved (CVC5: 1 VC)
+test.adb:462:07: info: precondition proved (CVC5: 3 VC)
+test.adb:463:07: info: precondition proved (CVC5: 3 VC)
+test.adb:464:07: info: precondition proved (CVC5: 3 VC)
+test.adb:466:07: info: precondition proved (CVC5: 1 VC)
+test.adb:467:10: info: precondition proved (CVC5: 1 VC)
+test.adb:467:38: info: precondition proved (CVC5: 1 VC)
+test.adb:471:14: warning: subprogram "Test_Last_Child" has no effect
+test.adb:472:07: info: initialization of "T" proved
+test.adb:472:17: info: range check proved (CVC5: 2 VC)
+test.adb:474:07: info: precondition proved (CVC5: 2 VC)
+test.adb:476:07: info: precondition proved (CVC5: 1 VC)
+test.adb:477:10: info: precondition proved (CVC5: 1 VC)
+test.adb:480:07: info: precondition proved (CVC5: 3 VC)
+test.adb:481:07: info: precondition proved (CVC5: 3 VC)
+test.adb:482:07: info: precondition proved (CVC5: 3 VC)
+test.adb:484:07: info: precondition proved (CVC5: 1 VC)
+test.adb:485:10: info: precondition proved (CVC5: 1 VC)
+test.adb:485:37: info: precondition proved (CVC5: 1 VC)
+test.adb:489:14: warning: subprogram "Test_Next_Sibling" has no effect
+test.adb:490:07: info: initialization of "T" proved
+test.adb:490:17: info: range check proved (CVC5: 2 VC)
+test.adb:491:07: info: initialization of "C" proved
+test.adb:493:07: info: precondition proved (CVC5: 2 VC)
+test.adb:494:07: info: precondition proved (CVC5: 3 VC)
+test.adb:495:07: info: precondition proved (CVC5: 3 VC)
+test.adb:497:07: info: precondition proved (CVC5: 1 VC)
+test.adb:498:10: info: precondition proved (CVC5: 1 VC)
+test.adb:501:12: info: precondition proved (CVC5: 1 VC)
+test.adb:501:29: info: precondition proved (CVC5: 1 VC)
+test.adb:502:07: info: precondition proved (CVC5: 1 VC)
+test.adb:503:42: info: precondition proved (CVC5: 1 VC)
+test.adb:506:12: info: precondition proved (CVC5: 1 VC)
+test.adb:507:07: info: precondition proved (CVC5: 1 VC)
+test.adb:511:14: warning: subprogram "Test_Previous_Sibling" has no effect
+test.adb:512:07: info: initialization of "T" proved
+test.adb:512:17: info: range check proved (CVC5: 2 VC)
+test.adb:513:07: info: initialization of "C" proved
+test.adb:515:07: info: precondition proved (CVC5: 2 VC)
+test.adb:516:07: info: precondition proved (CVC5: 3 VC)
+test.adb:517:07: info: precondition proved (CVC5: 3 VC)
+test.adb:519:07: info: precondition proved (CVC5: 1 VC)
+test.adb:520:10: info: precondition proved (CVC5: 1 VC)
+test.adb:523:12: info: precondition proved (CVC5: 1 VC)
+test.adb:523:33: info: precondition proved (CVC5: 1 VC)
+test.adb:524:07: info: precondition proved (CVC5: 1 VC)
+test.adb:525:42: info: precondition proved (CVC5: 1 VC)
+test.adb:528:12: info: precondition proved (CVC5: 1 VC)
+test.adb:529:07: info: precondition proved (CVC5: 1 VC)
+test.adb:533:14: warning: subprogram "Test_Reference" has no effect
+test.adb:534:07: info: initialization of "T" proved
+test.adb:534:25: info: range check proved (CVC5: 2 VC)
+test.adb:535:07: info: initialization of "C" proved
+test.adb:537:07: info: precondition proved (CVC5: 2 VC)
+test.adb:538:07: info: precondition proved (CVC5: 3 VC)
+test.adb:539:07: info: precondition proved (CVC5: 3 VC)
+test.adb:540:07: info: precondition proved (CVC5: 3 VC)
+test.adb:542:12: info: precondition proved (CVC5: 1 VC)
+test.adb:545:52: info: precondition proved (CVC5: 1 VC)
+test.adb:545:63: info: discriminant check proved (CVC5: 1 VC)
+test.adb:545:63: info: in reconstructed value at the end of the borrow at test.adb:545
+test.adb:550:07: info: precondition proved (CVC5: 1 VC)
+test.adb:550:15: info: precondition proved (CVC5: 1 VC)
+test.adb:551:07: info: precondition proved (CVC5: 1 VC)
+test.adb:551:15: info: precondition proved (CVC5: 1 VC)
+test.adb:551:27: info: precondition proved (CVC5: 1 VC)
+test.adb:552:07: info: precondition proved (CVC5: 1 VC)
+test.adb:552:15: info: precondition proved (CVC5: 1 VC)
+test.adb:552:27: info: precondition proved (CVC5: 1 VC)
+test.adb:553:07: info: precondition proved (CVC5: 1 VC)
+test.adb:553:15: info: precondition proved (CVC5: 1 VC)
+test.adb:553:27: info: precondition proved (CVC5: 1 VC)
+test.adb:556:14: warning: subprogram "Test_Constant_Reference" has no effect
+test.adb:557:07: info: initialization of "T" proved
+test.adb:557:25: info: range check proved (CVC5: 2 VC)
+test.adb:559:07: info: precondition proved (CVC5: 2 VC)
+test.adb:560:07: info: precondition proved (CVC5: 3 VC)
+test.adb:561:07: info: precondition proved (CVC5: 3 VC)
+test.adb:562:07: info: precondition proved (CVC5: 3 VC)
+test.adb:566:12: info: precondition proved (CVC5: 1 VC)
+test.adb:569:12: info: precondition proved (CVC5: 1 VC)
+test.adb:569:35: info: precondition proved (CVC5: 1 VC)
+test.adb:572:12: info: precondition proved (CVC5: 1 VC)
+test.adb:572:35: info: precondition proved (CVC5: 1 VC)
+test.adb:575:12: info: precondition proved (CVC5: 1 VC)
+test.adb:575:35: info: precondition proved (CVC5: 1 VC)
+test.adb:577:10: info: precondition proved (CVC5: 1 VC)
+test.adb:577:18: info: precondition proved (CVC5: 1 VC)
+test.adb:579:10: info: precondition proved (CVC5: 1 VC)
+test.adb:580:13: info: precondition proved (CVC5: 1 VC)
+test.adb:580:25: info: precondition proved (CVC5: 1 VC)
+test.adb:582:10: info: precondition proved (CVC5: 1 VC)
+test.adb:583:13: info: precondition proved (CVC5: 1 VC)
+test.adb:583:25: info: precondition proved (CVC5: 1 VC)
+test.adb:585:10: info: precondition proved (CVC5: 1 VC)
+test.adb:586:13: info: precondition proved (CVC5: 1 VC)
+test.adb:586:25: info: precondition proved (CVC5: 1 VC)
+test.adb:590:14: warning: subprogram "Test_Move" has no effect
+test.adb:591:07: info: initialization of "T1" proved
+test.adb:591:18: info: range check proved (CVC5: 2 VC)
+test.adb:592:07: info: initialization of "T2" proved
+test.adb:592:18: info: range check proved (CVC5: 2 VC)
+test.adb:594:07: info: precondition proved (CVC5: 2 VC)
+test.adb:595:07: info: precondition proved (CVC5: 3 VC)
+test.adb:596:07: info: precondition proved (CVC5: 3 VC)
+test.adb:597:07: info: precondition proved (CVC5: 3 VC)
+test.adb:599:07: info: precondition proved (CVC5: 1 VC)
+test.adb:601:07: info: precondition proved (CVC5: 1 VC)
+test.adb:603:07: info: precondition proved (CVC5: 1 VC)
+test.adb:603:15: info: precondition proved (CVC5: 1 VC)
+test.adb:604:07: info: precondition proved (CVC5: 1 VC)
+test.adb:604:15: info: precondition proved (CVC5: 1 VC)
+test.adb:604:28: info: precondition proved (CVC5: 1 VC)
+test.adb:605:07: info: precondition proved (CVC5: 1 VC)
+test.adb:605:15: info: precondition proved (CVC5: 1 VC)
+test.adb:605:28: info: precondition proved (CVC5: 1 VC)
+test.adb:606:07: info: precondition proved (CVC5: 1 VC)
+test.adb:606:15: info: precondition proved (CVC5: 1 VC)
+test.adb:606:28: info: precondition proved (CVC5: 1 VC)
+test.adb:609:14: warning: subprogram "Test_Assign" has no effect
+test.adb:610:07: info: initialization of "T1" proved
+test.adb:610:18: info: range check proved (CVC5: 2 VC)
+test.adb:611:07: info: initialization of "T2" proved
+test.adb:611:18: info: range check proved (CVC5: 2 VC)
+test.adb:613:07: info: precondition proved (CVC5: 2 VC)
+test.adb:614:07: info: precondition proved (CVC5: 3 VC)
+test.adb:615:07: info: precondition proved (CVC5: 3 VC)
+test.adb:616:07: info: precondition proved (CVC5: 3 VC)
+test.adb:618:07: info: precondition proved (CVC5: 1 VC)
+test.adb:620:07: info: precondition proved (CVC5: 1 VC)
+test.adb:620:15: info: precondition proved (CVC5: 1 VC)
+test.adb:621:07: info: precondition proved (CVC5: 1 VC)
+test.adb:621:15: info: precondition proved (CVC5: 1 VC)
+test.adb:621:28: info: precondition proved (CVC5: 1 VC)
+test.adb:622:07: info: precondition proved (CVC5: 1 VC)
+test.adb:622:15: info: precondition proved (CVC5: 1 VC)
+test.adb:622:28: info: precondition proved (CVC5: 1 VC)
+test.adb:623:07: info: precondition proved (CVC5: 1 VC)
+test.adb:623:15: info: precondition proved (CVC5: 1 VC)
+test.adb:623:28: info: precondition proved (CVC5: 1 VC)
+test.adb:626:14: warning: subprogram "Test_Copy" has no effect
+test.adb:627:07: info: initialization of "T1" proved
+test.adb:627:18: info: range check proved (CVC5: 2 VC)
+test.adb:628:07: info: initialization of "T2" proved
+test.adb:628:18: info: range check proved (CVC5: 2 VC)
+test.adb:630:07: info: precondition proved (CVC5: 2 VC)
+test.adb:631:07: info: precondition proved (CVC5: 3 VC)
+test.adb:632:07: info: precondition proved (CVC5: 3 VC)
+test.adb:633:07: info: precondition proved (CVC5: 3 VC)
+test.adb:635:13: info: discriminant check proved (CVC5: 1 VC)
+test.adb:635:13: info: precondition proved (CVC5: 1 VC)
+test.adb:637:07: info: precondition proved (CVC5: 1 VC)
+test.adb:637:15: info: precondition proved (CVC5: 1 VC)
+test.adb:638:07: info: precondition proved (CVC5: 1 VC)
+test.adb:638:15: info: precondition proved (CVC5: 1 VC)
+test.adb:638:28: info: precondition proved (CVC5: 1 VC)
+test.adb:639:07: info: precondition proved (CVC5: 1 VC)
+test.adb:639:15: info: precondition proved (CVC5: 1 VC)
+test.adb:639:28: info: precondition proved (CVC5: 1 VC)
+test.adb:640:07: info: precondition proved (CVC5: 1 VC)
+test.adb:640:15: info: precondition proved (CVC5: 1 VC)
+test.adb:640:28: info: precondition proved (CVC5: 1 VC)
+test.adb:644:04: info: precondition proved (Trivial: 1 VC)
+test.adb:645:04: info: precondition proved (Trivial: 1 VC)
+test.adb:646:04: info: precondition proved (Trivial: 1 VC)
+test.adb:647:04: info: precondition proved (Trivial: 1 VC)
+test.adb:648:04: info: precondition proved (Trivial: 1 VC)
+test.adb:649:04: info: precondition proved (Trivial: 1 VC)
+test.adb:650:04: info: precondition proved (Trivial: 1 VC)
+test.adb:651:04: info: precondition proved (Trivial: 1 VC)
+test.adb:652:04: info: precondition proved (Trivial: 1 VC)
+test.adb:653:04: info: precondition proved (Trivial: 1 VC)
+test.adb:654:04: info: precondition proved (Trivial: 1 VC)
+test.adb:655:04: info: precondition proved (Trivial: 1 VC)
+test.adb:656:04: info: precondition proved (Trivial: 1 VC)
+test.adb:657:04: info: precondition proved (Trivial: 1 VC)
+test.adb:658:04: info: precondition proved (Trivial: 1 VC)
+test.adb:659:04: info: precondition proved (Trivial: 1 VC)
+test.adb:660:04: info: precondition proved (Trivial: 1 VC)
+test.adb:661:04: info: precondition proved (Trivial: 1 VC)
+test.adb:662:04: info: precondition proved (Trivial: 1 VC)
+test.adb:663:04: info: precondition proved (Trivial: 1 VC)
+test.adb:664:04: info: precondition proved (Trivial: 1 VC)
+test.adb:665:04: info: precondition proved (Trivial: 1 VC)
+test.adb:666:04: info: precondition proved (Trivial: 1 VC)
+test.adb:667:04: info: precondition proved (Trivial: 1 VC)
+test.adb:668:04: info: precondition proved (Trivial: 1 VC)
+test.adb:669:04: info: precondition proved (Trivial: 1 VC)
+test.adb:670:04: info: precondition proved (Trivial: 1 VC)
+test.adb:671:04: info: precondition proved (Trivial: 1 VC)
+test.adb:672:04: info: precondition proved (Trivial: 1 VC)
+test.adb:673:04: info: precondition proved (Trivial: 1 VC)
+test.adb:674:04: info: precondition proved (Trivial: 1 VC)
+test.adb:14:04: warning: check will fail at run time [-gnatw.a]
+test.adb:14:04: warning: check will fail at run time [-gnatw.a]
+test.adb:14:04: warning: check will fail at run time [-gnatw.a]
+test.adb:14:04: warning: check will fail at run time [-gnatw.a]
+test.adb:14:04: warning: in instantiation at spark-containers-formal-ordered_maps.ads:193 [-gnatw.a]
+test.adb:14:04: warning: in instantiation at spark-containers-formal-ordered_maps.ads:278 [-gnatw.a]
+test.adb:14:04: warning: in instantiation at spark-containers-formal-ordered_maps.ads:278 [-gnatw.a]
+test.adb:14:04: warning: in instantiation at spark-containers-formal-trees.ads:1171 [-gnatw.a]
+test.adb:14:04: warning: in instantiation at spark-containers-formal-trees.ads:1171 [-gnatw.a]
+test.adb:14:04: warning: in instantiation at spark-containers-formal-trees.ads:1171 [-gnatw.a]
+test.adb:14:04: warning: in instantiation at spark-containers-formal-trees.ads:65 [-gnatw.a]
+test.adb:14:04: warning: in instantiation at spark-containers-functional-maps.ads:144 [-gnatw.a]
+test.adb:14:04: warning: in instantiation at spark-containers-functional-maps.ads:162 [-gnatw.a]
+test.adb:14:04: warning: in instantiation at spark-containers-functional-trees.ads:121 [-gnatw.a]
+test.adb:14:04: warning: in instantiation at spark-containers-functional-vectors.ads:176 [-gnatw.a]
