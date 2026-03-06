@@ -11,16 +11,17 @@ with SPARK.Containers.Types; use SPARK.Containers.Types;
 with SPARK.Containers.Formal.Doubly_Linked_Lists;
 with SPARK.Containers.Formal.Hashed_Sets;
 with SPARK.Containers.Formal.Hashed_Maps;
+with SPARK.Higher_Order.Reachability;
 
 procedure Main with SPARK_Mode is
 
    --  Check that it is possible to instantiate functional containers
 
    package Seqs is new
-     SPARK.Containers.Functional.Infinite_Sequences (Integer);
+     SPARK.Containers.Functional.Infinite_Sequences (Positive, Use_Logical_Equality => True);
    package Maps is new SPARK.Containers.Functional.Maps (Integer, Integer);
    package Multisets is new SPARK.Containers.Functional.Multisets (Integer);
-   package Sets is new SPARK.Containers.Functional.Sets (Integer);
+   package Sets is new SPARK.Containers.Functional.Sets (Positive);
    package Vecs is new SPARK.Containers.Functional.Vectors (Positive, Integer);
 
    --  Check that it is possible to instantiate formal containers
@@ -31,6 +32,26 @@ procedure Main with SPARK_Mode is
    package H_Sets is new SPARK.Containers.Formal.Hashed_Sets (Positive, Hash);
    package H_Maps is new SPARK.Containers.Formal.Hashed_Maps
      (Positive, Integer, Hash);
+
+   --  Check that it is posisble to instantiate reachability
+
+   type Cell is record
+     N : Natural;
+   end record;
+
+   type Cell_Array is array (Positive range <>) of Cell;
+
+   function Next (X : Cell) return Natural is (X.N);
+
+   package Cell_Reachability is new
+        SPARK.Higher_Order.Reachability
+          (Positive,
+           0,
+           Cell,
+           Cell_Array,
+           Next,
+           Sets,
+           Seqs);
 
    --  Test whether SPARKlib_Defensive is enabled
 
