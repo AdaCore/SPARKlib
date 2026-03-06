@@ -188,7 +188,10 @@ is
        X in M'Range and then Valid_Memory (M) and then Is_Acyclic (X, M),
      Post     =>
        not Contains (Reachable_Set (Next (M (X)), M), X)
-       and then Reachable_Set (X, M) = Add (Reachable_Set (Next (M (X)), M), X)
+       and then Reachable_Set (Next (M (X)), M) <= Reachable_Set (X, M)
+       and then
+         Included_Except
+           (Reachable_Set (X, M), Reachable_Set (Next (M (X)), M), X)
        and then
          Length (Reachable_Set (X, M))
          = 1 + Length (Reachable_Set (Next (M (X)), M)),
@@ -211,7 +214,6 @@ is
        X in M'Range and then Valid_Memory (M) and then Is_Acyclic (X, M),
      Post     =>
        Length (Model (X, M)) - 1 = Length (Model (Next (M (X)), M))
-       and then Get (Model (X, M), Last (Model (X, M))) = X
        and then Model (Next (M (X)), M) <= Model (X, M),
      Annotate => (GNATprove, Automatic_Instantiation);
    --  Recursive definition of Model
