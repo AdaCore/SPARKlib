@@ -13,6 +13,8 @@ ALL_COQ=$(sort $(patsubst %.ctx,%.v,$(ALL_CTX)))
 sed -e 's/\\$$/\\ (\* non escaped EOL for cpp parsing \*)/g' | \
 cpp -w -I proof/Coq/common | sed -e 's/^#.*$$//g' > $@
 
+generate: $(ALL_COQ)
+
 clean:
 	find proof -name "*.v" -delete
 
@@ -34,5 +36,3 @@ check:
 format:
 	SPARKLIB_INSTALLED=False gnatformat -P sparklib_internal.gpr
 	SPARKLIB_INSTALLED=False gnatformat -P sparklib_light_internal.gpr
-
-generate: $(ALL_COQ)
