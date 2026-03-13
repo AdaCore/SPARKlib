@@ -50,7 +50,6 @@ is
    --  States that if an element is removed from a multiset, then its number of
    --  occurences is removed from the cardinality of this multiset.
 
-   pragma Warnings (Off, "unused variable ""E""");
    procedure Lemma_Empty (M : Multiset)
    with
      --  This lemma eases the proof of Is_Empty bridging the gap between the
@@ -59,7 +58,6 @@ is
      Ghost => Static,
      Pre   => Invariant (M.Map, M.Card),
      Post  => Is_Empty (M.Map) = (for all E of M => False);
-   pragma Warnings (On, "unused variable ""E""");
 
    procedure Lemma_Contains_Cardinality
      (Container : Multiset; Element : Element_Type)

@@ -168,7 +168,6 @@ is
    --  Two Multiset are equal if and only if all the Element_Type have the same
    --  number of occurences for both Multisets (possibly 0).
 
-   pragma Warnings (Off, "unused variable ""Element""");
    function Is_Empty (Container : Multiset) return Boolean
    with
      Global => null,
@@ -176,7 +175,6 @@ is
        (SPARKlib_Full =>
           Is_Empty'Result = (for all Element of Container => False)
           and then Is_Empty'Result = (Cardinality (Container) = 0));
-   pragma Warnings (On, "unused variable ""Element""");
    --  A Multiset is empty if it has no element. In other words, if the number
    --  of occurence of all the elements is 0.
 

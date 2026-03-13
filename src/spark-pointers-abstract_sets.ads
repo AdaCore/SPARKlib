@@ -48,11 +48,9 @@ is
    function "=" (Left, Right : Set) return Boolean
    with Import, Global => null, Annotate => (GNATprove, Logical_Equal);
 
-   pragma Warnings (Off, "unused variable ""E""");
    function Is_Empty (S : Set) return Boolean
    is (for all E in S => False)
    with Global => null;
-   pragma Warnings (On, "unused variable ""E""");
 
    function Empty_Set return Set
    with Global => null, Post => Is_Empty (Empty_Set'Result);
