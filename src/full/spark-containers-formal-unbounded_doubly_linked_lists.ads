@@ -49,6 +49,8 @@ is
      Iterable                  =>
        (First       => First,
         Next        => Next,
+        Last        => Last,
+        Previous    => Previous,
         Has_Element => Has_Element,
         Element     => Element),
      Default_Initial_Condition => (SPARKlib_Full => Is_Empty (List)),
