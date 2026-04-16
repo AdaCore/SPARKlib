@@ -60,17 +60,27 @@ coverage:
     - for i in gnat spark2014 gnatcov ; do eval $(anod printenv $i) ; done
     - section_end "anod_setup"
     - section_start "project_setup" "Setup testsuite and locations"
-    - cd /tmp
-    - git clone $GIT_CLONE_BASE/eng/spark/spark2014 --depth 1
-    - cd spark2014
+    - |
+      if [ -d /tmp/checkouts/spark2014 ]; then
+        export SPARK2014_DIR=/tmp/checkouts/spark2014
+      else
+        export SPARK2014_DIR=/tmp/spark2014
+        rm -rf $SPARK2014_DIR
+        git clone $GIT_CLONE_BASE/eng/spark/spark2014 --depth 1 $SPARK2014_DIR
+      fi
+    - cd $SPARK2014_DIR
+    - rm -rf include testsuite/gnatprove/sparklib
     - ln -s $CI_PROJECT_DIR include
+    - ln -s $CI_PROJECT_DIR/tests testsuite/gnatprove/sparklib
+    - export SPARKLIB_PROJECT_PATH=$CI_PROJECT_DIR
     - cd testsuite/gnatprove
-    - ln -s $CI_PROJECT_DIR/tests sparklib
     - section_end "project_setup"
     - python sparklib-coverage.py
+    - rm -rf $CI_PROJECT_DIR/sparklib-report
+    - cp -a sparklib-report $CI_PROJECT_DIR/
     - section_start "coverage_report" "Generate Coverage HTML report"
     # Coverage HTML report
     - export HTMLTARGETDIR=$CI_COMMIT_BRANCH
     - if [[ $CI_PIPELINE_SOURCE == "merge_request_event" ]]; then export HTMLTARGETDIR=MRs/$CI_MERGE_REQUEST_IID ; fi
-    - publish-pages sparklib-report --target-subdir $HTMLTARGETDIR --expires 30
+    - publish-pages $CI_PROJECT_DIR/sparklib-report --target-subdir $HTMLTARGETDIR --expires 30
     - section_end "coverage_report"
