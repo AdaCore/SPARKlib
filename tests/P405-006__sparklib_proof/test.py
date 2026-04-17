@@ -1,10 +1,10 @@
-from test_support import prove_all, create_sparklib
+from test_support import prepare_sparklib_bodymode, prove_all
 import os
 
 import shutil
 
 # first copy preprocessed sparklib to local folder
-create_sparklib(sparklib_bodymode=True)
+prepare_sparklib_bodymode(".")
 
 # then arrange folders so that SPARKLIB_INSTALLED works
 
