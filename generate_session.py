@@ -10,6 +10,14 @@ import sys
 import tempfile
 
 
+LIB_PYTHON_DIR = (
+    Path(__file__).resolve().parent / "../testsuite/gnatprove/lib/python"
+).resolve()
+sys.path.insert(0, str(LIB_PYTHON_DIR))
+
+from clean_sessions import clean_session_file  # noqa: E402
+
+
 def run(cmd):
     print("")
     print("run: " + cmd)
@@ -17,13 +25,18 @@ def run(cmd):
 
 
 projectfile = "sparklib_gen.gpr"
+gnatprove_common_options = f"-P {projectfile} -j0 --output=oneline -q"
+
+
+def gnatprove_command(options=""):
+    cmd = f"gnatprove {gnatprove_common_options}"
+    if options:
+        cmd += " " + options
+    return cmd
 
 
 def run_manual(check_to_prove, option=""):
-    cmd = (
-        f"gnatprove -j0 -P {projectfile} -U --output=oneline"
-        " --prover=coq --report=provers"
-    )
+    cmd = gnatprove_command("-U --prover=coq --report=provers")
     if ":" not in check_to_prove:
         run(cmd + " " + option + check_to_prove)
     else:
@@ -31,18 +44,33 @@ def run_manual(check_to_prove, option=""):
 
 
 def run_automatic(prover, level=4, timeout=None):
-    cmd = (
-        f"gnatprove -P {projectfile} --counterexamples=off --output=oneline -j0"
-        f" --prover={prover} --level={level}"
-    )
+    cmd = gnatprove_command(f"--counterexamples=off --prover={prover} --level={level}")
     if timeout is not None:
         cmd += f" --timeout={timeout}"
     run(cmd)
 
 
 def run_options(opt):
-    cmd = f"gnatprove -P {projectfile} --counterexamples=off -j0 --output=oneline {opt}"
+    cmd = gnatprove_command(f"--counterexamples=off {opt}")
     run(cmd)
+
+
+def clean_generated_sessions():
+    session_dir = Path("./proof/sessions")
+    session_files = sorted(session_dir.glob("*/why3session.xml"))
+
+    if not session_files:
+        print("No session files to clean")
+        return
+
+    print("")
+    print("--------------------")
+    print("Clean session files")
+    print("--------------------")
+
+    for session_file in session_files:
+        print(f"cleaning {session_file}")
+        clean_session_file(session_file)
 
 
 def copy_file(f_ctx, f_v):
@@ -185,6 +213,7 @@ def kill_and_regenerate(check):
     for bak_file in glob.glob("proof/sessions/*/*.bak"):
         print("deleting temp file ", bak_file)
         os.remove(bak_file)
+    clean_generated_sessions()
 
 
 def choose_mode():
