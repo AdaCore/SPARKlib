@@ -168,7 +168,7 @@ is
    ------------------------
 
    function Constant_Reference
-     (Container : aliased Vector; Index : Index_Type)
+     (Container : Vector; Index : Extended_Index)
       return not null access constant Element_Type is
    begin
       if Index > Container.Last then
