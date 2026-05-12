@@ -70,10 +70,10 @@ is
    type Vector is private
    with
      Iterable                  =>
-       (First       => Iter_First,
-        Next        => Iter_Next,
-        Has_Element => Iter_Has_Element,
-        Element     => Element),
+       (First              => Iter_First,
+        Next               => Iter_Next,
+        Has_Element        => Iter_Has_Element,
+        Constant_Reference => Constant_Reference),
      Default_Initial_Condition => (SPARKlib_Full => Is_Empty (Vector)),
      Aggregate                 =>
        (Empty => Empty_Vector, Add_Unnamed => Append),
@@ -367,7 +367,7 @@ is
    with Ghost => SPARKlib_Full, Annotate => (GNATprove, At_End_Borrow);
 
    function Constant_Reference
-     (Container : aliased Vector; Index : Index_Type)
+     (Container : Vector; Index : Extended_Index)
       return not null access constant Element_Type
    with
      Global => null,

@@ -77,10 +77,10 @@ is
    type Set is private
    with
      Iterable                  =>
-       (First       => First,
-        Next        => Next,
-        Has_Element => Has_Element,
-        Element     => Element),
+       (First              => First,
+        Next               => Next,
+        Has_Element        => Has_Element,
+        Constant_Reference => Constant_Reference),
      Default_Initial_Condition => (SPARKlib_Full => Is_Empty (Set)),
      Aggregate                 => (Empty => Empty_Set, Add_Unnamed => Insert),
      Annotate                  =>
