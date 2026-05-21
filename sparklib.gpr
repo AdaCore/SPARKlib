@@ -1,0 +1,49 @@
+with "sparklib_common";
+
+library project SPARKlib is
+
+   type SPARKlib_Library_Kind is ("static");
+   SPARKlib_Library_Type : SPARKlib_Library_Kind :=
+     external ("SPARKLIB_LIBRARY_TYPE", external ("LIBRARY_TYPE", "static"));
+
+   type SPARKlib_Mode_Kind is ("light", "full");
+   SPARKlib_Mode : SPARKlib_Mode_Kind := External("SPARKLIB_MODE", "full");
+
+   type SPARKlib_Build_Kind is ("Production", "Assertions", "Debug");
+   SPARKlib_Build : SPARKlib_Build_Kind := External("SPARKLIB_BUILD", "Production");
+
+   for Library_Name use "sparklib";
+   for Object_Dir use "sparklib_obj";
+   for Library_Dir use "sparklib_lib";
+   for Library_Kind use SPARKlib_Library_Type;
+
+   for Source_Dirs use
+     (SPARKlib_common.Root, SPARKlib_common.Root & "/" & SPARKlib_Mode);
+
+   GPR_Tool := external ("GPR_TOOL", "");
+   case GPR_Tool is
+      when "gnatprove" =>
+         for Externally_Built use "True";
+      when others =>
+         null;
+   end case;
+
+   package Compiler is
+      case SPARKlib_Build is
+         when "Production" =>
+            for Switches ("Ada") use SPARKlib_common.Common_Default_Switches
+              & ("-O2", "-gnatn");
+
+         when "Assertions" =>
+            for Switches ("Ada") use SPARKlib_common.Common_Default_Switches
+              & ("-O2", "-gnatn", "-gnata", "-g");
+
+         when "Debug" =>
+            for Switches ("Ada") use SPARKlib_common.Common_Default_Switches
+              & ("-Og", "-g");
+      end case;
+   end Compiler;
+
+   package Prove renames SPARKlib_common.Prove;
+
+end SPARKlib;
