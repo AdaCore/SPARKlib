@@ -16,6 +16,7 @@ abstract project SPARKlib_common is
    --  subprogram bodies (although not applicable to null subprograms).
    Common_Default_Switches :=
      ("-gnat2022", "-gnatygo-u",
+      "-ffunction-sections", "-fdata-sections",
       "-gnatwI");  --  disable warnings about SPARKlib using GNAT internal units
 
    Root := "";
