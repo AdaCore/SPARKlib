@@ -1,24 +1,6 @@
 SPARKlib_Logic:OFF
 SPARKlib_Defensive:OFF
 main.adb:27:13: info: implicit aspect Always_Terminates on "Hash" has been proved, subprogram will terminate
-spark-containers-formal-hashed_maps.ads:95:06: medium: Container_Aggregates annotation might be incorrect, in instantiation at main.adb:43 [provers reached step limit before completing the proof]
-spark-containers-formal-hashed_maps.ads:95:06: medium: Container_Aggregates annotation might be incorrect, in instantiation at main.adb:43 [provers reached step limit before completing the proof]
-spark-containers-formal-hashed_maps.ads:95:06: medium: after a call to "Insert" at spark-containers-formal-hashed_maps.ads:685, in instantiation at main.adb:43
-spark-containers-formal-hashed_maps.ads:95:06: medium: after a call to "Insert" at spark-containers-formal-hashed_maps.ads:685, in instantiation at main.adb:43
-spark-containers-formal-hashed_maps.ads:95:06: medium: when reestablishing invariant on "Get" at spark-containers-functional-maps.ads:148, in instantiation at spark-containers-formal-hashed_maps.ads:180, in instantiation at main.adb:43
-spark-containers-formal-hashed_maps.ads:95:06: medium: when reestablishing invariant on "Has_Key" at spark-containers-functional-maps.ads:131, in instantiation at spark-containers-formal-hashed_maps.ads:180, in instantiation at main.adb:43
-spark-containers-formal-hashed_sets.ads:94:06: medium: Container_Aggregates annotation might be incorrect, in instantiation at main.adb:45 [provers reached step limit before completing the proof]
-spark-containers-formal-hashed_sets.ads:94:06: medium: after a call to "Insert" at spark-containers-formal-hashed_sets.ads:756, in instantiation at main.adb:45
-spark-containers-formal-hashed_sets.ads:94:06: medium: when reestablishing invariant on "Contains" at spark-containers-functional-sets.ads:99, in instantiation at spark-containers-formal-hashed_sets.ads:174, in instantiation at main.adb:45
-spark-containers-formal-ordered_maps.ads:91:06: medium: Container_Aggregates annotation might be incorrect, in instantiation at main.adb:47 [provers reached step limit before completing the proof]
-spark-containers-formal-ordered_maps.ads:91:06: medium: Container_Aggregates annotation might be incorrect, in instantiation at main.adb:47 [provers reached step limit before completing the proof]
-spark-containers-formal-ordered_maps.ads:91:06: medium: after a call to "Insert" at spark-containers-formal-ordered_maps.ads:695, in instantiation at main.adb:47
-spark-containers-formal-ordered_maps.ads:91:06: medium: after a call to "Insert" at spark-containers-formal-ordered_maps.ads:695, in instantiation at main.adb:47
-spark-containers-formal-ordered_maps.ads:91:06: medium: when reestablishing invariant on "Get" at spark-containers-functional-maps.ads:148, in instantiation at spark-containers-formal-ordered_maps.ads:166, in instantiation at main.adb:47
-spark-containers-formal-ordered_maps.ads:91:06: medium: when reestablishing invariant on "Has_Key" at spark-containers-functional-maps.ads:131, in instantiation at spark-containers-formal-ordered_maps.ads:166, in instantiation at main.adb:47
-spark-containers-formal-ordered_sets.ads:89:06: medium: Container_Aggregates annotation might be incorrect, in instantiation at main.adb:49 [provers reached step limit before completing the proof]
-spark-containers-formal-ordered_sets.ads:89:06: medium: after a call to "Insert" at spark-containers-formal-ordered_sets.ads:770, in instantiation at main.adb:49
-spark-containers-formal-ordered_sets.ads:89:06: medium: when reestablishing invariant on "Contains" at spark-containers-functional-sets.ads:99, in instantiation at spark-containers-formal-ordered_sets.ads:161, in instantiation at main.adb:49
 spark-lemmas-floating_point_arithmetic.ads:200:33: medium: range check might fail, cannot prove lower bound for F, in instantiation at spark-lemmas-float_arithmetic.ads:14 [reason for check: value must be convertible to the target type of the conversion] [possible fix: subprogram at line 195 should mention F in a precondition] [provers reached step limit before completing the proof]
 spark-lemmas-floating_point_arithmetic.ads:209:33: medium: range check might fail, cannot prove lower bound for F, in instantiation at spark-lemmas-float_arithmetic.ads:14 [reason for check: value must be convertible to the target type of the conversion] [possible fix: subprogram at line 204 should mention F in a precondition] [provers reached step limit before completing the proof]
 spark-lemmas-floating_point_arithmetic.ads:219:29: medium: range check might fail, cannot prove lower bound for Fl (I), in instantiation at spark-lemmas-float_arithmetic.ads:14 [reason for check: value must be convertible to the target type of the conversion] [possible fix: subprogram at line 214 should mention I in a precondition] [provers reached step limit before completing the proof]

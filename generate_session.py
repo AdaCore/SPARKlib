@@ -3,8 +3,19 @@
 import difflib
 import glob
 import os
+from pathlib import Path
+import re
 import shutil
 import sys
+import tempfile
+
+
+LIB_PYTHON_DIR = (
+    Path(__file__).resolve().parent / "../testsuite/gnatprove/lib/python"
+).resolve()
+sys.path.insert(0, str(LIB_PYTHON_DIR))
+
+from clean_sessions import clean_session_file  # noqa: E402
 
 
 def run(cmd):
@@ -13,11 +24,19 @@ def run(cmd):
     os.system(cmd)
 
 
-projectfile = "sparklib_internal.gpr"
+projectfile = "sparklib_gen.gpr"
+gnatprove_common_options = f"-P {projectfile} -j0 --output=oneline -q"
+
+
+def gnatprove_command(options=""):
+    cmd = f"gnatprove {gnatprove_common_options}"
+    if options:
+        cmd += " " + options
+    return cmd
 
 
 def run_manual(check_to_prove, option=""):
-    cmd = f"gnatprove -j0 -P {projectfile} -U --prover=coq --report=provers"
+    cmd = gnatprove_command("-U --prover=coq --report=provers")
     if ":" not in check_to_prove:
         run(cmd + " " + option + check_to_prove)
     else:
@@ -25,18 +44,33 @@ def run_manual(check_to_prove, option=""):
 
 
 def run_automatic(prover, level=4, timeout=None):
-    cmd = (
-        f"gnatprove -P {projectfile} --counterexamples=off -j0"
-        + f" --prover={prover} --level={level}"
-    )
+    cmd = gnatprove_command(f"--counterexamples=off --prover={prover} --level={level}")
     if timeout is not None:
         cmd += f" --timeout={timeout}"
     run(cmd)
 
 
 def run_options(opt):
-    cmd = f"gnatprove -P {projectfile} --counterexamples=off -j0 {opt}"
+    cmd = gnatprove_command(f"--counterexamples=off {opt}")
     run(cmd)
+
+
+def clean_generated_sessions():
+    session_dir = Path("./proof/sessions")
+    session_files = sorted(session_dir.glob("*/why3session.xml"))
+
+    if not session_files:
+        print("No session files to clean")
+        return
+
+    print("")
+    print("--------------------")
+    print("Clean session files")
+    print("--------------------")
+
+    for session_file in session_files:
+        print(f"cleaning {session_file}")
+        clean_session_file(session_file)
 
 
 def copy_file(f_ctx, f_v):
@@ -134,10 +168,7 @@ def kill_and_regenerate(check):
             shutil.rmtree(d)
     os.makedirs("./temp")
     os.system("make clean")
-    for envvar in ["SPARKLIB_INSTALLED", "SPARKLIB_BODY_MODE"]:
-        if envvar not in os.environ:
-            print(f"{envvar} not set; make sure to run 'source setup.sh'")
-            exit(1)
+    os.environ["SPARKLIB_INSTALLED"] = "False"
     print("")
     print("----------------------------")
     print("Generate the Coq proof files")
@@ -182,6 +213,7 @@ def kill_and_regenerate(check):
     for bak_file in glob.glob("proof/sessions/*/*.bak"):
         print("deleting temp file ", bak_file)
         os.remove(bak_file)
+    clean_generated_sessions()
 
 
 def choose_mode():
@@ -192,4 +224,103 @@ def choose_mode():
             kill_and_regenerate(sys.argv[1])
 
 
-choose_mode()
+def preprocess_sparklib_source_file(filepath):
+    """
+    Reads a file line by line and replaces specific SPARK_Mode patterns
+    in-place, preserving line numbers.
+
+    Args:
+        filepath (str): The path to the file to be processed.
+    """
+    # Pattern 1: Recognizes '... SPARK_Mode => Off --  #BODYMODE' at the end of a line.
+    # It's case-insensitive and handles variable whitespace.
+    # This will be used with re.sub to replace 'Off' with 'On' while preserving
+    # any leading content on the line.
+    pattern_to_enable = re.compile(
+        r"(SPARK_Mode\s*=>\s*)Off(\s*--  #BODYMODE\s*$)", re.IGNORECASE
+    )
+
+    # Pattern 2: Recognizes a line containing only
+    # 'pragma SPARK_Mode (Off); -- # #BODYMODE'
+    # It's case-insensitive and handles variable whitespace.
+    pattern_to_remove = re.compile(
+        r"^\s*pragma\s+SPARK_Mode\s*\(\s*Off\s*\)\s*;\s*--  #BODYMODE\s*$",
+        re.IGNORECASE,
+    )
+
+    fd, temp_path = tempfile.mkstemp()
+
+    try:
+        with os.fdopen(fd, "w", newline="") as newfile:
+            with open(filepath, "r", newline="") as oldfile:
+                for line in oldfile:
+                    # Test for the first pattern and replace using re.subn.
+                    # re.subn returns a tuple: (new_string, number_of_subs_made).
+                    # This handles cases where the pattern is not at the start
+                    # of the line.
+                    new_line, count = pattern_to_enable.subn(r"\1On\2", line)
+                    if count > 0:
+                        # If a substitution was made, write the modified line.
+                        # new_line already contains the original newline
+                        # character.
+                        newfile.write(new_line)
+                        continue
+
+                    # Test for the second pattern.
+                    # This pattern is expected to match the entire line.
+                    match_remove = pattern_to_remove.match(line)
+                    if match_remove:
+                        if line.endswith("\r\n"):
+                            # Preserve Windows-style line endings.
+                            newfile.write("\r\n")
+                        elif line.endswith("\n"):
+                            # Preserve Unix-style line endings.
+                            newfile.write("\n")
+                        else:
+                            # EOF case
+                            pass
+                        continue
+
+                    # If no pattern is matched, write the original line back to
+                    # the file.  'line' already contains a newline character.
+                    newfile.write(line)
+
+        # Replace the original file with the modified temporary file.
+        shutil.move(temp_path, filepath)
+
+    except FileNotFoundError:
+        print(f"Error: The file {filepath!r} was not found.", file=sys.stderr)
+        sys.exit(1)
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+sparklib_gen_content = """
+with "sparklib_common";
+project sparklib_gen is
+   for Source_Dirs use ("src2", "src2/full");
+   for Object_Dir use "obj2";
+   package Compiler is
+      for Default_Switches ("Ada") use ("-gnat2022", "-gnatygo-u", "-gnata", "-gnatwI");
+   end Compiler;
+   package Prove is
+     for Proof_Dir use "proof";
+   end Prove;
+end sparklib_gen;
+"""
+
+
+try:
+    with open("sparklib_gen.gpr", "w") as f_prj:
+        f_prj.write(sparklib_gen_content)
+    shutil.copytree("src", "src2")
+    for path_obj in Path("src2").rglob("*"):
+        if path_obj.is_file():
+            preprocess_sparklib_source_file(path_obj)
+    choose_mode()
+finally:
+    if os.path.isfile("sparklib_gen.gpr"):
+        os.remove("sparklib_gen.gpr")
+    if os.path.isdir("src2"):
+        shutil.rmtree("src2")

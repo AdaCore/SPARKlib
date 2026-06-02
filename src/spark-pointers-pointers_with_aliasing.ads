@@ -1,5 +1,5 @@
 --
---  Copyright (C) 2022-2025, AdaCore
+--  Copyright (C) 2022-2026, AdaCore
 --
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
@@ -112,7 +112,7 @@ is
 
    procedure Create (O : Object; P : out Pointer)
    with
-     Global => (In_Out => Memory),
+     Global => (In_Out => Memory, Input => Memory_Addresses),
      Post   =>
        Valid (Memory, Address (P))
        and then Allocates (Memory'Old, Memory, Only (Address (P)))
