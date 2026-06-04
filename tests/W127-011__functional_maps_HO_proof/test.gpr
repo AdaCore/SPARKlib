@@ -2,9 +2,9 @@ with "sparklib";
 
 project Test is
 
-   package Builder is
+   package Compiler is
       for Switches ("ada") use ("-gnata", "-gnat2022");
-   end Builder;
+   end Compiler;
 
    package Prove is
       for Proof_Dir use "proof";

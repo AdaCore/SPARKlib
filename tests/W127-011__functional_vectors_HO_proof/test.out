@@ -504,13 +504,9 @@ test_sequence_ho.adb:61:04: info: local subprogram "Do_Proof" only analyzed in t
 test_sequence_ho.adb:61:04: info: local subprogram "Do_Proof" only analyzed in the context of calls [info-unrolling-inlining]
 test_sequence_ho.adb:61:04: info: local subprogram "Do_Proof" only analyzed in the context of calls [info-unrolling-inlining]
 test_sequence_ho.adb:61:04: info: local subprogram "Do_Proof" only analyzed in the context of calls [info-unrolling-inlining]
-test_sequence_ho.adb:61:04: warning: expression function body of subprograms with a numeric variant might not be available on recursive calls [numeric-variant]
-test_sequence_ho.adb:61:04: warning: expression function body of subprograms with a numeric variant might not be available on recursive calls [numeric-variant]
-test_sequence_ho.adb:61:04: warning: expression function body of subprograms with a numeric variant might not be available on recursive calls [numeric-variant]
-test_sequence_ho.adb:61:04: warning: function contract might not be available on recursive calls [contracts-recursive]
-test_sequence_ho.adb:61:04: warning: function contract might not be available on recursive calls [contracts-recursive]
+test_sequence_ho.adb:61:04: warning: "Count_Rec" is recursive; its body and contract might not be available on recursive calls from contracts and assertions [contracts-recursive]
+test_sequence_ho.adb:61:04: warning: "Filter_Rec" is recursive; its body and contract might not be available on recursive calls from contracts and assertions [contracts-recursive]
+test_sequence_ho.adb:61:04: warning: "Sum_Rec" is recursive; its body might not be available on recursive calls from contracts and assertions [contracts-recursive]
 test_sequence_ho.adb:61:04: warning: in instantiation at spark-containers-functional-vectors-higher_order.adb:13
-test_sequence_ho.adb:61:04: warning: in instantiation at spark-containers-functional-vectors-higher_order.adb:13
-test_sequence_ho.adb:61:04: warning: in instantiation at spark-containers-functional-vectors-higher_order.adb:26
 test_sequence_ho.adb:61:04: warning: in instantiation at spark-containers-functional-vectors-higher_order.adb:26
 test_sequence_ho.adb:61:04: warning: in instantiation at spark-containers-functional-vectors-higher_order.adb:40

@@ -1,5 +1,5 @@
 --
---  Copyright (C) 2022-2025, Free Software Foundation, Inc.
+--  Copyright (C) 2022-2026, Free Software Foundation, Inc.
 --
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
@@ -80,6 +80,8 @@ is
      Iterable                  =>
        (First       => First,
         Next        => Next,
+        Last        => Last,
+        Previous    => Previous,
         Has_Element => Has_Element,
         Element     => Element),
      Default_Initial_Condition => (SPARKlib_Full => Is_Empty (Set)),
@@ -610,7 +612,12 @@ is
      (Container : in out Set; Position : Cursor; New_Item : Element_Type)
    with
      Global => null,
-     Pre    => (SPARKlib_Defensive => Has_Element (Container, Position)),
+     Pre    =>
+       (SPARKlib_Defensive =>
+          Has_Element (Container, Position)
+          and then
+            (Equivalent_Elements (Element (Container, Position), New_Item)
+             or else not Contains (Container, New_Item))),
      Post   =>
        (SPARKlib_Full =>
           Length (Container)

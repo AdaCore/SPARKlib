@@ -26,7 +26,7 @@ test.adb:73:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
 test.adb:74:07: info: precondition proved (Z3: 1 VC)
 test.adb:78:07: medium: precondition might fail, cannot prove not Contains (Container, Key) [provers reached step limit before completing the proof]
 test.adb:79:07: medium: precondition might fail, cannot prove not Contains (Container, Key) [provers reached step limit before completing the proof]
-test.adb:80:07: info: precondition proved (Z3: 1 VC)
+test.adb:80:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:84:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
 test.adb:85:07: medium: precondition might fail, cannot prove not Contains (Container, Key) [provers reached step limit before completing the proof]
 test.adb:86:07: info: precondition proved (Z3: 1 VC)
@@ -120,7 +120,7 @@ test.adb:233:12: info: pointer dereference check proved (CVC5: 1 VC)
 test.adb:238:07: info: precondition proved (Z3: 1 VC)
 test.adb:238:44: info: precondition proved (CVC5: 1 VC)
 test.adb:239:07: info: precondition proved (Z3: 1 VC)
-test.adb:239:15: info: precondition proved (CVC5: 1 VC)
+test.adb:239:15: info: precondition proved (Z3: 1 VC)
 test.adb:240:07: info: precondition proved (CVC5: 1 VC)
 test.adb:241:07: info: precondition proved (Z3: 1 VC)
 test.adb:241:44: info: precondition proved (CVC5: 1 VC)
@@ -230,7 +230,7 @@ test.adb:374:07: info: precondition proved (CVC5: 1 VC)
 test.adb:379:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:380:07: info: precondition proved (Z3: 1 VC)
 test.adb:381:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:381:15: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:381:15: info: precondition proved (Z3: 1 VC)
 test.adb:382:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:382:15: info: precondition proved (Z3: 1 VC)
 test.adb:387:07: info: initialization of "X" proved
@@ -240,8 +240,8 @@ test.adb:392:07: medium: precondition might fail [provers reached step limit bef
 test.adb:394:07: info: precondition proved (CVC5: 1 VC)
 test.adb:395:07: info: precondition proved (CVC5: 1 VC)
 test.adb:396:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:396:15: info: precondition proved (Z3: 1 VC)
-test.adb:397:07: info: precondition proved (Z3: 1 VC)
+test.adb:396:15: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:397:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:397:15: info: precondition proved (CVC5: 1 VC)
 test.adb:402:07: info: initialization of "X" proved
 test.adb:402:10: info: initialization of "Y" proved
@@ -262,7 +262,7 @@ test.adb:422:07: info: precondition proved (CVC5: 1 VC)
 test.adb:428:07: info: precondition proved (CVC5: 1 VC)
 test.adb:429:07: info: precondition proved (Z3: 1 VC)
 test.adb:430:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:430:15: medium: precondition might fail [possible fix: call at line 426 should mention Container (for argument X) in a postcondition] [provers reached step limit before completing the proof]
+test.adb:430:15: info: precondition proved (Z3: 1 VC)
 test.adb:431:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:431:15: info: precondition proved (Z3: 1 VC)
 test.adb:435:07: info: initialization of "X" proved
@@ -274,16 +274,16 @@ test.adb:446:07: info: precondition proved (Z3: 1 VC)
 test.adb:447:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:447:15: info: precondition proved (Z3: 1 VC)
 test.adb:448:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:448:15: medium: precondition might fail [possible fix: call at line 443 should mention Container (for argument X) in a postcondition] [provers reached step limit before completing the proof]
+test.adb:448:15: info: precondition proved (Z3: 1 VC)
 test.adb:452:07: info: initialization of "X" proved
 test.adb:454:07: info: precondition proved (CVC5: 1 VC)
-test.adb:456:07: info: precondition proved (Z3: 1 VC)
+test.adb:456:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:456:46: info: precondition proved (CVC5: 1 VC)
 test.adb:460:07: info: initialization of "X" proved
 test.adb:463:07: info: precondition proved (Z3: 1 VC)
 test.adb:463:15: info: precondition proved (CVC5: 1 VC)
 test.adb:467:07: info: initialization of "X" proved
-test.adb:470:07: info: precondition proved (Z3: 1 VC)
+test.adb:470:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:470:15: info: precondition proved (CVC5: 1 VC)
 test.adb:474:07: info: initialization of "X" proved
 test.adb:474:10: info: initialization of "Y" proved
@@ -327,7 +327,7 @@ test.adb:538:07: info: initialization of "X" proved
 test.adb:540:07: info: precondition proved (CVC5: 1 VC)
 test.adb:544:07: info: precondition proved (CVC5: 1 VC)
 test.adb:545:07: info: precondition proved (CVC5: 1 VC)
-test.adb:546:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:546:07: info: precondition proved (Z3: 1 VC)
 test.adb:550:07: info: initialization of "X" proved
 test.adb:552:07: info: precondition proved (CVC5: 1 VC)
 test.adb:556:07: info: precondition proved (CVC5: 1 VC)
@@ -354,8 +354,8 @@ test.adb:595:07: info: precondition proved (Z3: 1 VC)
 test.adb:596:07: info: precondition proved (CVC5: 1 VC)
 test.adb:597:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:597:56: info: precondition proved (CVC5: 1 VC)
-test.adb:599:07: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
-test.adb:600:07: info: precondition proved (Z3: 1 VC)
+test.adb:599:07: info: precondition proved (CVC5: 2 VC)
+test.adb:600:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:600:56: info: precondition proved (CVC5: 1 VC)
 test.adb:604:07: info: initialization of "X" proved
 test.adb:604:10: info: initialization of "Y" proved
@@ -366,7 +366,7 @@ test.adb:610:07: info: precondition proved (CVC5: 1 VC)
 test.adb:610:34: info: precondition proved (CVC5: 1 VC)
 test.adb:611:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:611:35: info: precondition proved (CVC5: 1 VC)
-test.adb:615:18: info: keys shall be distinct and all elements shall be smaller than "Aggr_Capacity" for maps aggregates at spark-containers-formal-unbounded_ordered_maps.ads:89, in instantiation at test.adb:15
+test.adb:615:18: info: keys shall be distinct and all elements shall be smaller than "Aggr_Capacity" for maps aggregates at spark-containers-formal-unbounded_ordered_maps.ads:91, in instantiation at test.adb:15
 test.adb:615:18: info: precondition proved (CVC5: 11 VC)
 test.adb:617:07: info: precondition proved (CVC5: 1 VC)
 test.adb:618:07: info: precondition proved (CVC5: 1 VC)
@@ -416,9 +416,9 @@ test.adb:662:04: info: precondition proved (Trivial: 1 VC)
 test.adb:15:04: warning: check will fail at run time [-gnatw.a]
 test.adb:15:04: warning: check will fail at run time [-gnatw.a]
 test.adb:15:04: warning: check will fail at run time [-gnatw.a]
-test.adb:15:04: warning: in instantiation at spark-containers-formal-unbounded_ordered_maps.ads:183 [-gnatw.a]
-test.adb:15:04: warning: in instantiation at spark-containers-formal-unbounded_ordered_maps.ads:268 [-gnatw.a]
-test.adb:15:04: warning: in instantiation at spark-containers-formal-unbounded_ordered_maps.ads:268 [-gnatw.a]
+test.adb:15:04: warning: in instantiation at spark-containers-formal-unbounded_ordered_maps.ads:185 [-gnatw.a]
+test.adb:15:04: warning: in instantiation at spark-containers-formal-unbounded_ordered_maps.ads:270 [-gnatw.a]
+test.adb:15:04: warning: in instantiation at spark-containers-formal-unbounded_ordered_maps.ads:270 [-gnatw.a]
 test.adb:15:04: warning: in instantiation at spark-containers-functional-maps.ads:144 [-gnatw.a]
 test.adb:15:04: warning: in instantiation at spark-containers-functional-maps.ads:162 [-gnatw.a]
 test.adb:15:04: warning: in instantiation at spark-containers-functional-vectors.ads:176 [-gnatw.a]

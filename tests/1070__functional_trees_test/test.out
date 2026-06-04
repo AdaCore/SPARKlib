@@ -1,7 +1,7 @@
-test.adb:19:04: warning: function contract might not be available on recursive calls [contracts-recursive]
-test.adb:19:04: warning: function contract might not be available on recursive calls [contracts-recursive]
-test.adb:19:04: warning: function contract might not be available on recursive calls [contracts-recursive]
-test.adb:19:04: warning: function contract might not be available on recursive calls [contracts-recursive]
+test.adb:19:04: warning: "=" is recursive; its contract might not be available on recursive calls from contracts and assertions [contracts-recursive]
+test.adb:19:04: warning: "Count" is recursive; (implicit) contract of mutally recursive functions might not be available on calls from contracts and assertions [contracts-recursive]
+test.adb:19:04: warning: "Count_Children" is recursive; (implicit) contract of mutally recursive functions might not be available on calls from contracts and assertions [contracts-recursive]
+test.adb:19:04: warning: "Height" is recursive; its contract might not be available on recursive calls from contracts and assertions [contracts-recursive]
 test.adb:19:04: warning: in instantiation at spark-containers-functional-trees.ads:105
 test.adb:19:04: warning: in instantiation at spark-containers-functional-trees.ads:113
 test.adb:19:04: warning: in instantiation at spark-containers-functional-trees.ads:125
@@ -9,6 +9,11 @@ test.adb:19:04: warning: in instantiation at spark-containers-functional-trees.a
 test.adb:19:04: warning: in instantiation at spark-containers-functional-trees.ads:233
 test.adb:19:04: warning: in instantiation at spark-containers-functional-trees.ads:78
 test.adb:19:04: warning: in instantiation at spark-containers-functional-trees.ads:97
+test.adb:19:04: warning: its contract might be missing
+test.adb:19:04: warning: its contract might be missing
+test.adb:19:04: warning: potentially missing automatically instanciated lemma "Lemma_Count_Children_Tail" declared at spark-containers-functional-trees.ads:249, instance at line 19
+test.adb:19:04: warning: potentially missing contract for "Count" declared at spark-containers-functional-trees.ads:140, instance at line 19
+test.adb:19:04: warning: potentially missing contract for "Count_Children" declared at spark-containers-functional-trees.ads:233, instance at line 19
 test.adb:19:04: warning: precondition is statically False [precondition-statically-false]
 test.adb:19:04: warning: precondition is statically False [precondition-statically-false]
 test.adb:19:04: warning: precondition is statically False [precondition-statically-false]
@@ -174,7 +179,7 @@ test.adb:256:15: info: precondition proved (CVC5: 1 VC)
 test.adb:257:19: info: precondition proved (CVC5: 1 VC)
 test.adb:258:19: info: precondition proved (CVC5: 1 VC)
 test.adb:259:19: info: precondition proved (CVC5: 1 VC)
-test.adb:261:07: info: precondition proved (Z3: 1 VC)
+test.adb:261:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:261:15: info: predicate check proved (Trivial: 1 VC)
 test.adb:261:28: info: predicate check proved (Trivial: 1 VC)
 test.adb:262:07: info: precondition proved (Z3: 1 VC)
@@ -190,7 +195,7 @@ test.adb:268:19: info: precondition proved (CVC5: 1 VC)
 test.adb:270:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:270:15: info: predicate check proved (Trivial: 1 VC)
 test.adb:270:28: info: predicate check proved (Trivial: 1 VC)
-test.adb:271:07: info: precondition proved (Z3: 1 VC)
+test.adb:271:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:271:15: info: predicate check proved (Trivial: 1 VC)
 test.adb:271:29: info: predicate check proved (Trivial: 1 VC)
 test.adb:273:07: info: precondition proved (CVC5: 1 VC)

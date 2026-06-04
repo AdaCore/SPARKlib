@@ -1,5 +1,5 @@
 --
---  Copyright (C) 2004-2025, Free Software Foundation, Inc.
+--  Copyright (C) 2004-2026, Free Software Foundation, Inc.
 --
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
@@ -47,6 +47,8 @@ is
      Iterable                  =>
        (First       => First,
         Next        => Next,
+        Last        => Last,
+        Previous    => Previous,
         Has_Element => Has_Element,
         Element     => Element),
      Default_Initial_Condition => (SPARKlib_Full => Is_Empty (List)),
