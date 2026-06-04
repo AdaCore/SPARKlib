@@ -83,18 +83,18 @@ test.adb:40:10: info: precondition proved (CVC5: 1 VC), in call inlined at test.
 test.adb:40:10: info: precondition proved (Z3: 1 VC), in call inlined at test.adb:126
 test.adb:40:10: info: precondition proved (Z3: 1 VC), in call inlined at test.adb:150
 test.adb:40:10: info: precondition proved (Z3: 1 VC), in call inlined at test.adb:227
+test.adb:41:15: info: precondition proved (CVC5: 1 VC), in call inlined at test.adb:126
 test.adb:41:15: info: precondition proved (CVC5: 1 VC), in call inlined at test.adb:150
 test.adb:41:15: info: precondition proved (CVC5: 1 VC), in call inlined at test.adb:227
 test.adb:41:15: info: precondition proved (CVC5: 1 VC), in call inlined at test.adb:98
-test.adb:41:15: info: precondition proved (Z3: 1 VC), in call inlined at test.adb:126
+test.adb:41:24: info: precondition proved (CVC5: 1 VC), in call inlined at test.adb:126
 test.adb:41:24: info: precondition proved (CVC5: 1 VC), in call inlined at test.adb:150
 test.adb:41:24: info: precondition proved (CVC5: 1 VC), in call inlined at test.adb:227
 test.adb:41:24: info: precondition proved (CVC5: 1 VC), in call inlined at test.adb:98
-test.adb:41:24: info: precondition proved (Z3: 1 VC), in call inlined at test.adb:126
+test.adb:41:33: info: precondition proved (CVC5: 1 VC), in call inlined at test.adb:126
 test.adb:41:33: info: precondition proved (CVC5: 1 VC), in call inlined at test.adb:150
 test.adb:41:33: info: precondition proved (CVC5: 1 VC), in call inlined at test.adb:227
 test.adb:41:33: info: precondition proved (CVC5: 1 VC), in call inlined at test.adb:98
-test.adb:41:33: info: precondition proved (Z3: 1 VC), in call inlined at test.adb:126
 test.adb:43:10: info: precondition proved (Z3: 1 VC), in call inlined at test.adb:126
 test.adb:43:10: info: precondition proved (Z3: 1 VC), in call inlined at test.adb:150
 test.adb:43:10: info: precondition proved (Z3: 1 VC), in call inlined at test.adb:227
@@ -296,7 +296,7 @@ test.adb:247:18: info: precondition proved (Z3: 1 VC)
 test.adb:247:30: info: precondition proved (Z3: 1 VC)
 test.adb:248:10: info: precondition proved (Z3: 1 VC)
 test.adb:248:47: info: precondition proved (CVC5: 1 VC)
-test.adb:249:10: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:249:10: info: precondition proved (Z3: 1 VC)
 test.adb:249:47: info: precondition proved (CVC5: 1 VC)
 test.adb:250:10: info: precondition proved (Z3: 1 VC)
 test.adb:250:23: info: precondition proved (Z3: 1 VC)
@@ -1119,7 +1119,7 @@ test.adb:966:16: info: precondition proved (CVC5: 1 VC)
 test.adb:967:16: info: precondition proved (CVC5: 1 VC)
 test.adb:970:10: info: precondition proved (CVC5: 1 VC; Z3: 1 VC)
 test.adb:971:10: info: precondition proved (CVC5: 1 VC)
-test.adb:972:10: info: precondition proved (Z3: 1 VC)
+test.adb:972:10: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:972:18: info: precondition proved (Z3: 1 VC)
 test.adb:972:40: info: precondition proved (Z3: 1 VC)
 test.adb:972:66: info: precondition proved (Z3: 1 VC)
