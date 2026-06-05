@@ -9,7 +9,7 @@ procedure Test with SPARK_Mode is
    use type Ada.Containers.Count_Type;
 
    type Small_Int is new Integer range -100 .. 100;
-   subtype Small_Pos is Small_Int range 1 .. Small_Int'Last;
+   subtype Small_Pos is Small_Int range 1 .. 10;
 
    package Int_Trees is new SPARK.Containers.Formal.Trees
      (Small_Pos, Integer);

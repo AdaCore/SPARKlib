@@ -47,12 +47,12 @@ is
    type List is private
    with
      Iterable                  =>
-       (First       => First,
-        Next        => Next,
-        Last        => Last,
-        Previous    => Previous,
-        Has_Element => Has_Element,
-        Element     => Element),
+       (First              => First,
+        Next               => Next,
+        Last               => Last,
+        Previous           => Previous,
+        Has_Element        => Has_Element,
+        Constant_Reference => Constant_Reference),
      Default_Initial_Condition => (SPARKlib_Full => Is_Empty (List)),
      Aggregate                 => (Empty => Empty_List, Add_Unnamed => Append),
      Annotate                  =>
