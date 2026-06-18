@@ -395,9 +395,9 @@ spark-higher_order-fold.adb:365:31: info: index check proved, in instantiation a
 spark-higher_order-fold.adb:365:31: info: index check proved, in instantiation at spark-higher_order-fold.ads:617, in instantiation at spark-higher_order-fold.ads:826, in instantiation at test_higher_order3.ads:89
 spark-higher_order-fold.adb:365:31: info: index check proved, in instantiation at spark-higher_order-fold.ads:617, in instantiation at test_higher_order1.ads:28
 spark-higher_order-fold.adb:365:35: info: index check proved, in instantiation at spark-higher_order-fold.ads:617, in instantiation at spark-higher_order-fold.ads:706, in instantiation at test_higher_order3.ads:33
-spark-higher_order-fold.adb:365:35: info: index check proved, in instantiation at spark-higher_order-fold.ads:617, in instantiation at spark-higher_order-fold.ads:706, in instantiation at test_higher_order3.ads:77
 spark-higher_order-fold.adb:365:35: info: index check proved, in instantiation at spark-higher_order-fold.ads:617, in instantiation at spark-higher_order-fold.ads:826, in instantiation at test_higher_order3.ads:89
 spark-higher_order-fold.adb:365:35: info: index check proved, in instantiation at spark-higher_order-fold.ads:617, in instantiation at test_higher_order1.ads:28
+spark-higher_order-fold.adb:365:35: medium: array index check might fail, in instantiation at spark-higher_order-fold.ads:617, in instantiation at spark-higher_order-fold.ads:706, in instantiation at test_higher_order3.ads:77 [reason for check: value must be a valid index into the array] [provers reached step limit before completing the proof]
 spark-higher_order-fold.adb:366:30: info: precondition proved, in instantiation at spark-higher_order-fold.ads:617, in instantiation at spark-higher_order-fold.ads:826, in instantiation at test_higher_order3.ads:89
 spark-higher_order-fold.adb:366:30: info: predicate check proved, in instantiation at spark-higher_order-fold.ads:617, in instantiation at spark-higher_order-fold.ads:706, in instantiation at test_higher_order3.ads:33
 spark-higher_order-fold.adb:366:30: info: predicate check proved, in instantiation at spark-higher_order-fold.ads:617, in instantiation at spark-higher_order-fold.ads:706, in instantiation at test_higher_order3.ads:77
@@ -2357,3 +2357,4 @@ test_higher_order3.ads:89:04: warning: in instantiation at spark-higher_order-fo
 test_higher_order3.ads:89:04: warning: in instantiation at spark-higher_order-fold.ads:617
 test_higher_order3.ads:89:04: warning: in instantiation at spark-higher_order-fold.ads:826
 test_higher_order3.ads:89:04: warning: initialization of a multi-dimensional array in nested FOR loops is handled imprecisely [multidimensional-array-init]
+FAILED There should be exactly 15 axioms in this tests

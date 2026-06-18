@@ -262,9 +262,9 @@ test.adb:422:07: info: precondition proved (CVC5: 1 VC)
 test.adb:428:07: info: precondition proved (CVC5: 1 VC)
 test.adb:429:07: info: precondition proved (Z3: 1 VC)
 test.adb:430:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:430:15: info: precondition proved (Z3: 1 VC)
+test.adb:430:15: medium: precondition might fail [possible fix: call at line 426 should mention Container (for argument X) in a postcondition] [provers reached step limit before completing the proof]
 test.adb:431:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:431:15: info: precondition proved (Z3: 1 VC)
+test.adb:431:15: medium: precondition might fail [possible fix: call at line 426 should mention Container (for argument X) in a postcondition] [provers reached step limit before completing the proof]
 test.adb:435:07: info: initialization of "X" proved
 test.adb:435:10: info: initialization of "Y" proved
 test.adb:436:07: info: initialization of "Q" proved
@@ -283,7 +283,7 @@ test.adb:460:07: info: initialization of "X" proved
 test.adb:463:07: info: precondition proved (Z3: 1 VC)
 test.adb:463:15: info: precondition proved (CVC5: 1 VC)
 test.adb:467:07: info: initialization of "X" proved
-test.adb:470:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:470:07: info: precondition proved (Z3: 1 VC)
 test.adb:470:15: info: precondition proved (CVC5: 1 VC)
 test.adb:474:07: info: initialization of "X" proved
 test.adb:474:10: info: initialization of "Y" proved
@@ -307,7 +307,7 @@ test.adb:503:07: info: initialization of "X" proved
 test.adb:506:07: info: precondition proved (Z3: 1 VC)
 test.adb:506:15: info: precondition proved (CVC5: 1 VC)
 test.adb:510:07: info: initialization of "X" proved
-test.adb:513:07: info: precondition proved (Z3: 1 VC)
+test.adb:513:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:513:15: info: precondition proved (CVC5: 1 VC)
 test.adb:517:07: info: initialization of "X" proved
 test.adb:517:10: info: initialization of "Y" proved
@@ -332,7 +332,7 @@ test.adb:550:07: info: initialization of "X" proved
 test.adb:552:07: info: precondition proved (CVC5: 1 VC)
 test.adb:556:07: info: precondition proved (CVC5: 1 VC)
 test.adb:557:07: info: precondition proved (CVC5: 1 VC)
-test.adb:558:07: info: precondition proved (Z3: 1 VC)
+test.adb:558:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:562:07: info: initialization of "X" proved
 test.adb:563:07: info: initialization of "P" proved
 test.adb:566:07: info: precondition proved (CVC5: 1 VC)
