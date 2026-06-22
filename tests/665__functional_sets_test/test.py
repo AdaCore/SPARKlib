@@ -5,4 +5,4 @@ if __name__ == "__main__":
     no_crash(
         sparklib=True, opt=["--no-inlining", "-P", "test.gpr"], sparklib_bodymode=True
     )
-    sparklib_exec_test()
+    sparklib_exec_test(sparklib_bodymode=True)
