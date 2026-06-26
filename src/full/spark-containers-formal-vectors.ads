@@ -1205,20 +1205,4 @@ private
       Elements : Elements_Array (1 .. Capacity);
    end record;
 
-   function Empty_Vector (Capacity : Count_Type := 10) return Vector
-   is ((Capacity => Capacity, others => <>));
-
-   function Iter_First (Container : Vector) return Extended_Index
-   is (Index_Type'First);
-
-   function Iter_Next
-     (Container : Vector; Position : Extended_Index) return Extended_Index
-   is (if Position = Extended_Index'Last
-       then Extended_Index'First
-       else Extended_Index'Succ (Position));
-
-   function Iter_Has_Element
-     (Container : Vector; Position : Extended_Index) return Boolean
-   is (Position in Index_Type'First .. Container.Last);
-
 end SPARK.Containers.Formal.Vectors;
