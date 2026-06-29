@@ -37,7 +37,7 @@ pre-commit:
     - anod install gnat --latest
     - anod install gnatformat -Qdate=$GNATFORMAT_DATE
     - eval $(anod printenv gnat -Qdate)
-    - eval $(anod printenv gnatformat -Qdate)
+    - eval $(anod printenv gnatformat -Qdate=$GNATFORMAT_DATE)
     - gnatformat --version
     - cd $CI_PROJECT_DIR
 
