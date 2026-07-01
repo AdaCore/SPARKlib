@@ -66,7 +66,7 @@ is
              then
                (for all I in 1 .. To_Array_Index (Last) =>
                   (if I < To_Array_Index (Before)
-                     or else I > To_Array_Index (Before) + Count - 1
+                     or else I - To_Array_Index (Before) >= Count
                    then Elements (I)'Initialized))));
    --  Insert_Space takes the backing array and last index separately, rather
    --  than a Vector, on purpose. It slides the existing elements up to open a
@@ -436,8 +436,13 @@ is
    -- Empty_Vector --
    ------------------
 
-   function Empty_Vector (Capacity : Count_Type := 10) return Vector
-   is ((Capacity => Capacity, others => <>));
+   function Empty_Vector (Capacity : Count_Type := 10) return Vector is
+   begin
+      if Capacity > Last_Count then
+         raise Constraint_Error with "last index is out of range";
+      end if;
+      return (Capacity => Capacity, others => <>);
+   end Empty_Vector;
 
    ----------------
    -- Find_Index --
@@ -512,6 +517,13 @@ is
       begin
          if Same then
             raise Program_Error with "Target and Source denote same container";
+            pragma
+              Annotate
+                (GNATprove,
+                 Intentional,
+                 "exception might be raised",
+                 "unreachable in SPARK: two in out parameters cannot alias, "
+                 & "so Same_Object never holds here");
          end if;
 
          if Length (Source) = 0 then
@@ -530,14 +542,25 @@ is
 
          I := Length (Target);
          declare
-            New_Last : Extended_Index := Target.Last;
-            TA       : Elements_Array renames Target.Elements;
-            SA       : Elements_Array renames Source.Elements;
+            Current_Last : Extended_Index := Target.Last;
+            TA           : Elements_Array renames Target.Elements;
+            SA           : Elements_Array renames Source.Elements;
 
          begin
-            Insert_Space (TA, New_Last, Target.Last + 1, Length (Source));
+            Insert_Space (TA, Current_Last, Target.Last + 1, Length (Source));
             J := I + Length (Source);
             while Length (Source) /= 0 loop
+               pragma Loop_Invariant (Static => J = I + Length (Source));
+               pragma Loop_Invariant (Static => I <= Length (Target));
+               pragma
+                 Loop_Invariant (Static => J <= To_Array_Index (Current_Last));
+               pragma
+                 Loop_Invariant
+                   (Static =>
+                      (for all K in 1 .. To_Array_Index (Current_Last) =>
+                         (if K <= Length (Target) or else K > J
+                          then TA (K).V'Initialized)));
+               pragma Loop_Variant (Static => (Decreases => J));
                if I = 0 then
                   TA (1 .. J) := SA (1 .. Length (Source));
                   Source.Last := No_Index;
@@ -556,7 +579,7 @@ is
                J := J - 1;
             end loop;
 
-            Target.Last := New_Last;
+            Target.Last := Current_Last;
          end;
       end Merge;
 
@@ -568,14 +591,34 @@ is
          subtype T is Long_Long_Integer;
 
          function To_Index (J : T) return Array_Index
-         is (Array_Index (J));
+         is (Array_Index (J))
+         with Pre => J in 1 .. T (Length (Container));
          --  The array index subtype starts at 1, hence To_Index is the
          --  identity on the heapsort indices 1 .. Max.
 
-         procedure Sift (S : T);
+         function Is_Anc (Root, Node : T) return Boolean
+         is (Node = Root
+             or else (Node > Root and then Is_Anc (Root, Node / 2)))
+         with
+           Ghost              => Static,
+           Global             => null,
+           Subprogram_Variant => (Decreases => Node),
+           Pre                => (Static => Root >= 1 and then Node >= 1);
+         --  Node lies in the subtree rooted at Root, i.e. Root is reached by
+         --  halving Node repeatedly. This is the sift path invariant: it lets
+         --  the sift-up loop conclude Father = C / 2 >= Root >= 1.
 
          Max  : T := T (Length (Container));
          Temp : Element_Type;
+
+         procedure Sift (S : T)
+         with
+           Pre  =>
+             (Static => S in 1 .. Max and then Max <= T (Length (Container))),
+           Post => (Static => Length (Container) = Length (Container)'Old);
+         --  Sift the element held in Temp down the heap rooted at S, over the
+         --  heap region 1 .. Max. Only permutes Elements (1 .. Max); leaves
+         --  the vector's length unchanged.
 
          ----------
          -- Sift --
@@ -587,6 +630,9 @@ is
 
          begin
             loop
+               pragma Loop_Invariant (Static => C in S .. Max);
+               pragma Loop_Invariant (Static => Is_Anc (S, C));
+               pragma Loop_Variant (Static => (Increases => C));
                Son := 2 * C;
 
                exit when Son > Max;
@@ -612,6 +658,10 @@ is
             end loop;
 
             while C /= S loop
+               pragma Loop_Invariant (Static => C in 1 .. Max);
+               pragma Loop_Invariant (Static => C >= S);
+               pragma Loop_Invariant (Static => Is_Anc (S, C));
+               pragma Loop_Variant (Static => (Decreases => C));
                declare
                   Father : constant T := C / 2;
                begin
@@ -634,11 +684,18 @@ is
          end if;
 
          for J in reverse 1 .. Max / 2 loop
+            pragma Loop_Invariant (Static => Max = T (Length (Container)));
             Temp := Container.Elements (To_Index (J)).V;
             Sift (J);
          end loop;
 
          while Max > 1 loop
+            pragma
+              Loop_Invariant (Static => Max in 1 .. T (Length (Container)));
+            pragma
+              Loop_Invariant
+                (Static => Length (Container) = Length (Container)'Loop_Entry);
+            pragma Loop_Variant (Static => (Decreases => Max));
             Temp := Container.Elements (To_Index (Max)).V;
             Container.Elements (To_Index (Max)).V := Container.Elements (1).V;
 
@@ -911,6 +968,13 @@ is
       if Same then
          raise Program_Error
            with "Container and New_Item denote same container";
+         pragma
+           Annotate
+             (GNATprove,
+              Intentional,
+              "exception might be raised",
+              "unreachable in SPARK: an in out and an in parameter cannot "
+              & "alias, so Same_Object never holds here");
       end if;
 
       --  Use Insert_Space to create the "hole" (the destination slice) into
@@ -1002,6 +1066,10 @@ is
 
    begin
       for Position in 1 .. Length (Container) loop
+         pragma
+           Loop_Invariant
+             (Static =>
+                Formal_Model.M.Length (R) = Formal_Model.Big (Position - 1));
          R := Formal_Model.M.Add (R, Container.Elements (Position).V);
       end loop;
 
@@ -1022,7 +1090,7 @@ is
       end if;
 
       if Target.Capacity < LS then
-         raise Constraint_Error;
+         raise Capacity_Error with "Capacity too small";
       end if;
 
       Clear (Target);
@@ -1124,6 +1192,8 @@ is
          I := 1;
          J := Len;
          while I < J loop
+            pragma Loop_Invariant (Static => I >= 1 and then J <= Len);
+            pragma Loop_Variant (Static => (Decreases => J - I));
             declare
                EI : constant Element_Type := E (I).V;
 
@@ -1203,7 +1273,9 @@ is
      (New_Item : Element_Type; Length : Capacity_Range) return Vector is
    begin
       if Length = 0 then
-         return Empty_Vector (0);
+         return V : Vector (0) do
+            V := Empty_Vector (0);
+         end return;
       end if;
 
       declare

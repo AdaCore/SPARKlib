@@ -14,12 +14,12 @@ with Index_Types;       use Index_Types;
 package Test_Instances with SPARK_Mode is
 
    package Big_Vectors is new
-     SPARK.Containers.Formal.Vectors (Big_Index, Element_Type);
+     SPARK.Containers.Formal.Vectors (Big_Index, Element_Type, "=", Eq_Reflexive, Eq_Symmetric, Eq_Transitive);
 
    package Big_Vectors_Impl is new Big_Vectors.Public_Impl;
 
    package Small_Vectors is new
-     SPARK.Containers.Formal.Vectors (Small_Index, Element_Type);
+     SPARK.Containers.Formal.Vectors (Small_Index, Element_Type, "=", Eq_Reflexive, Eq_Symmetric, Eq_Transitive);
 
    package Small_Vectors_Impl is new Small_Vectors.Public_Impl;
 

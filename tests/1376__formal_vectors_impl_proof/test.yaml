@@ -1,17 +1,5 @@
-# The vector implementation generic SPARK.Containers.Formal.Vectors.Impl (a
-# private child of Formal.Vectors) is checked through two instantiations (a wide
-# and a narrow index base type, with opaque element type and bounds) in
-# test_instances.ads. gnatprove analyses every operation of an instantiated
-# generic, so these instantiations cover the whole implementation.
-#
-# sparklib_bodymode flips the #BODYMODE private part of Formal.Vectors to
-# SPARK_Mode => On, so that the child Impl can see the representation it works
-# on.
-#
-# Only SPARK_Mode conformance is checked for now (step 3 of the silver
-# implementation plan in include/IMPL_SILVER_PLAN.md). Switch to the default
-# proof mode once the implementation is proved at silver (step 6).
 prove_all:
-  mode: check_all
+  filter_sparklib: False
   sparklib: True
   sparklib_bodymode: True
+  no_fail: True

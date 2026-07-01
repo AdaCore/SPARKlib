@@ -10,10 +10,6 @@ gen_inst.ads:7:54: info: division check proved (CVC5: 1 VC), in instantiation at
 gen_inst.ads:7:54: info: division check proved (CVC5: 1 VC), in instantiation at inst.ads:6
 gen_inst.ads:7:67: info: division check proved (CVC5: 1 VC), in instantiation at inst.ads:4
 gen_inst.ads:7:67: info: division check proved (CVC5: 1 VC), in instantiation at inst.ads:6
-spark-containers-formal-vectors.ads:85:53: medium: default initial condition might fail, in instantiation at gen_inst.ads:8, in instantiation at inst.ads:4
-spark-containers-formal-vectors.ads:85:53: medium: default initial condition might fail, in instantiation at gen_inst.ads:8, in instantiation at inst.ads:6
-spark-containers-formal-vectors.ads:1245:04: medium: type "Vector" is not fully initialized, in instantiation at gen_inst.ads:8, in instantiation at inst.ads:4
-spark-containers-formal-vectors.ads:1245:04: medium: type "Vector" is not fully initialized, in instantiation at gen_inst.ads:8, in instantiation at inst.ads:6
 test.adb:11:04: info: add a contract to analyze it separately from calling contexts
 test.adb:11:04: info: analyzing call to "Create_Non_Empty_Vector" in context
 test.adb:11:04: info: analyzing call to "Create_Non_Empty_Vector" in context
@@ -1632,10 +1628,10 @@ test_gen.adb:742:04: info: precondition proved (Trivial: 1 VC), in instantiation
 test_gen.adb:742:04: info: precondition proved (Trivial: 1 VC), in instantiation at test.adb:14
 inst.ads:4:04: warning: check will fail at run time [-gnatw.a]
 inst.ads:4:04: warning: in instantiation at gen_inst.ads:8 [-gnatw.a]
-inst.ads:4:04: warning: in instantiation at spark-containers-formal-vectors.ads:150 [-gnatw.a]
+inst.ads:4:04: warning: in instantiation at spark-containers-formal-vectors.ads:157 [-gnatw.a]
 inst.ads:4:04: warning: in instantiation at spark-containers-functional-vectors.ads:176 [-gnatw.a]
 inst.ads:6:04: warning: check will fail at run time [-gnatw.a]
 inst.ads:6:04: warning: in instantiation at gen_inst.ads:8 [-gnatw.a]
-inst.ads:6:04: warning: in instantiation at spark-containers-formal-vectors.ads:150 [-gnatw.a]
+inst.ads:6:04: warning: in instantiation at spark-containers-formal-vectors.ads:157 [-gnatw.a]
 inst.ads:6:04: warning: in instantiation at spark-containers-functional-vectors.ads:176 [-gnatw.a]
 test_gen.adb:68:07: warning: variable "X" is read but never assigned [-gnatwv]

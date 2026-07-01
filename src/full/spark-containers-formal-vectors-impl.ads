@@ -31,9 +31,9 @@ is
    use SPARK.Containers.Formal.Impl.Address_Space;
 
    --  The following ghost helpers express, without any model, the exact
-   --  conditions under which the insertion operations raise. They are used in
-   --  the Exit_Cases below so that those contracts state precisely when, and
-   --  which, exception is raised.
+   --  conditions under which the insertion operations raise en exception. They
+   --  are used in the Exit_Cases below so that those contracts state precisely
+   --  when, and which, exception is raised.
 
    function Valid_Index_For_Insertion
      (Last : Extended_Index; Before : Extended_Index) return Boolean
@@ -80,26 +80,21 @@ is
    with Global => null;
 
    function "=" (Left, Right : Vector) return Boolean
-   with
-     Volatile_Function,
-     Global => Address_State,
-     Pre    =>
-       (Static =>
-          (for all I in 1 .. To_Array_Index (Left.Last) =>
-             Left.Elements (I).V'Initialized)
-          and
-            (for all I in 1 .. To_Array_Index (Right.Last) =>
-               Right.Elements (I).V'Initialized));
+   with Volatile_Function, Global => Address_State;
 
    function Empty_Vector (Capacity : Count_Type := 10) return Vector
    with
-     Global => null,
-     Pre    => (Static => Capacity in Capacity_Range),
-     Post   => Empty_Vector'Result.Capacity = Capacity;
+     Global     => null,
+     Side_Effects,
+     Exit_Cases =>
+       ((Capacity in Capacity_Range) => Normal_Return,
+        others                       =>
+          (Exception_Raised => Constraint_Error)),
+     Post       => (Static => Empty_Vector'Result.Capacity = Capacity);
 
    function To_Vector
      (New_Item : Element_Type; Length : Capacity_Range) return Vector
-   with Global => null, Post => To_Vector'Result.Capacity = Length;
+   with Global => null, Post => (Static => To_Vector'Result.Capacity = Length);
 
    procedure Reserve_Capacity
      (Container : in out Vector; Capacity : Capacity_Range)
@@ -109,7 +104,7 @@ is
        (Capacity <= Container.Capacity => Normal_Return,
         others                         =>
           (Exception_Raised => Capacity_Error)),
-     Post       => Length (Container) = Length (Container)'Old;
+     Post       => (Static => Length (Container) = Length (Container)'Old);
 
    procedure Clear (Container : in out Vector)
    with Global => null, Post => Length (Container) = 0;
@@ -131,16 +126,18 @@ is
           (Exception_Raised => Capacity_Error),
         others                                            => Normal_Return),
      Post       =>
-       (if Capacity = 0
-        then Copy'Result.Capacity = Length (Source)
-        else Copy'Result.Capacity = Capacity);
+       (Static =>
+          (if Capacity = 0
+           then Copy'Result.Capacity = Length (Source)
+           else Copy'Result.Capacity = Capacity));
 
    procedure Move (Target : in out Vector; Source : in out Vector)
    with
      Global     => Address_State,
      Exit_Cases =>
        (Target.Capacity < Length (Source) =>
-          (Exception_Raised => Constraint_Error));
+          (Exception_Raised => Capacity_Error),
+        others                            => Normal_Return);
 
    function Element
      (Container : Vector; Index : Extended_Index) return Element_Type
@@ -161,7 +158,7 @@ is
        (Index <= Last_Index (Container) => Normal_Return,
         others                          =>
           (Exception_Raised => Constraint_Error)),
-     Post       => Length (Container) = Length (Container)'Old;
+     Post       => (Static => Length (Container) = Length (Container)'Old);
 
    function Constant_Reference
      (Container : aliased Vector; Index : Index_Type)
@@ -188,7 +185,6 @@ is
         or Exceeds_Last_Count (Length (Container), Length (New_Item))     =>
           (Exception_Raised => Constraint_Error),
         Valid_Index_For_Insertion (Last_Index (Container), Before)
-        and not Exceeds_Last_Count (Length (Container), Length (New_Item))
         and
           Exceeds_Capacity
             (Length (Container), Capacity (Container), Length (New_Item)) =>
@@ -211,7 +207,6 @@ is
         or Exceeds_Last_Count (Length (Container), 1)                      =>
           (Exception_Raised => Constraint_Error),
         Valid_Index_For_Insertion (Last_Index (Container), Before)
-        and not Exceeds_Last_Count (Length (Container), 1)
         and Exceeds_Capacity (Length (Container), Capacity (Container), 1) =>
           (Exception_Raised => Capacity_Error),
         others                                                             =>
@@ -229,7 +224,6 @@ is
         or Exceeds_Last_Count (Length (Container), Count)
         => (Exception_Raised => Constraint_Error),
         Valid_Index_For_Insertion (Last_Index (Container), Before)
-        and not Exceeds_Last_Count (Length (Container), Count)
         and Exceeds_Capacity (Length (Container), Capacity (Container), Count)
         => (Exception_Raised => Capacity_Error),
         others
@@ -239,14 +233,12 @@ is
    with
      Global     => Address_State,
      Exit_Cases =>
-       (Exceeds_Last_Count (Length (Container), Length (New_Item))        =>
+       (Exceeds_Last_Count (Length (Container), Length (New_Item))      =>
           (Exception_Raised => Constraint_Error),
-        not Exceeds_Last_Count (Length (Container), Length (New_Item))
-        and
-          Exceeds_Capacity
-            (Length (Container), Capacity (Container), Length (New_Item)) =>
+        Exceeds_Capacity
+          (Length (Container), Capacity (Container), Length (New_Item)) =>
           (Exception_Raised => Capacity_Error),
-        others                                                            =>
+        others                                                          =>
           Normal_Return);
    --  May also raise Program_Error on aliasing; see Insert_Vector.
 
@@ -254,12 +246,11 @@ is
    with
      Global     => null,
      Exit_Cases =>
-       (Exceeds_Last_Count (Length (Container), 1)                         =>
+       (Exceeds_Last_Count (Length (Container), 1)                     =>
           (Exception_Raised => Constraint_Error),
-        not Exceeds_Last_Count (Length (Container), 1)
-        and Exceeds_Capacity (Length (Container), Capacity (Container), 1) =>
+        Exceeds_Capacity (Length (Container), Capacity (Container), 1) =>
           (Exception_Raised => Capacity_Error),
-        others                                                             =>
+        others                                                         =>
           Normal_Return);
 
    procedure Prepend
@@ -267,85 +258,67 @@ is
    with
      Global     => null,
      Exit_Cases =>
-       (Exceeds_Last_Count (Length (Container), Count)
-        => (Exception_Raised => Constraint_Error),
-        not Exceeds_Last_Count (Length (Container), Count)
-        and Exceeds_Capacity (Length (Container), Capacity (Container), Count)
-        => (Exception_Raised => Capacity_Error),
-        others
-        => Normal_Return);
+       (Exceeds_Last_Count (Length (Container), Count)                     =>
+          (Exception_Raised => Constraint_Error),
+        Exceeds_Capacity (Length (Container), Capacity (Container), Count) =>
+          (Exception_Raised => Capacity_Error),
+        others                                                             =>
+          Normal_Return);
 
    procedure Append_Vector (Container : in out Vector; New_Item : Vector)
    with
      Global     => Address_State,
      Exit_Cases =>
-       (Length (New_Item) > 0
-        and then
-          (Last_Index (Container) >= Index_Type'Last
-           or else Exceeds_Last_Count (Length (Container), Length (New_Item)))
-        => (Exception_Raised => Constraint_Error),
-        Length (New_Item) > 0
-        and then Last_Index (Container) < Index_Type'Last
-        and then not Exceeds_Last_Count (Length (Container), Length (New_Item))
-        and then
-          Exceeds_Capacity
-            (Length (Container), Capacity (Container), Length (New_Item))
-        => (Exception_Raised => Capacity_Error),
-        others
-        => Normal_Return);
+       (Exceeds_Last_Count (Length (Container), Length (New_Item))      =>
+          (Exception_Raised => Constraint_Error),
+        Exceeds_Capacity
+          (Length (Container), Capacity (Container), Length (New_Item)) =>
+          (Exception_Raised => Capacity_Error),
+        others                                                          =>
+          Normal_Return);
    --  May also raise Program_Error on aliasing; see Insert_Vector.
 
    procedure Append (Container : in out Vector; New_Item : Element_Type)
    with
      Global     => null,
      Exit_Cases =>
-       (Last_Index (Container) >= Index_Type'Last
-        or else Exceeds_Last_Count (Length (Container), 1)
-        => (Exception_Raised => Constraint_Error),
-        Last_Index (Container) < Index_Type'Last
-        and then not Exceeds_Last_Count (Length (Container), 1)
-        and then Exceeds_Capacity (Length (Container), Capacity (Container), 1)
-        => (Exception_Raised => Capacity_Error),
-        others
-        => Normal_Return);
+       (Exceeds_Last_Count (Length (Container), 1)                     =>
+          (Exception_Raised => Constraint_Error),
+        Exceeds_Capacity (Length (Container), Capacity (Container), 1) =>
+          (Exception_Raised => Capacity_Error),
+        others                                                         =>
+          Normal_Return);
 
    procedure Append
      (Container : in out Vector; New_Item : Element_Type; Count : Count_Type)
    with
      Global     => null,
      Exit_Cases =>
-       (Count > 0
-        and then
-          (Last_Index (Container) >= Index_Type'Last
-           or else Exceeds_Last_Count (Length (Container), Count))           =>
+       (Exceeds_Last_Count (Length (Container), Count)                     =>
           (Exception_Raised => Constraint_Error),
-        Count > 0
-        and then Last_Index (Container) < Index_Type'Last
-        and then not Exceeds_Last_Count (Length (Container), Count)
-        and then
-          Exceeds_Capacity (Length (Container), Capacity (Container), Count) =>
+        Exceeds_Capacity (Length (Container), Capacity (Container), Count) =>
           (Exception_Raised => Capacity_Error),
-        others                                                               =>
+        others                                                             =>
           Normal_Return);
 
    procedure Delete (Container : in out Vector; Index : Extended_Index)
    with
      Global     => null,
      Exit_Cases =>
-       (Index < First_Index (Container)
-        or else Index - 1 > Last_Index (Container) =>
-          (Exception_Raised => Constraint_Error),
-        others                                     => Normal_Return);
+       ((Index in First_Index (Container) .. Last_Index (Container))
+        or Index - 1 = Last_Index (Container) => Normal_Return,
+        others                                =>
+          (Exception_Raised => Constraint_Error));
 
    procedure Delete
      (Container : in out Vector; Index : Extended_Index; Count : Count_Type)
    with
      Global     => null,
      Exit_Cases =>
-       (Index < First_Index (Container)
-        or else Index - 1 > Last_Index (Container) =>
-          (Exception_Raised => Constraint_Error),
-        others                                     => Normal_Return);
+       ((Index in First_Index (Container) .. Last_Index (Container))
+        or Index - 1 = Last_Index (Container) => Normal_Return,
+        others                                =>
+          (Exception_Raised => Constraint_Error));
 
    procedure Delete_First (Container : in out Vector)
    with Global => null;
@@ -371,7 +344,7 @@ is
           (Exception_Raised => Constraint_Error),
         others                                                        =>
           Normal_Return),
-     Post       => Length (Container) = Length (Container)'Old;
+     Post       => (Static => Length (Container) = Length (Container)'Old);
 
    function First_Element (Container : Vector) return Element_Type
    with
@@ -416,20 +389,20 @@ is
       with Global => null;
 
       procedure Sort (Container : in out Vector)
-      with Global => null, Post => Length (Container) = Length (Container)'Old;
+      with
+        Global => null,
+        Post   => (Static => Length (Container) = Length (Container)'Old);
 
       procedure Merge (Target : in out Vector; Source : in out Vector)
       with
         Global     => SPARK.Containers.Formal.Impl.Address_Space.Address_State,
         Exit_Cases =>
-          (Length (Source) > 0
-           and then
-             (Exceeds_Last_Count (Length (Target), Length (Source))
-              or
-                Exceeds_Capacity
-                  (Length (Target), Capacity (Target), Length (Source))) =>
+          (Exceeds_Last_Count (Length (Target), Length (Source))   =>
              (Exception_Raised => Constraint_Error),
-           others                                                        =>
+           Exceeds_Capacity
+             (Length (Target), Capacity (Target), Length (Source)) =>
+             (Exception_Raised => Capacity_Error),
+           others                                                  =>
              Normal_Return);
       --  May also raise Program_Error on aliasing; see Insert_Vector.
    end Generic_Sorting;
@@ -440,6 +413,7 @@ is
      (Container : Vector; Position : Extended_Index) return Boolean;
 
    function Iter_Next
-     (Container : Vector; Position : Extended_Index) return Extended_Index;
+     (Container : Vector; Position : Extended_Index) return Extended_Index
+   with Pre => (Static => Iter_Has_Element (Container, Position));
 
 end SPARK.Containers.Formal.Vectors.Impl;

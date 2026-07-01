@@ -13,6 +13,15 @@ package Element_Type_Defs with SPARK_Mode is
    function "=" (Left, Right : Element_Type) return Boolean
    with Import, Global => null;
 
+   procedure Eq_Reflexive (X : Element_Type)
+     with Ghost => Static, Global => null, Post => X = X;
+
+   procedure Eq_Symmetric (X, Y : Element_Type)
+     with Ghost => Static, Global => null, Pre => X = Y, Post => Y = X;
+
+   procedure Eq_Transitive (X, Y, Z : Element_Type)
+     with Ghost => Static, Global => null, Pre => X = Y and Y = Z, Post => X = Z;
+
    function "<" (Left, Right : Element_Type) return Boolean
    with Import, Global => null;
 
