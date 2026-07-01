@@ -6,34 +6,96 @@
 
 pragma Ada_2022;
 
-with Ada.Containers.Generic_Array_Sort;
-
-with System;
-use type System.Address;
-
 package body SPARK.Containers.Formal.Vectors.Impl
-  with SPARK_Mode => Off
+  with SPARK_Mode
 is
+
+   package Address_Comparisons is new
+     SPARK.Containers.Formal.Impl.Address_Space.Address_Comparison (Vector);
+
+   function Same_Object (Left, Right : Vector) return Boolean
+   renames Address_Comparisons.Same_Object;
 
    subtype Int is Long_Long_Integer;
 
-   function To_Array_Index (Index : Index_Type'Base) return Count_Type'Base;
+   function Count_Type_Last return Count_Type'Base
+   is (Count_Type'Last)
+   with Inline;
+   function Index_Type_Last return Index_Type'Base
+   is (Index_Type'Last)
+   with Inline;
+   --  Non-static wrappers for the two bounds. They are used in the
+   --  overflow-guarded conversions of Insert_Space so that those conversions
+   --  are ordinary (branch-guarded) run-time checks rather than static
+   --  expressions the front end folds into compile-time Constraint_Error on
+   --  instantiations whose index base type is narrower than Count_Type.
 
    procedure Insert_Space
-     (Container : in out Vector;
-      Before    : Extended_Index;
-      Count     : Count_Type := 1);
-
-   function Length_Internal (Container : Vector) return Capacity_Range;
-   --  Internal version of Length without a postcondition calling Model
+     (Elements : in out Elements_Array;
+      Last     : in out Extended_Index;
+      Before   : Extended_Index;
+      Count    : Count_Type := 1)
+   with
+     Exit_Cases =>
+       (not Valid_Index_For_Insertion (Last, Before)
+        or Exceeds_Last_Count (To_Array_Index (Last), Count)               =>
+          (Exception_Raised => Constraint_Error),
+        Valid_Index_For_Insertion (Last, Before)
+        and not Exceeds_Last_Count (To_Array_Index (Last), Count)
+        and Exceeds_Capacity (To_Array_Index (Last), Elements'Last, Count) =>
+          (Exception_Raised => Capacity_Error),
+        others                                                             =>
+          Normal_Return),
+     Pre        =>
+       (Static =>
+          Elements'First = 1
+          and then Last <= No_Index + Count_Type'Pos (Last_Count)
+          and then To_Array_Index (Last) <= Elements'Last
+          and then
+            (for all I in 1 .. To_Array_Index (Last) =>
+               Elements (I).V'Initialized)),
+     Post       =>
+       (Static =>
+          To_Array_Index (Last) = To_Array_Index (Last'Old) + Count
+          and then To_Array_Index (Last) <= Elements'Last
+          and then
+            (for all I in 1 .. To_Array_Index (Last'Old) =>
+               Elements (I)'Initialized)
+          and then
+            (if Count /= 0
+             then
+               (for all I in 1 .. To_Array_Index (Last) =>
+                  (if I < To_Array_Index (Before)
+                     or else I > To_Array_Index (Before) + Count - 1
+                   then Elements (I)'Initialized))));
+   --  Insert_Space takes the backing array and last index separately, rather
+   --  than a Vector, on purpose. It slides the existing elements up to open a
+   --  hole of Count cells at Before and reports the grown last index in the
+   --  in-out Last parameter, but it does NOT touch a Vector: a Ghost_Predicate
+   --  is checked at every boundary a Vector crosses (every parameter pass and
+   --  return, and after a call updates one of its components), and the hole it
+   --  opens transiently breaks that predicate.
+   --
+   --  The caller must therefore pass a LOCAL last index (not Container.Last
+   --  directly) and keep Container.Last at its old value across the call and
+   --  the hole-fill: with the old last, Container's predicate is consistent
+   --  with the slid array (the post keeps the old used prefix initialized), so
+   --  the checks after the call and the fill hold. The caller assigns the
+   --  reported new last to Container.Last only after filling the hole. The
+   --  post leaves exactly the hole
+   --  (To_Array_Index (Before) .. To_Array_Index (Before) + Count - 1)
+   --  possibly uninitialized.
 
    ---------
    -- "=" --
    ---------
 
-   function "=" (Left : Vector; Right : Vector) return Boolean is
+   function "=" (Left, Right : Vector) return Boolean is
+      Same : constant Boolean := Same_Object (Left, Right);
+      --  Volatile read in a non-interfering context (object initialization)
+
    begin
-      if Left'Address = Right'Address then
+      if Same then
          return True;
       end if;
 
@@ -42,7 +104,7 @@ is
       end if;
 
       for J in 1 .. Length (Left) loop
-         if Left.Elements (J) /= Right.Elements (J) then
+         if Left.Elements (J).V /= Right.Elements (J).V then
             return False;
          end if;
       end loop;
@@ -96,10 +158,11 @@ is
    ------------
 
    procedure Assign (Target : in out Vector; Source : Vector) is
-      LS : constant Capacity_Range := Length (Source);
+      LS   : constant Capacity_Range := Length (Source);
+      Same : constant Boolean := Same_Object (Target, Source);
 
    begin
-      if Target'Address = Source'Address then
+      if Same then
          return;
       end if;
 
@@ -115,10 +178,8 @@ is
    -- Capacity --
    --------------
 
-   function Capacity (Container : Vector) return Capacity_Range is
-   begin
-      return Container.Capacity;
-   end Capacity;
+   function Capacity (Container : Vector) return Capacity_Range
+   is (Container.Capacity);
 
    -----------
    -- Clear --
@@ -141,7 +202,7 @@ is
          raise Constraint_Error with "Index is out of range";
       end if;
 
-      return Container.Elements (To_Array_Index (Index))'Access;
+      return Container.Elements (To_Array_Index (Index)).V'Access;
    end Constant_Reference;
 
    --------------
@@ -173,10 +234,17 @@ is
          raise Capacity_Error with "Capacity too small";
       end if;
 
-      return Target : Vector (C) do
-         Target.Elements (1 .. LS) := Source.Elements (1 .. LS);
-         Target.Last := Source.Last;
-      end return;
+      declare
+         Target_Capacity : constant Capacity_Range := C;
+         --  Target_Capacity must be a constant: it is used as a subtype
+         --  constraint below, which may not depend on a variable input in
+         --  SPARK (E0007).
+      begin
+         return Target : Vector (Target_Capacity) do
+            Target.Elements (1 .. LS) := Source.Elements (1 .. LS);
+            Target.Last := Source.Last;
+         end return;
+      end;
    end Copy;
 
    ------------
@@ -352,7 +420,7 @@ is
    function Element
      (Container : Vector; Index : Extended_Index) return Element_Type is
    begin
-      if Index > Container.Last then
+      if Index = No_Index or else Index > Container.Last then
          raise Constraint_Error with "Index is out of range";
       end if;
 
@@ -360,7 +428,7 @@ is
          II : constant Int'Base := Int (Index) - Int (No_Index);
          I  : constant Capacity_Range := Capacity_Range (II);
       begin
-         return Container.Elements (I);
+         return Container.Elements (I).V;
       end;
    end Element;
 
@@ -378,19 +446,12 @@ is
    function Find_Index
      (Container : Vector;
       Item      : Element_Type;
-      Index     : Index_Type := Index_Type'First) return Extended_Index
-   is
-      K    : Count_Type;
-      Last : constant Extended_Index := Last_Index (Container);
-
+      Index     : Index_Type := Index_Type'First) return Extended_Index is
    begin
-      K := Capacity_Range (Int (Index) - Int (No_Index));
-      for Indx in Index .. Last loop
-         if Container.Elements (K) = Item then
+      for Indx in Index .. Container.Last loop
+         if Container.Elements (To_Array_Index (Indx)).V = Item then
             return Indx;
          end if;
-
-         K := K + 1;
       end loop;
 
       return No_Index;
@@ -405,7 +466,7 @@ is
       if Is_Empty (Container) then
          raise Constraint_Error with "Container is empty";
       else
-         return Container.Elements (1);
+         return Container.Elements (1).V;
       end if;
    end First_Element;
 
@@ -413,19 +474,14 @@ is
    -- First_Index --
    -----------------
 
-   function First_Index (Container : Vector) return Index_Type is
-      pragma Unreferenced (Container);
-   begin
-      return Index_Type'First;
-   end First_Index;
+   function First_Index (Dummy_Container : Vector) return Index_Type
+   is (Index_Type'First);
 
    ---------------------
    -- Generic_Sorting --
    ---------------------
 
-   package body Generic_Sorting
-     with SPARK_Mode => Off
-   is
+   package body Generic_Sorting is
 
       ---------------
       -- Is_Sorted --
@@ -436,7 +492,7 @@ is
 
       begin
          for J in 1 .. L - 1 loop
-            if Container.Elements (J + 1) < Container.Elements (J) then
+            if Container.Elements (J + 1).V < Container.Elements (J).V then
                return False;
             end if;
          end loop;
@@ -449,11 +505,12 @@ is
       -----------
 
       procedure Merge (Target : in out Vector; Source : in out Vector) is
-         I : Count_Type;
-         J : Count_Type;
+         I    : Count_Type;
+         J    : Count_Type;
+         Same : constant Boolean := Same_Object (Target, Source);
 
       begin
-         if Target'Address = Source'Address then
+         if Same then
             raise Program_Error with "Target and Source denote same container";
          end if;
 
@@ -466,27 +523,20 @@ is
             return;
          end if;
 
+         if Target.Last >= Index_Type'Last then
+            raise Constraint_Error
+              with "vector is already at its maximum length";
+         end if;
+
          I := Length (Target);
-
          declare
-            New_Length : constant Count_Type := I + Length (Source);
+            New_Last : Extended_Index := Target.Last;
+            TA       : Elements_Array renames Target.Elements;
+            SA       : Elements_Array renames Source.Elements;
 
          begin
-            if Index_Type'Base'Last >= Count_Type'Pos (Count_Type'Last) then
-               Target.Last := No_Index + Index_Type'Base (New_Length);
-
-            else
-               Target.Last :=
-                 Index_Type'Base (Count_Type'Base (No_Index) + New_Length);
-            end if;
-         end;
-
-         declare
-            TA : Elements_Array renames Target.Elements;
-            SA : Elements_Array renames Source.Elements;
-
-         begin
-            J := Length (Target);
+            Insert_Space (TA, New_Last, Target.Last + 1, Length (Source));
+            J := I + Length (Source);
             while Length (Source) /= 0 loop
                if I = 0 then
                   TA (1 .. J) := SA (1 .. Length (Source));
@@ -494,7 +544,7 @@ is
                   exit;
                end if;
 
-               if SA (Length (Source)) < TA (I) then
+               if SA (Length (Source)).V < TA (I).V then
                   TA (J) := TA (I);
                   I := I - 1;
 
@@ -505,6 +555,8 @@ is
 
                J := J - 1;
             end loop;
+
+            Target.Last := New_Last;
          end;
       end Merge;
 
@@ -513,21 +565,86 @@ is
       ----------
 
       procedure Sort (Container : in out Vector) is
-         procedure Sort is new
-           Generic_Array_Sort
-             (Index_Type   => Array_Index,
-              Element_Type => Element_Type,
-              Array_Type   => Elements_Array,
-              "<"          => "<");
+         subtype T is Long_Long_Integer;
 
-         Len : constant Capacity_Range := Length (Container);
+         function To_Index (J : T) return Array_Index
+         is (Array_Index (J));
+         --  The array index subtype starts at 1, hence To_Index is the
+         --  identity on the heapsort indices 1 .. Max.
+
+         procedure Sift (S : T);
+
+         Max  : T := T (Length (Container));
+         Temp : Element_Type;
+
+         ----------
+         -- Sift --
+         ----------
+
+         procedure Sift (S : T) is
+            C   : T := S;
+            Son : T;
+
+         begin
+            loop
+               Son := 2 * C;
+
+               exit when Son > Max;
+
+               declare
+                  Son_Index : Array_Index := To_Index (Son);
+
+               begin
+                  if Son < Max then
+                     if Container.Elements (Son_Index).V
+                       < Container.Elements (Array_Index'Succ (Son_Index)).V
+                     then
+                        Son := Son + 1;
+                        Son_Index := Array_Index'Succ (Son_Index);
+                     end if;
+                  end if;
+
+                  Container.Elements (To_Index (C)).V :=
+                    Container.Elements (Son_Index).V;
+               end;
+
+               C := Son;
+            end loop;
+
+            while C /= S loop
+               declare
+                  Father : constant T := C / 2;
+               begin
+                  if Container.Elements (To_Index (Father)).V < Temp then
+                     Container.Elements (To_Index (C)).V :=
+                       Container.Elements (To_Index (Father)).V;
+                     C := Father;
+                  else
+                     exit;
+                  end if;
+               end;
+            end loop;
+
+            Container.Elements (To_Index (C)).V := Temp;
+         end Sift;
 
       begin
          if Container.Last <= Index_Type'First then
             return;
-         else
-            Sort (Container.Elements (1 .. Len));
          end if;
+
+         for J in reverse 1 .. Max / 2 loop
+            Temp := Container.Elements (To_Index (J)).V;
+            Sift (J);
+         end loop;
+
+         while Max > 1 loop
+            Temp := Container.Elements (To_Index (Max)).V;
+            Container.Elements (To_Index (Max)).V := Container.Elements (1).V;
+
+            Max := Max - 1;
+            Sift (1);
+         end loop;
       end Sort;
 
    end Generic_Sorting;
@@ -537,10 +654,8 @@ is
    -----------------
 
    function Has_Element
-     (Container : Vector; Position : Extended_Index) return Boolean is
-   begin
-      return Position in First_Index (Container) .. Last_Index (Container);
-   end Has_Element;
+     (Container : Vector; Position : Extended_Index) return Boolean
+   is (Position in Index_Type'First .. Container.Last);
 
    ------------
    -- Insert --
@@ -560,16 +675,26 @@ is
       New_Item  : Element_Type;
       Count     : Count_Type)
    is
-      J : Count_Type'Base;  -- scratch
+      J    : Count_Type'Base;  -- scratch
+      Last : Extended_Index := Container.Last;
+      --  Local last index. Container.Last is left untouched until the hole is
+      --  filled, so the Vector predicate stays consistent throughout (see
+      --  Insert_Space).
 
    begin
       --  Use Insert_Space to create the "hole" (the destination slice)
 
-      Insert_Space (Container, Before, Count);
+      Insert_Space (Container.Elements, Last, Before, Count);
+
+      if Count = 0 then
+         return;
+      end if;
 
       J := To_Array_Index (Before);
 
-      Container.Elements (J .. J - 1 + Count) := [others => New_Item];
+      Container.Elements (J .. J - 1 + Count) := [others => (V => New_Item)];
+
+      Container.Last := Last;
    end Insert;
 
    ------------------
@@ -577,11 +702,12 @@ is
    ------------------
 
    procedure Insert_Space
-     (Container : in out Vector;
-      Before    : Extended_Index;
-      Count     : Count_Type := 1)
+     (Elements : in out Elements_Array;
+      Last     : in out Extended_Index;
+      Before   : Extended_Index;
+      Count    : Count_Type := 1)
    is
-      Old_Length : constant Count_Type := Length (Container);
+      Old_Length : constant Count_Type := To_Array_Index (Last);
 
       Max_Length : Count_Type'Base;  -- determined from range of Index_Type
       New_Length : Count_Type'Base;  -- sum of current length and Count
@@ -592,7 +718,7 @@ is
    begin
       --  As a precondition on the generic actual Index_Type, the base type
       --  must include Index_Type'Pred (Index_Type'First); this is the value
-      --  that Container.Last assumes when the vector is empty. However, we do
+      --  that Last assumes when the vector is empty. However, we do
       --  not allow that as the value for Index when specifying where the new
       --  items should be inserted, so we must manually check. (That the user
       --  is allowed to specify the value at all here is a consequence of the
@@ -612,7 +738,7 @@ is
       --  deeper flaw in the caller's algorithm, so that case is treated as a
       --  proper error.)
 
-      if Before > Container.Last and then Before - 1 > Container.Last then
+      if Before > Last and then Before - 1 > Last then
          raise Constraint_Error
            with "Before index is out of range (too large)";
       end if;
@@ -656,7 +782,7 @@ is
             --  less than 0, so it is safe to compute the following sum without
             --  fear of overflow.
 
-            Index := No_Index + Index_Type'Base (Count_Type'Last);
+            Index := No_Index + Index_Type'Base (Count_Type_Last);
 
             if Index <= Index_Type'Last then
 
@@ -671,7 +797,7 @@ is
                --  so the maximum number of items is computed from the range of
                --  the Index_Type.
 
-               Max_Length := Count_Type'Base (Index_Type'Last - No_Index);
+               Max_Length := Count_Type'Base (Index_Type_Last - No_Index);
             end if;
 
          else
@@ -680,7 +806,7 @@ is
             --  worry about if No_Index were less than 0, but that case is
             --  handled above).
 
-            if Index_Type'Last - No_Index >= Count_Type'Pos (Count_Type'Last)
+            if Index_Type_Last - No_Index >= Index_Type'Base (Count_Type_Last)
             then
                --  We have determined that range of Index_Type has at least as
                --  many values as in Count_Type, so Count_Type'Last is the
@@ -693,7 +819,7 @@ is
                --  so the maximum number of items is computed from the range of
                --  the Index_Type.
 
-               Max_Length := Count_Type'Base (Index_Type'Last - No_Index);
+               Max_Length := Count_Type'Base (Index_Type_Last - No_Index);
             end if;
          end if;
 
@@ -705,7 +831,7 @@ is
 
          J := Count_Type'Base (No_Index) + Count_Type'Last;
 
-         if J <= Count_Type'Base (Index_Type'Last) then
+         if J <= Count_Type'Base (Index_Type_Last) then
 
             --  We have determined that range of Index_Type has at least as
             --  many values as in Count_Type, so Count_Type'Last is the maximum
@@ -729,7 +855,7 @@ is
          --  above).
 
          Max_Length :=
-           Count_Type'Base (Index_Type'Last) - Count_Type'Base (No_Index);
+           Count_Type'Base (Index_Type_Last) - Count_Type'Base (No_Index);
       end if;
 
       --  We have just computed the maximum length (number of items). We must
@@ -744,32 +870,25 @@ is
       --  Raise Capacity_Error if the new length exceeds the container's
       --  capacity.
 
-      elsif New_Length > Container.Capacity then
+      elsif New_Length > Elements'Last then
          raise Capacity_Error with "New length is larger than capacity";
       end if;
 
       J := To_Array_Index (Before);
 
-      declare
-         EA : Elements_Array renames Container.Elements;
+      if Before <= Last then
 
-      begin
-         if Before <= Container.Last then
+         --  The new items are being inserted before some existing elements, so
+         --  we must slide the existing elements up to their new home.
 
-            --  The new items are being inserted before some existing
-            --  elements, so we must slide the existing elements up to their
-            --  new home.
-
-            EA (J + Count .. New_Length) := EA (J .. Old_Length);
-         end if;
-      end;
+         Elements (J + Count .. New_Length) := Elements (J .. Old_Length);
+      end if;
 
       if Index_Type'Base'Last >= Count_Type'Pos (Count_Type'Last) then
-         Container.Last := No_Index + Index_Type'Base (New_Length);
+         Last := No_Index + Index_Type'Base (New_Length);
 
       else
-         Container.Last :=
-           Index_Type'Base (Count_Type'Base (No_Index) + New_Length);
+         Last := Index_Type'Base (Count_Type'Base (No_Index) + New_Length);
       end if;
    end Insert_Space;
 
@@ -780,11 +899,16 @@ is
    procedure Insert_Vector
      (Container : in out Vector; Before : Extended_Index; New_Item : Vector)
    is
-      N : constant Count_Type := Length (New_Item);
-      B : Count_Type;  -- index Before converted to Count_Type
+      N    : constant Count_Type := Length (New_Item);
+      B    : Count_Type;  -- index Before converted to Count_Type
+      Same : constant Boolean := Same_Object (Container, New_Item);
+      Last : Extended_Index := Container.Last;
+      --  Local last index. Container.Last is left untouched until the hole is
+      --  filled, so the Vector predicate stays consistent throughout (see
+      --  Insert_Space).
 
    begin
-      if Container'Address = New_Item'Address then
+      if Same then
          raise Program_Error
            with "Container and New_Item denote same container";
       end if;
@@ -792,36 +916,45 @@ is
       --  Use Insert_Space to create the "hole" (the destination slice) into
       --  which we copy the source items.
 
-      Insert_Space (Container, Before, Count => N);
+      Insert_Space (Container.Elements, Last, Before, Count => N);
 
       if N = 0 then
 
          --  There's nothing else to do here (vetting of parameters was
-         --  performed already in Insert_Space), so we simply return.
+         --  performed already in Insert_Space, and Last is unchanged), so we
+         --  simply return.
 
          return;
       end if;
 
       B := To_Array_Index (Before);
 
-      Container.Elements (B .. B + N - 1) := New_Item.Elements (1 .. N);
+      Container.Elements (B .. B - 1 + N) := New_Item.Elements (1 .. N);
+
+      Container.Last := Last;
    end Insert_Vector;
 
    --------------
    -- Is_Empty --
    --------------
 
-   function Is_Empty (Container : Vector) return Boolean is
-   begin
-      return Last_Index (Container) < Index_Type'First;
-   end Is_Empty;
+   function Is_Empty (Container : Vector) return Boolean
+   is (Container.Last < Index_Type'First);
 
    ----------------
    -- Iter_First --
    ----------------
 
-   function Iter_First (Container : Vector) return Extended_Index
+   function Iter_First (Dummy_Container : Vector) return Extended_Index
    is (Index_Type'First);
+
+   ----------------------
+   -- Iter_Has_Element --
+   ----------------------
+
+   function Iter_Has_Element
+     (Container : Vector; Position : Extended_Index) return Boolean
+   is (Position in Index_Type'First .. Container.Last);
 
    ---------------
    -- Iter_Next --
@@ -829,17 +962,9 @@ is
 
    function Iter_Next
      (Container : Vector; Position : Extended_Index) return Extended_Index
-   is (if Position = Extended_Index'Last
-       then Extended_Index'First
+   is (if Position = Container.Last
+       then No_Index
        else Extended_Index'Succ (Position));
-
-   ------------------
-   -- Last_Element --
-   ------------------
-
-   function Iter_Has_Element
-     (Container : Vector; Position : Extended_Index) return Boolean
-   is (Position in Index_Type'First .. Container.Last);
 
    ------------------
    -- Last_Element --
@@ -850,7 +975,7 @@ is
       if Is_Empty (Container) then
          raise Constraint_Error with "Container is empty";
       else
-         return Container.Elements (Length (Container));
+         return Container.Elements (Length (Container)).V;
       end if;
    end Last_Element;
 
@@ -858,43 +983,26 @@ is
    -- Last_Index --
    ----------------
 
-   function Last_Index (Container : Vector) return Extended_Index is
-   begin
-      return Container.Last;
-   end Last_Index;
+   function Last_Index (Container : Vector) return Extended_Index
+   is (Container.Last);
 
    ------------
    -- Length --
    ------------
 
-   function Length (Container : Vector) return Capacity_Range is
-   begin
-      return Length_Internal (Container);
-   end Length;
-
-   ---------------------
-   -- Length_Internal --
-   ---------------------
-
-   function Length_Internal (Container : Vector) return Capacity_Range is
-      L : constant Int := Int (Container.Last);
-      F : constant Int := Int (Index_Type'First);
-      N : constant Int'Base := L - F + 1;
-
-   begin
-      return Capacity_Range (N);
-   end Length_Internal;
+   function Length (Container : Vector) return Capacity_Range
+   is (To_Array_Index (Container.Last));
 
    -----------
    -- Model --
    -----------
 
-   function Model (Container : Vector) return M.Sequence is
-      R : M.Sequence;
+   function Model (Container : Vector) return Formal_Model.M.Sequence is
+      R : Formal_Model.M.Sequence;
 
    begin
-      for Position in 1 .. Length_Internal (Container) loop
-         R := M.Add (R, Container.Elements (Position));
+      for Position in 1 .. Length (Container) loop
+         R := Formal_Model.M.Add (R, Container.Elements (Position).V);
       end loop;
 
       return R;
@@ -905,10 +1013,11 @@ is
    ----------
 
    procedure Move (Target : in out Vector; Source : in out Vector) is
-      LS : constant Capacity_Range := Length (Source);
+      LS   : constant Capacity_Range := Length (Source);
+      Same : constant Boolean := Same_Object (Target, Source);
 
    begin
-      if Target'Address = Source'Address then
+      if Same then
          return;
       end if;
 
@@ -958,7 +1067,7 @@ is
          raise Constraint_Error with "Index is out of range";
       end if;
 
-      return Container.Elements (To_Array_Index (Index))'Access;
+      return Container.Elements (To_Array_Index (Index)).V'Access;
    end Reference;
 
    ---------------------
@@ -978,7 +1087,7 @@ is
          I  : constant Capacity_Range := Capacity_Range (II);
 
       begin
-         Container.Elements (I) := New_Item;
+         Container.Elements (I).V := New_Item;
       end;
    end Replace_Element;
 
@@ -1005,20 +1114,22 @@ is
       end if;
 
       declare
+         Len  : constant Capacity_Range := Length (Container);
+         --  Captured in a constant: a renamed slice's bounds may not depend on
+         --  a variable input in SPARK (E0007).
          I, J : Capacity_Range;
-         E    : Elements_Array renames
-           Container.Elements (1 .. Length (Container));
+         E    : Elements_Array renames Container.Elements (1 .. Len);
 
       begin
          I := 1;
-         J := Length (Container);
+         J := Len;
          while I < J loop
             declare
-               EI : constant Element_Type := E (I);
+               EI : constant Element_Type := E (I).V;
 
             begin
-               E (I) := E (J);
-               E (J) := EI;
+               E (I).V := E (J).V;
+               E (J).V := EI;
             end;
 
             I := I + 1;
@@ -1036,23 +1147,15 @@ is
       Item      : Element_Type;
       Index     : Index_Type := Index_Type'Last) return Extended_Index
    is
-      Last : Index_Type'Base;
-      K    : Count_Type'Base;
+
+      Last : constant Index_Type'Base :=
+        Index_Type'Min (Container.Last, Index);
 
    begin
-      if Index > Last_Index (Container) then
-         Last := Last_Index (Container);
-      else
-         Last := Index;
-      end if;
-
-      K := Capacity_Range (Int (Last) - Int (No_Index));
       for Indx in reverse Index_Type'First .. Last loop
-         if Container.Elements (K) = Item then
+         if Container.Elements (To_Array_Index (Indx)).V = Item then
             return Indx;
          end if;
-
-         K := K - 1;
       end loop;
 
       return No_Index;
@@ -1081,8 +1184,8 @@ is
          II : constant Int'Base := Int (I) - Int (No_Index);
          JJ : constant Int'Base := Int (J) - Int (No_Index);
 
-         EI : Element_Type renames Container.Elements (Capacity_Range (II));
-         EJ : Element_Type renames Container.Elements (Capacity_Range (JJ));
+         EI : Element_Type renames Container.Elements (Capacity_Range (II)).V;
+         EJ : Element_Type renames Container.Elements (Capacity_Range (JJ)).V;
 
          EI_Copy : constant Element_Type := EI;
 
@@ -1091,39 +1194,6 @@ is
          EJ := EI_Copy;
       end;
    end Swap;
-
-   --------------------
-   -- To_Array_Index --
-   --------------------
-
-   function To_Array_Index (Index : Index_Type'Base) return Count_Type'Base is
-      Offset : Count_Type'Base;
-
-   begin
-      --  We know that
-      --    Index >= Index_Type'First
-      --  hence we also know that
-      --    Index - Index_Type'First >= 0
-
-      --  The issue is that even though 0 is guaranteed to be a value in
-      --  the type Index_Type'Base, there's no guarantee that the difference
-      --  is a value in that type. To prevent overflow we use the wider
-      --  of Count_Type'Base and Index_Type'Base to perform intermediate
-      --  calculations.
-
-      if Index_Type'Base'Last >= Count_Type'Pos (Count_Type'Last) then
-         Offset := Count_Type'Base (Index - Index_Type'First);
-
-      else
-         Offset :=
-           Count_Type'Base (Index) - Count_Type'Base (Index_Type'First);
-      end if;
-
-      --  The array index subtype for all container element arrays always
-      --  starts with 1.
-
-      return 1 + Offset;
-   end To_Array_Index;
 
    ---------------
    -- To_Vector --
@@ -1142,17 +1212,12 @@ is
          Last        : Index_Type;
 
       begin
-         if Last_As_Int > Index_Type'Pos (Index_Type'Last) then
-            raise Constraint_Error with "Length is out of range";  -- ???
-
-         end if;
-
          Last := Index_Type (Last_As_Int);
 
          return
            (Capacity => Length,
             Last     => Last,
-            Elements => [others => New_Item]);
+            Elements => [others => (V => New_Item)]);
       end;
    end To_Vector;
 
