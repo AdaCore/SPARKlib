@@ -10,6 +10,7 @@ with SPARK.Lemmas.Integer_Arithmetic;
 with SPARK.Lemmas.Mod32_Arithmetic;
 with SPARK.Containers.Types; use SPARK.Containers.Types;
 with SPARK.Containers.Formal.Doubly_Linked_Lists;
+with SPARK.Containers.Formal.Vectors;
 with SPARK.Containers.Formal.Hashed_Sets;
 with SPARK.Containers.Formal.Hashed_Maps;
 with SPARK.Higher_Order.Reachability;
@@ -30,6 +31,7 @@ procedure Main with SPARK_Mode is
    --  Check that it is possible to instantiate formal containers
 
    package Lists is new SPARK.Containers.Formal.Doubly_Linked_Lists (Integer);
+   package Vectors is new SPARK.Containers.Formal.Vectors (Positive, Integer);
 
    function Hash (X : Positive) return Hash_Type is (Hash_Type (X));
    package H_Sets is new SPARK.Containers.Formal.Hashed_Sets (Positive, Hash);
