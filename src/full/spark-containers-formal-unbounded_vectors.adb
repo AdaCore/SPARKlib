@@ -428,19 +428,12 @@ is
    function Find_Index
      (Container : Vector;
       Item      : Element_Type;
-      Index     : Index_Type := Index_Type'First) return Extended_Index
-   is
-      K    : Count_Type;
-      Last : constant Extended_Index := Last_Index (Container);
-
+      Index     : Index_Type := Index_Type'First) return Extended_Index is
    begin
-      K := To_Array_Index (Index);
-      for Indx in Index .. Last loop
-         if Container.Elements (K).all = Item then
+      for Indx in Index .. Container.Last loop
+         if Container.Elements (To_Array_Index (Indx)).all = Item then
             return Indx;
          end if;
-
-         K := K + 1;
       end loop;
 
       return No_Index;
@@ -1284,27 +1277,15 @@ is
       Item      : Element_Type;
       Index     : Index_Type := Index_Type'Last) return Extended_Index
    is
-      Last : Index_Type'Base;
-      K    : Count_Type'Base;
+
+      Last : constant Index_Type'Base :=
+        Index_Type'Min (Container.Last, Index);
 
    begin
-      if Is_Empty (Container) then
-         return No_Index;
-      end if;
-
-      if Index > Last_Index (Container) then
-         Last := Last_Index (Container);
-      else
-         Last := Index;
-      end if;
-
-      K := To_Array_Index (Last);
       for Indx in reverse Index_Type'First .. Last loop
-         if Container.Elements (K).all = Item then
+         if Container.Elements (To_Array_Index (Indx)).all = Item then
             return Indx;
          end if;
-
-         K := K - 1;
       end loop;
 
       return No_Index;
