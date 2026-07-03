@@ -28,9 +28,6 @@ is
    procedure Insert_Internal
      (Container : in out List; Before : Count_Type; New_Node : Count_Type);
 
-   function Vet (L : List; Position : Cursor) return Boolean
-   with Inline;
-
    ---------
    -- "=" --
    ---------
@@ -203,8 +200,9 @@ is
       P : List (C);
 
    begin
-      if 0 < Capacity and then Capacity < Source.Capacity then
-         raise Capacity_Error;
+      if Capacity < Source.Length and then Capacity /= 0 then
+         raise Capacity_Error
+           with "Requested capacity is less than Source length";
       end if;
 
       N := 1;
@@ -251,7 +249,6 @@ is
          raise Constraint_Error with "Position cursor has no element";
       end if;
 
-      pragma Assert (Vet (Container, Position), "bad cursor in Delete");
       pragma Assert (Container.First >= 1);
       pragma Assert (Container.Last >= 1);
       pragma Assert (N (Container.First).Prev = 0);
@@ -393,15 +390,9 @@ is
       From : Count_Type := Position.Node;
 
    begin
-      if From = 0 and Container.Length = 0 then
-         return No_Element;
-      end if;
-
       if From = 0 then
          From := Container.First;
-      end if;
-
-      if Position.Node /= 0 and then not Has_Element (Container, Position) then
+      elsif not Has_Element (Container, Position) then
          raise Constraint_Error with "Position cursor has no element";
       end if;
 
@@ -908,8 +899,21 @@ is
          RI : Cursor;
 
       begin
+         if Is_Empty (Source) then
+            return;
+         end if;
+
          if Target'Address = Source'Address then
-            raise Program_Error with "Target and Source denote same container";
+            raise Program_Error
+              with "Target and Source denote same non-empty container";
+         end if;
+
+         if Target.Length > Count_Type'Last - Source.Length then
+            raise Constraint_Error with "new length exceeds maximum";
+         end if;
+
+         if Target.Length + Source.Length > Target.Capacity then
+            raise Capacity_Error with "new length exceeds target capacity";
          end if;
 
          LI := First (Target);
@@ -1017,7 +1021,7 @@ is
 
    function Has_Element (Container : List; Position : Cursor) return Boolean is
    begin
-      if Position.Node = 0 then
+      if Position.Node = 0 or Position.Node > Container.Capacity then
          return False;
       end if;
 
@@ -1038,8 +1042,8 @@ is
       J : Count_Type;
 
    begin
-      if Before.Node /= 0 then
-         pragma Assert (Vet (Container, Before), "bad cursor in Insert");
+      if Before.Node /= 0 and then not Has_Element (Container, Before) then
+         raise Program_Error with "bad cursor in Insert";
       end if;
 
       if Count = 0 then
@@ -1205,13 +1209,11 @@ is
 
    begin
       if Target'Address = Source'Address then
-         raise Program_Error with "Source and Target are aliases";
+         return;
       end if;
 
       if Target.Capacity < Source.Length then
-         raise Constraint_Error
-           with  -- ???
-             "Source length exceeds Target capacity";
+         raise Capacity_Error with "Source length exceeds Target capacity";
       end if;
 
       Clear (Target);
@@ -1225,7 +1227,7 @@ is
          --  Copy first element from Source to Target
 
          X := Source.First;
-         Append (Target, N (X).Element);  -- optimize away???
+         Append (Target, N (X).Element);
 
          --  Unlink first node of Source
 
@@ -1359,9 +1361,6 @@ is
          raise Constraint_Error with "Position cursor has no element";
       end if;
 
-      pragma
-        Assert (Vet (Container, Position), "bad cursor in Replace_Element");
-
       Container.Nodes (Position.Node).Element := New_Item;
    end Replace_Element;
 
@@ -1461,6 +1460,9 @@ is
    begin
       if CFirst = 0 then
          CFirst := Container.Last;
+
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error with "bad cursor in Reverse_Find";
       end if;
 
       if Container.Length = 0 then
@@ -1489,12 +1491,20 @@ is
       SN : Node_Array renames Source.Nodes;
 
    begin
-      if Target'Address = Source'Address then
-         raise Program_Error with "Target and Source denote same container";
+      if Before.Node /= 0 and then not Has_Element (Target, Before) then
+         raise Program_Error with "bad cursor in Splice";
       end if;
 
-      if Before.Node /= 0 then
-         pragma Assert (Vet (Target, Before), "bad cursor in Splice");
+      if Target'Address = Source'Address or else Source.Length = 0 then
+         return;
+      end if;
+
+      if Target.Length > Count_Type'Last - Source.Length then
+         raise Constraint_Error with "new length exceeds maximum";
+      end if;
+
+      if Target.Length + Source.Length > Target.Capacity then
+         raise Capacity_Error with "new length exceeds target capacity";
       end if;
 
       if Source.Length = 0 then
@@ -1503,14 +1513,6 @@ is
 
       pragma Assert (SN (Source.First).Prev = 0);
       pragma Assert (SN (Source.Last).Next = 0);
-
-      if Target.Length > Count_Type'Base'Last - Source.Length then
-         raise Constraint_Error with "new length exceeds maximum";
-      end if;
-
-      if Target.Length + Source.Length > Target.Capacity then
-         raise Constraint_Error;
-      end if;
 
       loop
          Insert (Target, Before, SN (Source.First).Element);
@@ -1529,17 +1531,22 @@ is
 
    begin
       if Target'Address = Source'Address then
-         raise Program_Error with "Target and Source denote same container";
+         Splice (Target, Before, Position);
+         return;
+      end if;
+
+      if Before.Node /= 0 and then not Has_Element (Target, Before) then
+         raise Program_Error with "bad Before cursor in Splice";
       end if;
 
       if Position.Node = 0 then
          raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Source, Position) then
+         raise Program_Error with "bad Position cursor in Splice";
       end if;
 
-      pragma Assert (Vet (Source, Position), "bad Position cursor in Splice");
-
       if Target.Length >= Target.Capacity then
-         raise Constraint_Error;
+         raise Capacity_Error with "Target is full";
       end if;
 
       Insert
@@ -1558,17 +1565,15 @@ is
       N : Node_Array renames Container.Nodes;
 
    begin
-      if Before.Node /= 0 then
-         pragma
-           Assert (Vet (Container, Before), "bad Before cursor in Splice");
+      if Before.Node /= 0 and then not Has_Element (Container, Before) then
+         raise Program_Error with "bad Before cursor in Splice";
       end if;
 
       if Position.Node = 0 then
          raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error with "bad Position cursor in Splice";
       end if;
-
-      pragma
-        Assert (Vet (Container, Position), "bad Position cursor in Splice");
 
       if Position.Node = Before.Node
         or else N (Position.Node).Next = Before.Node
@@ -1651,18 +1656,19 @@ is
    begin
       if I.Node = 0 then
          raise Constraint_Error with "I cursor has no element";
+      elsif not Has_Element (Container, I) then
+         raise Program_Error with "bad I cursor in Swap";
       end if;
 
       if J.Node = 0 then
          raise Constraint_Error with "J cursor has no element";
+      elsif not Has_Element (Container, J) then
+         raise Program_Error with "bad J cursor in Swap";
       end if;
 
       if I.Node = J.Node then
          return;
       end if;
-
-      pragma Assert (Vet (Container, I), "bad I cursor in Swap");
-      pragma Assert (Vet (Container, J), "bad J cursor in Swap");
 
       declare
          NN : Node_Array renames Container.Nodes;
@@ -1688,18 +1694,19 @@ is
    begin
       if I.Node = 0 then
          raise Constraint_Error with "I cursor has no element";
+      elsif not Has_Element (Container, I) then
+         raise Program_Error with "bad I cursor in Swap_Links";
       end if;
 
       if J.Node = 0 then
          raise Constraint_Error with "J cursor has no element";
+      elsif not Has_Element (Container, J) then
+         raise Program_Error with "bad J cursor in Swap_Links";
       end if;
 
       if I.Node = J.Node then
          return;
       end if;
-
-      pragma Assert (Vet (Container, I), "bad I cursor in Swap_Links");
-      pragma Assert (Vet (Container, J), "bad J cursor in Swap_Links");
 
       I_Next := Next (Container, I);
 
@@ -1719,138 +1726,5 @@ is
          end if;
       end if;
    end Swap_Links;
-
-   ---------
-   -- Vet --
-   ---------
-
-   function Vet (L : List; Position : Cursor) return Boolean is
-      N : Node_Array renames L.Nodes;
-   begin
-      if not Container_Checks'Enabled then
-         return True;
-      end if;
-
-      if L.Length = 0 then
-         return False;
-      end if;
-
-      if L.First = 0 then
-         return False;
-      end if;
-
-      if L.Last = 0 then
-         return False;
-      end if;
-
-      if Position.Node > L.Capacity then
-         return False;
-      end if;
-
-      if N (Position.Node).Prev < 0 or else N (Position.Node).Prev > L.Capacity
-      then
-         return False;
-      end if;
-
-      if N (Position.Node).Next > L.Capacity then
-         return False;
-      end if;
-
-      if N (L.First).Prev /= 0 then
-         return False;
-      end if;
-
-      if N (L.Last).Next /= 0 then
-         return False;
-      end if;
-
-      if N (Position.Node).Prev = 0 and then Position.Node /= L.First then
-         return False;
-      end if;
-
-      if N (Position.Node).Next = 0 and then Position.Node /= L.Last then
-         return False;
-      end if;
-
-      if L.Length = 1 then
-         return L.First = L.Last;
-      end if;
-
-      if L.First = L.Last then
-         return False;
-      end if;
-
-      if N (L.First).Next = 0 then
-         return False;
-      end if;
-
-      if N (L.Last).Prev = 0 then
-         return False;
-      end if;
-
-      if N (N (L.First).Next).Prev /= L.First then
-         return False;
-      end if;
-
-      if N (N (L.Last).Prev).Next /= L.Last then
-         return False;
-      end if;
-
-      if L.Length = 2 then
-         if N (L.First).Next /= L.Last then
-            return False;
-         end if;
-
-         if N (L.Last).Prev /= L.First then
-            return False;
-         end if;
-
-         return True;
-      end if;
-
-      if N (L.First).Next = L.Last then
-         return False;
-      end if;
-
-      if N (L.Last).Prev = L.First then
-         return False;
-      end if;
-
-      if Position.Node = L.First then
-         return True;
-      end if;
-
-      if Position.Node = L.Last then
-         return True;
-      end if;
-
-      if N (Position.Node).Next = 0 then
-         return False;
-      end if;
-
-      if N (Position.Node).Prev = 0 then
-         return False;
-      end if;
-
-      if N (N (Position.Node).Next).Prev /= Position.Node then
-         return False;
-      end if;
-
-      if N (N (Position.Node).Prev).Next /= Position.Node then
-         return False;
-      end if;
-
-      if L.Length = 3 then
-         if N (L.First).Next /= Position.Node then
-            return False;
-         end if;
-
-         if N (L.Last).Prev /= Position.Node then
-            return False;
-         end if;
-      end if;
-
-      return True;
-   end Vet;
 
 end SPARK.Containers.Formal.Doubly_Linked_Lists;
