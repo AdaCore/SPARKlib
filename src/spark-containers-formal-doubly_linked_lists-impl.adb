@@ -7,12 +7,16 @@
 pragma Ada_2022;
 
 with SPARK.Containers.Stable_Sorting; use SPARK.Containers.Stable_Sorting;
-with System;
-use type System.Address;
 
 package body SPARK.Containers.Formal.Doubly_Linked_Lists.Impl
-  with SPARK_Mode => Off
+  with SPARK_Mode => On
 is
+
+   package Address_Comparisons is new
+     SPARK.Containers.Formal.Impl.Address_Space.Address_Comparison (List);
+
+   function Same_Object (Left, Right : List) return Boolean
+   renames Address_Comparisons.Same_Object;
 
    -----------------------
    -- Local Subprograms --
@@ -33,11 +37,14 @@ is
    ---------
 
    function "=" (Left : List; Right : List) return Boolean is
+      Same : constant Boolean := Same_Object (Left, Right);
+      --  Volatile read in a non-interfering context (object initialization)
+
       LI : Count_Type;
       RI : Count_Type;
 
    begin
-      if Left'Address = Right'Address then
+      if Same then
          return True;
       end if;
 
@@ -103,18 +110,18 @@ is
    ------------
 
    procedure Assign (Target : in out List; Source : List) is
+      Same : constant Boolean := Same_Object (Target, Source);
+
       N : Node_Array renames Source.Nodes;
       J : Count_Type;
 
    begin
-      if Target'Address = Source'Address then
+      if Same then
          return;
       end if;
 
       if Target.Capacity < Source.Length then
-         raise Constraint_Error
-           with  -- ???
-             "Source length exceeds Target capacity";
+         raise Capacity_Error with "Source length exceeds Target capacity";
       end if;
 
       Clear (Target);
@@ -174,8 +181,10 @@ is
      (Container : aliased List; Position : Cursor)
       return not null access constant Element_Type is
    begin
-      if not Has_Element (Container => Container, Position => Position) then
-         raise Constraint_Error with "Position cursor has no element";
+      if Position = No_Element then
+         raise Constraint_Error with "Position cursor is No_Element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error with "Position cursor has no element";
       end if;
 
       return Container.Nodes (Position.Node).Element'Access;
@@ -186,8 +195,10 @@ is
    --------------
 
    function Contains (Container : List; Item : Element_Type) return Boolean is
+      Position : Cursor;
    begin
-      return Find (Container, Item) /= No_Element;
+      Position := Find (Container, Item);
+      return Position /= No_Element;
    end Contains;
 
    ----------
@@ -384,7 +395,12 @@ is
    ----------------
 
    function Empty_List (Capacity : Count_Type := 10) return List
-   is ((Capacity, others => <>));
+   is (Capacity => Capacity,
+       Free     => -1,
+       Length   => 0,
+       First    => 0,
+       Last     => 0,
+       Nodes    => (1 .. Capacity => <>));
 
    ----------
    -- Find --
@@ -472,9 +488,11 @@ is
          else
             for J in Container.Free .. Container.Capacity - 1 loop
                N (J).Next := J + 1;
+               N (J).Prev := -1;
             end loop;
 
             N (Container.Capacity).Next := 0;
+            N (Container.Capacity).Prev := -1;
          end if;
 
          N (X).Next := Container.Free;
@@ -515,6 +533,8 @@ is
       -----------
 
       procedure Merge (Target : in out List; Source : in out List) is
+         Same : constant Boolean := Same_Object (Target, Source);
+
          LN : Node_Array renames Target.Nodes;
          RN : Node_Array renames Source.Nodes;
          LI : Cursor;
@@ -525,9 +545,16 @@ is
             return;
          end if;
 
-         if Target'Address = Source'Address then
+         if Same then
             raise Program_Error
               with "Target and Source denote same non-empty container";
+            pragma
+              Annotate
+                (GNATprove,
+                 Intentional,
+                 "exception might be raised",
+                 "unreachable in SPARK: two in out parameters cannot alias, "
+                 & "so Same_Object never holds here");
          end if;
 
          if Target.Length > Count_Type'Last - Source.Length then
@@ -641,14 +668,11 @@ is
    -- Has_Element --
    -----------------
 
-   function Has_Element (Container : List; Position : Cursor) return Boolean is
-   begin
-      if Position.Node = 0 or Position.Node > Container.Capacity then
-         return False;
-      end if;
-
-      return Container.Nodes (Position.Node).Prev /= -1;
-   end Has_Element;
+   function Has_Element (Container : List; Position : Cursor) return Boolean
+   is (Position.Node in 1 .. Container.Capacity
+       and then
+         (Container.Free >= 0 or else Position.Node <= -(1 + Container.Free))
+       and then Container.Nodes (Position.Node).Prev /= -1);
 
    ------------
    -- Insert --
@@ -673,8 +697,12 @@ is
          return;
       end if;
 
-      if Container.Length > Container.Capacity - Count then
-         raise Constraint_Error with "new length exceeds capacity";
+      if Container.Length > Count_Type'Last - Count then
+         raise Constraint_Error with "new length exceeds maximum";
+      end if;
+
+      if Container.Length + Count > Container.Capacity then
+         raise Capacity_Error with "new length exceeds target capacity";
       end if;
 
       Allocate (Container, New_Item, New_Node => J);
@@ -779,10 +807,8 @@ is
    -- Is_Empty --
    --------------
 
-   function Is_Empty (Container : List) return Boolean is
-   begin
-      return Length (Container) = 0;
-   end Is_Empty;
+   function Is_Empty (Container : List) return Boolean
+   is (Length (Container) = 0);
 
    ----------
    -- Last --
@@ -816,10 +842,8 @@ is
    -- Length --
    ------------
 
-   function Length (Container : List) return Count_Type is
-   begin
-      return Container.Length;
-   end Length;
+   function Length (Container : List) return Count_Type
+   is (Container.Length);
 
    -----------
    -- Model --
@@ -846,11 +870,13 @@ is
    ----------
 
    procedure Move (Target : in out List; Source : in out List) is
+      Same : constant Boolean := Same_Object (Target, Source);
+
       N : Node_Array renames Source.Nodes;
       X : Count_Type;
 
    begin
-      if Target'Address = Source'Address then
+      if Same then
          return;
       end if;
 
@@ -1008,8 +1034,10 @@ is
      (Container : aliased in out List; Position : Cursor)
       return not null access Element_Type is
    begin
-      if not Has_Element (Container, Position) then
-         raise Constraint_Error with "Position cursor has no element";
+      if Position = No_Element then
+         raise Constraint_Error with "Position cursor is No_Element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error with "Position cursor has no element";
       end if;
 
       return Container.Nodes (Position.Node).Element'Access;
@@ -1022,8 +1050,10 @@ is
    procedure Replace_Element
      (Container : in out List; Position : Cursor; New_Item : Element_Type) is
    begin
-      if not Has_Element (Container, Position) then
-         raise Constraint_Error with "Position cursor has no element";
+      if Position = No_Element then
+         raise Constraint_Error with "Position cursor is No_Element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error with "Position cursor has no element";
       end if;
 
       Container.Nodes (Position.Node).Element := New_Item;
@@ -1153,6 +1183,8 @@ is
    procedure Splice
      (Target : in out List; Before : Cursor; Source : in out List)
    is
+      Same : constant Boolean := Same_Object (Target, Source);
+
       SN : Node_Array renames Source.Nodes;
 
    begin
@@ -1160,7 +1192,7 @@ is
          raise Program_Error with "bad cursor in Splice";
       end if;
 
-      if Target'Address = Source'Address or else Source.Length = 0 then
+      if Same or else Source.Length = 0 then
          return;
       end if;
 
@@ -1192,10 +1224,12 @@ is
       Source   : in out List;
       Position : in out Cursor)
    is
+      Same : constant Boolean := Same_Object (Target, Source);
+
       Target_Position : Cursor;
 
    begin
-      if Target'Address = Source'Address then
+      if Same then
          Splice (Target, Before, Position);
          return;
       end if;
@@ -1210,7 +1244,9 @@ is
          raise Program_Error with "bad Position cursor in Splice";
       end if;
 
-      if Target.Length >= Target.Capacity then
+      if Target.Length = Count_Type'Last then
+         raise Constraint_Error with "Target exceeds maximum";
+      elsif Target.Length >= Target.Capacity then
          raise Capacity_Error with "Target is full";
       end if;
 
@@ -1321,13 +1357,17 @@ is
    begin
       if I.Node = 0 then
          raise Constraint_Error with "I cursor has no element";
-      elsif not Has_Element (Container, I) then
-         raise Program_Error with "bad I cursor in Swap";
       end if;
 
       if J.Node = 0 then
          raise Constraint_Error with "J cursor has no element";
-      elsif not Has_Element (Container, J) then
+      end if;
+
+      if not Has_Element (Container, I) then
+         raise Program_Error with "bad I cursor in Swap";
+      end if;
+
+      if not Has_Element (Container, J) then
          raise Program_Error with "bad J cursor in Swap";
       end if;
 
@@ -1359,13 +1399,17 @@ is
    begin
       if I.Node = 0 then
          raise Constraint_Error with "I cursor has no element";
-      elsif not Has_Element (Container, I) then
-         raise Program_Error with "bad I cursor in Swap_Links";
       end if;
 
       if J.Node = 0 then
          raise Constraint_Error with "J cursor has no element";
-      elsif not Has_Element (Container, J) then
+      end if;
+
+      if not Has_Element (Container, I) then
+         raise Program_Error with "bad I cursor in Swap_Links";
+      end if;
+
+      if not Has_Element (Container, J) then
          raise Program_Error with "bad J cursor in Swap_Links";
       end if;
 

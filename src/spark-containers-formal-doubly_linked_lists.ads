@@ -1963,13 +1963,20 @@ is
      Annotate => (GNATprove, Container_Aggregates, "Model");
 
 private
-   pragma SPARK_Mode (Off);
+   pragma SPARK_Mode (Off); --  #BODYMODE
+
+   --  The whole node is marked Relaxed_Initialization, so that a node that
+   --  has never been allocated (in the never-used tail of the free region)
+   --  need have none of its fields initialized. The Element field is aliased
+   --  so that Reference and Constant_Reference can hand out an access
+   --  designating it.
 
    type Node_Type is record
-      Prev    : Count_Type'Base := -1;
+      Prev    : Count_Type'Base;
       Next    : Count_Type;
       Element : aliased Element_Type;
-   end record;
+   end record
+   with Relaxed_Initialization;
 
    function "=" (L, R : Node_Type) return Boolean is abstract;
 
@@ -1982,6 +1989,42 @@ private
       First  : Count_Type := 0;
       Last   : Count_Type := 0;
       Nodes  : Node_Array (1 .. Capacity);
-   end record;
+   end record
+   with
+     Ghost_Predicate =>
+       (Static =>
+          Length <= Capacity
+          and then First <= Capacity
+          and then Last <= Capacity
+          and then Free in -Capacity - 1 .. Capacity
+          and then
+            (for all I in 1 .. Capacity =>
+               (if Free >= 0 or else I < -Free
+                then
+                  Nodes (I).Prev'Initialized
+                  and then Nodes (I).Next'Initialized
+                  and then
+                    (if Nodes (I).Prev /= -1
+                     then Nodes (I).Element'Initialized))));
+   pragma
+     Annotate
+       (GNATprove,
+        False_Positive,
+        "type ""List"" is not fully initialized",
+        "spurious: Node_Type has Relaxed_Initialization, so a "
+        & "default-initialized List need not be fully initialized.");
+   --  The free-list encoding determines which nodes have their Prev/Next
+   --  bookkeeping initialized: when Free is non-negative every node has been
+   --  touched (the free list is an explicit chain over all cells); when Free
+   --  is negative only the nodes below abs Free have been touched (the cells
+   --  from abs Free to Capacity are the never-used tail). Among the touched
+   --  nodes, a deallocated one (Prev = -1) has an uninitialized element and an
+   --  allocated one has an initialized element. These cheap structural facts
+   --  are carried in a Ghost_Predicate rather than a Type_Invariant: a
+   --  Type_Invariant would be nicer (it may be transiently broken inside the
+   --  package body and is only re-checked at the package boundary), but
+   --  GNATprove would then reject instances of Generic_Sorting occurring
+   --  outside of Doubly_Linked_Lists. The deep model invariant is gold and
+   --  stays out of the Impl child.
 
 end SPARK.Containers.Formal.Doubly_Linked_Lists;
