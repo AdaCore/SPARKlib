@@ -1984,7 +1984,4 @@ private
       Nodes  : Node_Array (1 .. Capacity);
    end record;
 
-   function Empty_List (Capacity : Count_Type := 10) return List
-   is ((Capacity, others => <>));
-
 end SPARK.Containers.Formal.Doubly_Linked_Lists;
