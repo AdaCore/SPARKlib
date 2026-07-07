@@ -1,5 +1,10 @@
+large: True
+timeout: 1500
+replay: session
 prove_all:
-  mode: flow
   filter_sparklib: False
   sparklib: True
   sparklib_bodymode: True
+session_opt:
+  level: 3
+  prover: ["cvc5","z3","altergo"]

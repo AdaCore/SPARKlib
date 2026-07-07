@@ -559,13 +559,6 @@ is
      (Container : in out List; Before : Cursor; New_Item : Element_Type)
    renames List_Impl.Insert;
 
-   --------------
-   -- Is_Empty --
-   --------------
-
-   function Is_Empty (Container : List) return Boolean
-   renames List_Impl.Is_Empty;
-
    ----------
    -- Last --
    ----------
@@ -578,13 +571,6 @@ is
 
    function Last_Element (Container : List) return Element_Type
    renames List_Impl.Last_Element;
-
-   ------------
-   -- Length --
-   ------------
-
-   function Length (Container : List) return Count_Type
-   renames List_Impl.Length;
 
    ----------
    -- Move --

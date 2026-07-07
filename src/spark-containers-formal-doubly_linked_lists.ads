@@ -1999,10 +1999,16 @@ private
           and then Free in -Capacity - 1 .. Capacity
           and then
             (for all I in 1 .. Capacity =>
-               (if Free >= 0 or else I < -Free
+               (if Free >= 0 or else I <= -(Free + 1)
                 then
                   Nodes (I).Prev'Initialized
                   and then Nodes (I).Next'Initialized
+                  and then
+                    Nodes (I).Prev
+                    in -1 .. (if Free >= 0 then Capacity else -(Free + 1))
+                  and then
+                    Nodes (I).Next
+                    <= (if Free >= 0 then Capacity else -(Free + 1))
                   and then
                     (if Nodes (I).Prev /= -1
                      then Nodes (I).Element'Initialized))));
@@ -2026,5 +2032,11 @@ private
    --  GNATprove would then reject instances of Generic_Sorting occurring
    --  outside of Doubly_Linked_Lists. The deep model invariant is gold and
    --  stays out of the Impl child.
+
+   function Is_Empty (Container : List) return Boolean
+   is (Length (Container) = 0);
+
+   function Length (Container : List) return Count_Type
+   is (Container.Length);
 
 end SPARK.Containers.Formal.Doubly_Linked_Lists;
