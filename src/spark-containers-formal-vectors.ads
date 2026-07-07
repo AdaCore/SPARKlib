@@ -1255,11 +1255,12 @@ private
    end record
    with
      Ghost_Predicate =>
-       Last <= No_Index + Count_Type'Pos (Last_Count)
-       and then To_Array_Index (Last) <= Capacity
-       and then
-         (for all I in 1 .. To_Array_Index (Last) =>
-            Elements (I).V'Initialized);
+       (Static =>
+          Last <= No_Index + Count_Type'Pos (Last_Count)
+          and then To_Array_Index (Last) <= Capacity
+          and then
+            (for all I in 1 .. To_Array_Index (Last) =>
+               Elements (I).V'Initialized));
    pragma
      Annotate
        (GNATprove,
