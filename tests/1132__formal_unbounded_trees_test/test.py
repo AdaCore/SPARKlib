@@ -4,7 +4,7 @@ contains_manual_proof = False
 
 
 def replay():
-    prove_all(sparklib=True, level=2, sparklib_bodymode=True)
+    prove_all(sparklib=True, level=2, procs=0, sparklib_bodymode=True)
 
 
 if __name__ == "__main__":
