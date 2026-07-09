@@ -276,10 +276,10 @@ is
        X in M1'Range | No_Index
        and then Valid_Memory (M1)
        and then Valid_Memory (M2)
-       and then M1'Last <= M2'Last
        and then Is_Acyclic (X, M1)
        and then
-         (for all I of Reachable_Set (X, M1) => Next (M1 (I)) = Next (M2 (I))),
+         (for all I of Reachable_Set (X, M1) =>
+            I <= M2'Last and then Next (M1 (I)) = Next (M2 (I))),
      Post               => Is_Acyclic (X, M2);
    --  Lemma for the preservation of the property if the Next elements of all
    --  cells reachable from X are preserved.
@@ -314,13 +314,13 @@ is
      Ghost              => Static,
      Subprogram_Variant => (Decreases => (Length (Reachable_Set (X, M1)))),
      Pre                =>
-       M1'Last <= M2'Last
-       and then X in M1'Range | No_Index
+       X in M1'Range | No_Index
        and then Valid_Memory (M1)
        and then Valid_Memory (M2)
        and then Is_Acyclic (X, M1)
        and then
-         (for all I of Reachable_Set (X, M1) => Next (M1 (I)) = Next (M2 (I))),
+         (for all I of Reachable_Set (X, M1) =>
+            I <= M2'Last and then Next (M1 (I)) = Next (M2 (I))),
      Post               =>
        Reachable_Set (X, M1) = Reachable_Set (X, M2)
        and then
@@ -366,13 +366,13 @@ is
      Ghost              => Static,
      Subprogram_Variant => (Decreases => Length (Reachable_Set (X, M1))),
      Pre                =>
-       M1'Last <= M2'Last
-       and then X in M1'Range | No_Index
+       X in M1'Range | No_Index
        and then Valid_Memory (M1)
        and then Valid_Memory (M2)
        and then Is_Acyclic (X, M1)
        and then
-         (for all I of Reachable_Set (X, M1) => Next (M1 (I)) = Next (M2 (I))),
+         (for all I of Reachable_Set (X, M1) =>
+            I <= M2'Last and then Next (M1 (I)) = Next (M2 (I))),
      Post               => Model (X, M1) = Model (X, M2);
    --  Lemma for the preservation of the property if the Next elements of all
    --  cells reachable from X are preserved.
