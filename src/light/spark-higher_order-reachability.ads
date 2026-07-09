@@ -279,7 +279,7 @@ is
        X in M1'Range | No_Index
        and then Valid_Memory (M1)
        and then Valid_Memory (M2)
-       and then M1'Last = M2'Last
+       and then M1'Last <= M2'Last
        and then Is_Acyclic (X, M1)
        and then
          (for all I of Reachable_Set (X, M1) => Next (M1 (I)) = Next (M2 (I))),
@@ -317,7 +317,7 @@ is
      Ghost              => Static,
      Subprogram_Variant => (Decreases => (Length (Reachable_Set (X, M1)))),
      Pre                =>
-       M1'Last = M2'Last
+       M1'Last <= M2'Last
        and then X in M1'Range | No_Index
        and then Valid_Memory (M1)
        and then Valid_Memory (M2)
@@ -369,7 +369,7 @@ is
      Ghost              => Static,
      Subprogram_Variant => (Decreases => Length (Reachable_Set (X, M1))),
      Pre                =>
-       M1'Last = M2'Last
+       M1'Last <= M2'Last
        and then X in M1'Range | No_Index
        and then Valid_Memory (M1)
        and then Valid_Memory (M2)
