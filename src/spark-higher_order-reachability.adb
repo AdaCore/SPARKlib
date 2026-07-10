@@ -272,6 +272,19 @@ is
          All_Set (M'First, M'Last));
    end Lemma_Model_Def;
 
+   -------------------------
+   -- Lemma_Model_Extract --
+   -------------------------
+
+   procedure Lemma_Model_Extract (X, Z : Index_Type; M : Memory_Type) is
+   begin
+      Disclose_Recursive_Definitions;
+      Lemma_Reachable_Acyclic (X, Z, M);
+      if Z /= X then
+         Lemma_Model_Extract (Next (M (X)), Z, M);
+      end if;
+   end Lemma_Model_Extract;
+
    ------------------------------
    -- Lemma_Model_Internal_Cut --
    ------------------------------
@@ -404,6 +417,19 @@ is
                   (Next (M (X)), M, Remove (All_Set (M'First, M'Last), X)));
       end if;
    end Lemma_Reachable_Def;
+
+   -----------------------------
+   -- Lemma_Reachable_Extract --
+   -----------------------------
+
+   procedure Lemma_Reachable_Extract (X, Z : Index_Type; M : Memory_Type) is
+   begin
+      Disclose_Recursive_Definitions;
+      Lemma_Reachable_Acyclic (X, Z, M);
+      if Z /= X then
+         Lemma_Reachable_Extract (Next (M (X)), Z, M);
+      end if;
+   end Lemma_Reachable_Extract;
 
    -------------------------------
    -- Lemma_Reachable_Preserved --
