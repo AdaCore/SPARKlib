@@ -264,6 +264,34 @@ is
    --  If X is the head of an acyclic list, Y is reachable from X, and Z is
    --  reachable from Y, then Z is reachable from X.
 
+   procedure Lemma_Reachable_Extract (X, Z : Index_Type; M : Memory_Type)
+   with
+     Ghost              => Static,
+     Subprogram_Variant => (Decreases => Length (Reachable_Set (X, M))),
+     Pre                =>
+       X in M'Range
+       and then Z in M'Range
+       and then Valid_Memory (M)
+       and then Is_Acyclic (X, M)
+       and then Reachable (X, M, Z),
+     Post               => Reachable_Set (Z, M) <= Reachable_Set (X, M);
+   --  If Z is reachable from Y, the cells reachable from Z are also reachable
+   --  from X. Reformulation of the transitivity lemma.
+
+   procedure Lemma_Model_Extract (X, Z : Index_Type; M : Memory_Type)
+   with
+     Ghost              => Static,
+     Subprogram_Variant => (Decreases => Length (Reachable_Set (X, M))),
+     Pre                =>
+       X in M'Range
+       and then Z in M'Range
+       and then Valid_Memory (M)
+       and then Is_Acyclic (X, M)
+       and then Reachable (X, M, Z),
+     Post               => Model (Z, M) <= Model (X, M);
+   --  If Z is reachable from Y, the sequence of calls reachable from X starts
+   --  with the cells reachable from Z.
+
    --  Lemmas used to compute the new values of Is_Acyclic, Reachable_Set, and
    --  Model after a change in the memory array.
 
