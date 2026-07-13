@@ -8,5 +8,5 @@ def replay():
 
 
 if __name__ == "__main__":
-    prove_all(replay=True, sparklib=True, sparklib_bodymode=True)
+    prove_all(replay="session", sparklib=True, sparklib_bodymode=True)
     sparklib_exec_test(sparklib_bodymode=True)

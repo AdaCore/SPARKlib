@@ -30,7 +30,7 @@ copy_proof_files()
 os.environ["SPARKLIB_INSTALLED"] = "False"
 
 prove_all(
-    replay=True,
+    replay="session",
     prover=["coq", "cvc5", "z3", "altergo", "colibri"],
     counterexample=False,
     #  We need to remove useless coq warning for Grammar extension

@@ -34,7 +34,7 @@ if __name__ == "__main__":
     prove_all(
         sparklib=True,
         steps=0,
-        replay=True,
+        replay="session",
         opt=[
             "-u",
             "test_higher_order.ads",
