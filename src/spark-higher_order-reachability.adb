@@ -431,6 +431,18 @@ is
       end if;
    end Lemma_Reachable_Extract;
 
+   --------------------------
+   -- Lemma_Reachable_Next --
+   --------------------------
+
+   procedure Lemma_Reachable_Next (X : Extended_Index; M : Memory_Type) is
+   begin
+      Disclose_Recursive_Definitions;
+      if X /= No_Index then
+         Lemma_Reachable_Next (Next (M (X)), M);
+      end if;
+   end Lemma_Reachable_Next;
+
    -------------------------------
    -- Lemma_Reachable_Preserved --
    -------------------------------

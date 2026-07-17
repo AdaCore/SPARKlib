@@ -234,6 +234,19 @@ is
    --  All cells reachable from the head of an acyclic list are heads of an
    --  acyclic list.
 
+   procedure Lemma_Reachable_Next (X : Extended_Index; M : Memory_Type)
+   with
+     Ghost              => Static,
+     Subprogram_Variant => (Decreases => Length (Reachable_Set (X, M))),
+     Pre                =>
+       X in M'Range | No_Index
+       and then Valid_Memory (M)
+       and then Is_Acyclic (X, M),
+     Post               =>
+       (for all Y of Reachable_Set (X, M) =>
+          Next (M (Y)) = No_Index or else Reachable (X, M, Next (M (Y))));
+   --  Reachable set is closed by Next
+
    procedure Lemma_Reachable_Antisym (X, Z : Index_Type; M : Memory_Type)
    with
      Ghost              => Static,
