@@ -279,29 +279,27 @@ is
 
    procedure Lemma_Reachable_Extract (X, Z : Index_Type; M : Memory_Type)
    with
-     Ghost              => Static,
-     Subprogram_Variant => (Decreases => Length (Reachable_Set (X, M))),
-     Pre                =>
+     Ghost => Static,
+     Pre   =>
        X in M'Range
        and then Z in M'Range
        and then Valid_Memory (M)
        and then Is_Acyclic (X, M)
        and then Reachable (X, M, Z),
-     Post               => Reachable_Set (Z, M) <= Reachable_Set (X, M);
+     Post  => Reachable_Set (Z, M) <= Reachable_Set (X, M);
    --  If Z is reachable from Y, the cells reachable from Z are also reachable
    --  from X. Reformulation of the transitivity lemma.
 
    procedure Lemma_Model_Extract (X, Z : Index_Type; M : Memory_Type)
    with
-     Ghost              => Static,
-     Subprogram_Variant => (Decreases => Length (Reachable_Set (X, M))),
-     Pre                =>
+     Ghost => Static,
+     Pre   =>
        X in M'Range
        and then Z in M'Range
        and then Valid_Memory (M)
        and then Is_Acyclic (X, M)
        and then Reachable (X, M, Z),
-     Post               => Model (Z, M) <= Model (X, M);
+     Post  => Model (Z, M) <= Model (X, M);
    --  If Z is reachable from Y, the sequence of calls reachable from X starts
    --  with the cells reachable from Z.
 
@@ -311,9 +309,8 @@ is
    procedure Lemma_Is_Acyclic_Preserved
      (X : Extended_Index; M1, M2 : Memory_Type)
    with
-     Ghost              => Static,
-     Subprogram_Variant => (Decreases => (Length (Reachable_Set (X, M1)))),
-     Pre                =>
+     Ghost => Static,
+     Pre   =>
        X in M1'Range | No_Index
        and then Valid_Memory (M1)
        and then Valid_Memory (M2)
@@ -321,16 +318,15 @@ is
        and then
          (for all I of Reachable_Set (X, M1) =>
             I <= M2'Last and then Next (M1 (I)) = Next (M2 (I))),
-     Post               => Is_Acyclic (X, M2);
+     Post  => Is_Acyclic (X, M2);
    --  Lemma for the preservation of the property if the Next elements of all
    --  cells reachable from X are preserved.
 
    procedure Lemma_Is_Acyclic_Set
      (X, Y : Index_Type; Z : Extended_Index; M1, M2 : Memory_Type)
    with
-     Ghost              => Static,
-     Subprogram_Variant => (Decreases => Length (Reachable_Set (X, M1))),
-     Pre                =>
+     Ghost => Static,
+     Pre   =>
        M1'Last = M2'Last
        and then X in M1'Range
        and then Y in M1'Range
@@ -345,16 +341,36 @@ is
        and then Is_Acyclic (Z, M1)
        and then Reachable (X, M1, Y)
        and then not Reachable (Z, M1, Y),
-     Post               => Is_Acyclic (X, M2);
+     Post  => Is_Acyclic (X, M2);
    --  Lemma for the preservation of the property if the Next element of a cell
    --  Y reachable from X is set to a disjoint acyclic list Z.
 
-   procedure Lemma_Reachable_Preserved
-     (X : Extended_Index; M1, M2 : Memory_Type)
+   procedure Lemma_Is_Acyclic_Preserved_Until
+     (X, Y : Extended_Index; M1, M2 : Memory_Type)
    with
      Ghost              => Static,
      Subprogram_Variant => (Decreases => (Length (Reachable_Set (X, M1)))),
      Pre                =>
+       X in M1'Range | No_Index
+       and then Y in M1'Range | No_Index
+       and then Y /= X
+       and then Y in M2'Range | No_Index
+       and then Valid_Memory (M1)
+       and then Valid_Memory (M2)
+       and then Is_Acyclic (X, M1)
+       and then (Y = No_Index or else Reachable (X, M1, Y))
+       and then
+         (for all I of Reachable_Set (X, M1) =>
+            (if not Reachable (Y, M1, I)
+             then I <= M2'Last and then Next (M1 (I)) = Next (M2 (I)))),
+     Post               => (if Is_Acyclic (Y, M2) then Is_Acyclic (X, M2));
+   --  General lemma for the preservation of the property on a list segment
+
+   procedure Lemma_Reachable_Preserved
+     (X : Extended_Index; M1, M2 : Memory_Type)
+   with
+     Ghost => Static,
+     Pre   =>
        X in M1'Range | No_Index
        and then Valid_Memory (M1)
        and then Valid_Memory (M2)
@@ -362,7 +378,7 @@ is
        and then
          (for all I of Reachable_Set (X, M1) =>
             I <= M2'Last and then Next (M1 (I)) = Next (M2 (I))),
-     Post               =>
+     Post  =>
        Reachable_Set (X, M1) = Reachable_Set (X, M2)
        and then
          Length (Reachable_Set (X, M1)) = Length (Reachable_Set (X, M2));
@@ -372,9 +388,8 @@ is
    procedure Lemma_Reachable_Set
      (X, Y : Index_Type; Z : Extended_Index; M1, M2 : Memory_Type)
    with
-     Ghost              => Static,
-     Subprogram_Variant => (Decreases => Length (Reachable_Set (X, M1))),
-     Pre                =>
+     Ghost => Static,
+     Pre   =>
        M1'Last = M2'Last
        and then X in M1'Range
        and then Y in M1'Range
@@ -389,7 +404,7 @@ is
        and then Is_Acyclic (Z, M1)
        and then Reachable (X, M1, Y)
        and then not Reachable (Z, M1, Y),
-     Post               =>
+     Post  =>
        (for all I of Reachable_Set (X, M2) =>
           Reachable (Z, M1, I)
           or else
@@ -402,11 +417,44 @@ is
    --  Lemma for the preservation of the property if the Next element of a cell
    --  Y reachable from X is set to a disjoint acyclic list Z.
 
-   procedure Lemma_Model_Preserved (X : Extended_Index; M1, M2 : Memory_Type)
+   procedure Lemma_Reachable_Preserved_Until
+     (X, Y : Extended_Index; M1, M2 : Memory_Type)
    with
      Ghost              => Static,
-     Subprogram_Variant => (Decreases => Length (Reachable_Set (X, M1))),
+     Subprogram_Variant => (Decreases => (Length (Reachable_Set (X, M1)))),
      Pre                =>
+       X in M1'Range | No_Index
+       and then Y in M1'Range | No_Index
+       and then Y /= X
+       and then Y in M2'Range | No_Index
+       and then Valid_Memory (M1)
+       and then Valid_Memory (M2)
+       and then Is_Acyclic (X, M1)
+       and then (Y = No_Index or else Reachable (X, M1, Y))
+       and then
+         (for all I of Reachable_Set (X, M1) =>
+            (if not Reachable (Y, M1, I)
+             then I <= M2'Last and then Next (M1 (I)) = Next (M2 (I)))),
+     Post               =>
+       (if Is_Acyclic (Y, M2)
+        then
+          Reachable_Set (Y, M2) <= Reachable_Set (X, M2)
+          and then
+            (for all I of Reachable_Set (X, M1) =>
+               Reachable (Y, M1, I) or else Reachable (X, M2, I))
+          and then
+            (for all I of Reachable_Set (X, M2) =>
+               Reachable (Y, M2, I)
+               or else (Reachable (X, M1, I) and not Reachable (Y, M1, I)))
+          and then
+            Length (Reachable_Set (X, M2)) - Length (Reachable_Set (Y, M2))
+            = Length (Reachable_Set (X, M1)) - Length (Reachable_Set (Y, M1)));
+   --  General lemma for the preservation of the property on a list segment
+
+   procedure Lemma_Model_Preserved (X : Extended_Index; M1, M2 : Memory_Type)
+   with
+     Ghost => Static,
+     Pre   =>
        X in M1'Range | No_Index
        and then Valid_Memory (M1)
        and then Valid_Memory (M2)
@@ -414,16 +462,15 @@ is
        and then
          (for all I of Reachable_Set (X, M1) =>
             I <= M2'Last and then Next (M1 (I)) = Next (M2 (I))),
-     Post               => Model (X, M1) = Model (X, M2);
+     Post  => Model (X, M1) = Model (X, M2);
    --  Lemma for the preservation of the property if the Next elements of all
    --  cells reachable from X are preserved.
 
    procedure Lemma_Model_Set
      (X, Y : Index_Type; Z : Extended_Index; M1, M2 : Memory_Type)
    with
-     Ghost              => Static,
-     Subprogram_Variant => (Decreases => Length (Reachable_Set (X, M1))),
-     Pre                =>
+     Ghost => Static,
+     Pre   =>
        M1'Last = M2'Last
        and then X in M1'Range
        and then Y in M1'Range
@@ -438,7 +485,7 @@ is
        and then Is_Acyclic (Z, M1)
        and then Reachable (X, M1, Y)
        and then not Reachable (Z, M1, Y),
-     Post               =>
+     Post  =>
        Model (Z, M1) <= Model (X, M2)
        and
          Length (Model (X, M2))
@@ -455,5 +502,39 @@ is
             Length (Model (Y, M1)) - Length (Model (Z, M1)) - 1);
    --  Lemma for the preservation of the property if the Next element of a cell
    --  Y reachable from X is set to a disjoint acyclic list Z.
+
+   procedure Lemma_Model_Preserved_Until
+     (X, Y : Extended_Index; M1, M2 : Memory_Type)
+   with
+     Ghost              => Static,
+     Subprogram_Variant => (Decreases => (Length (Reachable_Set (X, M1)))),
+     Pre                =>
+       X in M1'Range | No_Index
+       and then Y in M1'Range | No_Index
+       and then Y /= X
+       and then Y in M2'Range | No_Index
+       and then Valid_Memory (M1)
+       and then Valid_Memory (M2)
+       and then Is_Acyclic (X, M1)
+       and then (Y = No_Index or else Reachable (X, M1, Y))
+       and then
+         (for all I of Reachable_Set (X, M1) =>
+            (if not Reachable (Y, M1, I)
+             then I <= M2'Last and then Next (M1 (I)) = Next (M2 (I)))),
+     Post               =>
+       (if Is_Acyclic (Y, M2)
+        then
+          Model (Y, M2) <= Model (X, M2)
+          and
+            Length (Model (X, M2)) - Length (Model (Y, M2))
+            = Length (Model (X, M1)) - Length (Model (Y, M1))
+          and
+            Range_Shifted
+              (Model (X, M2),
+               Model (X, M1),
+               Last (Model (Y, M2)) + 1,
+               Last (Model (X, M2)),
+               Length (Model (Y, M1)) - Length (Model (Y, M2))));
+   --  General lemma for the preservation of the property on a list segment
 
 end SPARK.Higher_Order.Reachability;
