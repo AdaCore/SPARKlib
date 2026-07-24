@@ -1200,7 +1200,16 @@ is
      Global => null,
      Post   =>
        (SPARKlib_Full =>
-          M_Elements_Reversed (Model (Container)'Old, Model (Container)));
+          M_Elements_Reversed (Model (Container)'Old, Model (Container))
+
+          --  Cursors from Container continue designating the same elements
+
+          and
+            Mapping_Preserved
+              (M_Left  => Model (Container)'Old,
+               M_Right => Model (Container),
+               P_Left  => Positions (Container)'Old,
+               P_Right => Positions (Container)));
 
    procedure Swap (Container : in out List; I : Cursor; J : Cursor)
    with
