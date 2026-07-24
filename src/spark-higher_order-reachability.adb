@@ -174,7 +174,7 @@ is
       C        : Extended_Index := X;
    begin
       while C /= No_Index loop
-         pragma Loop_Variant (Decreases => Length (Not_Seen));
+         pragma Loop_Variant (Static => (Decreases => Length (Not_Seen)));
          pragma Loop_Invariant (Static => C in M'Range);
          pragma
            Loop_Invariant
