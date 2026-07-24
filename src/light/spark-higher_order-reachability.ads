@@ -280,6 +280,22 @@ is
    --  If X is the head of an acyclic list, Y is reachable from X, and Z is
    --  reachable from Y, then Z is reachable from X.
 
+   procedure Lemma_Reachable_Split (X, Y, Z : Index_Type; M : Memory_Type)
+   with
+     Ghost              => Static,
+     Subprogram_Variant => (Decreases => Length (Reachable_Set (X, M))),
+     Pre                =>
+       X in M'Range
+       and then Y in M'Range
+       and then Z in M'Range
+       and then Valid_Memory (M)
+       and then Is_Acyclic (X, M)
+       and then Reachable (X, M, Y)
+       and then Reachable (X, M, Z),
+     Post               => Reachable (Y, M, Z) or Reachable (Z, M, Y);
+   --  If X is the head of an acyclic list, and both Y and Z are reachable from
+   --  X, then either Y is reachable from X or X is reachable from Y.
+
    procedure Lemma_Reachable_Extract (X, Z : Index_Type; M : Memory_Type)
    with
      Ghost => Static,

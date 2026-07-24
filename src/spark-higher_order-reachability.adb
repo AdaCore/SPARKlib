@@ -513,6 +513,18 @@ is
       Lemma_Reachable_Preserved (Z, M1, M2);
    end Lemma_Reachable_Set;
 
+   ---------------------------
+   -- Lemma_Reachable_Split --
+   ---------------------------
+
+   procedure Lemma_Reachable_Split (X, Y, Z : Index_Type; M : Memory_Type) is
+   begin
+      Disclose_Recursive_Definitions;
+      if X /= Y and X /= Z then
+         Lemma_Reachable_Split (Next (M (X)), Y, Z, M);
+      end if;
+   end Lemma_Reachable_Split;
+
    --------------------------------
    -- Lemma_Reachable_Transitive --
    --------------------------------
