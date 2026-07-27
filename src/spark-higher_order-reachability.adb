@@ -214,6 +214,20 @@ is
 
    procedure Lemma_Automatically_Instantiate_Reachable_Def is null;
 
+   --------------------------------
+   -- Lemma_Is_Acyclic_After_Set --
+   --------------------------------
+
+   procedure Lemma_Is_Acyclic_After_Set
+     (X, Y : Index_Type; Z : Extended_Index; M1, M2 : Memory_Type) is
+   begin
+      Disclose_Recursive_Definitions;
+      if X /= Y then
+         Lemma_Is_Acyclic_Preserved_Until (X, Y, M1, M2);
+      end if;
+      Lemma_Is_Acyclic_Preserved (Z, M1, M2);
+   end Lemma_Is_Acyclic_After_Set;
+
    --------------------------
    -- Lemma_Is_Acyclic_Def --
    --------------------------
@@ -252,25 +266,37 @@ is
    begin
       Disclose_Recursive_Definitions;
       if Y /= No_Index then
-         Lemma_Reachable_Antisym (X, Y, M1);
+         Lemma_Reachable_Antisymmetric (X, Y, M1);
       end if;
       if Next (M1 (X)) /= Y then
          Lemma_Is_Acyclic_Preserved_Until (Next (M1 (X)), Y, M1, M2);
       end if;
    end Lemma_Is_Acyclic_Preserved_Until;
-   --------------------------
-   -- Lemma_Is_Acyclic_Set --
-   --------------------------
 
-   procedure Lemma_Is_Acyclic_Set
+   ---------------------------
+   -- Lemma_Model_After_Set --
+   ---------------------------
+
+   procedure Lemma_Model_After_Set
      (X, Y : Index_Type; Z : Extended_Index; M1, M2 : Memory_Type) is
    begin
       Disclose_Recursive_Definitions;
+      Lemma_Reachable_Is_Acyclic (X, Y, M1);
+      Lemma_Is_Acyclic_After_Set (X, Y, Z, M1, M2);
+      Lemma_Model_Is_Prefix (X, Y, M1);
       if X /= Y then
-         Lemma_Is_Acyclic_Preserved_Until (X, Y, M1, M2);
+         Lemma_Model_Preserved_Until (X, Y, M1, M2);
       end if;
       Lemma_Is_Acyclic_Preserved (Z, M1, M2);
-   end Lemma_Is_Acyclic_Set;
+      Lemma_Model_Preserved (Z, M1, M2);
+   end Lemma_Model_After_Set;
+
+   ----------------------------------
+   -- Lemma_Model_Covers_Reachable --
+   ----------------------------------
+
+   procedure Lemma_Model_Covers_Reachable (X : Extended_Index; M : Memory_Type)
+   is null;
 
    ---------------------
    -- Lemma_Model_Def --
@@ -285,18 +311,6 @@ is
          All_Set (M'First, M'Last));
    end Lemma_Model_Def;
 
-   -------------------------
-   -- Lemma_Model_Extract --
-   -------------------------
-
-   procedure Lemma_Model_Extract (X, Z : Index_Type; M : Memory_Type) is
-   begin
-      Lemma_Reachable_Acyclic (X, Z, M);
-      if Z /= X then
-         Lemma_Model_Preserved_Until (X, Z, M, M);
-      end if;
-   end Lemma_Model_Extract;
-
    ------------------------------
    -- Lemma_Model_Internal_Cut --
    ------------------------------
@@ -306,6 +320,11 @@ is
    begin
       if Next (M (X)) /= No_Index and X /= Y and Contains (S, X) then
          Lemma_Model_Internal_Cut (Next (M (X)), Y, M, Remove (S, X));
+
+         --  The two calls below are used to show that removing X and Y from S
+         --  in either order gives the same model, as Remove does not commute
+         --  syntactically.
+
          Lemma_Model_Internal_Inc
            (Next (M (X)),
             M,
@@ -334,6 +353,18 @@ is
    end Lemma_Model_Internal_Inc;
 
    ---------------------------
+   -- Lemma_Model_Is_Prefix --
+   ---------------------------
+
+   procedure Lemma_Model_Is_Prefix (X, Z : Index_Type; M : Memory_Type) is
+   begin
+      Lemma_Reachable_Is_Acyclic (X, Z, M);
+      if Z /= X then
+         Lemma_Model_Preserved_Until (X, Z, M, M);
+      end if;
+   end Lemma_Model_Is_Prefix;
+
+   ---------------------------
    -- Lemma_Model_Preserved --
    ---------------------------
 
@@ -356,10 +387,10 @@ is
       Disclose_Recursive_Definitions;
       Lemma_Is_Acyclic_Preserved_Until (X, Y, M1, M2);
       if Y /= No_Index then
-         Lemma_Reachable_Antisym (X, Y, M1);
+         Lemma_Reachable_Antisymmetric (X, Y, M1);
       end if;
       if Y /= No_Index then
-         Lemma_Reachable_Acyclic (X, Y, M1);
+         Lemma_Reachable_Is_Acyclic (X, Y, M1);
       end if;
       if Y /= Next (M1 (X)) then
          Lemma_Model_Preserved_Until (Next (M1 (X)), Y, M1, M2);
@@ -377,49 +408,50 @@ is
       end if;
    end Lemma_Model_Preserved_Until;
 
-   ---------------------
-   -- Lemma_Model_Set --
-   ---------------------
+   -------------------------------
+   -- Lemma_Reachable_After_Set --
+   -------------------------------
 
-   procedure Lemma_Model_Set
+   procedure Lemma_Reachable_After_Set
      (X, Y : Index_Type; Z : Extended_Index; M1, M2 : Memory_Type) is
    begin
       Disclose_Recursive_Definitions;
-      Lemma_Reachable_Acyclic (X, Y, M1);
-      Lemma_Is_Acyclic_Set (X, Y, Z, M1, M2);
-      Lemma_Model_Extract (X, Y, M1);
+      Lemma_Reachable_Is_Acyclic (X, Y, M1);
+      Lemma_Is_Acyclic_After_Set (X, Y, Z, M1, M2);
       if X /= Y then
-         Lemma_Model_Preserved_Until (X, Y, M1, M2);
+         Lemma_Reachable_Preserved_Until (X, Y, M1, M2);
       end if;
       Lemma_Is_Acyclic_Preserved (Z, M1, M2);
-      Lemma_Model_Preserved (Z, M1, M2);
-   end Lemma_Model_Set;
+      Lemma_Reachable_Preserved (Z, M1, M2);
+   end Lemma_Reachable_After_Set;
 
-   -----------------------------
-   -- Lemma_Reachable_Acyclic --
-   -----------------------------
+   -----------------------------------
+   -- Lemma_Reachable_Antisymmetric --
+   -----------------------------------
 
-   procedure Lemma_Reachable_Acyclic (X, Y : Index_Type; M : Memory_Type) is
-   begin
-      Disclose_Recursive_Definitions;
-      if X /= Y then
-         Lemma_Reachable_Acyclic (Next (M (X)), Y, M);
-      end if;
-   end Lemma_Reachable_Acyclic;
-
-   -----------------------------
-   -- Lemma_Reachable_Antisym --
-   -----------------------------
-
-   procedure Lemma_Reachable_Antisym (X, Z : Index_Type; M : Memory_Type) is
+   procedure Lemma_Reachable_Antisymmetric (X, Z : Index_Type; M : Memory_Type)
+   is
    begin
       Disclose_Recursive_Definitions;
       if X /= Z and Reachable (X, M, Z) and Reachable (Z, M, X) then
-         Lemma_Reachable_Acyclic (X, Z, M);
-         Lemma_Reachable_Antisym (Next (M (X)), Z, M);
+         Lemma_Reachable_Is_Acyclic (X, Z, M);
+         Lemma_Reachable_Antisymmetric (Next (M (X)), Z, M);
          Lemma_Reachable_Transitive (Z, X, Next (M (X)), M);
       end if;
-   end Lemma_Reachable_Antisym;
+   end Lemma_Reachable_Antisymmetric;
+
+   ------------------------------------
+   -- Lemma_Reachable_Closed_By_Next --
+   ------------------------------------
+
+   procedure Lemma_Reachable_Closed_By_Next
+     (X : Extended_Index; M : Memory_Type) is
+   begin
+      Disclose_Recursive_Definitions;
+      if X /= No_Index then
+         Lemma_Reachable_Closed_By_Next (Next (M (X)), M);
+      end if;
+   end Lemma_Reachable_Closed_By_Next;
 
    -------------------------
    -- Lemma_Reachable_Def --
@@ -442,29 +474,41 @@ is
       end if;
    end Lemma_Reachable_Def;
 
-   -----------------------------
-   -- Lemma_Reachable_Extract --
-   -----------------------------
+   ------------------------------
+   -- Lemma_Reachable_Included --
+   ------------------------------
 
-   procedure Lemma_Reachable_Extract (X, Z : Index_Type; M : Memory_Type) is
+   procedure Lemma_Reachable_Included (X, Z : Index_Type; M : Memory_Type) is
    begin
-      Lemma_Reachable_Acyclic (X, Z, M);
+      Lemma_Reachable_Is_Acyclic (X, Z, M);
       if Z /= X then
          Lemma_Reachable_Preserved_Until (X, Z, M, M);
       end if;
-   end Lemma_Reachable_Extract;
+   end Lemma_Reachable_Included;
 
-   --------------------------
-   -- Lemma_Reachable_Next --
-   --------------------------
+   --------------------------------
+   -- Lemma_Reachable_Is_Acyclic --
+   --------------------------------
 
-   procedure Lemma_Reachable_Next (X : Extended_Index; M : Memory_Type) is
+   procedure Lemma_Reachable_Is_Acyclic (X, Y : Index_Type; M : Memory_Type) is
    begin
       Disclose_Recursive_Definitions;
-      if X /= No_Index then
-         Lemma_Reachable_Next (Next (M (X)), M);
+      if X /= Y then
+         Lemma_Reachable_Is_Acyclic (Next (M (X)), Y, M);
       end if;
-   end Lemma_Reachable_Next;
+   end Lemma_Reachable_Is_Acyclic;
+
+   -----------------------------
+   -- Lemma_Reachable_Ordered --
+   -----------------------------
+
+   procedure Lemma_Reachable_Ordered (X, Y, Z : Index_Type; M : Memory_Type) is
+   begin
+      Disclose_Recursive_Definitions;
+      if X /= Y and X /= Z then
+         Lemma_Reachable_Ordered (Next (M (X)), Y, Z, M);
+      end if;
+   end Lemma_Reachable_Ordered;
 
    -------------------------------
    -- Lemma_Reachable_Preserved --
@@ -489,41 +533,12 @@ is
       Disclose_Recursive_Definitions;
       Lemma_Is_Acyclic_Preserved_Until (X, Y, M1, M2);
       if Y /= No_Index then
-         Lemma_Reachable_Antisym (X, Y, M1);
+         Lemma_Reachable_Antisymmetric (X, Y, M1);
       end if;
       if Y /= Next (M1 (X)) then
          Lemma_Reachable_Preserved_Until (Next (M1 (X)), Y, M1, M2);
       end if;
    end Lemma_Reachable_Preserved_Until;
-
-   -------------------------
-   -- Lemma_Reachable_Set --
-   -------------------------
-
-   procedure Lemma_Reachable_Set
-     (X, Y : Index_Type; Z : Extended_Index; M1, M2 : Memory_Type) is
-   begin
-      Disclose_Recursive_Definitions;
-      Lemma_Reachable_Acyclic (X, Y, M1);
-      Lemma_Is_Acyclic_Set (X, Y, Z, M1, M2);
-      if X /= Y then
-         Lemma_Reachable_Preserved_Until (X, Y, M1, M2);
-      end if;
-      Lemma_Is_Acyclic_Preserved (Z, M1, M2);
-      Lemma_Reachable_Preserved (Z, M1, M2);
-   end Lemma_Reachable_Set;
-
-   ---------------------------
-   -- Lemma_Reachable_Split --
-   ---------------------------
-
-   procedure Lemma_Reachable_Split (X, Y, Z : Index_Type; M : Memory_Type) is
-   begin
-      Disclose_Recursive_Definitions;
-      if X /= Y and X /= Z then
-         Lemma_Reachable_Split (Next (M (X)), Y, Z, M);
-      end if;
-   end Lemma_Reachable_Split;
 
    --------------------------------
    -- Lemma_Reachable_Transitive --

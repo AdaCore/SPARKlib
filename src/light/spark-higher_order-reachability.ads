@@ -11,7 +11,11 @@ with SPARK.Containers.Functional.Infinite_Sequences;
 with SPARK.Containers.Functional.Sets;
 
 --  This package provides functions and lemmas to reason about linked
---  structures represented inside an array.
+--  structures represented inside an array. The cells of the structures are
+--  stored in an array of type Memory_Type. Each cell designates the next cell
+--  of its structure through the Next function, which returns either a valid
+--  index in the array or the special value No_Index to mark the end of the
+--  structure.
 
 generic
    type Index_Type is range <>;
@@ -48,6 +52,12 @@ is
 
    subtype Extended_Index is Index_Type'Base;
 
+   --  A memory array is valid if it is indexed from Index_Type'First and the
+   --  Next value of each of its cells is either a valid index in the array or
+   --  No_Index. Pinning the lower bound of valid memory arrays is what allows
+   --  the lemmas below to relate two memory arrays of different lengths: the
+   --  shorter one is then necessarily a prefix of the longer one.
+
    function Valid_Memory (M : Memory_Type) return Boolean
    is (M'First = Index_Type'First
        and then (for all C of M => Next (C) in M'Range | No_Index))
@@ -56,7 +66,7 @@ is
    package Big_Conversions is
       package Memory_Index_To_Big is new Signed_Conversions (Extended_Index);
       use Memory_Index_To_Big;
-      function To_Big (X : Extended_Index'Base) return Big_Integer
+      function To_Big (X : Extended_Index) return Big_Integer
       renames Memory_Index_To_Big.To_Big_Integer;
    end Big_Conversions;
    use Big_Conversions;
@@ -66,7 +76,8 @@ is
 
    use Memory_Index_Sequences;
 
-   --  The list starting at X in M represents an acyclic list
+   --  True if the structure starting at X in M is acyclic, that is, if
+   --  following Next repeatedly from X eventually reaches No_Index
 
    function Is_Acyclic (X : Extended_Index; M : Memory_Type) return Boolean
    with
@@ -114,8 +125,13 @@ is
        X in M'Range | No_Index and then Y in M'Range and then Valid_Memory (M),
      Annotate => (GNATprove, Inline_For_Proof);
 
-   --  The sequence of memory indexes starting from X in M in the order in
-   --  which they occur.
+   --  The sequence of the memory indexes reachable from X in M. Beware that
+   --  the sequence is ordered from the end of the structure to X: its first
+   --  element is the last index of the structure, the one whose Next is
+   --  No_Index, and its last element is X itself. This reverse order is what
+   --  makes the model of a cell reachable from X a prefix of the model of X,
+   --  so that segments of a structure can be expressed using "<=" and
+   --  Range_Shifted on sequences.
 
    function Model (X : Extended_Index; M : Memory_Type) return Sequence
    with
@@ -150,13 +166,37 @@ is
    --  can either be instantiated manually or get pulled into the proof context
    --  for the verification of a specific entity by calling the Disclose_*
    --  subprograms.
+   --
+   --  The machinery works as follows. The Automatic_Instantiation annotation
+   --  attaches a lemma to the function declared just before it, so that the
+   --  axiom it provides is only available when that function occurs in the
+   --  proof context. Each definition lemma below is attached to a Disclose_*
+   --  function, whose only purpose is to be such a trigger. There are then two
+   --  ways to bring a call to a Disclose_* function into the proof context:
+   --
+   --    * If Automatically_Instantiate_Definitions is True, the
+   --      Lemma_Automatically_Instantiate_*_Def procedures declared above are
+   --      themselves automatically instantiated as soon as Is_Acyclic,
+   --      Reachable_Set, or Model occurs in the proof context, and their
+   --      postconditions call the Disclose_* functions. Their preconditions
+   --      make them useless if the flag is False.
+   --
+   --    * Otherwise, calling a Disclose_* procedure inside an entity brings
+   --      the corresponding definitions into the proof context of that entity
+   --      only, again through the call in its postcondition.
+   --
+   --  The Disclose_* functions are markers only; they always return True and
+   --  are never meant to be called at runtime.
 
    procedure Disclose_Recursive_Definitions
    with
      Ghost => Static,
      Post  => Disclose_Is_Acyclic and Disclose_Reachable and Disclose_Model;
    --  Disclose the recursive definitions of Is_Acyclic, Reachable_Set, and
-   --  Model for the verification of the enclosing entity.
+   --  Model for the verification of the enclosing entity. Prefer the
+   --  individual Disclose_* procedures below when the proof context is already
+   --  large: disclosing a definition which is not needed can be enough to make
+   --  a difficult proof reach the prover time limit.
 
    procedure Disclose_Is_Acyclic
    with Ghost => Static, Post => Disclose_Is_Acyclic;
@@ -223,7 +263,7 @@ is
 
    --  Useful lemmas about reachability
 
-   procedure Lemma_Reachable_Acyclic (X, Y : Index_Type; M : Memory_Type)
+   procedure Lemma_Reachable_Is_Acyclic (X, Y : Index_Type; M : Memory_Type)
    with
      Ghost              => Static,
      Subprogram_Variant => (Decreases => Length (Reachable_Set (X, M))),
@@ -234,10 +274,11 @@ is
        and then Is_Acyclic (X, M)
        and then Reachable (X, M, Y),
      Post               => Is_Acyclic (Y, M);
-   --  All cells reachable from the head of an acyclic list are heads of an
-   --  acyclic list.
+   --  All cells reachable from the head of an acyclic structure are heads of
+   --  an acyclic structure.
 
-   procedure Lemma_Reachable_Next (X : Extended_Index; M : Memory_Type)
+   procedure Lemma_Reachable_Closed_By_Next
+     (X : Extended_Index; M : Memory_Type)
    with
      Ghost              => Static,
      Subprogram_Variant => (Decreases => Length (Reachable_Set (X, M))),
@@ -248,9 +289,10 @@ is
      Post               =>
        (for all Y of Reachable_Set (X, M) =>
           Next (M (Y)) = No_Index or else Reachable (X, M, Next (M (Y))));
-   --  Reachable set is closed by Next
+   --  The set of cells reachable from X is closed under Next: the successor of
+   --  a reachable cell is either No_Index or reachable from X too.
 
-   procedure Lemma_Reachable_Antisym (X, Z : Index_Type; M : Memory_Type)
+   procedure Lemma_Reachable_Antisymmetric (X, Z : Index_Type; M : Memory_Type)
    with
      Ghost              => Static,
      Subprogram_Variant => (Decreases => Length (Reachable_Set (X, M))),
@@ -261,7 +303,7 @@ is
        and then Is_Acyclic (X, M),
      Post               =>
        (if Reachable (X, M, Z) and Reachable (Z, M, X) then X = Z);
-   --  If X is the head of an acyclic list, then X cannot be reachable from an
+   --  If X is the head of an acyclic structure, then X cannot be reachable
    --  from a cell Z reachable from X unless Z is X itself.
 
    procedure Lemma_Reachable_Transitive (X, Y, Z : Index_Type; M : Memory_Type)
@@ -277,10 +319,10 @@ is
      Post               =>
        (if Reachable (X, M, Y) and Reachable (Y, M, Z)
         then Reachable (X, M, Z));
-   --  If X is the head of an acyclic list, Y is reachable from X, and Z is
-   --  reachable from Y, then Z is reachable from X.
+   --  If X is the head of an acyclic structure, Y is reachable from X, and Z
+   --  is reachable from Y, then Z is reachable from X.
 
-   procedure Lemma_Reachable_Split (X, Y, Z : Index_Type; M : Memory_Type)
+   procedure Lemma_Reachable_Ordered (X, Y, Z : Index_Type; M : Memory_Type)
    with
      Ghost              => Static,
      Subprogram_Variant => (Decreases => Length (Reachable_Set (X, M))),
@@ -293,10 +335,11 @@ is
        and then Reachable (X, M, Y)
        and then Reachable (X, M, Z),
      Post               => Reachable (Y, M, Z) or Reachable (Z, M, Y);
-   --  If X is the head of an acyclic list, and both Y and Z are reachable from
-   --  X, then either Y is reachable from X or X is reachable from Y.
+   --  If X is the head of an acyclic structure, and both Y and Z are reachable
+   --  from X, then Y and Z occur one after the other in the structure: either
+   --  Z is reachable from Y or Y is reachable from Z.
 
-   procedure Lemma_Reachable_Extract (X, Z : Index_Type; M : Memory_Type)
+   procedure Lemma_Reachable_Included (X, Z : Index_Type; M : Memory_Type)
    with
      Ghost => Static,
      Pre   =>
@@ -306,10 +349,10 @@ is
        and then Is_Acyclic (X, M)
        and then Reachable (X, M, Z),
      Post  => Reachable_Set (Z, M) <= Reachable_Set (X, M);
-   --  If Z is reachable from Y, the cells reachable from Z are also reachable
+   --  If Z is reachable from X, the cells reachable from Z are also reachable
    --  from X. Reformulation of the transitivity lemma.
 
-   procedure Lemma_Model_Extract (X, Z : Index_Type; M : Memory_Type)
+   procedure Lemma_Model_Is_Prefix (X, Z : Index_Type; M : Memory_Type)
    with
      Ghost => Static,
      Pre   =>
@@ -319,11 +362,39 @@ is
        and then Is_Acyclic (X, M)
        and then Reachable (X, M, Z),
      Post  => Model (Z, M) <= Model (X, M);
-   --  If Z is reachable from Y, the sequence of calls reachable from X starts
-   --  with the cells reachable from Z.
+   --  If Z is reachable from X, the model of X starts with the model of Z, as
+   --  the cells reachable from Z are the last ones of the structure rooted at
+   --  X.
+
+   procedure Lemma_Model_Covers_Reachable (X : Extended_Index; M : Memory_Type)
+   with
+     Ghost => Static,
+     Pre   =>
+       X in M'Range | No_Index
+       and then Valid_Memory (M)
+       and then Is_Acyclic (X, M),
+     Post  =>
+       (for all I of Reachable_Set (X, M) => Find (Model (X, M), I) > 0);
+   --  The model of X contains all the cells reachable from X. The
+   --  postcondition of Model only provides the other inclusion; as it also
+   --  states that the model and the reachable set have the same length, this
+   --  lemma additionally entails that the model contains each reachable cell
+   --  exactly once.
 
    --  Lemmas used to compute the new values of Is_Acyclic, Reachable_Set, and
-   --  Model after a change in the memory array.
+   --  Model after a change in the memory array. They come in three flavors:
+   --  the preservation of a whole structure, the preservation of a segment of
+   --  a structure (the _Until lemmas), and the update of the Next value of a
+   --  single cell (the _After_Set lemmas). All the lemmas of a given flavor
+   --  share the same hypotheses on the old and new memory arrays M1 and M2.
+   --
+   --  Only the three _Preserved_Until lemmas are primitive. Every other lemma
+   --  about the effect of a memory change is a corollary of them: the
+   --  _Preserved lemmas are the case Y = No_Index, and the _After_Set lemmas
+   --  combine a _Preserved_Until on the segment going from X to Y with a
+   --  _Preserved on the structure rooted at Z.
+   --  The corollaries are provided because they are both easier to find and
+   --  easier to use than the general versions.
 
    procedure Lemma_Is_Acyclic_Preserved
      (X : Extended_Index; M1, M2 : Memory_Type)
@@ -338,10 +409,10 @@ is
          (for all I of Reachable_Set (X, M1) =>
             I <= M2'Last and then Next (M1 (I)) = Next (M2 (I))),
      Post  => Is_Acyclic (X, M2);
-   --  Lemma for the preservation of the property if the Next elements of all
-   --  cells reachable from X are preserved.
+   --  If M2 preserves the Next value of all the cells reachable from X in M1,
+   --  then the structure rooted at X is still acyclic in M2.
 
-   procedure Lemma_Is_Acyclic_Set
+   procedure Lemma_Is_Acyclic_After_Set
      (X, Y : Index_Type; Z : Extended_Index; M1, M2 : Memory_Type)
    with
      Ghost => Static,
@@ -361,8 +432,10 @@ is
        and then Reachable (X, M1, Y)
        and then not Reachable (Z, M1, Y),
      Post  => Is_Acyclic (X, M2);
-   --  Lemma for the preservation of the property if the Next element of a cell
-   --  Y reachable from X is set to a disjoint acyclic list Z.
+   --  If the Next value of a cell Y reachable from X is set to the head Z of a
+   --  disjoint acyclic structure, then the structure rooted at X is still
+   --  acyclic in M2. It is then made of the cells going from X to Y in M1
+   --  followed by the cells of the structure rooted at Z in M1.
 
    procedure Lemma_Is_Acyclic_Preserved_Until
      (X, Y : Extended_Index; M1, M2 : Memory_Type)
@@ -383,7 +456,9 @@ is
             (if not Reachable (Y, M1, I)
              then I <= M2'Last and then Next (M1 (I)) = Next (M2 (I)))),
      Post               => (if Is_Acyclic (Y, M2) then Is_Acyclic (X, M2));
-   --  General lemma for the preservation of the property on a list segment
+   --  General version of Lemma_Is_Acyclic_Preserved. It is enough for M2 to
+   --  preserve the Next value of the cells going from X up to Y, provided the
+   --  structure rooted at Y is acyclic in M2.
 
    procedure Lemma_Reachable_Preserved
      (X : Extended_Index; M1, M2 : Memory_Type)
@@ -401,10 +476,12 @@ is
        Reachable_Set (X, M1) = Reachable_Set (X, M2)
        and then
          Length (Reachable_Set (X, M1)) = Length (Reachable_Set (X, M2));
-   --  Lemma for the preservation of the property if the Next elements of all
-   --  cells reachable from X are preserved.
+   --  If M2 preserves the Next value of all the cells reachable from X in M1,
+   --  then the same cells are reachable from X in M1 and M2. The equality of
+   --  the lengths is stated on purpose: it does not follow from the equality
+   --  of the sets, which is extensional.
 
-   procedure Lemma_Reachable_Set
+   procedure Lemma_Reachable_After_Set
      (X, Y : Index_Type; Z : Extended_Index; M1, M2 : Memory_Type)
    with
      Ghost => Static,
@@ -432,9 +509,16 @@ is
        and then (for all I of Reachable_Set (Z, M1) => Reachable (X, M2, I))
        and then
          (for all I of Reachable_Set (X, M1) =>
-            Reachable (X, M2, I) or else Reachable (Next (M1 (Y)), M1, I));
-   --  Lemma for the preservation of the property if the Next element of a cell
-   --  Y reachable from X is set to a disjoint acyclic list Z.
+            Reachable (X, M2, I) or else Reachable (Next (M1 (Y)), M1, I))
+       and then
+         Length (Reachable_Set (X, M2))
+         = Length (Reachable_Set (X, M1))
+           - Length (Reachable_Set (Y, M1))
+           + Length (Reachable_Set (Z, M1))
+           + 1;
+   --  If the Next value of a cell Y reachable from X is set to the head Z of a
+   --  disjoint acyclic structure, then the cells reachable from X in M2 are
+   --  those going from X to Y in M1, plus those reachable from Z in M1.
 
    procedure Lemma_Reachable_Preserved_Until
      (X, Y : Extended_Index; M1, M2 : Memory_Type)
@@ -468,7 +552,10 @@ is
           and then
             Length (Reachable_Set (X, M2)) - Length (Reachable_Set (Y, M2))
             = Length (Reachable_Set (X, M1)) - Length (Reachable_Set (Y, M1)));
-   --  General lemma for the preservation of the property on a list segment
+   --  General version of Lemma_Reachable_Preserved. If M2 preserves the Next
+   --  value of the cells going from X up to Y and the structure rooted at Y is
+   --  acyclic in M2, then the cells reachable from X in M2 are those reachable
+   --  from Y in M2 plus the cells going from X to Y, which are unchanged.
 
    procedure Lemma_Model_Preserved (X : Extended_Index; M1, M2 : Memory_Type)
    with
@@ -482,10 +569,10 @@ is
          (for all I of Reachable_Set (X, M1) =>
             I <= M2'Last and then Next (M1 (I)) = Next (M2 (I))),
      Post  => Model (X, M1) = Model (X, M2);
-   --  Lemma for the preservation of the property if the Next elements of all
-   --  cells reachable from X are preserved.
+   --  If M2 preserves the Next value of all the cells reachable from X in M1,
+   --  then X has the same model in M1 and M2.
 
-   procedure Lemma_Model_Set
+   procedure Lemma_Model_After_Set
      (X, Y : Index_Type; Z : Extended_Index; M1, M2 : Memory_Type)
    with
      Ghost => Static,
@@ -519,8 +606,10 @@ is
             Last (Model (Z, M1)) + 1,
             Last (Model (X, M2)),
             Length (Model (Y, M1)) - Length (Model (Z, M1)) - 1);
-   --  Lemma for the preservation of the property if the Next element of a cell
-   --  Y reachable from X is set to a disjoint acyclic list Z.
+   --  If the Next value of a cell Y reachable from X is set to the head Z of a
+   --  disjoint acyclic structure, then the model of X in M2 is the model of Z
+   --  in M1, followed by Y, followed by the part of the model of X in M1 which
+   --  comes after Y.
 
    procedure Lemma_Model_Preserved_Until
      (X, Y : Extended_Index; M1, M2 : Memory_Type)
@@ -554,6 +643,9 @@ is
                Last (Model (Y, M2)) + 1,
                Last (Model (X, M2)),
                Length (Model (Y, M1)) - Length (Model (Y, M2))));
-   --  General lemma for the preservation of the property on a list segment
+   --  General version of Lemma_Model_Preserved. If M2 preserves the Next value
+   --  of the cells going from X up to Y and the structure rooted at Y is
+   --  acyclic in M2, then the model of X in M2 is the model of Y in M2
+   --  followed by the part of the model of X in M1 which comes after Y.
 
 end SPARK.Higher_Order.Reachability;
