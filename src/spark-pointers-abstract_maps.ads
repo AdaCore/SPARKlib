@@ -52,11 +52,9 @@ is
    function Iter_Next (M : Map; K : Key_Type) return Key_Type
    with Global => null, Import;
 
-   pragma Warnings (Off, "unused variable ""K""");
    function Is_Empty (M : Map) return Boolean
    is (for all K in M => False)
    with Global => null;
-   pragma Warnings (On, "unused variable ""K""");
 
    type Ownership_Map is private
    with Annotate => (GNATprove, Ownership, "Needs_Reclamation");
@@ -67,11 +65,9 @@ is
    function "=" (Left, Right : Ownership_Map) return Boolean
    is (+Left = +Right);
 
-   pragma Warnings (Off, "unused variable ""K""");
    function Is_Empty (M : Ownership_Map) return Boolean
    is (for all K in "+" (M) => False)
    with Global => null, Annotate => (GNATprove, Ownership, "Is_Reclaimed");
-   pragma Warnings (On, "unused variable ""K""");
 
    function Empty_Map return Ownership_Map
    with Global => null, Post => Is_Empty (Empty_Map'Result);

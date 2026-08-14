@@ -151,7 +151,6 @@ is
      Post   =>
        (SPARKlib_Full => "="'Result = (Left <= Right and Right <= Left));
 
-   pragma Warnings (Off, "unused variable ""Item""");
    function Is_Empty (Container : Set) return Boolean
    with
      --  A set is empty if it contains no element
@@ -161,7 +160,6 @@ is
        (SPARKlib_Full =>
           Is_Empty'Result = (for all Item of Container => False)
           and Is_Empty'Result = (Length (Container) = 0));
-   pragma Warnings (On, "unused variable ""Item""");
 
    function Included_Except
      (Left : Set; Right : Set; Item : Element_Type) return Boolean
