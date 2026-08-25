@@ -6,8 +6,6 @@
 
 pragma Ada_2022;
 
-with SPARK.Containers.Stable_Sorting; use SPARK.Containers.Stable_Sorting;
-
 package body SPARK.Containers.Formal.Doubly_Linked_Lists.Impl
   with SPARK_Mode => On
 is
@@ -45,15 +43,6 @@ is
    --  minus the unlinked node) use it; the field Container.Length is
    --  independent of Count while a node is in limbo. New_Node is the Covered
    --  Extra node, so its stale Prev does not misclassify it as active.
-
-   function Is_Add
-     (S1, S2 : Memory_Index_Set; E : Positive_Count_Type) return Boolean
-   is (not Memory_Index_Sets.Contains (S1, E)
-       and then Memory_Index_Sets.Contains (S2, E)
-       and then Memory_Index_Sets."<=" (S1, S2)
-       and then Memory_Index_Sets.Included_Except (S2, S1, E))
-   with Ghost => Static;
-   --  Return True if S2 is obtained by adding E to S1
 
    -----------------------
    -- Local Subprograms --
@@ -812,8 +801,47 @@ is
    ------------
 
    procedure Delete (Container : in out List; Position : in out Cursor) is
+      X : constant Count_Type := Position.Node;
+
+      Old_Active : constant Memory_Index_Set := Active_Set (Container)
+      with Ghost => Static;
+      --  The active list on entry, so that the per-branch reasoning below can
+      --  be stated without 'Old (not available in the body).
+
    begin
-      Delete (Container => Container, Position => Position, Count => 1);
+      if not Has_Element (Container => Container, Position => Position) then
+         raise Constraint_Error with "Position cursor has no element";
+      end if;
+
+      Position := No_Element;
+
+      --  Unlink X from the active list and return it to the free store. The
+      --  Unlink_* primitives export the active-set change (Is_Add), which is
+      --  what the Post passes on to the callers.
+
+      if Container.Length = 1 then
+
+         --  The sole node is the whole active list, so disclosing
+         --  Reachable_Set (First) = {First} gives the active-set change.
+
+         Lemma_Reachable_Def (Container.First, Memory (Container));
+         Unlink_Sole_Node (Container);
+
+         pragma
+           Assert (Static => Is_Add (Active_Set (Container), Old_Active, X));
+
+      elsif X = Container.First then
+         Unlink_First_Node (Container);
+
+      elsif X = Container.Last then
+         Unlink_Last_Node (Container);
+
+      else
+         Unlink_Interior_Node (Container, X);
+      end if;
+
+      Container.Length := Container.Length - 1;
+      Free (Container, X);
    end Delete;
 
    procedure Delete
@@ -1268,9 +1296,7 @@ is
    -- Generic_Sorting --
    ---------------------
 
-   package body Generic_Sorting
-     with SPARK_Mode => Off
-   is
+   package body Generic_Sorting is
 
       ---------------
       -- Is_Sorted --
@@ -1281,7 +1307,33 @@ is
          Node  : Count_Type := Container.First;
 
       begin
+         --  The active list is closed under Next, so once Node is reachable
+         --  from First its successor is reachable (or 0).
+
+         Lemma_Reachable_Closed_By_Next (Container.First, Memory (Container));
+
          for J in 2 .. Container.Length loop
+
+            --  Node is the (J - 1)th node of the active list, so the list it
+            --  heads still holds Length - J + 2 nodes. Two or more of them
+            --  means Node has a successor, which is what makes the reads
+            --  below in range.
+
+            pragma
+              Loop_Invariant
+                (Static =>
+                   Reachable (Container.First, Memory (Container), Node));
+            pragma
+              Loop_Invariant
+                (Static =>
+                   Memory_Index_Sets.Length
+                     (Reachable_Set (Node, Memory (Container)))
+                   = Big_Conversions.To_Big (Container.Length - J + 2));
+
+            Lemma_Reachable_Is_Acyclic
+              (Container.First, Node, Memory (Container));
+            Lemma_Reachable_Def (Node, Memory (Container));
+
             if Nodes (Nodes (Node).Next).Element < Nodes (Node).Element then
                return False;
             else
@@ -1304,7 +1356,14 @@ is
          LI : Cursor;
          RI : Cursor;
 
+         Orig_Sum : Count_Type
+         with Ghost => Static;
+         --  The invariant sum Target.Length + Source.Length (captured once the
+         --  guards rule out its overflow), which bounds Target below capacity.
+
       begin
+         pragma Assume (Static => Same = Same_Object_Ghost);
+
          if Is_Empty (Source) then
             return;
          end if;
@@ -1316,7 +1375,7 @@ is
               Annotate
                 (GNATprove,
                  Intentional,
-                 "exception might be raised",
+                 "unexpected exception might be raised",
                  "unreachable in SPARK: two in out parameters cannot alias, "
                  & "so Same_Object never holds here");
          end if;
@@ -1329,40 +1388,70 @@ is
             raise Capacity_Error with "new length exceeds target capacity";
          end if;
 
+         Orig_Sum := Target.Length + Source.Length;
+
          LI := First (Target);
          RI := First (Source);
+
+         --  Walk both lists in lockstep, moving Source's head into Target
+         --  whenever it is the smaller of the two heads and advancing LI
+         --  otherwise. The running sum Target.Length + Source.Length stays
+         --  equal to Orig_Sum, so Target never overflows and each move keeps
+         --  LI a valid cursor. Termination is lexicographic: a move shortens
+         --  Source, and otherwise LI advances along an unchanged Target.
+
          while RI.Node /= 0 loop
+            pragma Loop_Invariant (Static => Structural_Invariant (Target));
+            pragma Loop_Invariant (Static => Structural_Invariant (Source));
+            pragma Loop_Invariant (Static => Has_Element (Source, RI));
+            pragma Loop_Invariant (Static => Is_Relevant (Target, LI));
             pragma
-              Assert
+              Loop_Invariant
+                (Static => Target.Length + Source.Length = Orig_Sum);
+            pragma Loop_Invariant (Static => Orig_Sum <= Target.Capacity);
+            pragma
+              Loop_Variant
                 (Static =>
-                   RN (RI.Node).Next = 0
-                   or else
-                     not (RN (RN (RI.Node).Next).Element
-                          < RN (RI.Node).Element));
+                   (Decreases => Source.Length,
+                    Decreases =>
+                      Memory_Index_Sets.Length
+                        (Reachable_Set (LI.Node, Memory (Target)))));
 
             if LI.Node = 0 then
                Splice (Target, No_Element, Source);
                return;
             end if;
 
-            pragma
-              Assert
-                (Static =>
-                   LN (LI.Node).Next = 0
-                   or else
-                     not (LN (LN (LI.Node).Next).Element
-                          < LN (LI.Node).Element));
-
             if RN (RI.Node).Element < LN (LI.Node).Element then
                declare
                   RJ : Cursor := RI;
-                  pragma Warnings (Off, RJ);
+
                begin
-                  RI.Node := RN (RI.Node).Next;
+                  --  RI moves to the successor of the node being moved, which
+                  --  is active (the active list is closed under Next) and
+                  --  distinct from it (acyclicity), so it survives the move:
+                  --  Splice takes exactly RJ's node off Source. Splice resets
+                  --  RJ, which is discarded: RI is the cursor Merge follows.
+
+                  Lemma_Reachable_Closed_By_Next
+                    (Source.First, Memory (Source));
+                  Lemma_Reachable_Is_Acyclic
+                    (Source.First, RI.Node, Memory (Source));
+                  Lemma_Reachable_Def (RI.Node, Memory (Source));
+
+                  RI.Node := RN (RJ.Node).Next;
                   Splice (Target, LI, Source, RJ);
                end;
 
             else
+               --  LI moves to its successor, which is active or 0, and heads
+               --  a shorter part of the unchanged Target.
+
+               Lemma_Reachable_Closed_By_Next (Target.First, Memory (Target));
+               Lemma_Reachable_Is_Acyclic
+                 (Target.First, LI.Node, Memory (Target));
+               Lemma_Reachable_Def (LI.Node, Memory (Target));
+
                LI.Node := LN (LI.Node).Next;
             end if;
          end loop;
@@ -1373,59 +1462,866 @@ is
       ----------
 
       procedure Sort (Container : in out List) is
-         N : Node_Array renames Container.Nodes;
+
+         type List_Descriptor is record
+            First  : Count_Type := 0;
+            Last   : Count_Type := 0;
+            Length : Count_Type := 0;
+         end record;
+         --  A detached segment of the list, given by its endpoints and its
+         --  number of nodes
+
+         No_Segment : constant List_Descriptor := (0, 0, 0);
+
+         -----------------------------
+         -- Ghost model of segments --
+         -----------------------------
+
+         Old_Free : constant Count_Type'Base := Container.Free
+         with Ghost => Static;
+         --  The free-list head on entry. The sort never touches it, and that
+         --  is threaded through the preconditions of the helpers as well as
+         --  their postconditions: it is what keeps the bounds of the memory
+         --  the model sees fixed for the whole sort, and 'Old only relates a
+         --  call's own entry and exit, not the sort's entry.
+
+         function Segment_Valid
+           (M : Nodes_Type_Base; D : List_Descriptor) return Boolean
+         is (Valid_Memory (M)
+             and then (for all N of M => N.Prev'Initialized)
+             and then D.First in M'Range | 0
+             and then Is_Acyclic (D.First, M)
+             and then
+               Memory_Index_Sets.Length (Reachable_Set (D.First, M))
+               = Big_Conversions.To_Big (D.Length)
+             and then
+               (if D.First = 0
+                then D.Last = 0
+                else
+                  D.Last in M'Range
+                  and then M (D.First).Prev = 0
+                  and then M (D.Last).Next = 0
+                  and then Reachable (D.First, M, D.Last))
+             and then
+               (for all I of Reachable_Set (D.First, M) =>
+                  M (I).Prev in 0 .. M'Last
+                  and then M (I).Element'Initialized
+                  and then (if M (I).Next = 0 then I = D.Last)
+                  and then
+                    (if M (I).Prev = 0
+                     then I = D.First
+                     else
+                       Reachable (D.First, M, M (I).Prev)
+                       and then M (M (I).Prev).Next = I)))
+         with Ghost => Static;
+         --  D is a well-formed doubly linked segment of the memory M: an
+         --  acyclic chain of D.Length allocated nodes running from D.First to
+         --  D.Last, with the Prev links mirroring the Next links inside the
+         --  segment.
+
+         function Untouched_Outside
+           (M1, M2 : Nodes_Type_Base; S : Memory_Index_Set) return Boolean
+         is (M1'First = M2'First
+             and then M1'Last = M2'Last
+             and then (for all N of M1 => N.Prev'Initialized)
+             and then (for all N of M2 => N.Prev'Initialized)
+             and then
+               (for all I in M1'Range =>
+                  M1 (I).Element'Initialized = M2 (I).Element'Initialized)
+             and then
+               (for all I in M1'Range =>
+                  (if not Memory_Index_Sets.Contains (S, I)
+                   then
+                     M1 (I).Prev = M2 (I).Prev
+                     and then M1 (I).Next = M2 (I).Next)))
+         with Ghost => Static;
+         --  The frame of the sort helpers: they only ever relink the nodes of
+         --  the segments they are given, and never touch an element
+
+         Whole : List_Descriptor :=
+           (First  => Container.First,
+            Last   => Container.Last,
+            Length => Container.Length);
+         --  The whole list, as the segment handed to the sort
+
+         M_Old : constant Nodes_Type_Base := Memory (Container)
+         with Ghost => Static;
+
+         ------------------------
+         -- Local subprograms  --
+         ------------------------
+
+         procedure Detach_First
+           (Source : in out List_Descriptor; Detached : out Count_Type)
+         with
+           Modifies => (Container.Nodes, Source, Detached),
+           Pre      =>
+             (Static =>
+                Container.Free = Old_Free
+                and then Segment_Valid (Memory (Container), Source)
+                and then Source.Length >= 1),
+           Post     =>
+             (Static =>
+                Segment_Valid (Memory (Container), Source)
+                and then Detached = Source'Old.First
+                and then Detached in Memory (Container)'Range
+                and then Source.Length = Source'Old.Length - 1
+                and then Memory (Container) (Detached).Prev = 0
+                and then Memory (Container) (Detached).Next = 0
+                and then Memory (Container) (Detached).Element'Initialized
+                and then
+                  Is_Add
+                    (Reachable_Set (Source.First, Memory (Container)),
+                     Reachable_Set (Source'Old.First, Memory (Container'Old)),
+                     Detached)
+                and then
+                  Untouched_Outside
+                    (Memory (Container'Old),
+                     Memory (Container),
+                     Reachable_Set
+                       (Source'Old.First, Memory (Container'Old))));
+         --  Take the first node off a non-empty segment. The detached node is
+         --  left as an isolated singleton (both its links null), as the merge
+         --  loop expects.
+
+         procedure Append_Node
+           (Target : in out List_Descriptor; New_Node : Count_Type)
+         with
+           Modifies => (Container.Nodes, Target),
+           Pre      =>
+             (Static =>
+                Container.Free = Old_Free
+                and then Segment_Valid (Memory (Container), Target)
+                and then New_Node in Memory (Container)'Range
+                and then Memory (Container) (New_Node).Prev = 0
+                and then Memory (Container) (New_Node).Next = 0
+                and then Memory (Container) (New_Node).Element'Initialized
+                and then
+                  not Reachable (Target.First, Memory (Container), New_Node)),
+           Post     =>
+             (Static =>
+                Segment_Valid (Memory (Container), Target)
+                and then Target.Length = Target'Old.Length + 1
+                and then
+                  Is_Add
+                    (Reachable_Set (Target'Old.First, Memory (Container'Old)),
+                     Reachable_Set (Target.First, Memory (Container)),
+                     New_Node)
+                and then
+                  Untouched_Outside
+                    (Memory (Container'Old),
+                     Memory (Container),
+                     Reachable_Set (Target.First, Memory (Container))));
+         --  Append a detached node to a list segment
+
+         procedure Merge_Parts
+           (Part1, Part2 : List_Descriptor; Merged : out List_Descriptor)
+         with
+           Pre  =>
+             (Static =>
+                Container.Free = Old_Free
+                and then Segment_Valid (Memory (Container), Part1)
+                and then Segment_Valid (Memory (Container), Part2)
+                and then
+                  Memory_Index_Sets.No_Overlap
+                    (Reachable_Set (Part1.First, Memory (Container)),
+                     Reachable_Set (Part2.First, Memory (Container)))
+                and then Part1.Length <= Count_Type'Last - Part2.Length),
+           Post =>
+             (Static =>
+                Container.Free = Old_Free
+                and then Segment_Valid (Memory (Container), Merged)
+                and then Container.First = Container.First'Old
+                and then Container.Last = Container.Last'Old
+                and then Container.Length = Container.Length'Old
+                and then Merged.Length = Part1.Length + Part2.Length
+                and then
+                  Memory_Index_Sets."="
+                    (Reachable_Set (Merged.First, Memory (Container)),
+                     Memory_Index_Sets.Union
+                       (Reachable_Set (Part1.First, Memory (Container'Old)),
+                        Reachable_Set (Part2.First, Memory (Container'Old))))
+                and then
+                  Untouched_Outside
+                    (Memory (Container'Old),
+                     Memory (Container),
+                     Memory_Index_Sets.Union
+                       (Reachable_Set (Part1.First, Memory (Container'Old)),
+                        Reachable_Set (Part2.First, Memory (Container'Old)))));
+         --  Merge two disjoint segments, preserving the sorted property. If
+         --  the compared elements are equal the node of Part1 comes first, as
+         --  stability requires.
+
+         procedure Merge_Sort (Arg : in out List_Descriptor)
+         with
+           Subprogram_Variant => (Decreases => Arg.Length),
+           Pre                =>
+             (Static =>
+                Container.Free = Old_Free
+                and then Segment_Valid (Memory (Container), Arg)),
+           Post               =>
+             (Static =>
+                Container.Free = Old_Free
+                and then Segment_Valid (Memory (Container), Arg)
+                and then Container.First = Container.First'Old
+                and then Container.Last = Container.Last'Old
+                and then Container.Length = Container.Length'Old
+                and then Arg.Length = Arg'Old.Length
+                and then
+                  Memory_Index_Sets."="
+                    (Reachable_Set (Arg.First, Memory (Container)),
+                     Reachable_Set (Arg'Old.First, Memory (Container'Old)))
+                and then
+                  Untouched_Outside
+                    (Memory (Container'Old),
+                     Memory (Container),
+                     Reachable_Set (Arg'Old.First, Memory (Container'Old))));
+         --  Sort a segment in place using MergeSort. As required by the RM,
+         --  the sort is stable.
+
+         procedure Split_List
+           (Unsplit : List_Descriptor; Part1, Part2 : out List_Descriptor)
+         with
+           Pre  =>
+             (Static =>
+                Container.Free = Old_Free
+                and then Segment_Valid (Memory (Container), Unsplit)
+                and then Unsplit.Length >= 2),
+           Post =>
+             (Static =>
+                Container.Free = Old_Free
+                and then Segment_Valid (Memory (Container), Part1)
+                and then Segment_Valid (Memory (Container), Part2)
+                and then Container.First = Container.First'Old
+                and then Container.Last = Container.Last'Old
+                and then Container.Length = Container.Length'Old
+                and then Part1.Length >= 1
+                and then Part2.Length >= 1
+                and then Part1.Length + Part2.Length = Unsplit.Length
+                and then
+                  Memory_Index_Sets.No_Overlap
+                    (Reachable_Set (Part1.First, Memory (Container)),
+                     Reachable_Set (Part2.First, Memory (Container)))
+                and then
+                  Memory_Index_Sets."="
+                    (Memory_Index_Sets.Union
+                       (Reachable_Set (Part1.First, Memory (Container)),
+                        Reachable_Set (Part2.First, Memory (Container))),
+                     Reachable_Set (Unsplit.First, Memory (Container'Old)))
+                and then
+                  Untouched_Outside
+                    (Memory (Container'Old),
+                     Memory (Container),
+                     Reachable_Set (Unsplit.First, Memory (Container'Old))));
+         --  Split a segment of two nodes or more into two non-empty parts for
+         --  divide-and-conquer
+
+         -----------------
+         -- Append_Node --
+         -----------------
+
+         procedure Append_Node
+           (Target : in out List_Descriptor; New_Node : Count_Type)
+         is
+            M_Old : constant Nodes_Type_Base := Memory (Container)
+            with Ghost => Static;
+         begin
+            --  The new node is an isolated singleton
+
+            Lemma_Is_Acyclic_Def (New_Node, Memory (Container));
+            Lemma_Reachable_Def (New_Node, Memory (Container));
+
+            if Target.Length = 0 then
+               Target := (First | Last => New_Node, Length => 1);
+
+            else
+               --  The tail of the merged list is its own last node, so
+               --  appending the singleton headed by New_Node adds exactly one
+               --  node.
+
+               Lemma_Reachable_Is_Acyclic
+                 (Target.First, Target.Last, Memory (Container));
+               Lemma_Reachable_Def (Target.Last, Memory (Container));
+
+               Container.Nodes (New_Node).Prev := Target.Last;
+               Container.Nodes (Target.Last).Next := New_Node;
+
+               --  Only the Next link of the old tail changed, so the three
+               --  lists are reconstructed on the final memory in one step
+               --  each: neither part goes through that node.
+
+               Lemma_Reachable_After_Set
+                 (Target.First,
+                  Target.Last,
+                  New_Node,
+                  M_Old,
+                  Memory (Container));
+               Lemma_Is_Acyclic_After_Set
+                 (Target.First,
+                  Target.Last,
+                  New_Node,
+                  M_Old,
+                  Memory (Container));
+
+               Target.Last := New_Node;
+               Target.Length := Target.Length + 1;
+            end if;
+         end Append_Node;
+
+         ------------------
+         -- Detach_First --
+         ------------------
+
+         procedure Detach_First
+           (Source : in out List_Descriptor; Detached : out Count_Type)
+         is
+            M_Old : constant Nodes_Type_Base := Memory (Container)
+            with Ghost => Static;
+            S_Old : constant List_Descriptor := Source
+            with Ghost => Static;
+         begin
+            Detached := Source.First;
+
+            if Source.Length = 1 then
+
+               --  The sole node of the segment is both its head and its tail,
+               --  so it is already isolated.
+
+               Lemma_Reachable_Def (Detached, Memory (Container));
+               Source := No_Segment;
+
+            else
+               Source :=
+                 (First  => Container.Nodes (Detached).Next,
+                  Last   => Source.Last,
+                  Length => Source.Length - 1);
+
+               Lemma_Reachable_Def (Detached, Memory (Container));
+               Lemma_Is_Acyclic_Def (Detached, Memory (Container));
+
+               Container.Nodes (Source.First).Prev := 0;
+
+               Lemma_Reachable_Preserved
+                 (Source.First, M_Old, Memory (Container));
+               Lemma_Is_Acyclic_Preserved
+                 (Source.First, M_Old, Memory (Container));
+
+               declare
+                  M_Interm : constant Nodes_Type_Base := Memory (Container)
+                  with Ghost => Static;
+               begin
+                  Container.Nodes (Detached).Next := 0;
+
+                  Lemma_Reachable_Preserved
+                    (Source.First, M_Interm, Memory (Container));
+                  Lemma_Is_Acyclic_Preserved
+                    (Source.First, M_Interm, Memory (Container));
+               end;
+            end if;
+
+            pragma
+              Assert
+                (Static =>
+                   Is_Add
+                     (Reachable_Set (Source.First, Memory (Container)),
+                      Reachable_Set (S_Old.First, M_Old),
+                      Detached));
+         end Detach_First;
+
+         -----------------
+         -- Merge_Parts --
+         -----------------
+
+         procedure Merge_Parts
+           (Part1, Part2 : List_Descriptor; Merged : out List_Descriptor)
+         is
+            M_Old : constant Nodes_Type_Base := Memory (Container)
+            with Ghost => Static;
+
+            All_Cells : constant Memory_Index_Set :=
+              Memory_Index_Sets.Union
+                (Reachable_Set (Part1.First, Memory (Container)),
+                 Reachable_Set (Part2.First, Memory (Container)))
+            with Ghost => Static;
+
+            Total : constant Count_Type := Part1.Length + Part2.Length;
+
+            P1 : List_Descriptor := Part1;
+            P2 : List_Descriptor := Part2;
+
+            Take_From_P2 : Boolean;
+            Detached     : Count_Type;
+
+            M_Entry                          : Nodes_Type_Base := M_Old
+            with Ghost => Static;
+            P1_Entry, P2_Entry, Merged_Entry : List_Descriptor
+            with Ghost => Static;
+            --  The memory and the three descriptors at the start of the
+            --  current iteration.
+
+            procedure Lemma_Still_Covered
+              (Old_Merged, Old_P1, Old_P2 : Memory_Index_Set;
+               New_Merged, New_P1, New_P2 : Memory_Index_Set;
+               Moved                      : Positive_Count_Type)
+            with
+              Ghost => Static,
+              Pre   =>
+                Memory_Index_Sets."<=" (Old_P1, All_Cells)
+                and then Memory_Index_Sets."<=" (Old_P2, All_Cells)
+                and then Memory_Index_Sets."<=" (Old_Merged, All_Cells)
+                and then Memory_Index_Sets.No_Overlap (Old_P1, Old_P2)
+                and then Memory_Index_Sets.No_Overlap (Old_Merged, Old_P1)
+                and then Memory_Index_Sets.No_Overlap (Old_Merged, Old_P2)
+                and then
+                  (for all I of All_Cells =>
+                     Memory_Index_Sets.Contains (Old_Merged, I)
+                     or else Memory_Index_Sets.Contains (Old_P1, I)
+                     or else Memory_Index_Sets.Contains (Old_P2, I))
+                and then Is_Add (Old_Merged, New_Merged, Moved)
+                and then
+                  (if Take_From_P2
+                   then
+                     Memory_Index_Sets."=" (Old_P1, New_P1)
+                     and then Is_Add (New_P2, Old_P2, Moved)
+                   else
+                     Memory_Index_Sets."=" (Old_P2, New_P2)
+                     and then Is_Add (New_P1, Old_P1, Moved)),
+              Post  =>
+                Memory_Index_Sets."<=" (New_P1, All_Cells)
+                and then Memory_Index_Sets."<=" (New_P2, All_Cells)
+                and then Memory_Index_Sets."<=" (New_Merged, All_Cells)
+                and then Memory_Index_Sets.No_Overlap (New_P1, New_P2)
+                and then Memory_Index_Sets.No_Overlap (New_Merged, New_P1)
+                and then Memory_Index_Sets.No_Overlap (New_Merged, New_P2)
+                and then
+                  (for all I of All_Cells =>
+                     Memory_Index_Sets.Contains (New_Merged, I)
+                     or else Memory_Index_Sets.Contains (New_P1, I)
+                     or else Memory_Index_Sets.Contains (New_P2, I));
+            --  A merge step keeps the three lists covering the whole node
+            --  set: the merged list only grows, and each part loses at most
+            --  the moved node, which the merged list gains. Isolated in a
+            --  lemma so that this set reasoning does not run in the merge
+            --  loop's context.
+
+            -------------------------
+            -- Lemma_Still_Covered --
+            -------------------------
+
+            procedure Lemma_Still_Covered
+              (Old_Merged, Old_P1, Old_P2 : Memory_Index_Set;
+               New_Merged, New_P1, New_P2 : Memory_Index_Set;
+               Moved                      : Positive_Count_Type) is
+            begin
+               null;
+            end Lemma_Still_Covered;
+
+         begin
+            Merged := No_Segment;
+
+            while P1.Length /= 0 or else P2.Length /= 0 loop
+               pragma
+                 Loop_Invariant
+                   (Static =>
+                      Container.Free = Old_Free
+                      and then Container.First = Container.First'Loop_Entry
+                      and then Container.Last = Container.Last'Loop_Entry
+                      and then Container.Length = Container.Length'Loop_Entry);
+               pragma
+                 Loop_Invariant
+                   (Static => Segment_Valid (Memory (Container), P1));
+               pragma
+                 Loop_Invariant
+                   (Static => Segment_Valid (Memory (Container), P2));
+               pragma
+                 Loop_Invariant
+                   (Static => Segment_Valid (Memory (Container), Merged));
+               pragma
+                 Loop_Invariant
+                   (Static =>
+                      Memory_Index_Sets.No_Overlap
+                        (Reachable_Set (P1.First, Memory (Container)),
+                         Reachable_Set (P2.First, Memory (Container))));
+               pragma
+                 Loop_Invariant
+                   (Static =>
+                      Memory_Index_Sets.No_Overlap
+                        (Reachable_Set (Merged.First, Memory (Container)),
+                         Reachable_Set (P1.First, Memory (Container))));
+               pragma
+                 Loop_Invariant
+                   (Static =>
+                      Memory_Index_Sets.No_Overlap
+                        (Reachable_Set (Merged.First, Memory (Container)),
+                         Reachable_Set (P2.First, Memory (Container))));
+               pragma
+                 Loop_Invariant
+                   (Static =>
+                      Memory_Index_Sets."<="
+                        (Reachable_Set (Merged.First, Memory (Container)),
+                         All_Cells));
+               pragma
+                 Loop_Invariant
+                   (Static =>
+                      Memory_Index_Sets."<="
+                        (Reachable_Set (P1.First, Memory (Container)),
+                         All_Cells));
+               pragma
+                 Loop_Invariant
+                   (Static =>
+                      Memory_Index_Sets."<="
+                        (Reachable_Set (P2.First, Memory (Container)),
+                         All_Cells));
+               pragma
+                 Loop_Invariant
+                   (Static =>
+                      (for all I of All_Cells =>
+                         Memory_Index_Sets.Contains
+                           (Reachable_Set (Merged.First, Memory (Container)),
+                            I)
+                         or else
+                           Memory_Index_Sets.Contains
+                             (Reachable_Set (P1.First, Memory (Container)), I)
+                         or else
+                           Memory_Index_Sets.Contains
+                             (Reachable_Set (P2.First, Memory (Container)),
+                              I)));
+               pragma
+                 Loop_Invariant
+                   (Static => Merged.Length + P1.Length + P2.Length = Total);
+               pragma
+                 Loop_Invariant
+                   (Static =>
+                      Untouched_Outside
+                        (M_Old, Memory (Container), All_Cells));
+               pragma
+                 Loop_Variant (Static => (Decreases => P1.Length + P2.Length));
+
+               M_Entry := Memory (Container);
+               P1_Entry := P1;
+               P2_Entry := P2;
+               Merged_Entry := Merged;
+
+               if P1.Length = 0 then
+                  Take_From_P2 := True;
+               elsif P2.Length = 0 then
+                  Take_From_P2 := False;
+               else
+                  --  If the compared elements are equal then Take_From_P2
+                  --  must be False in order to ensure stability.
+
+                  Take_From_P2 :=
+                    Container.Nodes (P2.First).Element
+                    < Container.Nodes (P1.First).Element;
+               end if;
+
+               --  The other part and the merged list lie outside the part the
+               --  node is taken from, so the detach leaves them alone.
+
+               if Take_From_P2 then
+                  Detach_First (P2, Detached);
+
+                  Lemma_Reachable_Preserved
+                    (P1.First, M_Entry, Memory (Container));
+                  Lemma_Is_Acyclic_Preserved
+                    (P1.First, M_Entry, Memory (Container));
+               else
+                  Detach_First (P1, Detached);
+
+                  Lemma_Reachable_Preserved
+                    (P2.First, M_Entry, Memory (Container));
+                  Lemma_Is_Acyclic_Preserved
+                    (P2.First, M_Entry, Memory (Container));
+               end if;
+
+               Lemma_Reachable_Preserved
+                 (Merged.First, M_Entry, Memory (Container));
+               Lemma_Is_Acyclic_Preserved
+                 (Merged.First, M_Entry, Memory (Container));
+
+               declare
+                  M_Det : constant Nodes_Type_Base := Memory (Container)
+                  with Ghost => Static;
+
+               begin
+                  Append_Node (Merged, Detached);
+
+                  Lemma_Reachable_Preserved
+                    (P1.First, M_Det, Memory (Container));
+                  Lemma_Is_Acyclic_Preserved
+                    (P1.First, M_Det, Memory (Container));
+                  Lemma_Reachable_Preserved
+                    (P2.First, M_Det, Memory (Container));
+                  Lemma_Is_Acyclic_Preserved
+                    (P2.First, M_Det, Memory (Container));
+               end;
+
+               --  Every node the three lists held on entry is still on one of
+               --  them: the merged list only grew, and each part lost at most
+               --  the detached node, which the merged list took.
+
+               Lemma_Still_Covered
+                 (Reachable_Set (Merged_Entry.First, M_Entry),
+                  Reachable_Set (P1_Entry.First, M_Entry),
+                  Reachable_Set (P2_Entry.First, M_Entry),
+                  Reachable_Set (Merged.First, Memory (Container)),
+                  Reachable_Set (P1.First, Memory (Container)),
+                  Reachable_Set (P2.First, Memory (Container)),
+                  Detached);
+
+               pragma
+                 Assert
+                   (Static =>
+                      Untouched_Outside
+                        (M_Entry, Memory (Container), All_Cells));
+            end loop;
+
+            --  Both parts are exhausted, so the merged list holds every node
+
+            pragma
+              Assert
+                (Static =>
+                   Memory_Index_Sets.Is_Empty
+                     (Reachable_Set (P1.First, Memory (Container))));
+            pragma
+              Assert
+                (Static =>
+                   Memory_Index_Sets.Is_Empty
+                     (Reachable_Set (P2.First, Memory (Container))));
+            pragma
+              Assert
+                (Static =>
+                   Memory_Index_Sets."="
+                     (Reachable_Set (Merged.First, Memory (Container)),
+                      All_Cells));
+         end Merge_Parts;
+
+         ----------------
+         -- Merge_Sort --
+         ----------------
+
+         procedure Merge_Sort (Arg : in out List_Descriptor) is
+            Part1, Part2 : List_Descriptor;
+
+            Cells : constant Memory_Index_Set :=
+              Reachable_Set (Arg.First, Memory (Container))
+            with Ghost => Static;
+            --  The nodes of the segment on entry. Each step below states that
+            --  the two parts still cover exactly them: the final equality is
+            --  a chain of five set equalities composed through Union, and it
+            --  times out unless each link is established on its own.
+
+         begin
+            if Arg.Length < 2 then
+
+               --  Already sorted
+
+               return;
+            end if;
+
+            Split_List (Arg, Part1, Part2);
+
+            pragma
+              Assert
+                (Static =>
+                   Memory_Index_Sets."="
+                     (Memory_Index_Sets.Union
+                        (Reachable_Set (Part1.First, Memory (Container)),
+                         Reachable_Set (Part2.First, Memory (Container))),
+                      Cells));
+
+            declare
+               M_Split : constant Nodes_Type_Base := Memory (Container)
+               with Ghost => Static;
+            begin
+               Merge_Sort (Part1);
+
+               --  Part2 lies outside Part1, so sorting Part1 left it alone.
+               --  Part2 being closed under Next is what places the successor
+               --  of each of its nodes outside Part1 too.
+
+               Lemma_Reachable_Preserved
+                 (Part2.First, M_Split, Memory (Container));
+               Lemma_Is_Acyclic_Preserved
+                 (Part2.First, M_Split, Memory (Container));
+               Lemma_Reachable_Closed_By_Next (Part2.First, M_Split);
+
+               pragma
+                 Assert
+                   (Static =>
+                      Memory_Index_Sets."="
+                        (Memory_Index_Sets.Union
+                           (Reachable_Set (Part1.First, Memory (Container)),
+                            Reachable_Set (Part2.First, Memory (Container))),
+                         Cells));
+            end;
+
+            declare
+               M_Sorted1 : constant Nodes_Type_Base := Memory (Container)
+               with Ghost => Static;
+            begin
+               Merge_Sort (Part2);
+
+               Lemma_Reachable_Preserved
+                 (Part1.First, M_Sorted1, Memory (Container));
+               Lemma_Is_Acyclic_Preserved
+                 (Part1.First, M_Sorted1, Memory (Container));
+               Lemma_Reachable_Closed_By_Next (Part1.First, M_Sorted1);
+
+               pragma
+                 Assert
+                   (Static =>
+                      Memory_Index_Sets."="
+                        (Memory_Index_Sets.Union
+                           (Reachable_Set (Part1.First, Memory (Container)),
+                            Reachable_Set (Part2.First, Memory (Container))),
+                         Cells));
+            end;
+
+            Merge_Parts (Part1, Part2, Arg);
+         end Merge_Sort;
+
+         ----------------
+         -- Split_List --
+         ----------------
+
+         procedure Split_List
+           (Unsplit : List_Descriptor; Part1, Part2 : out List_Descriptor)
+         is
+            M_Old : constant Nodes_Type_Base := Memory (Container)
+            with Ghost => Static;
+
+            Rover      : Count_Type := Unsplit.First;
+            Bump_Count : constant Count_Type := (Unsplit.Length - 1) / 2;
+
+         begin
+            for Iter in 1 .. Bump_Count loop
+               pragma
+                 Loop_Invariant (Static => Rover in Memory (Container)'Range);
+               pragma
+                 Loop_Invariant
+                   (Static =>
+                      Reachable (Unsplit.First, Memory (Container), Rover));
+               pragma
+                 Loop_Invariant
+                   (Static =>
+                      Memory_Index_Sets.Length
+                        (Reachable_Set (Rover, Memory (Container)))
+                      = Big_Conversions.To_Big (Unsplit.Length - Iter + 1));
+
+               Lemma_Reachable_Is_Acyclic
+                 (Unsplit.First, Rover, Memory (Container));
+               Lemma_Reachable_Def (Rover, Memory (Container));
+               Lemma_Reachable_Closed_By_Next
+                 (Unsplit.First, Memory (Container));
+
+               Rover := Container.Nodes (Rover).Next;
+            end loop;
+
+            Lemma_Reachable_Is_Acyclic
+              (Unsplit.First, Rover, Memory (Container));
+            Lemma_Reachable_Def (Rover, Memory (Container));
+            Lemma_Reachable_Closed_By_Next (Unsplit.First, Memory (Container));
+
+            Part1 :=
+              (First  => Unsplit.First,
+               Last   => Rover,
+               Length => Bump_Count + 1);
+
+            Part2 :=
+              (First  => Container.Nodes (Rover).Next,
+               Last   => Unsplit.Last,
+               Length => Unsplit.Length - Part1.Length);
+
+            pragma Assert (Static => Part2.First in Memory (Container)'Range);
+            pragma
+              Assert
+                (Static =>
+                   Memory_Index_Sets.Length
+                     (Reachable_Set (Part2.First, Memory (Container)))
+                   = Big_Conversions.To_Big (Part2.Length));
+
+            Lemma_Reachable_Is_Acyclic
+              (Unsplit.First, Part2.First, Memory (Container));
+            Lemma_Reachable_Included
+              (Unsplit.First, Part2.First, Memory (Container));
+
+            --  The tail of the segment belongs to the second part: Rover
+            --  heads two nodes or more, so it is not the tail itself, and the
+            --  two are ordered along the chain.
+
+            Lemma_Reachable_Is_Acyclic
+              (Unsplit.First, Unsplit.Last, Memory (Container));
+            Lemma_Reachable_Def (Unsplit.Last, Memory (Container));
+            Lemma_Reachable_Ordered
+              (Unsplit.First, Rover, Unsplit.Last, Memory (Container));
+
+            pragma
+              Assert
+                (Static =>
+                   Reachable (Part2.First, Memory (Container), Unsplit.Last));
+
+            --  Detach
+
+            Container.Nodes (Part1.Last).Next := 0;
+            Container.Nodes (Part2.First).Prev := 0;
+
+            Lemma_Reachable_After_Set
+              (Part1.First, Part1.Last, 0, M_Old, Memory (Container));
+            Lemma_Is_Acyclic_After_Set
+              (Part1.First, Part1.Last, 0, M_Old, Memory (Container));
+            Lemma_Reachable_Preserved (Part2.First, M_Old, Memory (Container));
+            Lemma_Is_Acyclic_Preserved
+              (Part2.First, M_Old, Memory (Container));
+
+            Lemma_Reachable_Closed_By_Next (Part1.First, Memory (Container));
+            Lemma_Reachable_Closed_By_Next (Part2.First, Memory (Container));
+
+            --  Establish the postcondition conjunct by conjunct: merged into
+            --  a single verification condition they time out.
+
+            pragma
+              Assert
+                (Static =>
+                   Memory_Index_Sets.No_Overlap
+                     (Reachable_Set (Part1.First, Memory (Container)),
+                      Reachable_Set (Part2.First, Memory (Container))));
+            pragma
+              Assert (Static => Segment_Valid (Memory (Container), Part1));
+            pragma
+              Assert (Static => Segment_Valid (Memory (Container), Part2));
+            pragma
+              Assert
+                (Static =>
+                   Untouched_Outside
+                     (M_Old,
+                      Memory (Container),
+                      Reachable_Set (Unsplit.First, M_Old)));
+         end Split_List;
+
       begin
          if Container.Length <= 1 then
             return;
          end if;
 
-         pragma Assert (Static => N (Container.First).Prev = 0);
-         pragma Assert (Static => N (Container.Last).Next = 0);
+         Merge_Sort (Whole);
 
-         declare
-            package Descriptors is new
-              List_Descriptors (Node_Ref => Count_Type, Nil => 0);
-            use Descriptors;
+         Container.First := Whole.First;
+         Container.Last := Whole.Last;
 
-            function Next (Idx : Count_Type) return Count_Type
-            is (N (Idx).Next);
-            procedure Set_Next (Idx : Count_Type; Next : Count_Type)
-            with Inline;
-            procedure Set_Prev (Idx : Count_Type; Prev : Count_Type)
-            with Inline;
-            function "<" (L, R : Count_Type) return Boolean
-            is (N (L).Element < N (R).Element);
-            procedure Update_Container (List : List_Descriptor)
-            with Inline;
+         pragma
+           Assert (Static => Active_List_Valid (Container, Container.Length));
 
-            procedure Set_Next (Idx : Count_Type; Next : Count_Type) is
-            begin
-               N (Idx).Next := Next;
-            end Set_Next;
+         --  The sort permutes the links of the active nodes and leaves every
+         --  other node alone, so the free store is untouched and the active
+         --  set is the same as on entry.
 
-            procedure Set_Prev (Idx : Count_Type; Prev : Count_Type) is
-            begin
-               N (Idx).Prev := Prev;
-            end Set_Prev;
+         Lemma_Free_List_Preserved (Container.Free, M_Old, Memory (Container));
 
-            procedure Update_Container (List : List_Descriptor) is
-            begin
-               Container.First := List.First;
-               Container.Last := List.Last;
-               Container.Length := List.Length;
-            end Update_Container;
-
-            procedure Sort_List is new Doubly_Linked_List_Sort;
-         begin
-            Sort_List
-              (List_Descriptor'
-                 (First  => Container.First,
-                  Last   => Container.Last,
-                  Length => Container.Length));
-         end;
-
-         pragma Assert (Static => N (Container.First).Prev = 0);
-         pragma Assert (Static => N (Container.Last).Next = 0);
+         pragma Assert (Static => Covered (Container, 0));
+         pragma
+           Assert
+             (Static => Structural_Invariant (Container, Container.Length));
       end Sort;
 
    end Generic_Sorting;
@@ -2561,7 +3457,14 @@ is
          New_Item  => Source.Nodes (Position.Node).Element,
          Position  => Target_Position);
 
+      --  Take Position's node off Source. Delete exports the active-set
+      --  change (Is_Add), which is what keeps the other Source cursors of a
+      --  caller valid across the move. It also resets the cursor it is given,
+      --  which is discarded here: Position is set to the node's new location
+      --  in Target.
+
       Delete (Source, Position);
+
       Position := Target_Position;
    end Splice;
 

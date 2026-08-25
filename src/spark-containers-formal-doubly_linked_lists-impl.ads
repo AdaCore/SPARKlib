@@ -247,6 +247,15 @@ is
    --  Silver structural invariant. Carried as Static Pre/Post on the
    --  operations and threaded through their loop invariants/variants.
 
+   function Is_Add
+     (S1, S2 : Memory_Index_Set; E : Positive_Count_Type) return Boolean
+   is (not Memory_Index_Sets.Contains (S1, E)
+       and then Memory_Index_Sets.Contains (S2, E)
+       and then Memory_Index_Sets."<=" (S1, S2)
+       and then Memory_Index_Sets.Included_Except (S2, S1, E))
+   with Ghost => Static;
+   --  Return True if S2 is obtained by adding E to S1
+
    --  Runtime-executable model functions (proved run-time-error-free)
 
    function Model (Container : List) return Formal_Model.M.Sequence
@@ -501,7 +510,11 @@ is
    with
      Global     => null,
      Pre        => (Static => Structural_Invariant (Container)),
-     Post       => (Static => Structural_Invariant (Container)),
+     Post       =>
+       (Static =>
+          Structural_Invariant (Container)
+          and then Length (Container) = Length (Container'Old) + 1
+          and then Is_Relevant (Container, Before)),
      Exit_Cases =>
        (not Is_Relevant (Container, Before)
         => (Exception_Raised => Program_Error),
@@ -578,7 +591,20 @@ is
    with
      Global     => null,
      Pre        => (Static => Structural_Invariant (Container)),
-     Post       => (Static => Structural_Invariant (Container)),
+     Post       =>
+       (Static =>
+          Structural_Invariant (Container)
+
+          --  Deleting takes exactly Position's node off the active list, so a
+          --  caller keeps any other cursor valid across the call (Splice
+          --  relies on it, and Merge in turn on Splice).
+
+          and then Length (Container) = Length (Container'Old) - 1
+          and then
+            Is_Add
+              (Active_Set (Container),
+               Active_Set (Container'Old),
+               Position'Old.Node)),
      Exit_Cases =>
        (Has_Element (Container, Position) => Normal_Return,
         others                            =>
@@ -694,7 +720,25 @@ is
      Post       =>
        (Static =>
           Structural_Invariant (Target)
-          and then Structural_Invariant (Source)),
+          and then Structural_Invariant (Source)
+
+          --  Moving a node from Source to Target adds exactly one element to
+          --  Target and takes exactly Position's node off Source, so a caller
+          --  keeps both its Before cursor in Target and any other cursor in
+          --  Source valid across the call (Merge relies on both). Nothing of
+          --  the kind holds on the aliased path, which relinks a single list.
+
+          and then
+            (if not Same_Object_Ghost
+             then
+               Length (Target) = Length (Target'Old) + 1
+               and then Length (Source) = Length (Source'Old) - 1
+               and then Is_Relevant (Target, Before)
+               and then
+                 Is_Add
+                   (Active_Set (Source),
+                    Active_Set (Source'Old),
+                    Position'Old.Node))),
      Exit_Cases =>
        (not Is_Relevant (Target, Before)
         or else
@@ -830,16 +874,31 @@ is
    package Generic_Sorting with SPARK_Mode, Always_Terminates is
 
       function Is_Sorted (Container : List) return Boolean
-      with Global => null;
+      with Global => null, Pre => (Static => Structural_Invariant (Container));
 
       procedure Sort (Container : in out List)
       with
         Global => null,
-        Post   => (Static => Length (Container) = Length (Container)'Old);
+        Pre    => (Static => Structural_Invariant (Container)),
+        Post   =>
+          (Static =>
+             Structural_Invariant (Container)
+             and then Length (Container) = Length (Container'Old));
 
       procedure Merge (Target : in out List; Source : in out List)
       with
-        Global     => SPARK.Containers.Formal.Impl.Address_Space.Address_State,
+        Global     =>
+          (Input    =>
+             SPARK.Containers.Formal.Impl.Address_Space.Address_State,
+           Proof_In => Same_Object_Ghost),
+        Pre        =>
+          (Static =>
+             Structural_Invariant (Target)
+             and then Structural_Invariant (Source)),
+        Post       =>
+          (Static =>
+             Structural_Invariant (Target)
+             and then Structural_Invariant (Source)),
         Exit_Cases =>
           (Exceeds_Count_Type (Length (Target), Length (Source))
            => (Exception_Raised => Constraint_Error),
@@ -847,6 +906,13 @@ is
            => (Exception_Raised => Capacity_Error),
            others
            => Normal_Return);
+      pragma
+        Annotate
+          (GNATprove,
+           Intentional,
+           "exit case might fail",
+           "unreachable in SPARK: on the aliased path Merge raises "
+           & "Program_Error instead, and two in out parameters cannot alias");
       --  May also raise Program_Error when Target and Source denote the same
       --  object; that guard is unreachable in SPARK (two in out parameters
       --  cannot alias) and relies on the volatile Same_Object function, which
