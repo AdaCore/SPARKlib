@@ -127,7 +127,7 @@ is
    with
      Global   => Memory,
      Pre      => Valid (Memory, Address (P)),
-     Post     => Deref'Result = Get (Memory, Address (P)),
+     Post     => Object_Logic_Equal (Deref'Result, Get (Memory, Address (P))),
      Annotate => (GNATprove, Inline_For_Proof);
 
    procedure Assign (P : Pointer; O : Object)

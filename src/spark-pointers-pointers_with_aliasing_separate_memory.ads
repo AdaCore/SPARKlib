@@ -130,7 +130,7 @@ is
    with
      Global   => null,
      Pre      => Valid (+Memory, Address (P)),
-     Post     => Deref'Result = Get (+Memory, Address (P)),
+     Post     => Object_Logic_Equal (Deref'Result, Get (+Memory, Address (P))),
      Annotate => (GNATprove, Inline_For_Proof);
 
    procedure Assign (Memory : in out Memory_Type; P : Pointer; O : Object)
@@ -175,7 +175,8 @@ is
        and then Writes (Memory_Map'(+Target)'Old, +Target, None)
        and then
          (for all A in F =>
-            Get (+Target, A) = Get (Memory_Map'(+Source)'Old, A));
+            Object_Logic_Equal
+              (Get (+Target, A), Get (Memory_Map'(+Source)'Old, A)));
 
    --  Primitives to access the content of a memory cell directly. Ownership is
    --  used to preserve the link between the dereferenced value and the
