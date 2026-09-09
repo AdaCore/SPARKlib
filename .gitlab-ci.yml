@@ -72,14 +72,9 @@ coverage:
     - rm -rf include testsuite/gnatprove/sparklib
     - ln -s $CI_PROJECT_DIR include
     - ln -s $CI_PROJECT_DIR/tests testsuite/gnatprove/sparklib
-    - |
-      rm -rf $CI_PROJECT_DIR/.sparklib-install
-      mkdir -p $CI_PROJECT_DIR/.sparklib-install/lib/gnat
-      mkdir -p $CI_PROJECT_DIR/.sparklib-install/include
-      find $CI_PROJECT_DIR -maxdepth 1 -type f \( -name '*.gpr' -o -name '*.gpr.templ' \) \
-        -exec ln -s {} $CI_PROJECT_DIR/.sparklib-install/lib/gnat/ \;
-      ln -s $CI_PROJECT_DIR/proof $CI_PROJECT_DIR/.sparklib-install/lib/gnat/proof
-      ln -s $CI_PROJECT_DIR/src $CI_PROJECT_DIR/.sparklib-install/include/spark
+    - rm -rf $CI_PROJECT_DIR/.sparklib-install
+    - python3 $CI_PROJECT_DIR/scripts/sparklib_tree.py install-tree
+        --dest $CI_PROJECT_DIR/.sparklib-install --link
     - export SPARKLIB_PROJECT_PATH=$CI_PROJECT_DIR/.sparklib-install
     - cd testsuite/gnatprove
     - section_end "project_setup"
