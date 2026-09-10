@@ -25,63 +25,117 @@ is
         & " [SPARK_ITERABLE]");
    type Map is private
    with
-     Default_Initial_Condition => Is_Empty (Map),
+     Default_Initial_Condition => (Static => Is_Empty (Map)),
      Iterable                  =>
-       (First => Iter_First, Next => Iter_Next, Has_Element => Has_Key);
+       (First => Iter_First, Next => Iter_Next, Has_Element => Has_Key),
+     Annotate                  =>
+       (GNATprove, Predefined_Equality, "No_Equality");
    pragma
      Annotate
        (GNATcheck,
         Exempt_Off,
         "Restrictions:No_Specification_Of_Aspect => Iterable");
 
-   function "=" (Left, Right : Map) return Boolean
-   with Import, Global => null, Annotate => (GNATprove, Logical_Equal);
+   function "=" (Left, Right : Map) return Boolean is abstract;
+   --  Maps have no content at run time, so the predefined equality would
+   --  return True on any two maps. Use Logical_Eq below instead.
+
+   function Logical_Eq (Left, Right : Map) return Boolean
+   with
+     Global   => null,
+     Ghost    => Static,
+     Import,
+     Annotate => (GNATprove, Logical_Equal);
 
    function Empty_Map return Map
-   with Global => null, Post => Is_Empty (Empty_Map'Result);
+   with Global => null, Post => (Static => Is_Empty (Empty_Map'Result));
 
    function Has_Key (M : Map; K : Key_Type) return Boolean
-   with Import, Global => null, Post => (if Has_Key'Result then K /= No_Key);
+   with
+     Global => null,
+     Ghost  => Static,
+     Import,
+     Post   => (if Has_Key'Result then K /= No_Key);
 
-   function Get (M : Map; K : Key_Type) return Object_Type
-   with Import, Global => null, Pre => Has_Key (M, K);
+   function Get
+     (M : Map; K : Key_Type) return not null access constant Object_Type
+   with Global => null, Ghost => Static, Import, Pre => Has_Key (M, K);
 
    --  For quantification only. Do not use to iterate through the map.
    function Iter_First (M : Map) return Key_Type
-   with Global => null, Import;
+   with Global => null, Import, Ghost => Static;
    function Iter_Next (M : Map; K : Key_Type) return Key_Type
-   with Global => null, Import;
+   with Global => null, Import, Ghost => Static;
 
    function Is_Empty (M : Map) return Boolean
    is (for all K in M => False)
+   with Global => null, Ghost => Static;
+
+   --  A map subject to ownership with reclamation checks: assignment moves it,
+   --  and a reclamation check is emitted when it goes out of scope.
+
+   type Owning_Map_Needs_Reclamation is private
+   with
+     Default_Initial_Condition =>
+       (Static => Is_Empty (Owning_Map_Needs_Reclamation)),
+     Annotate                  => (GNATprove, Ownership, "Needs_Reclamation"),
+     Annotate                  =>
+       (GNATprove, Predefined_Equality, "No_Equality");
+
+   function "=" (Left, Right : Owning_Map_Needs_Reclamation) return Boolean
+   is abstract;
+
+   function "+" (M : Owning_Map_Needs_Reclamation) return Map
    with Global => null;
 
-   type Ownership_Map is private
-   with Annotate => (GNATprove, Ownership, "Needs_Reclamation");
+   function Logical_Eq
+     (Left, Right : Owning_Map_Needs_Reclamation) return Boolean
+   is (Logical_Eq (+Left, +Right))
+   with Global => null, Ghost => Static;
 
-   function "+" (M : Ownership_Map) return Map
-   with Global => null;
-
-   function "=" (Left, Right : Ownership_Map) return Boolean
-   is (+Left = +Right);
-
-   function Is_Empty (M : Ownership_Map) return Boolean
+   function Is_Empty (M : Owning_Map_Needs_Reclamation) return Boolean
    is (for all K in "+" (M) => False)
-   with Global => null, Annotate => (GNATprove, Ownership, "Is_Reclaimed");
+   with
+     Global   => null,
+     Annotate => (GNATprove, Ownership, "Is_Reclaimed"),
+     Ghost    => Static;
 
-   function Empty_Map return Ownership_Map
-   with Global => null, Post => Is_Empty (Empty_Map'Result);
+   function Empty_Map return Owning_Map_Needs_Reclamation
+   with Global => null, Post => (Static => Is_Empty (Empty_Map'Result));
 
-   --  Keys and elements of abstract maps are (implicitely) copied in this
-   --  package. These functions causes GNATprove to verify that such a copy
-   --  is valid (in particular, it does not break the ownership policy of
-   --  SPARK, i.e. it does not contain pointers that could be used to alias
-   --  mutable data).
+   --  A map subject to ownership but with no reclamation checks: assignment
+   --  moves it, so there is never a second name for one map, and no
+   --  reclamation check is emitted when it goes out of scope. Use the flavor
+   --  above for a map that must be emptied before it dies.
+
+   type Owning_Map is private
+   with
+     Default_Initial_Condition => (Static => Is_Empty (Owning_Map)),
+     Annotate                  => (GNATprove, Ownership),
+     Annotate                  =>
+       (GNATprove, Predefined_Equality, "No_Equality");
+
+   function "=" (Left, Right : Owning_Map) return Boolean is abstract;
+
+   function "+" (M : Owning_Map) return Map
+   with Global => null;
+
+   function Logical_Eq (Left, Right : Owning_Map) return Boolean
+   is (Logical_Eq (+Left, +Right))
+   with Global => null, Ghost => Static;
+
+   function Is_Empty (M : Owning_Map) return Boolean
+   is (for all K in "+" (M) => False)
+   with Global => null, Ghost => Static;
+
+   function Empty_Map return Owning_Map
+   with Global => null, Post => (Static => Is_Empty (Empty_Map'Result));
+
+   --  Keys are copied by this package, they should not be subject to ownership
 
    function Copy_Key (K : Key_Type) return Key_Type
-   is (K);
-   function Copy_Object (O : Object_Type) return Object_Type
-   is (O);
+   is (K)
+   with Global => null;
 
 private
    pragma SPARK_Mode (Off);
@@ -91,11 +145,23 @@ private
    function Empty_Map return Map
    is ((null record));
 
-   type Ownership_Map is new Map;
+   type Owning_Map_Needs_Reclamation is record
+      M : Map;
+   end record;
 
-   function "+" (M : Ownership_Map) return Map
-   is (Map (M));
+   function "+" (M : Owning_Map_Needs_Reclamation) return Map
+   is (M.M);
 
-   function Empty_Map return Ownership_Map
-   is ((null record));
+   function Empty_Map return Owning_Map_Needs_Reclamation
+   is (M => (null record));
+
+   type Owning_Map is record
+      M : Map;
+   end record;
+
+   function "+" (M : Owning_Map) return Map
+   is (M.M);
+
+   function Empty_Map return Owning_Map
+   is (M => (null record));
 end SPARK.Pointers.Abstract_Maps;

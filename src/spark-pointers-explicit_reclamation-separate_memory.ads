@@ -1,0 +1,338 @@
+--
+--  Copyright (C) 2022-2026, AdaCore
+--
+--  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+--
+
+--  Pointers with aliasing over memories passed as objects.
+--
+--  Reclamation is explicit, as in Explicit_Reclamation.Global_Memory. Here
+--  Memory_Type is subject to ownership, so two memory objects are necessarily
+--  disjoint and a memory left non-empty at the end of its scope raises a leak
+--  check. Disjointness gives the frame conditions of an operation from its
+--  profile, and is what makes Move_Memory correct.
+
+with SPARK.Pointers.Abstract_Maps;
+with SPARK.Pointers.Abstract_Sets;
+with SPARK.Pointers.Handles.Plain_Handles;
+with SPARK.Pointers.Parameter_Checks;
+
+generic
+   type Object (<>) is private;
+   with
+     function Is_Reclaimed (X : Object) return Boolean
+     with Ghost => Static;
+
+package SPARK.Pointers.Explicit_Reclamation.Separate_Memory with
+    SPARK_Mode,
+    Always_Terminates
+is
+   pragma Unevaluated_Use_Of_Old (Allow);
+
+   --  The Is_Reclaimed function shall only return True on reclaimed values
+
+   package Reclamation_Checks is new
+     Parameter_Checks.Is_Reclaimed_Checks (Object, Is_Reclaimed);
+
+   package Definitions is
+
+      type Pointer is private
+      with Default_Initial_Condition => (Static => Pointer = Null_Pointer);
+
+      Null_Pointer : constant Pointer;
+
+      function "=" (P1, P2 : Pointer) return Boolean
+      with Global => null, Annotate => (GNATprove, Logical_Equal);
+
+      --  Operations on the cell designated by a pointer. They are used by the
+      --  rest of the library to reach the full view of Pointer. They are
+      --  incompatible with the ownership policy of SPARK and should not be
+      --  used directly.
+
+      function To_Access (P : Pointer) return not null access Object
+      with SPARK_Mode => Off, Inline;
+
+      function Allocate (O : Object) return Pointer
+      with SPARK_Mode => Off, Inline;
+
+      procedure Deallocate (P : in out Pointer)
+      with SPARK_Mode => Off, Inline;
+
+   private
+      pragma SPARK_Mode (Off);
+
+      type Object_Access is access Object;
+      for Object_Access'Size use Standard'Address_Size;
+      --  A thin pointer, so that the conversions in the handle layer are
+      --  correct for an indefinite Object, for which GNAT would otherwise use
+      --  a fat pointer.
+
+      type Pointer is record
+         P : Object_Access;
+      end record;
+
+      Null_Pointer : constant Pointer := (P => null);
+
+      function "=" (P1, P2 : Pointer) return Boolean
+      is (P1.P = P2.P);
+
+      function To_Access (P : Pointer) return not null access Object
+      is (P.P);
+
+      function Allocate (O : Object) return Pointer
+      is (Pointer'(P => new Object'(O)));
+   end Definitions;
+
+   subtype Pointer is Definitions.Pointer;
+
+   Null_Pointer : Pointer renames Definitions.Null_Pointer;
+
+   function "=" (P1, P2 : Pointer) return Boolean renames Definitions."=";
+
+   --  Model for the memory, this is not executable
+
+   package Memory_Model is
+
+      package Pointer_To_Object_Maps is new
+        SPARK.Pointers.Abstract_Maps (Pointer, Null_Pointer, Object);
+      --  Use an abstract map rather than a functional map to avoid taking up
+      --  memory space as the memory model cannot be ghost.
+
+      subtype Memory_Map is Pointer_To_Object_Maps.Map;
+
+      type Memory_Type is
+        new Pointer_To_Object_Maps.Owning_Map_Needs_Reclamation;
+
+      --  Whether the memory holds a cell for this pointer
+      function In_Memory (M : Memory_Map; P : Pointer) return Boolean
+      renames Pointer_To_Object_Maps.Has_Key;
+
+      function Get
+        (M : Memory_Map; P : Pointer) return not null access constant Object
+      renames Pointer_To_Object_Maps.Get;
+
+      function Is_Empty (M : Memory_Map) return Boolean
+      renames Pointer_To_Object_Maps.Is_Empty;
+
+      function Object_Logic_Equal (Left, Right : Object) return Boolean
+      with
+        Ghost    => Static,
+        Import,
+        Global   => null,
+        Annotate => (GNATprove, Logical_Equal);
+      --  Logical equality on objects. It is marked as import as it cannot be
+      --  safely executed on most object types.
+
+      --  Functions to make it easier to specify the frame of subprograms
+      --  modifying a memory.
+
+      package Pointer_Sets is new
+        SPARK.Pointers.Abstract_Sets (Pointer, Null_Pointer);
+      --  Use an abstract set rather than a functional set to avoid taking up
+      --  memory space as the footprints cannot be ghost.
+
+      type Footprint is new Pointer_Sets.Set;
+
+      function None return Footprint renames Empty_Set;
+      function Only (P : Pointer) return Footprint renames Singleton;
+
+      function Writes (M1, M2 : Memory_Map; Target : Footprint) return Boolean
+      is (for all P in M1 =>
+            (if not Contains (Target, P) and In_Memory (M2, P)
+             then Object_Logic_Equal (Get (M1, P).all, Get (M2, P).all)))
+      with Ghost => Static, Global => null;
+
+      function Allocates
+        (M1, M2 : Memory_Map; Target : Footprint) return Boolean
+      is ((for all P in M2 => Contains (Target, P) or In_Memory (M1, P))
+          and
+            (for all P in Target =>
+               not In_Memory (M1, P) and In_Memory (M2, P)))
+      with Ghost => Static, Global => null;
+
+      function Deallocates
+        (M1, M2 : Memory_Map; Target : Footprint) return Boolean
+      is ((for all P in M1 => Contains (Target, P) or In_Memory (M2, P))
+          and
+            (for all P in Target =>
+               not In_Memory (M2, P) and In_Memory (M1, P)))
+      with Ghost => Static, Global => null;
+   end Memory_Model;
+
+   use Memory_Model;
+
+   generic
+      with function Copy (O : Object) return Object;
+      --  A copy of the designated value
+
+   package Copy_Operations with Always_Terminates
+   is
+
+      procedure Create_Copy
+        (Memory : in out Memory_Type; O : Object; P : out Pointer)
+      with
+        Global => SPARK.Pointers.Memory_Addresses,
+        Post   =>
+          (Static =>
+             (Allocates (Memory_Map'(+Memory)'Old, +Memory, Only (P))
+              and Deallocates (Memory_Map'(+Memory)'Old, +Memory, None)
+              and Writes (Memory_Map'(+Memory)'Old, +Memory, None))
+             and then In_Memory (+Memory, P)
+             and then Object_Logic_Equal (Get (+Memory, P).all, Copy (O)));
+
+      --  Primitives for classical pointer functionalities. Deref will copy the
+      --  designated value.
+
+      function Deref (Memory : Memory_Type; P : Pointer) return Object
+      with
+        Global   => null,
+        Pre      => (Static => In_Memory (+Memory, P)),
+        Post     =>
+          (Static =>
+             Object_Logic_Equal (Deref'Result, Copy (Get (+Memory, P).all))),
+        Annotate => (GNATprove, Inline_For_Proof);
+
+      procedure Assign (Memory : in out Memory_Type; P : Pointer; O : Object)
+      with
+        Global => null,
+        Pre    =>
+          (Static =>
+             In_Memory (+Memory, P)
+             and then Is_Reclaimed (Get (+Memory, P).all)),
+        Post   =>
+          (Static =>
+             (Allocates (Memory_Map'(+Memory)'Old, +Memory, None)
+              and Deallocates (Memory_Map'(+Memory)'Old, +Memory, None)
+              and Writes (Memory_Map'(+Memory)'Old, +Memory, Only (P)))
+             and then Object_Logic_Equal (Get (+Memory, P).all, Copy (O)));
+
+   end Copy_Operations;
+
+   generic
+      type Input (<>) is private;
+      with function Create_Object (X : Input) return Object;
+   procedure Create (Memory : in out Memory_Type; X : Input; P : out Pointer)
+   with
+     Global => SPARK.Pointers.Memory_Addresses,
+     Post   =>
+       (Static =>
+          (Allocates (Memory_Map'(+Memory)'Old, +Memory, Only (P))
+           and Deallocates (Memory_Map'(+Memory)'Old, +Memory, None)
+           and Writes (Memory_Map'(+Memory)'Old, +Memory, None))
+          and then In_Memory (+Memory, P)
+          and then
+            Object_Logic_Equal (Get (+Memory, P).all, Create_Object (X)));
+
+   procedure Dealloc (Memory : in out Memory_Type; P : in out Pointer)
+   with
+     Global  => null,
+     Depends => (P => null, Memory => (Memory, P)),
+     Pre     =>
+       (Static =>
+          P = Null_Pointer
+          or else
+            (In_Memory (+Memory, P)
+             and then Is_Reclaimed (Get (+Memory, P).all))),
+     Post    =>
+       (Static =>
+          P = Null_Pointer
+          and then Allocates (Memory_Map'(+Memory)'Old, +Memory, None)
+          and then
+            (if P'Old = Null_Pointer
+             then Deallocates (Memory_Map'(+Memory)'Old, +Memory, None)
+             else
+               Deallocates (Memory_Map'(+Memory)'Old, +Memory, Only (P'Old)))
+          and then Writes (Memory_Map'(+Memory)'Old, +Memory, None));
+
+   procedure Move_Memory (Source, Target : in out Memory_Type; F : Footprint)
+   with
+     --  Move addresses from a memory to another.
+     --  This is correct because of the implicit invariant that 2 different
+     --  memory objects are necessarily disjoint.
+     Inline,
+     Global => null,
+     Pre    => (Static => (for all A in F => In_Memory (+Source, A))),
+     Post   =>
+       (Static =>
+          Allocates (Memory_Map'(+Source)'Old, +Source, None)
+          and then Deallocates (Memory_Map'(+Source)'Old, +Source, F)
+          and then Writes (Memory_Map'(+Source)'Old, +Source, None)
+          and then Allocates (Memory_Map'(+Target)'Old, +Target, F)
+          and then Deallocates (Memory_Map'(+Target)'Old, +Target, None)
+          and then Writes (Memory_Map'(+Target)'Old, +Target, None)
+          and then
+            (for all A in F =>
+               Object_Logic_Equal
+                 (Get (+Target, A).all,
+                  Get (Memory_Map'(+Source)'Old, A).all)));
+
+   --  Primitives to access the content of a memory cell directly. Ownership is
+   --  used to preserve the link between the dereferenced value and the
+   --  memory model.
+
+   function Constant_Reference
+     (Memory : Memory_Type; P : Pointer) return not null access constant Object
+   with
+     Global => null,
+     Pre    => (Static => In_Memory (+Memory, P)),
+     Post   =>
+       (Static =>
+          Object_Logic_Equal
+            (Constant_Reference'Result.all, Get (+Memory, P).all));
+
+   function At_End (X : access constant Object) return access constant Object
+   is (X)
+   with Ghost, Global => null, Annotate => (GNATprove, At_End_Borrow);
+
+   function At_End (X : Memory_Type) return Memory_Type
+   is (X)
+   with Ghost, Global => null, Annotate => (GNATprove, At_End_Borrow);
+
+   function Reference
+     (Memory : Memory_Type; P : Pointer) return not null access Object
+   with
+     Global => null,
+     Pre    => (Static => In_Memory (+Memory, P)),
+     Post   =>
+       (Static =>
+          Object_Logic_Equal
+            (At_End (Reference'Result).all, Get (+At_End (Memory), P).all)
+          and then Allocates (+Memory, +At_End (Memory), None)
+          and then Deallocates (+Memory, +At_End (Memory), None)
+          and then Writes (+Memory, +At_End (Memory), Only (P)));
+
+   --  Abstract handles can be used to create recursive data structure. As the
+   --  Pointer type is not subject to ownership, simple handles should be used
+   --  here.
+
+   package Handle_Operations is
+
+      use SPARK.Pointers.Handles.Plain_Handles;
+
+      function Valid_Handle (H : Handle) return Boolean
+      with Import, Ghost => Static, Global => null;
+      --  Abstract predicate: H is a valid handle for Pointer
+
+      --  Conversion functions
+
+      function To_Handle (P : Pointer) return Handle
+      with
+        Global => null,
+        Post   =>
+          (Static =>
+             Valid_Handle (To_Handle'Result)
+             and then Of_Handle (To_Handle'Result) = P);
+
+      function Of_Handle (H : Handle) return Pointer
+      with Global => null, Pre => (Static => Valid_Handle (H));
+
+      function "=" (X, Y : Handle) return Boolean
+      with
+        Global   => null,
+        Pre      => (Static => Valid_Handle (X) and Valid_Handle (Y)),
+        Post     => (Static => "="'Result = (Of_Handle (X) = Of_Handle (Y))),
+        Annotate => (GNATprove, Inline_For_Proof);
+
+   end Handle_Operations;
+
+end SPARK.Pointers.Explicit_Reclamation.Separate_Memory;

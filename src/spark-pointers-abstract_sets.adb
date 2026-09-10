@@ -13,9 +13,4 @@ is
       return Set
    is ((null record));
 
-   procedure All_Elements_Chosen
-     (Choose : not null access function (E : Element_Type) return Boolean;
-      E      : Element_Type)
-   is null;
-
 end SPARK.Pointers.Abstract_Sets;
