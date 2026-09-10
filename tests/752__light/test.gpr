@@ -5,7 +5,7 @@ project Test is
    for Runtime ("ada") use "light";
 
    package Compiler is
-      for Default_Switches ("Ada") use ("-gnat2022", "-gnateDSPARK_BODY_MODE=Off");
+      for Default_Switches ("Ada") use ("-gnat2022");
    end Compiler;
 
 end Test;

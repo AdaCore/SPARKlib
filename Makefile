@@ -16,9 +16,20 @@ cpp -w -I proof/Coq/common | sed -e 's/^#.*$$//g' > $@
 clean:
 	find proof -name "*.v" -delete
 
+# -gnatwU is needed because the only use some units make of SPARK.Body_Mode is
+# in a SPARK_Mode pragma or aspect, and the front end does not record that as a
+# reference, so -gnatg would report the with clause as unused.
+# ??? Drop it once the front end records such references.
+CHECK_SWITCHES=-c -f -gnatc -gnatg -gnatwU -gnat2022 -gnatwe -k
+
+# Both libraries are checked in the default mode, and the full one is checked
+# in body mode as well.
+# We don't check light library in body mode due to a front-end crash:
+#   eng/toolchain/gnat#2015
 check:
-	SPARKLIB_INSTALLED=False SPARKLIB_BODY_MODE=On gprbuild -P sparklib_internal.gpr -c -f -gnatc -gnatg -gnat2022 -gnateDSPARK_BODY_MODE=On -gnatwe -k
-	SPARKLIB_INSTALLED=False SPARKLIB_BODY_MODE=On gprbuild -P sparklib_light_internal.gpr -c -f -gnatc -gnatg -gnat2022 -gnateDSPARK_BODY_MODE=On -gnatwe -k
+	SPARKLIB_INSTALLED=False gprbuild -P sparklib_internal.gpr $(CHECK_SWITCHES)
+	SPARKLIB_INSTALLED=False gprbuild -P sparklib_light_internal.gpr $(CHECK_SWITCHES)
+	SPARKLIB_INSTALLED=False SPARKLIB_BODY_MODE=On gprbuild -P sparklib_internal.gpr $(CHECK_SWITCHES)
 
 format:
 	SPARKLIB_INSTALLED=False gnatformat -P sparklib_internal.gpr

@@ -11,9 +11,37 @@ abstract project SPARKlib_common is
    type SPARKlib_Installed_T is ("True", "False");
    SPARKlib_Installed : SPARKlib_Installed_T := External("SPARKLIB_INSTALLED", "True");
 
-   --  Enforce GNAT style checks, except for multiple blank lines which does
-   --  not work for preprocessed files, and alphabetical ordering of
-   --  subprogram bodies (although not applicable to null subprograms).
+   --  Environment variable SPARKLIB_BODY_MODE controls whether the library
+   --  bodies, and the private parts they rely on, are analysed (value "On")
+   --  or hidden from analysis (value "Off", the default). The two settings
+   --  select different variants of the root SPARK unit and of SPARK.Body_Mode,
+   --  the unit holding the static Boolean that the SPARK_Mode pragmas and
+   --  aspects of the library are written against.
+
+   type SPARKlib_Body_Mode_T is ("On", "Off");
+   SPARKlib_Body_Mode : SPARKlib_Body_Mode_T :=
+     External ("SPARKLIB_BODY_MODE", "Off");
+
+   --  Files providing the mode-dependent units. They do not follow the Ada
+   --  naming scheme, so that only the variant named by the Naming package
+   --  below is ever a source of the library. Projects that restrict
+   --  Source_Files explicitly need to name them, as the names vary with the
+   --  mode.
+
+   Mode_Source_Files := ();
+
+   case SPARKlib_Body_Mode is
+      when "On" =>
+         Mode_Source_Files :=
+           ("spark__exec.ads.in", "spark-body_mode__on.ads.in");
+      when "Off" =>
+         Mode_Source_Files :=
+           ("spark__prove.ads.in", "spark-body_mode__off.ads.in");
+   end case;
+
+   --  Enforce GNAT style checks, except for multiple blank lines and
+   --  alphabetical ordering of subprogram bodies (although not applicable to
+   --  null subprograms).
    Common_Default_Switches :=
      ("-gnat2022", "-gnatygo-u",
       "-gnatwI");  --  disable warnings about SPARKlib using GNAT internal units
@@ -30,6 +58,17 @@ abstract project SPARKlib_common is
    package Compiler is
       for Default_Switches ("Ada") use Common_Default_Switches;
    end Compiler;
+
+   package Naming is
+      case SPARKlib_Body_Mode is
+         when "On" =>
+            for Spec ("SPARK") use "spark__exec.ads.in";
+            for Spec ("SPARK.Body_Mode") use "spark-body_mode__on.ads.in";
+         when "Off" =>
+            for Spec ("SPARK") use "spark__prove.ads.in";
+            for Spec ("SPARK.Body_Mode") use "spark-body_mode__off.ads.in";
+      end case;
+   end Naming;
 
    package Prove is
       for Proof_Dir use "proof";

@@ -6,8 +6,10 @@
 
 pragma Ada_2022;
 
+with SPARK.Body_Mode;
+
 package body SPARK.Containers.Functional.Vectors.Higher_Order
-  with SPARK_Mode => Off --  #BODYMODE
+  with SPARK_Mode => SPARK.Body_Mode.Enabled
 is
 
    function Count_Rec

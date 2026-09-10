@@ -17,16 +17,23 @@ found in the [SPARK User's Guide](https://docs.adacore.com/spark2014-docs/html/u
 
 # 4. Testing
 
-Some units or subprograms are in `SPARK_Mode => Off` for regular use, but
+Some units or subprograms are hidden from analysis for regular use, but
 `SPARK_Mode` should be enabled for specific tests. For this use case, these
-tests use sparklib in a special body mode. In this mode, the marked subprograms
-are moved to `SPARK_Mode => On` via a script. The following patterns are
-recognized:
+tests use sparklib in a special body mode. The affected pragmas and aspects
+name the static Boolean constant `SPARK.Body_Mode.Enabled` instead of `On` or
+`Off`:
 ```
-   pragma SPARK_Mode (Off); --  #BODYMODE
+   pragma SPARK_Mode (SPARK.Body_Mode.Enabled);
 ```
 and
 
 ```
-  with SPARK_Mode => Off --  #BODYMODE
+  with SPARK_Mode => SPARK.Body_Mode.Enabled
 ```
+
+Two variants of `SPARK.Body_Mode` exist, one for each value of the constant.
+The library project files select between them, and between the two variants of
+the root `SPARK` unit, through the `SPARKLIB_BODY_MODE` external, whose value
+is `On` or `Off` (the default). Neither variant follows the Ada naming scheme,
+so only the one named by the projects' `Naming` package is ever a source of the
+library.

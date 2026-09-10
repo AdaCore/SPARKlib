@@ -4,10 +4,8 @@ import difflib
 import glob
 import os
 from pathlib import Path
-import re
 import shutil
 import sys
-import tempfile
 
 
 LIB_PYTHON_DIR = (
@@ -224,83 +222,12 @@ def choose_mode():
             kill_and_regenerate(sys.argv[1])
 
 
-def preprocess_sparklib_source_file(filepath):
-    """
-    Reads a file line by line and replaces specific SPARK_Mode patterns
-    in-place, preserving line numbers.
-
-    Args:
-        filepath (str): The path to the file to be processed.
-    """
-    # Pattern 1: Recognizes '... SPARK_Mode => Off --  #BODYMODE' at the end of a line.
-    # It's case-insensitive and handles variable whitespace.
-    # This will be used with re.sub to replace 'Off' with 'On' while preserving
-    # any leading content on the line.
-    pattern_to_enable = re.compile(
-        r"(SPARK_Mode\s*=>\s*)Off(\s*--  #BODYMODE\s*$)", re.IGNORECASE
-    )
-
-    # Pattern 2: Recognizes a line containing only
-    # 'pragma SPARK_Mode (Off); -- # #BODYMODE'
-    # It's case-insensitive and handles variable whitespace.
-    pattern_to_remove = re.compile(
-        r"^\s*pragma\s+SPARK_Mode\s*\(\s*Off\s*\)\s*;\s*--  #BODYMODE\s*$",
-        re.IGNORECASE,
-    )
-
-    fd, temp_path = tempfile.mkstemp()
-
-    try:
-        with os.fdopen(fd, "w", newline="") as newfile:
-            with open(filepath, "r", newline="") as oldfile:
-                for line in oldfile:
-                    # Test for the first pattern and replace using re.subn.
-                    # re.subn returns a tuple: (new_string, number_of_subs_made).
-                    # This handles cases where the pattern is not at the start
-                    # of the line.
-                    new_line, count = pattern_to_enable.subn(r"\1On\2", line)
-                    if count > 0:
-                        # If a substitution was made, write the modified line.
-                        # new_line already contains the original newline
-                        # character.
-                        newfile.write(new_line)
-                        continue
-
-                    # Test for the second pattern.
-                    # This pattern is expected to match the entire line.
-                    match_remove = pattern_to_remove.match(line)
-                    if match_remove:
-                        if line.endswith("\r\n"):
-                            # Preserve Windows-style line endings.
-                            newfile.write("\r\n")
-                        elif line.endswith("\n"):
-                            # Preserve Unix-style line endings.
-                            newfile.write("\n")
-                        else:
-                            # EOF case
-                            pass
-                        continue
-
-                    # If no pattern is matched, write the original line back to
-                    # the file.  'line' already contains a newline character.
-                    newfile.write(line)
-
-        # Replace the original file with the modified temporary file.
-        shutil.move(temp_path, filepath)
-
-    except FileNotFoundError:
-        print(f"Error: The file {filepath!r} was not found.", file=sys.stderr)
-        sys.exit(1)
-    except Exception as e:
-        print(f"An unexpected error occurred: {e}", file=sys.stderr)
-        sys.exit(1)
-
-
 sparklib_gen_content = """
 with "sparklib_common";
 project sparklib_gen is
-   for Source_Dirs use ("src2", "src2/full");
+   for Source_Dirs use ("src", "src/full");
    for Object_Dir use "obj2";
+   package Naming renames SPARKlib_common.Naming;
    package Compiler is
       for Default_Switches ("Ada") use ("-gnat2022", "-gnatygo-u", "-gnata", "-gnatwI");
    end Compiler;
@@ -314,13 +241,10 @@ end sparklib_gen;
 try:
     with open("sparklib_gen.gpr", "w") as f_prj:
         f_prj.write(sparklib_gen_content)
-    shutil.copytree("src", "src2")
-    for path_obj in Path("src2").rglob("*"):
-        if path_obj.is_file():
-            preprocess_sparklib_source_file(path_obj)
+    # The sessions record the proofs of the library bodies, so they are
+    # generated with the bodies exposed to analysis.
+    os.environ["SPARKLIB_BODY_MODE"] = "On"
     choose_mode()
 finally:
     if os.path.isfile("sparklib_gen.gpr"):
         os.remove("sparklib_gen.gpr")
-    if os.path.isdir("src2"):
-        shutil.rmtree("src2")

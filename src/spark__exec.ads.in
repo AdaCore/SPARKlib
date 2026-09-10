@@ -4,7 +4,10 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
---  This file replaces spark.ads for testing in "body mode"
+--  Variant of the root SPARK unit used in body mode, selected through the
+--  SPARKLIB_BODY_MODE external of the library project files. It differs from
+--  the regular variant in that no assertion level is static, so that all of
+--  them can be executed.
 
 pragma Assertion_Level (SPARKlib_Defensive);
 pragma Assertion_Level (SPARKlib_Logic);

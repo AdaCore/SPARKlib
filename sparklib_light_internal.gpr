@@ -23,6 +23,8 @@ project SPARKlib_Light_Internal is
          for Object_Dir use "obj";
    end case;
 
+   package Naming renames SPARKlib_common.Naming;
+
    package Compiler renames SPARKlib_common.Compiler;
 
    package Prove renames SPARKlib_common.Prove;

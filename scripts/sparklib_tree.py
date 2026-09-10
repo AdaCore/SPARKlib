@@ -2,11 +2,10 @@
 
 """Build and inspect SPARKlib trees.
 
-This helper script establishes an "installed-tree" layout for SPARKlib,
-including possible preprocessing. It can be called directly or used as a
-library.
+This helper script establishes an "installed-tree" layout for SPARKlib. It can
+be called directly or used as a library.
 
-The three shapes are:
+The two shapes are:
 
   source tree      the SPARKlib repository itself: project files at the root,
                    sources in "src", Coq material in "proof". Used with
@@ -14,26 +13,20 @@ The three shapes are:
 
   installed tree   what a SPARK install exposes:
                      <root>/lib/gnat/{*.gpr,*.gpr.templ,proof}
-                     <root>/include/spark/{*.ad?,full,light}
+                     <root>/include/spark/{sources,full,light}
                    Used with SPARKLIB_INSTALLED=True, which is the default.
-
-  body-mode tree   an installed tree whose sources have been preprocessed to
-                   enable SPARK_Mode on the library bodies, and whose "spark.ads"
-                   has been replaced by the variant suitable for execution.
 
 Run with --help for the list of subcommands.
 """
 
 import argparse
 import os
-import re
 import shutil
 import sys
-import tempfile
 from pathlib import Path
 
 # The name of the project file that identifies a directory as the one holding
-# the SPARKlib projects, in any of the three shapes.
+# the SPARKlib projects, in either shape.
 ANCHOR_PROJECT = "sparklib_internal.gpr"
 
 # Location of the SPARKlib sources inside an installed tree, relative to its
@@ -47,9 +40,11 @@ INSTALLED_PROJECT_DIR = os.path.join("lib", "gnat")
 # Subdirectories of the sources that hold the variant-specific units.
 SOURCE_VARIANTS = ("full", "light")
 
-# The source file that replaces "spark.ads" in every variant when building a
-# body-mode tree.
-EXEC_UNIT = "spark__exec.ads"
+# Glob patterns matching the source files of the library. The mode-dependent
+# variants deliberately do not follow the Ada naming scheme, so that only the
+# one selected by the projects' Naming package is a source; they still have to
+# be transferred, as either one may be selected.
+SOURCE_PATTERNS = ("*.ad?", "*.ads.in", "*.adb.in")
 
 
 def source_root(path=None):
@@ -194,12 +189,14 @@ def install_tree(dest, source=None, link=False):
         transfer(root / "src", src_dir, link=True)
     else:
         src_dir.mkdir(parents=True)
-        for unit in sorted((root / "src").glob("*.ad?")):
-            transfer(unit, src_dir / unit.name, link=False)
+        for pattern in SOURCE_PATTERNS:
+            for unit in sorted((root / "src").glob(pattern)):
+                transfer(unit, src_dir / unit.name, link=False)
         for variant in SOURCE_VARIANTS:
             (src_dir / variant).mkdir(parents=True, exist_ok=True)
-            for unit in sorted((root / "src" / variant).glob("*.ad?")):
-                transfer(unit, src_dir / variant / unit.name, link=False)
+            for pattern in SOURCE_PATTERNS:
+                for unit in sorted((root / "src" / variant).glob(pattern)):
+                    transfer(unit, src_dir / variant / unit.name, link=False)
 
     for pattern in ("*.gpr", "*.gpr.templ"):
         for project in sorted(root.glob(pattern)):
@@ -218,105 +215,8 @@ def do_check_tree(args):
     print(check_installed_tree(args.root))
 
 
-# Patterns marking the parts of the library that are only analysed in body
-# mode. Both are anchored on the "#BODYMODE" marker comment.
-
-# "... SPARK_Mode => Off --  #BODYMODE" at the end of a line: enable the mode
-# while preserving whatever precedes it on the line.
-PATTERN_TO_ENABLE = re.compile(
-    r"(SPARK_Mode\s*=>\s*)Off(\s*--  #BODYMODE\s*$)", re.IGNORECASE
-)
-
-# A line holding nothing but "pragma SPARK_Mode (Off); --  #BODYMODE": drop the
-# pragma but keep the line, so that line numbers are preserved.
-PATTERN_TO_REMOVE = re.compile(
-    r"^\s*pragma\s+SPARK_Mode\s*\(\s*Off\s*\)\s*;\s*--  #BODYMODE\s*$",
-    re.IGNORECASE,
-)
-
-
-def preprocess_file(filepath):
-    """Rewrite the SPARK_Mode markers of one file in place.
-
-    Line numbers are preserved, so that diagnostics and committed sessions
-    still refer to the right places.
-    """
-    fd, temp_path = tempfile.mkstemp()
-    try:
-        with os.fdopen(fd, "w", newline="") as newfile:
-            with open(filepath, "r", newline="") as oldfile:
-                for line in oldfile:
-                    new_line, count = PATTERN_TO_ENABLE.subn(r"\1On\2", line)
-                    if count > 0:
-                        newfile.write(new_line)
-                        continue
-
-                    if PATTERN_TO_REMOVE.match(line):
-                        # Keep the line ending, drop the pragma. The last line
-                        # of a file may have no line ending at all.
-                        if line.endswith("\r\n"):
-                            newfile.write("\r\n")
-                        elif line.endswith("\n"):
-                            newfile.write("\n")
-                        continue
-
-                    newfile.write(line)
-        # The temporary file is private to its creator, whereas the file
-        # being rewritten keeps whatever access the installation gave it.
-        shutil.copymode(filepath, temp_path)
-        shutil.move(temp_path, filepath)
-    except Exception:
-        if os.path.exists(temp_path):
-            os.unlink(temp_path)
-        raise
-
-
-def do_preprocess(args):
-    """Rewrite the SPARK_Mode markers of the given files in place"""
-    for filepath in args.files:
-        preprocess_file(filepath)
-
-
-def body_mode(dest, from_tree=None, source=None):
-    """Materialize a body-mode tree under `dest`, and return its project dir.
-
-    The sources are rewritten in place, so the tree is always a private copy;
-    pointing this at a tree of symlinks into a checkout would corrupt the
-    checkout.
-    """
-    dest = Path(dest).resolve()
-
-    if from_tree is not None:
-        root = Path(from_tree).resolve()
-        check_installed_tree(root)
-        if root == dest:
-            raise RuntimeError("--from-tree and --dest must differ")
-        for rel in ("lib", "include"):
-            target = dest / rel
-            remove_path(target)
-            shutil.copytree(str(root / rel), str(target), symlinks=False)
-    else:
-        for rel in ("lib", "include"):
-            remove_path(dest / rel)
-        install_tree(dest, source=source, link=False)
-
-    src_dir = dest / INSTALLED_SOURCE_DIR
-    for variant in SOURCE_VARIANTS:
-        shutil.copy(str(src_dir / EXEC_UNIT), str(src_dir / variant / "spark.ads"))
-
-    for path in (dest / "include").rglob("*"):
-        if path.is_file():
-            preprocess_file(str(path))
-
-    return check_installed_tree(dest)
-
-
-def do_body_mode(args):
-    print(body_mode(args.dest, from_tree=args.from_tree, source=args.source))
-
-
 def source_mode(dest, from_tree):
-    """Flatten an installed or body-mode tree into the source-tree shape.
+    """Flatten an installed tree into the source-tree shape.
 
     This is what SPARKLIB_INSTALLED=False expects: project files at the root,
     sources in "src", Coq material in "proof". Returns the populated directory.
@@ -381,15 +281,6 @@ def main(argv=None):
     p.add_argument("--link", action="store_true", help="symlink instead of copying")
     p.set_defaults(func=do_install_tree)
 
-    p = sub.add_parser("body-mode", help="build a preprocessed body-mode tree")
-    p.add_argument("--dest", required=True, help="root of the tree to build")
-    # Either an installed tree is derived from, or one is built from sources;
-    # naming a source tree in the first case would say nothing.
-    origin = p.add_mutually_exclusive_group()
-    origin.add_argument("--from-tree", help="installed tree to derive it from")
-    origin.add_argument("--source", help="SPARKlib source tree (default: this repo)")
-    p.set_defaults(func=do_body_mode)
-
     p = sub.add_parser("source-mode", help="flatten a tree to the source shape")
     p.add_argument("--dest", required=True, help="directory to populate")
     p.add_argument("--from-tree", required=True, help="tree to flatten")
@@ -398,10 +289,6 @@ def main(argv=None):
     p = sub.add_parser("check-tree", help="validate an installed-tree layout")
     p.add_argument("root", help="root of the tree to check")
     p.set_defaults(func=do_check_tree)
-
-    p = sub.add_parser("preprocess", help="rewrite SPARK_Mode markers in place")
-    p.add_argument("files", nargs="+")
-    p.set_defaults(func=do_preprocess)
 
     p = sub.add_parser("test-project", help="write a client sparklib.gpr")
     p.add_argument("--dest", required=True, help="directory to write it in")

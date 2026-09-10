@@ -9,9 +9,9 @@
 --  carries all the operations of the bounded list in SPARK_Mode => On,
 --  working on the parent's List type rather than redefining the
 --  representation. That representation lives in the private part of
---  Formal.Doubly_Linked_Lists, which is SPARK_Mode => Off in normal builds;
---  proving this unit relies on the body-mode mechanism (the #BODYMODE
---  annotations and sparklib_bodymode) to switch it On in the proof test
+--  Formal.Doubly_Linked_Lists, which is hidden from analysis in normal
+--  builds; proving this unit relies on body mode (see SPARK.Body_Mode) to
+--  expose it in the proof test
 --  tests/1376__formal_doubly_linked_lists_impl_proof.
 --
 --  It carries no gold (model-based) postconditions, only what silver needs:

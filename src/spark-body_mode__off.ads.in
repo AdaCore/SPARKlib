@@ -1,0 +1,24 @@
+--
+--  Copyright (C) 2026, AdaCore
+--
+--  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+--
+
+--  Body mode is the configuration in which the library bodies, and the
+--  private parts they rely on, are analysed instead of being hidden from
+--  analysis. The constant below is the static Boolean that all the affected
+--  SPARK_Mode pragmas and aspects of the library are written against.
+--
+--  Two variants of this unit exist, one for each value of the constant. The
+--  library project files select between them through the SPARKLIB_BODY_MODE
+--  external, so the file names must never be relied upon directly.
+--
+--  This is the variant that disables body mode.
+
+package SPARK.Body_Mode
+  with SPARK_Mode, Pure
+is
+
+   Enabled : constant Boolean := False;
+
+end SPARK.Body_Mode;

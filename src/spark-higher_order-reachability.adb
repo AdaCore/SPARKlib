@@ -4,10 +4,11 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
+with SPARK.Body_Mode;
 with SPARK.Big_Intervals; use SPARK.Big_Intervals;
 
 package body SPARK.Higher_Order.Reachability
-  with SPARK_Mode => Off --  #BODYMODE
+  with SPARK_Mode => SPARK.Body_Mode.Enabled
 is
 
    --  Local functions
