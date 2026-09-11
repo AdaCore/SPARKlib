@@ -8,7 +8,7 @@ project Test is
    end Builder;
 
    package Compiler is
-      for Default_Switches ("Ada") use ("-gnata", "-gnat2022", "-gnateDSPARK_BODY_MODE=Off");
+      for Default_Switches ("Ada") use ("-gnata", "-gnat2022");
    end Compiler;
 
 end Test;

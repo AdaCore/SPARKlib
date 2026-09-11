@@ -4,10 +4,11 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
+with SPARK.Body_Mode;
 with SPARK.Lemmas.Unconstrained_Array;
 
 package body SPARK.Tests.Array_Lemmas
-  with SPARK_Mode => Off --  #BODYMODE
+  with SPARK_Mode => SPARK.Body_Mode.Enabled
 is
    pragma
      Warnings (Off, "postcondition does not check the outcome of calling");

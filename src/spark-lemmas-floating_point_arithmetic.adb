@@ -4,8 +4,10 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
+with SPARK.Body_Mode;
+
 package body SPARK.Lemmas.Floating_Point_Arithmetic
-  with SPARK_Mode => Off --  #BODYMODE
+  with SPARK_Mode => SPARK.Body_Mode.Enabled
 is
    procedure Lemma_Add_Is_Monotonic (Val1 : Fl; Val2 : Fl; Val3 : Fl) is null;
 

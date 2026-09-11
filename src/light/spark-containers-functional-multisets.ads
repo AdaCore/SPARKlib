@@ -6,6 +6,7 @@
 
 pragma Ada_2022;
 
+with SPARK.Body_Mode;
 with SPARK.Containers.Parameter_Checks;
 with SPARK.Big_Integers; use SPARK.Big_Integers;
 
@@ -575,7 +576,7 @@ is
                   = Nb_Occurence (Container'Old, E))));
 
 private
-   pragma SPARK_Mode (Off); --  #BODYMODE
+   pragma SPARK_Mode (SPARK.Body_Mode.Enabled);
    package Maps is new
      SPARK.Containers.Functional.Maps
        (Key_Type                   => Element_Type,

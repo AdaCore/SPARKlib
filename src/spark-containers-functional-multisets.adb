@@ -7,7 +7,7 @@
 pragma Ada_2022;
 
 package body SPARK.Containers.Functional.Multisets
-  with SPARK_Mode => Off --  #BODYMODE
+  with SPARK_Mode => SPARK.Body_Mode.Enabled
 is
 
    -----------------------

@@ -12,6 +12,7 @@
 
 pragma Ada_2022;
 
+with SPARK.Body_Mode;
 with SPARK.Containers.Types; use SPARK.Containers.Types;
 with SPARK.Big_Integers;     use SPARK.Big_Integers;
 with SPARK.Containers.Functional.Vectors;
@@ -1199,7 +1200,7 @@ is
      Annotate => (GNATprove, Container_Aggregates, "Model");
 
 private
-   pragma SPARK_Mode (Off); --  #BODYMODE
+   pragma SPARK_Mode (SPARK.Body_Mode.Enabled);
 
    pragma Inline (First_Index);
    pragma Inline (Last_Index);

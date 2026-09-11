@@ -9,9 +9,9 @@
 --  the operations of the bounded vector in SPARK_Mode => On, working on the
 --  parent's Vector type rather than redefining the representation. That
 --  representation lives in the private part of Formal.Vectors, which is
---  SPARK_Mode => Off in normal builds; proving this unit relies on the
---  body-mode mechanism (the #BODYMODE annotations and sparklib_bodymode) to
---  switch it On in the proof test tests/1376__formal_vectors_impl_proof.
+--  hidden from analysis in normal builds; proving this unit relies on body
+--  mode (see SPARK.Body_Mode) to expose it in the proof test
+--  tests/1376__formal_vectors_impl_proof.
 --
 --  It carries no gold (model-based) postconditions, only what silver needs:
 --  the non-model preconditions guarding implicit run-time errors, the

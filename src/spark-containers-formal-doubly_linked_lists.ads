@@ -6,6 +6,7 @@
 
 pragma Ada_2022;
 
+with SPARK.Body_Mode;
 with SPARK.Containers.Functional.Vectors;
 with SPARK.Containers.Functional.Maps;
 with SPARK.Containers.Parameter_Checks;
@@ -1963,7 +1964,7 @@ is
      Annotate => (GNATprove, Container_Aggregates, "Model");
 
 private
-   pragma SPARK_Mode (Off); --  #BODYMODE
+   pragma SPARK_Mode (SPARK.Body_Mode.Enabled);
 
    --  The whole node is marked Relaxed_Initialization, so that a node that
    --  has never been allocated (in the never-used tail of the free region)

@@ -6,10 +6,11 @@
 
 pragma Ada_2022;
 
+with SPARK.Body_Mode;
 with SPARK.Big_Integers; use SPARK.Big_Integers;
 
 package body SPARK.Containers.Functional.Sets.Higher_Order
-  with SPARK_Mode => Off --  #BODYMODE
+  with SPARK_Mode => SPARK.Body_Mode.Enabled
 is
 
    -----------------------------------

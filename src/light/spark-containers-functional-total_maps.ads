@@ -8,6 +8,7 @@ pragma Ada_2022;
 
 private with SPARK.Containers.Functional.Maps;
 
+with SPARK.Body_Mode;
 with SPARK.Containers.Parameter_Checks;
 
 generic
@@ -406,7 +407,7 @@ is
 
 private
 
-   pragma SPARK_Mode (Off); --  #BODYMODE
+   pragma SPARK_Mode (SPARK.Body_Mode.Enabled);
 
    package Maps is new
      SPARK.Containers.Functional.Maps
