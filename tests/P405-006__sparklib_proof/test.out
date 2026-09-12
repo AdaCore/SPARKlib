@@ -37,10 +37,10 @@ spark-conversions-long_float_conversions.ads:11:01: info: analyzing call to "Log
 spark-conversions-long_float_conversions.ads:11:01: info: analyzing call to "Minus_Log2_Estimate" in context
 spark-conversions-long_float_conversions.ads:11:01: info: in instantiation at a-nbnbre.adb:256
 spark-conversions-long_float_conversions.ads:11:01: info: in instantiation at a-nbnbre.adb:264
-spark-lemmas-arithmetic.adb:45:25: info: assertion proved, in instantiation at spark-lemmas-integer_arithmetic.ads:14
-spark-lemmas-arithmetic.adb:45:25: info: assertion proved, in instantiation at spark-lemmas-long_integer_arithmetic.ads:15
 spark-lemmas-arithmetic.adb:47:25: info: assertion proved, in instantiation at spark-lemmas-integer_arithmetic.ads:14
 spark-lemmas-arithmetic.adb:47:25: info: assertion proved, in instantiation at spark-lemmas-long_integer_arithmetic.ads:15
+spark-lemmas-arithmetic.adb:49:25: info: assertion proved, in instantiation at spark-lemmas-integer_arithmetic.ads:14
+spark-lemmas-arithmetic.adb:49:25: info: assertion proved, in instantiation at spark-lemmas-long_integer_arithmetic.ads:15
 spark-lemmas-arithmetic.ads:36:14: info: aspect Always_Terminates on "Lemma_Div_Is_Monotonic" has been proved, subprogram will terminate, in instantiation at spark-lemmas-integer_arithmetic.ads:14
 spark-lemmas-arithmetic.ads:36:14: info: aspect Always_Terminates on "Lemma_Div_Is_Monotonic" has been proved, subprogram will terminate, in instantiation at spark-lemmas-long_integer_arithmetic.ads:15
 spark-lemmas-arithmetic.ads:38:06: info: data dependencies proved, in instantiation at spark-lemmas-integer_arithmetic.ads:14
@@ -365,10 +365,10 @@ spark-lemmas-floating_point_arithmetic.ads:341:38: info: division check proved, 
 spark-lemmas-floating_point_arithmetic.ads:341:38: info: division check proved, in instantiation at spark-lemmas-long_float_arithmetic.ads:14
 spark-lemmas-floating_point_arithmetic.ads:341:55: info: predicate check proved, in instantiation at spark-lemmas-float_arithmetic.ads:14
 spark-lemmas-floating_point_arithmetic.ads:341:55: info: predicate check proved, in instantiation at spark-lemmas-long_float_arithmetic.ads:14
-spark-lemmas-mod_arithmetic.adb:17:22: info: assertion proved, in instantiation at spark-lemmas-mod32_arithmetic.ads:12
-spark-lemmas-mod_arithmetic.adb:17:22: info: assertion proved, in instantiation at spark-lemmas-mod64_arithmetic.ads:12
-spark-lemmas-mod_arithmetic.adb:18:22: info: assertion proved, in instantiation at spark-lemmas-mod32_arithmetic.ads:12
-spark-lemmas-mod_arithmetic.adb:18:22: info: assertion proved, in instantiation at spark-lemmas-mod64_arithmetic.ads:12
+spark-lemmas-mod_arithmetic.adb:19:22: info: assertion proved, in instantiation at spark-lemmas-mod32_arithmetic.ads:12
+spark-lemmas-mod_arithmetic.adb:19:22: info: assertion proved, in instantiation at spark-lemmas-mod64_arithmetic.ads:12
+spark-lemmas-mod_arithmetic.adb:20:22: info: assertion proved, in instantiation at spark-lemmas-mod32_arithmetic.ads:12
+spark-lemmas-mod_arithmetic.adb:20:22: info: assertion proved, in instantiation at spark-lemmas-mod64_arithmetic.ads:12
 spark-lemmas-mod_arithmetic.ads:32:14: info: aspect Always_Terminates on "Lemma_Div_Is_Monotonic" has been proved, subprogram will terminate, in instantiation at spark-lemmas-mod32_arithmetic.ads:12
 spark-lemmas-mod_arithmetic.ads:32:14: info: aspect Always_Terminates on "Lemma_Div_Is_Monotonic" has been proved, subprogram will terminate, in instantiation at spark-lemmas-mod64_arithmetic.ads:12
 spark-lemmas-mod_arithmetic.ads:34:06: info: data dependencies proved, in instantiation at spark-lemmas-mod32_arithmetic.ads:12
@@ -441,30 +441,30 @@ spark-lemmas-mod_arithmetic.ads:84:17: info: postcondition proved, in instantiat
 spark-lemmas-mod_arithmetic.ads:84:17: info: postcondition proved, in instantiation at spark-lemmas-mod64_arithmetic.ads:12
 spark-lemmas-mod_arithmetic.ads:84:30: info: division check proved, in instantiation at spark-lemmas-mod32_arithmetic.ads:12
 spark-lemmas-mod_arithmetic.ads:84:30: info: division check proved, in instantiation at spark-lemmas-mod64_arithmetic.ads:12
-spark-lemmas-unconstrained_array.ads:30:14: info: aspect Always_Terminates on "Lemma_Transitive_Order" has been proved, subprogram will terminate, in instantiation at spark-tests-array_lemmas.adb:15
-spark-lemmas-unconstrained_array.ads:30:14: info: aspect Always_Terminates on "Lemma_Transitive_Order" has been proved, subprogram will terminate, in instantiation at spark-tests-array_lemmas.adb:22
-spark-lemmas-unconstrained_array.ads:32:06: info: data dependencies proved, in instantiation at spark-tests-array_lemmas.adb:15
-spark-lemmas-unconstrained_array.ads:32:06: info: data dependencies proved, in instantiation at spark-tests-array_lemmas.adb:22
-spark-lemmas-unconstrained_array.ads:35:56: info: index check proved, in instantiation at spark-tests-array_lemmas.adb:15
-spark-lemmas-unconstrained_array.ads:35:56: info: index check proved, in instantiation at spark-tests-array_lemmas.adb:22
-spark-lemmas-unconstrained_array.ads:35:63: info: overflow check proved, in instantiation at spark-tests-array_lemmas.adb:15
-spark-lemmas-unconstrained_array.ads:35:63: info: overflow check proved, in instantiation at spark-tests-array_lemmas.adb:22
-spark-lemmas-unconstrained_array.ads:35:73: info: index check proved, in instantiation at spark-tests-array_lemmas.adb:15
-spark-lemmas-unconstrained_array.ads:35:73: info: index check proved, in instantiation at spark-tests-array_lemmas.adb:22
-spark-lemmas-unconstrained_array.ads:37:09: info: postcondition proved, in instantiation at spark-tests-array_lemmas.adb:15
-spark-lemmas-unconstrained_array.ads:37:09: info: postcondition proved, in instantiation at spark-tests-array_lemmas.adb:22
-spark-lemmas-unconstrained_array.ads:38:64: info: index check proved, in instantiation at spark-tests-array_lemmas.adb:15
-spark-lemmas-unconstrained_array.ads:38:64: info: index check proved, in instantiation at spark-tests-array_lemmas.adb:22
-spark-lemmas-unconstrained_array.ads:38:73: info: index check proved, in instantiation at spark-tests-array_lemmas.adb:15
-spark-lemmas-unconstrained_array.ads:38:73: info: index check proved, in instantiation at spark-tests-array_lemmas.adb:22
+spark-lemmas-unconstrained_array.ads:30:14: info: aspect Always_Terminates on "Lemma_Transitive_Order" has been proved, subprogram will terminate, in instantiation at spark-tests-array_lemmas.adb:16
+spark-lemmas-unconstrained_array.ads:30:14: info: aspect Always_Terminates on "Lemma_Transitive_Order" has been proved, subprogram will terminate, in instantiation at spark-tests-array_lemmas.adb:23
+spark-lemmas-unconstrained_array.ads:32:06: info: data dependencies proved, in instantiation at spark-tests-array_lemmas.adb:16
+spark-lemmas-unconstrained_array.ads:32:06: info: data dependencies proved, in instantiation at spark-tests-array_lemmas.adb:23
+spark-lemmas-unconstrained_array.ads:35:56: info: index check proved, in instantiation at spark-tests-array_lemmas.adb:16
+spark-lemmas-unconstrained_array.ads:35:56: info: index check proved, in instantiation at spark-tests-array_lemmas.adb:23
+spark-lemmas-unconstrained_array.ads:35:63: info: overflow check proved, in instantiation at spark-tests-array_lemmas.adb:16
+spark-lemmas-unconstrained_array.ads:35:63: info: overflow check proved, in instantiation at spark-tests-array_lemmas.adb:23
+spark-lemmas-unconstrained_array.ads:35:73: info: index check proved, in instantiation at spark-tests-array_lemmas.adb:16
+spark-lemmas-unconstrained_array.ads:35:73: info: index check proved, in instantiation at spark-tests-array_lemmas.adb:23
+spark-lemmas-unconstrained_array.ads:37:09: info: postcondition proved, in instantiation at spark-tests-array_lemmas.adb:16
+spark-lemmas-unconstrained_array.ads:37:09: info: postcondition proved, in instantiation at spark-tests-array_lemmas.adb:23
+spark-lemmas-unconstrained_array.ads:38:64: info: index check proved, in instantiation at spark-tests-array_lemmas.adb:16
+spark-lemmas-unconstrained_array.ads:38:64: info: index check proved, in instantiation at spark-tests-array_lemmas.adb:23
+spark-lemmas-unconstrained_array.ads:38:73: info: index check proved, in instantiation at spark-tests-array_lemmas.adb:16
+spark-lemmas-unconstrained_array.ads:38:73: info: index check proved, in instantiation at spark-tests-array_lemmas.adb:23
 spark-pointers.ads:12:08: info: initialization of "Pointers.Memory_Addresses" proved
 spark-pointers.ads:13:05: info: flow dependencies proved
-spark-tests-array_lemmas.adb:34:18: info: precondition proved
-spark-tests-array_lemmas.adb:34:68: info: range check proved
-spark-tests-array_lemmas.adb:39:18: info: precondition proved
-spark-tests-array_lemmas.adb:44:16: info: precondition proved
-spark-tests-array_lemmas.adb:44:64: info: range check proved
-spark-tests-array_lemmas.adb:49:16: info: precondition proved
+spark-tests-array_lemmas.adb:35:18: info: precondition proved
+spark-tests-array_lemmas.adb:35:68: info: range check proved
+spark-tests-array_lemmas.adb:40:18: info: precondition proved
+spark-tests-array_lemmas.adb:45:16: info: precondition proved
+spark-tests-array_lemmas.adb:45:64: info: range check proved
+spark-tests-array_lemmas.adb:50:16: info: precondition proved
 spark-tests-array_lemmas.ads:19:06: info: data dependencies proved
 spark-tests-array_lemmas.ads:24:08: info: postcondition proved
 spark-tests-array_lemmas.ads:29:06: info: data dependencies proved
