@@ -25,6 +25,14 @@ This builds an installed-tree layout out of the sources with
 `scripts/sparklib_tree.py` and exports `SPARKLIB_PROJECT_PATH`, which is the
 same mechanism the CI jobs use.
 
+## Coverage
+
+`sparklib-coverage.py` runs the tests listed in `../tests/coverage.manifest`
+with instrumentation and produces an HTML report of the SPARKlib code they
+exercise, in `sparklib-report`. It needs `gnatcov` on the PATH, and reports on
+the same SPARKlib the tests ran against, so point it with
+`SPARKLIB_PROJECT_PATH` as the CI job does.
+
 ## Migration in progress
 
 The tests are being migrated from the gnatprove testsuite to this one, one

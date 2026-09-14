@@ -26,10 +26,7 @@ sys.path.append(os.path.join(testsuite_dir, "lib"))
 sys.path.append(os.path.join(sparklib_dir, "scripts"))
 
 import sparklib_tree  # noqa: E402
-
-# Environment variable naming the SPARKlib to test. It is read by the drivers
-# of both testsuites, so setting it here also directs the unmigrated tests.
-sparklib_project_path_env = "SPARKLIB_PROJECT_PATH"
+from sparklib_support import sparklib_project_path_env  # noqa: E402
 
 # Environment variable overriding the location of the gnatprove testsuite
 # support library, for setups in which neither default location applies.

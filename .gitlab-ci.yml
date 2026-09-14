@@ -119,19 +119,17 @@ coverage:
         rm -rf $SPARK2014_DIR
         git clone $GIT_CLONE_BASE/eng/spark/spark2014 --depth 1 $SPARK2014_DIR
       fi
-    - cd $SPARK2014_DIR
-    - rm -rf include testsuite/gnatprove/sparklib
-    - ln -s $CI_PROJECT_DIR include
-    - ln -s $CI_PROJECT_DIR/tests testsuite/gnatprove/sparklib
+    # The tests that have not been migrated to this testsuite yet are run by
+    # the gnatprove testsuite's drivers, which our entry point loads from the
+    # spark2014 checkout above. This goes away with the last such test.
+    - export SPARK2014_TESTSUITE_LIB=$SPARK2014_DIR/testsuite/gnatprove/lib/python
+    - cd $CI_PROJECT_DIR
     - rm -rf $CI_PROJECT_DIR/.sparklib-install
     - python3 $CI_PROJECT_DIR/scripts/sparklib_tree.py install-tree
         --dest $CI_PROJECT_DIR/.sparklib-install --link
     - export SPARKLIB_PROJECT_PATH=$CI_PROJECT_DIR/.sparklib-install
-    - cd testsuite/gnatprove
     - section_end "project_setup"
-    - python sparklib-coverage.py
-    - rm -rf $CI_PROJECT_DIR/sparklib-report
-    - cp -a sparklib-report $CI_PROJECT_DIR/
+    - python3 testsuite/sparklib-coverage.py
     - section_start "coverage_report" "Generate Coverage HTML report"
     # Coverage HTML report
     - export HTMLTARGETDIR=$CI_COMMIT_BRANCH
