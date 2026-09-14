@@ -17,7 +17,11 @@ sys.path.append(
     )
 )
 
-from sparklib_tree import ANCHOR_PROJECT, check_installed_tree  # noqa: E402
+from sparklib_tree import (  # noqa: E402
+    ANCHOR_PROJECT,
+    check_installed_tree,
+    test_project,
+)
 
 # Environment variable naming the SPARKlib to test. It is read by the drivers
 # of both testsuites, so setting it also directs the tests that have not been
@@ -59,3 +63,34 @@ def resolve_sparklib_location(path=None):
             root = candidate
 
     return str(check_installed_tree(root)), str(root)
+
+
+def sparklib_project_dir():
+    """Return the directory holding the SPARKlib projects.
+
+    Callers add it to the project path with "-aP" on the command line rather
+    than mutating GPR_PROJECT_PATH, which concurrent tests share.
+    """
+    project_dir, _ = resolve_sparklib_location()
+    return project_dir
+
+
+def body_mode_switch(enabled):
+    """Return the switches selecting the SPARKlib body mode, if enabled.
+
+    Body mode is the configuration in which the library bodies, and the private
+    parts they rely on, are analysed instead of being hidden from analysis. It
+    is an external of the SPARKlib projects, passed on the command line rather
+    than through the environment, which concurrent tests share.
+    """
+    return [f"-X{sparklib_body_mode_var}=On"] if enabled else []
+
+
+def create_sparklib(cwd):
+    """Write the sparklib.gpr a test builds the library with, in `cwd`"""
+    test_project(cwd)
+
+
+def coverage_mode():
+    """Whether the testsuite runs with coverage instrumentation enabled"""
+    return os.environ.get("coverage") == "true"
