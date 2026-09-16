@@ -1128,9 +1128,9 @@ is
       end;
    end Previous;
 
-   --------------
+   ---------------
    -- Reference --
-   --------------
+   ---------------
 
    function Reference
      (Container : Map; Position : Cursor) return not null access Element_Type

@@ -277,9 +277,9 @@ is
       return Get (Container.Base.T_Access.Value).all;
    end Get;
 
-   -----------
+   ------------
    -- Height --
-   -----------
+   ------------
 
    function Height (Container : Tree) return Big_Natural
    is (if Container.Base.T_Access = null
