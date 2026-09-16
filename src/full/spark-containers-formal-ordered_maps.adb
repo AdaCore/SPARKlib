@@ -1065,9 +1065,9 @@ is
       end;
    end Previous;
 
-   --------------
+   ---------------
    -- Reference --
-   --------------
+   ---------------
 
    function Reference
      (Container : aliased in out Map; Position : Cursor)

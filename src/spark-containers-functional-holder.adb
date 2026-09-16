@@ -23,9 +23,9 @@ is
       end if;
    end Adjust;
 
-   ------------------
+   -------------------
    -- Create_Holder --
-   ------------------
+   -------------------
 
    function Create_Holder (E : Element_Type) return Element_Holder is
       Refcounted_E : constant Refcounted_Element_Access :=

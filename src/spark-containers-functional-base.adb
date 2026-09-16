@@ -263,9 +263,9 @@ is
 
    function Length (C : Container) return Count_Type
    is (C.Length);
-   ---------------------
+   ------------------
    -- Num_Overlaps --
-   ---------------------
+   ------------------
 
    function Num_Overlaps (C1 : Container; C2 : Container) return Count_Type is
       P : Count_Type := 0;

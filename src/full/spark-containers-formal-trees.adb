@@ -497,9 +497,9 @@ is
       end if;
    end Assign;
 
-   ------------
+   -----------
    -- Child --
-   ------------
+   -----------
 
    function Child
      (Container : Tree; Position : Cursor; Way : Way_Type) return Cursor
