@@ -19,6 +19,9 @@ include:
       stage: check
   - project: eng/gitlab-templates
     file: /ci-templates-shared/insteadOf.yml
+  - component: $CI_SERVER_FQDN/it/gitlab-templates/gitleaks@~latest
+    inputs:
+      stage: check
 
 stages:
   - check
