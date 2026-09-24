@@ -17,6 +17,8 @@ include:
   - component: $CI_SERVER_FQDN/eng/gitlab-templates/pre-commit@~latest
     inputs:
       stage: check
+  - project: eng/gitlab-templates
+    file: /ci-templates-shared/insteadOf.yml
 
 stages:
   - check
@@ -40,6 +42,39 @@ pre-commit:
     - eval $(anod printenv gnatformat -Qdate=$GNATFORMAT_DATE)
     - gnatformat --version
     - cd $CI_PROJECT_DIR
+
+# Run the selected commit message check(s) against every commit in the merge
+# request. "commit-msg" checks are *not* exercised by the regular "pre-commit"
+# job, which only runs the default-stage hooks over the file diff.
+commit-level-checks:
+  interruptible: true
+  services:
+     - image:pe-base
+  stage: check
+  needs: []
+  variables:
+    GIT_DEPTH: "0"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - when: never
+  script:
+    - !reference [.insteadOfPython]
+    - python -m pip install pre-commit
+    - |
+      set -eu
+
+      base="${CI_MERGE_REQUEST_DIFF_BASE_SHA:?CI_MERGE_REQUEST_DIFF_BASE_SHA is not set}"
+      head="${CI_MERGE_REQUEST_SOURCE_BRANCH_SHA:-${CI_COMMIT_SHA:?CI_COMMIT_SHA is not set}}"
+      commits="$(git rev-list --reverse "${base}..${head}")"
+
+      for commit in $commits; do
+        echo "Checking commit message for $commit"
+        git log -1 --format=%B "$commit" > .gitlab_commit_msg
+
+        pre-commit run check-attribution \
+            --hook-stage commit-msg \
+            --commit-msg-filename .gitlab_commit_msg
+      done
 
 coverage:
   stage: build
