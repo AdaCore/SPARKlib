@@ -1,0 +1,263 @@
+#! /usr/bin/env python
+
+"""Testsuite entry point for SPARKlib.
+
+A test that has been migrated to this testsuite carries a "driver" key in its
+test.yaml and is claimed by SparklibTestFinder. Every other test is claimed by
+the gnatprove testsuite's own finder, which runs it exactly as before.
+e3-testsuite hands a test directory to the first finder that claims it, so
+each test runs exactly once, whether or not it has been migrated.
+
+The second finder, and with it the dependency on the gnatprove testsuite,
+disappears once the last test has been migrated.
+"""
+
+from e3.testsuite import Testsuite
+from e3.testsuite.testcase_finder import ParsedTest, ProbingError, TestFinder
+import e3.yaml
+import os
+import os.path
+import sys
+
+testsuite_dir = os.path.dirname(os.path.abspath(__file__))
+sparklib_dir = os.path.dirname(testsuite_dir)
+
+sys.path.append(os.path.join(testsuite_dir, "lib"))
+sys.path.append(os.path.join(sparklib_dir, "scripts"))
+
+import sparklib_tree  # noqa: E402
+
+# Environment variable naming the SPARKlib to test. It is read by the drivers
+# of both testsuites, so setting it here also directs the unmigrated tests.
+sparklib_project_path_env = "SPARKLIB_PROJECT_PATH"
+
+# Environment variable overriding the location of the gnatprove testsuite
+# support library, for setups in which neither default location applies.
+spark2014_lib_env = "SPARK2014_TESTSUITE_LIB"
+
+
+def spark2014_lib_dir():
+    """Locate the gnatprove testsuite support library.
+
+    This is only needed as long as unmigrated tests remain, as those are run
+    by the gnatprove testsuite's finder and drivers. Nightly runs sync that
+    library next to this testsuite; in a developer checkout SPARKlib sits
+    inside the spark2014 tree.
+    """
+    in_spark2014 = os.path.join(
+        sparklib_dir, os.pardir, "testsuite", "gnatprove", "lib", "python"
+    )
+    candidates = [
+        os.environ.get(spark2014_lib_env),
+        os.path.join(sparklib_dir, "lib", "python"),
+        in_spark2014,
+    ]
+    for candidate in candidates:
+        if candidate and os.path.isdir(candidate):
+            return os.path.abspath(candidate)
+    raise RuntimeError(
+        "cannot find the gnatprove testsuite support library; "
+        f"set {spark2014_lib_env}"
+    )
+
+
+spark2014_lib = spark2014_lib_dir()
+sys.path.append(spark2014_lib)
+
+from spark_drivers import SPARKTestFinder  # noqa: E402
+
+# The drivers of this testsuite, by the name a test.yaml selects them with.
+# It is empty as long as no test has been migrated, which makes any "driver"
+# key an error rather than a silently ignored one.
+drivers = {}
+
+# The test.yaml keys a migrated test may use. Anything else is rejected, so
+# that a mistyped key cannot quietly turn into a no-op.
+known_yaml_keys = {"driver", "large", "timeout"}
+
+
+class SparklibTestFinder(TestFinder):
+    """Claim the tests that have been migrated to this testsuite.
+
+    A migrated test is one whose test.yaml carries a "driver" key. Everything
+    else is left to the next finder.
+    """
+
+    def __init__(self, tests_dir, testlist=None, only_large=False):
+        self.tests_dir = os.path.abspath(tests_dir)
+        self.testlist = [] if testlist is None else testlist
+        self.only_large = only_large
+
+    def probe(self, testsuite, dirpath, dirnames, filenames):
+        # Only a direct subdirectory of the tests directory can be a test.
+        if os.path.dirname(os.path.abspath(dirpath)) != self.tests_dir:
+            return None
+        if "test.yaml" not in filenames:
+            return None
+
+        testname = os.path.basename(dirpath)
+        yaml_file = os.path.join(dirpath, "test.yaml")
+        try:
+            test_env = e3.yaml.load_with_config(yaml_file, {})
+        except e3.yaml.YamlError as exc:
+            raise ProbingError(f"invalid syntax for test.yaml in {testname}") from exc
+        if not isinstance(test_env, dict) or "driver" not in test_env:
+            return None
+
+        # From here on the test claims to be migrated, so a problem with it is
+        # an error: leaving it to the legacy finder would run it in a way its
+        # author did not ask for.
+        del dirnames[:]
+
+        driver_name = test_env["driver"]
+        if driver_name not in drivers:
+            raise ProbingError(f"{testname}: unknown driver {driver_name}")
+        unknown = sorted(set(test_env) - known_yaml_keys)
+        if unknown:
+            raise ProbingError(
+                f"{testname}: unknown test.yaml keys: {', '.join(unknown)}"
+            )
+
+        if self.testlist and testname not in self.testlist:
+            return None
+        if self.only_large and not test_env.get("large"):
+            return None
+
+        return ParsedTest(testname, drivers[driver_name], test_env, dirpath)
+
+
+class SparklibTestsuite(Testsuite):
+    """Testsuite for SPARKlib."""
+
+    @property
+    def tests_subdir(self):
+        return os.path.join(os.pardir, "tests")
+
+    @property
+    def test_finders(self):
+        return [
+            SparklibTestFinder(
+                self.test_dir,
+                testlist=self.testlist,
+                only_large=self.env.only_large,
+            ),
+            # The gnatprove testsuite's finder expects the tests to sit in a
+            # directory named "tests" directly below the root it is given.
+            SPARKTestFinder(
+                os.path.dirname(os.path.abspath(self.test_dir)),
+                testlist=self.testlist,
+                only_large=self.env.only_large,
+                only_replay=self.env.only_replay,
+            ),
+        ]
+
+    def add_options(self, parser):
+        parser.add_argument(
+            "--cache", action="store_true", help="Use memcached to run testsuite faster"
+        )
+        parser.add_argument(
+            "--diffs", action="store_true", help="Synonym of --show-error-output/-E"
+        )
+        parser.add_argument("--disc", type=str, help="discriminants to be used")
+        parser.add_argument(
+            "--no-gaia-output",
+            action="store_true",
+            help="The opposite of --gaia-output (which is on by default).",
+        )
+        parser.add_argument(
+            "--rewrite",
+            action="store_true",
+            help="Rewrite test baselines according to current outputs",
+        )
+        parser.add_argument(
+            "--testlist",
+            type=str,
+            help="Argument is a file which contains one test \
+                  name per line. Run only those tests.",
+        )
+        parser.add_argument(
+            "--only-large",
+            action="store_true",
+            help="Run only large tests; implies --disc=large",
+        )
+        parser.add_argument(
+            "--only-replay",
+            action="store_true",
+            help="Run only replay tests",
+        )
+        parser.add_argument(
+            "--coverage",
+            action="store_true",
+            help="Generate coverage information for SPARKlib executable tests",
+        )
+        parser.add_argument(
+            "--sparklib-source",
+            nargs="?",
+            const=sparklib_dir,
+            metavar="DIR",
+            help="Test the SPARKlib sources in DIR (default: the checkout this \
+                  testsuite belongs to) instead of the installed one",
+        )
+
+    def setup_sparklib(self):
+        """Point the tests at the SPARKlib to test.
+
+        With no explicit source tree, the tests use the library of the SPARK
+        installation, which is what a released tool ships. Otherwise an
+        installed-tree layout is built out of the checkout, as that is the only
+        shape the tools accept; links keep it cheap and keep it following
+        edits to the sources.
+        """
+        source = self.main.args.sparklib_source
+        if source is None:
+            return
+        dest = os.path.join(self.working_dir, "sparklib-install")
+        sparklib_tree.install_tree(dest, source=source, link=True)
+        os.environ[sparklib_project_path_env] = dest
+
+    def compute_environ(self):
+        """Compute the environment the test drivers run with."""
+        pypath = "PYTHONPATH"
+        if pypath in os.environ:
+            os.environ[pypath] += os.path.pathsep + spark2014_lib
+        else:
+            os.environ[pypath] = spark2014_lib
+        if self.main.args.cache:
+            os.environ["cache"] = "true"
+        if self.main.args.coverage:
+            os.environ["coverage"] = "true"
+        return dict(os.environ)
+
+    def set_up(self):
+        super().set_up()
+        if self.main.args.diffs:
+            self.main.args.show_error_output = True
+        if not self.main.args.no_gaia_output:
+            self.main.args.gaia_output = True
+        self.env.discs = self.env.discriminants
+        if self.main.args.disc:
+            self.env.discs += self.main.args.disc.split(",")
+        if self.main.args.only_large:
+            self.env.only_large = True
+            self.env.discs += ["large"]
+        else:
+            self.env.only_large = False
+        # Tests excluded on some platform or configuration say so themselves,
+        # in their test.opt file. The gnatprove testsuite additionally groups
+        # such exclusions in a mass_xfail.yaml file, which pays off for a rule
+        # covering dozens of tests; no SPARKlib exclusion covers more than one,
+        # so there are no rules here.
+        self.env.skipped_reasons = {"rules": []}
+        self.env.only_replay = self.main.args.only_replay
+        self.env.rewrite_baselines = self.main.args.rewrite
+        self.setup_sparklib()
+        self.env.test_environ = self.compute_environ()
+        if self.main.args.testlist:
+            with open(self.main.args.testlist, "r") as f:
+                self.testlist = [s.strip() for s in f]
+        else:
+            self.testlist = []
+
+
+if __name__ == "__main__":
+    sys.exit(SparklibTestsuite().testsuite_main())
