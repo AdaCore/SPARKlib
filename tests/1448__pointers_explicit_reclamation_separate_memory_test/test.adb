@@ -84,6 +84,10 @@ procedure Test with SPARK_Mode => Off is
       Assert (Handle_Operations."=" (H, Handle_Operations.To_Handle (P)),
               "Equality on handles to the same cell");
 
+      Assert (Handle_Operations.Of_Handle (Handle_Operations.Null_Handle)
+              = Null_Pointer,
+              "Null_Handle designates Null_Pointer");
+
       declare
          P2 : Pointer := Handle_Operations.Of_Handle (H);
       begin

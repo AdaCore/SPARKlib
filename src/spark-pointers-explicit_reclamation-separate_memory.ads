@@ -326,6 +326,13 @@ is
       function Of_Handle (H : Handle) return Pointer
       with Global => null, Pre => (Static => Valid_Handle (H));
 
+      function Null_Handle return Handle
+      with
+        Global   => null,
+        Post     => (Static => Null_Handle'Result = To_Handle (Null_Pointer)),
+        Annotate => (GNATprove, Inline_For_Proof);
+      --  A handle designating Null_Pointer
+
       function "=" (X, Y : Handle) return Boolean
       with
         Global   => null,

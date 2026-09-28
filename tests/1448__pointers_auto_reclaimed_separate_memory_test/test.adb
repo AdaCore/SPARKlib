@@ -194,6 +194,11 @@ procedure Test with SPARK_Mode => Off is
                     "Two strong handles to the same cell are not equal");
             Assert (Owning_Handle_Ops."=" (W, To_Weak_Handle (H)),
                     "Two weak handles to the same cell are not equal");
+
+            Assert (Of_Strong_Handle (Null_Strong_Handle) = Null_Pointer,
+                    "Null_Strong_Handle designates Null_Pointer");
+            Assert (Of_Weak_Handle (Null_Weak_Handle) = Null_Pointer,
+                    "Null_Weak_Handle designates Null_Pointer");
          end;
       end;
       Assert (Counters.Reclaimed = Before + 1,

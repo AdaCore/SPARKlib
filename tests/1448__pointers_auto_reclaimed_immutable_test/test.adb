@@ -106,6 +106,9 @@ procedure Test with SPARK_Mode => Off is
          Assert (Constant_Reference (Of_Handle (H)).D.all = 7,
                  "Deref through a handle");
 
+         Assert (Of_Handle (Null_Handle) = Null_Pointer,
+                 "Null_Handle designates Null_Pointer");
+
          --  A second handle to the same cell, and a copy of one
          declare
             H2 : constant Handle := To_Handle (Of_Handle (H));
@@ -127,7 +130,7 @@ procedure Test with SPARK_Mode => Off is
       use List_Pointers;
       use List_Handle_Ops;
       T : constant Pointer :=
-        Create_Cell ((Value => 3, Next => To_Handle (Null_Pointer)));
+        Create_Cell ((Value => 3, Next => Null_Handle));
       M : constant Pointer := Create_Cell ((Value => 2, Next => To_Handle (T)));
       H : constant Pointer := Create_Cell ((Value => 1, Next => To_Handle (M)));
    begin

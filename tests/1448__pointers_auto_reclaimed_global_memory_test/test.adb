@@ -118,6 +118,8 @@ procedure Test with SPARK_Mode => Off is
             Assert (C.D.all = 4, "Deref through a strong handle");
             Free (C.D);
          end;
+         Assert (Of_Strong_Handle (Null_Strong_Handle) = Null_Pointer,
+                 "Null_Strong_Handle designates Null_Pointer");
       end;
       Assert (Counters.Reclaimed = Before + 1,
               "Not reclaimed exactly once when the strong handle dies");
@@ -166,6 +168,8 @@ procedure Test with SPARK_Mode => Off is
                  "A stale weak handle copy did not resolve to null");
          Assert (Of_Strong_Handle (To_Strong_Handle (W1)) = Null_Pointer,
                  "A stale weak handle did not upgrade to a null handle");
+         Assert (Of_Weak_Handle (Null_Weak_Handle) = Null_Pointer,
+                 "Null_Weak_Handle designates Null_Pointer");
       end;
       Assert (Counters.Reclaimed = Before + 1,
               "Reclaimed again when the weak handles died");
