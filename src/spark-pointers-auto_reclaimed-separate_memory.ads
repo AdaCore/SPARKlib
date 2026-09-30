@@ -303,6 +303,15 @@ is
       function Of_Strong_Handle (H : Strong_Handle) return Pointer
       with Global => null, Pre => (SPARKlib_Full => Valid_Handle (H));
 
+      function Null_Strong_Handle return Strong_Handle
+      with
+        Global   => null,
+        Post     =>
+          (Static =>
+             Null_Strong_Handle'Result = To_Strong_Handle (Null_Pointer)),
+        Annotate => (GNATprove, Inline_For_Proof);
+      --  A strong handle designating Null_Pointer
+
       function Valid_Handle (H : Weak_Handle) return Boolean
       with Ghost => SPARKlib_Full, Global => null;
 
@@ -321,6 +330,14 @@ is
         Post   =>
           (SPARKlib_Full => Valid_Handle (To_Weak_Handle'Result),
            Static        => Peek (To_Weak_Handle'Result) = P);
+
+      function Null_Weak_Handle return Weak_Handle
+      with
+        Global   => null,
+        Post     =>
+          (Static => Null_Weak_Handle'Result = To_Weak_Handle (Null_Pointer)),
+        Annotate => (GNATprove, Inline_For_Proof);
+      --  A weak handle designating Null_Pointer
 
       function To_Weak_Handle (H : Strong_Handle) return Weak_Handle
       with

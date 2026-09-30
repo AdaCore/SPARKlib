@@ -41,6 +41,13 @@ is
       is (Pointer_To_Handle (Create_Pointer (X)))
       with SPARK_Mode => Off;
 
+      -----------------
+      -- Null_Handle --
+      -----------------
+
+      function Null_Handle return Handle
+      is (Pointer_To_Handle (Null_Pointer));
+
       ---------------
       -- Reference --
       ---------------

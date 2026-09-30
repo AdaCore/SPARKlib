@@ -75,6 +75,14 @@ procedure Test with SPARK_Mode => Off is
          Assert (Constant_Reference (R.all).V = 9, "Reference sees the holder");
          Reclaim (R.all);
       end;
+
+      --  A null handle designates Null_Pointer
+      declare
+         Nh : aliased Object_Handle := Handle_Operations.Null_Handle;
+      begin
+         Assert (Handle_Operations.Constant_Reference (Nh).all = Null_Pointer,
+                 "Null_Handle designates Null_Pointer");
+      end;
    end Test_Handles;
 
    procedure Test_Pointer_Array is

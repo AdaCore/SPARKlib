@@ -140,6 +140,20 @@ is
       function "=" (X, Y : Weak_Handle) return Boolean
       is (Same_Pointer (X, Y));
 
+      ------------------------
+      -- Null_Strong_Handle --
+      ------------------------
+
+      function Null_Strong_Handle return Strong_Handle
+      is (To_Strong_Handle (Null_Pointer));
+
+      ----------------------
+      -- Null_Weak_Handle --
+      ----------------------
+
+      function Null_Weak_Handle return Weak_Handle
+      is (To_Weak_Handle (Null_Pointer));
+
       ----------------------
       -- Of_Strong_Handle --
       ----------------------

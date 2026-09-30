@@ -71,6 +71,13 @@ is
      with SPARK_Mode => Off
    is
 
+      -----------------
+      -- Null_Handle --
+      -----------------
+
+      function Null_Handle return Handle
+      is (To_Handle (Null_Pointer));
+
       ---------------
       -- Of_Handle --
       ---------------

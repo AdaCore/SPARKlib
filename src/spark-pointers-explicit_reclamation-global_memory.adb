@@ -51,6 +51,13 @@ is
       function "=" (X, Y : Handle) return Boolean
       is (Handle_To_Pointer (X) = Handle_To_Pointer (Y));
 
+      -----------------
+      -- Null_Handle --
+      -----------------
+
+      function Null_Handle return Handle
+      is (To_Handle (Null_Pointer));
+
       ---------------
       -- Of_Handle --
       ---------------

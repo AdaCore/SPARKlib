@@ -477,6 +477,15 @@ is
              and then
                Logical_Eq (Peek (Create_Handle'Result), Create_Pointer (X)));
 
+      function Null_Handle return Handle
+      with
+        Global => null,
+        Post   =>
+          (Static =>
+             Valid_Handle (Null_Handle'Result)
+             and then Peek (Null_Handle'Result) = Null_Pointer);
+      --  A handle designating Null_Pointer
+
    end Handle_Operations;
 
 private

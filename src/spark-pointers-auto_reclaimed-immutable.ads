@@ -150,6 +150,15 @@ is
       function Of_Handle (H : Handle) return Pointer
       with Global => null, Pre => (SPARKlib_Full => Valid_Handle (H));
 
+      function Null_Handle return Handle
+      with
+        Global   => null,
+        Post     =>
+          (Static =>
+             Logical_Eq (Null_Handle'Result, To_Handle (Null_Pointer))),
+        Annotate => (GNATprove, Inline_For_Proof);
+      --  A handle designating Null_Pointer
+
       function Logical_Eq (X, Y : Handle) return Boolean
       with
         Import,
