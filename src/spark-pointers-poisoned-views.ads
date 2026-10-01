@@ -13,9 +13,12 @@ with SPARK.Pointers.Parameter_Checks;
 
 generic
    type Object is private;
+   pragma Warnings (Off, "unused variable ""X""");
    with
      function Is_Reclaimed (X : Object) return Boolean
+     is (True)
      with Ghost => Static;
+   pragma Warnings (On, "unused variable ""X""");
 
 package SPARK.Pointers.Poisoned.Views with SPARK_Mode, Always_Terminates
 is

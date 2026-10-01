@@ -14,9 +14,12 @@ with SPARK.Pointers.Handles.Owning_Handles;
 
 generic
    type Object (<>) is private;
+   pragma Warnings (Off, "unused variable ""X""");
    with
      function Is_Reclaimed (X : Object) return Boolean
+     is (True)
      with Ghost => Static;
+   pragma Warnings (On, "unused variable ""X""");
 
 package SPARK.Pointers.Poisoned.Pointers with SPARK_Mode, Always_Terminates
 is
@@ -204,7 +207,9 @@ is
    --  Operations copying the designated value
 
    generic
-      with function Copy (O : Object) return Object;
+      with
+        function Copy (O : Object) return Object
+        is (O);
       --  A copy of the designated value, as SPARK understands copies: if
       --  Object is subject to ownership, Copy has to duplicate what it owns.
 

@@ -25,7 +25,7 @@ package Inst with SPARK_Mode is
    --  Deref, which copies the designated value, as opposed to
    --  Constant_Reference, which observes it in place.
 
-   package Plain_Ops is new Plain_Pointers.Copy_Operations (Id);
+   package Plain_Ops is new Plain_Pointers.Copy_Operations;
 
    --  A designated object subject to ownership. Reclaim frees the cell and
    --  bumps a counter, so the test can observe that the library reclaims.
