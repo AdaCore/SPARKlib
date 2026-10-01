@@ -22,9 +22,13 @@ procedure Test with SPARK_Mode => Off is
    begin
       Assert (Constant_Reference (H).V = 42, "Deref of a fresh holder");
 
+      --  The read-write accessor reaches the held object in place
+      Reference (H).V := 43;
+      Assert (Constant_Reference (H).V = 43, "Reference wrote through the holder");
+
       --  Taking the content moves it out and poisons the source
       G := Take (H);
-      Assert (Constant_Reference (G).V = 42, "Deref after Take");
+      Assert (Constant_Reference (G).V = 43, "Deref after Take");
 
       Reclaim (G);
       Assert (G = Null_Pointer, "Reclaim nulls out the holder");

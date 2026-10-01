@@ -107,7 +107,7 @@ is
       subtype Memory_Map is Pointer_To_Object_Maps.Map;
 
       function Model (M : Memory_Type) return Memory_Map
-      with Global => null;
+      with Ghost => Static, Global => null;
       --  Model of a memory
 
       --  Whether the memory holds a cell for this pointer

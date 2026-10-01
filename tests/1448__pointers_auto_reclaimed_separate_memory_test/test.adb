@@ -152,10 +152,10 @@ procedure Test with SPARK_Mode => Off is
       use Owning_Handle_Ops;
       Before : constant Natural := Counters.Reclaimed;
       M : Memory_Type := Empty_Map;
+      W : Weak_Handle;
    begin
       declare
          H : Strong_Handle;
-         W : Weak_Handle;
       begin
          declare
             P : Pointer;
@@ -203,6 +203,10 @@ procedure Test with SPARK_Mode => Off is
       end;
       Assert (Counters.Reclaimed = Before + 1,
               "Not reclaimed when the last handle died");
+      Assert (To_Strong_Handle (W) = Null_Strong_Handle,
+              "A dead weak handle can be promoted to a strong handle");
+      Assert (Of_Weak_Handle (W) = Null_Pointer,
+              "A dead weak handle can be promoted to a pointer");
    end Test_Handles;
 
 begin
