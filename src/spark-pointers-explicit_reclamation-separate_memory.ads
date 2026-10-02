@@ -12,6 +12,8 @@
 --  check. Disjointness gives the frame conditions of an operation from its
 --  profile, and is what makes Move_Memory correct.
 
+pragma Extensions_Allowed (On);
+
 with SPARK.Pointers.Abstract_Maps;
 with SPARK.Pointers.Abstract_Sets;
 with SPARK.Pointers.Handles.Plain_Handles;
@@ -19,9 +21,12 @@ with SPARK.Pointers.Parameter_Checks;
 
 generic
    type Object (<>) is private;
+   pragma Warnings (Off, "unused variable ""X""");
    with
      function Is_Reclaimed (X : Object) return Boolean
+     is (True)
      with Ghost => Static;
+   pragma Warnings (On, "unused variable ""X""");
 
 package SPARK.Pointers.Explicit_Reclamation.Separate_Memory with
     SPARK_Mode,
@@ -162,7 +167,9 @@ is
    use Memory_Model;
 
    generic
-      with function Copy (O : Object) return Object;
+      with
+        function Copy (O : Object) return Object
+        is (O);
       --  A copy of the designated value
 
    package Copy_Operations with Always_Terminates

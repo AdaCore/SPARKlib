@@ -12,8 +12,7 @@ package Inst with SPARK_Mode is
 
    package Pointers is new SPARK.Pointers.Explicit_Reclamation.Global_Memory (Object, Is_Reclaimed);
 
-   function Id (O : Object) return Object is (O);
-   package Ops is new Pointers.Copy_Operations (Id);
+   package Ops is new Pointers.Copy_Operations;
 
    --  The standalone allocator, which builds the object from an Input rather
    --  than copying an existing one.

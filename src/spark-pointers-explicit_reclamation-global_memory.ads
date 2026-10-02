@@ -12,6 +12,8 @@
 --  of scope. To have reclamation checks, use
 --  Explicit_Reclamation.Separate_Memory instead.
 
+pragma Extensions_Allowed (On);
+
 with SPARK.Pointers.Abstract_Maps;
 with SPARK.Pointers.Abstract_Sets;
 with SPARK.Pointers.Handles.Plain_Handles;
@@ -19,9 +21,12 @@ with SPARK.Pointers.Parameter_Checks;
 
 generic
    type Object (<>) is private;
+   pragma Warnings (Off, "unused variable ""X""");
    with
      function Is_Reclaimed (X : Object) return Boolean
+     is (True)
      with Ghost => Static;
+   pragma Warnings (On, "unused variable ""X""");
 package SPARK.Pointers.Explicit_Reclamation.Global_Memory with
     SPARK_Mode,
     Always_Terminates,
@@ -186,7 +191,9 @@ is
    --  of this type is ever created.
 
    generic
-      with function Copy (O : Object) return Object;
+      with
+        function Copy (O : Object) return Object
+        is (O);
       --  A copy of the designated value
 
    package Copy_Operations with Always_Terminates

@@ -81,7 +81,9 @@ is
    --  equality.
 
    generic
-      with function Copy (O : Object) return Object;
+      with
+        function Copy (O : Object) return Object
+        is (O);
       --  A copy of the designated value
 
    package Copy_Operations with Always_Terminates

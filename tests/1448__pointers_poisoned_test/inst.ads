@@ -11,9 +11,6 @@ package Inst with SPARK_Mode is
       V : Natural;
    end record;
 
-   function Is_Reclaimed (Unused : Object) return Boolean is (True)
-   with Ghost => Static;
-
    type Index is range 1 .. 10;
 
    --  Each flavour lives in its own nested package: Array_Operations names
@@ -23,7 +20,7 @@ package Inst with SPARK_Mode is
 
    package Pointer_Side is
       package Pointers is new
-        SPARK.Pointers.Poisoned.Pointers (Object, Is_Reclaimed);
+        SPARK.Pointers.Poisoned.Pointers (Object);
       use Pointers;
 
       function Id (O : Object) return Object is (O);
@@ -34,7 +31,7 @@ package Inst with SPARK_Mode is
       --  Deep-copy operations: Create_Copy fills a fresh cell from an Object,
       --  Assign overwrites the value an existing cell designates.
 
-      package Copy_Ops is new Pointers.Copy_Operations (Id);
+      package Copy_Ops is new Pointers.Copy_Operations;
 
       --  A Pointer is subject to ownership, so handles over it are owning
       --  handles: Create_Handle builds one, and the caller reclaims the
@@ -50,7 +47,7 @@ package Inst with SPARK_Mode is
 
    package View_Side is
       package Views is new
-        SPARK.Pointers.Poisoned.Views (Object, Is_Reclaimed);
+        SPARK.Pointers.Poisoned.Views (Object);
       use Views;
 
       type Object_Array is array (Index range <>) of aliased Object;

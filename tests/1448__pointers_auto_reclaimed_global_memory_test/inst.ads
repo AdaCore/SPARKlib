@@ -19,8 +19,7 @@ package Inst with SPARK_Mode is
    package Plain_Pointers is new
      SPARK.Pointers.Auto_Reclaimed.Global_Memory (Plain_Object);
 
-   function Id (O : Plain_Object) return Plain_Object is (O);
-   package Plain_Ops is new Plain_Pointers.Copy_Operations (Id);
+   package Plain_Ops is new Plain_Pointers.Copy_Operations;
 
    --  A designated object subject to ownership. Reclaim frees the cell and
    --  bumps a counter, so the test can observe that the library reclaims,

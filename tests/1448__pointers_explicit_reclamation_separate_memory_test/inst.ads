@@ -7,14 +7,10 @@ package Inst with SPARK_Mode is
       G : Integer;
    end record;
 
-   function Is_Reclaimed (Unused : Object) return Boolean is (True)
-   with Ghost => Static;
-
    package Pointers is new
-     SPARK.Pointers.Explicit_Reclamation.Separate_Memory (Object, Is_Reclaimed);
+     SPARK.Pointers.Explicit_Reclamation.Separate_Memory (Object);
 
-   function Id (O : Object) return Object is (O);
-   package Ops is new Pointers.Copy_Operations (Id);
+   package Ops is new Pointers.Copy_Operations;
 
    --  The standalone allocator, which builds the object from an Input rather
    --  than copying an existing one.
