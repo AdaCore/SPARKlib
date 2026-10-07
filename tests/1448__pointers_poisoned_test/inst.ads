@@ -13,10 +13,10 @@ package Inst with SPARK_Mode is
 
    type Index is range 1 .. 10;
 
-   --  Each flavour lives in its own nested package: Array_Operations names
-   --  Is_Poisoned in the predicate of Readable_Array, so the parent instance has
-   --  to be use-visible where it is instantiated, and the two Is_Poisoned
-   --  would otherwise hide each other.
+   --  Each flavour lives in its own nested package: Views.Array_Operations
+   --  refers to Is_Poisoned in the predicate of Readable_Array, so the parent
+   --  instance has to be use-visible where it is instantiated, and the two
+   --  Is_Poisoned would otherwise hide each other.
 
    package Pointer_Side is
       package Pointers is new
@@ -26,7 +26,9 @@ package Inst with SPARK_Mode is
       function Id (O : Object) return Object is (O);
       function Create_Pointer is new Pointers.Create (Object, Id);
 
-      package Pointer_Arrays is new Pointers.Array_Operations (Index);
+      type Pointer_Array is array (Index range <>) of Pointer;
+      package Pointer_Arrays is new
+        Pointers.Array_Operations (Index, Pointer_Array);
 
       --  Deep-copy operations: Create_Copy fills a fresh cell from an Object,
       --  Assign overwrites the value an existing cell designates.

@@ -171,7 +171,7 @@ package Pointers_Inst with SPARK_Mode is
         Handle_Ops.Witnessed_Conversions (Pointer, Is_Supported, Witness);
    end Auto_Reclaimed_Separate;
 
-   --  Poisoned. Array_Operations refers to Is_Poisoned, so the parent
+   --  Poisoned.Views.Array_Operations refers to Is_Poisoned, so the parent
    --  instance must be use-visible at the instantiation.
 
    package Poisoned_Pointers is
@@ -180,7 +180,9 @@ package Pointers_Inst with SPARK_Mode is
       use Pointers;
       function Create is new Pointers.Create (Integer, Id);
       package Copy is new Pointers.Copy_Operations (Id);
-      package Arrays is new Pointers.Array_Operations (Positive);
+      type Pointer_Array is array (Positive range <>) of Pointer;
+      package Arrays is new
+        Pointers.Array_Operations (Positive, Pointer_Array);
       function Create_Handle is new
         Pointers.Handle_Operations.Create_Handle (Integer, Create);
    end Poisoned_Pointers;

@@ -254,16 +254,10 @@ is
 
    generic
       type Index_Type is range <>;
-
-   package Array_Operations
-   is
-
       type Pointer_Array is array (Index_Type range <>) of Pointer;
 
-      subtype Readable_Array is Pointer_Array
-      with
-        Ghost_Predicate =>
-          (Static => (for all E of Readable_Array => not Is_Poisoned (E)));
+   package Array_Operations with Always_Terminates
+   is
 
       function Logical_Eq (X, Y : Pointer_Array) return Boolean
       with
