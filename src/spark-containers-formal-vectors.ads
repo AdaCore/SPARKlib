@@ -803,7 +803,7 @@ is
      Contract_Cases =>
        (SPARKlib_Full =>
 
-          --  All the elements after Position have been erased
+          --  All elements from Index through the last element are deleted
 
           (Length (Container) - Count <= Count_Type (Index - Index_Type'First)
            => Length (Container) = Count_Type (Index - Index_Type'First),
@@ -881,7 +881,7 @@ is
      Contract_Cases =>
        (SPARKlib_Full =>
 
-          --  All the elements after Position have been erased
+          --  All elements of Container are deleted
 
           (Length (Container) <= Count => Length (Container) = 0,
 
@@ -950,7 +950,7 @@ is
                     Lst       => Last_Index (Container),
                     Item      => Item) => Find_Index'Result = No_Index,
 
-           --  Otherwise, Find_Index returns a valid index greater than Index
+           --  Otherwise, Find_Index returns an index at or after Index
 
            others                      =>
              Find_Index'Result in Index .. Last_Index (Container)
@@ -989,7 +989,7 @@ is
                      else Last_Index (Container)),
                   Item      => Item) => Reverse_Find_Index'Result = No_Index,
 
-           --  Otherwise, Reverse_Find_Index returns a valid index smaller than
+           --  Otherwise, Reverse_Find_Index returns an index at or before
            --  Index
 
            others                    =>
