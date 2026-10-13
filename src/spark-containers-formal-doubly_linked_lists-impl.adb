@@ -363,13 +363,19 @@ is
       RI := Right.First;
 
       while LI /= 0 loop
+         --  Establish non-emptiness through cardinality before using it to
+         --  show that the right-hand traversal has not reached its end.
+
          pragma
            Assert
              (Static =>
-                (if LI /= 0
-                 then
-                   not Memory_Index_Sets.Is_Empty
-                         (Reachable_Set (RI, Memory (Right)))));
+                not Memory_Index_Sets.Is_Empty
+                      (Reachable_Set (LI, Memory (Left))));
+         pragma
+           Assert
+             (Static =>
+                Memory_Index_Sets.Length (Reachable_Set (RI, Memory (Right)))
+                > 0);
 
          --  LI and RI walk the two active lists in lockstep. Their remaining
          --  reachable sets have equal length (the lists have equal Length and
@@ -2277,26 +2283,29 @@ is
             Lemma_Reachable_Closed_By_Next (Part1.First, Memory (Container));
             Lemma_Reachable_Closed_By_Next (Part2.First, Memory (Container));
 
-            --  Establish the postcondition conjunct by conjunct: merged into
-            --  a single verification condition they time out.
+            --  Establish backward links before membership in the first part,
+            --  so that closure by Next can exclude the second part.
 
             pragma
               Assert
                 (Static =>
-                   Memory_Index_Sets.No_Overlap
-                     (Reachable_Set (Part1.First, Memory (Container)),
-                      Reachable_Set (Part2.First, Memory (Container))));
-            pragma
-              Assert (Static => Segment_Valid (Memory (Container), Part1));
-            pragma
-              Assert (Static => Segment_Valid (Memory (Container), Part2));
+                   (for all I of
+                      Reachable_Set (Part1.First, Memory (Container)) =>
+                      (if Memory (Container) (I).Prev /= 0
+                       then
+                         Memory (Container) (Memory (Container) (I).Prev).Next
+                         = I)));
             pragma
               Assert
                 (Static =>
-                   Untouched_Outside
-                     (M_Old,
-                      Memory (Container),
-                      Reachable_Set (Unsplit.First, M_Old)));
+                   (for all I of
+                      Reachable_Set (Part1.First, Memory (Container)) =>
+                      (if Memory (Container) (I).Prev /= 0
+                       then
+                         Reachable
+                           (Part1.First,
+                            Memory (Container),
+                            Memory (Container) (I).Prev))));
          end Split_List;
 
       begin
