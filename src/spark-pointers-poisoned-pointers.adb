@@ -76,6 +76,14 @@ is
       ----------
 
       procedure Move
+        (Source : in out Pointer_Array; Target : in out Pointer_Array)
+      is
+         pragma Unmodified (Source);
+      begin
+         Target := Source;
+      end Move;
+
+      procedure Move
         (Source       : in out Pointer_Array;
          Source_From  : Index_Type'Base;
          Source_Up_To : Index_Type'Base;
