@@ -7,13 +7,10 @@
 --  without ownership by enforcing that designated values are constant. This
 --  handling allows for precise contracts on the content of strings.
 --
---  Contracts in this unit are meant for analysis only, not for run-time
---  checking, so that the expected exceptions are raised. This is enforced by
---  setting the assertion policy to Ignore. These preconditions protect from
---  Constraint_Error, Dereference_Error and Update_Error, but not from
---  Storage_Error.
-
-pragma Assertion_Policy (Ignore);
+--  The preconditions in this unit protect from Constraint_Error,
+--  Dereference_Error and Update_Error, but not from Storage_Error. They can be
+--  enabled at run time using SPARKlib_Defensive. When disabled, the expected
+--  exceptions are raised. Postconditions are intended for analysis only.
 
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings;
@@ -37,14 +34,16 @@ is
    with
      Annotate                  =>
        (GNATprove, Predefined_Equality, "Only_Null"),
-     Default_Initial_Condition => Is_Null (Chars_Ptr);
+     Default_Initial_Condition => (SPARKlib_Full => Is_Null (Chars_Ptr));
    pragma Preelaborable_Initialization (chars_ptr);
 
    Null_Ptr : constant chars_ptr
    with Annotate => (GNATprove, Predefined_Equality, "Null_Value");
 
    function Is_Null (Item : chars_ptr) return Boolean
-   with Ghost, Post => Is_Null'Result = (Item = Null_Ptr);
+   with
+     Ghost => SPARKlib_Full,
+     Post  => (SPARKlib_Full => Is_Null'Result = (Item = Null_Ptr));
 
    function Is_Nul_Terminated_Ghost (Item : String) return Boolean
    renames SPARK.C.Strings.Is_Nul_Terminated_Ghost;
@@ -85,46 +84,53 @@ is
      (Item : const_char_array_access; Nul_Check : Boolean := False)
       return chars_ptr
    with
-     Pre            => Item = null or else Is_Nul_Terminated (Item.all),
+     Pre            =>
+       (SPARKlib_Defensive =>
+          Item = null or else Is_Nul_Terminated (Item.all)),
+     Post           =>
+       (Static =>
+          (if Item /= null
+           then Strlen (To_Chars_Ptr'Result) = C_Length_Ghost (Item.all))),
+     --  Strlen returns the number of elements before the first occurrence
+     --  of nul in Item.all.
+
      Contract_Cases =>
-       (Item = null => To_Chars_Ptr'Result = Null_Ptr,
-        others      =>
-          To_Chars_Ptr'Result /= Null_Ptr
-          and then Strlen (To_Chars_Ptr'Result) = C_Length_Ghost (Item.all)
-          --  Strlen returns the number of elements before the first occurrence
-          --  of nul in Item.all.
-
-          and then
-            (for all I in 0 .. Strlen (To_Chars_Ptr'Result) =>
-               Value (To_Chars_Ptr'Result) (I) = Item (Item'First + I))),
-     --  Value returns the prefix of Item.all up to and including the
-     --  first occurrence of nul.
-
+       (SPARKlib_Full =>
+          (Item = null => To_Chars_Ptr'Result = Null_Ptr,
+           others      =>
+             To_Chars_Ptr'Result /= Null_Ptr
+             and then
+               (for all I in 0 .. Strlen (To_Chars_Ptr'Result) =>
+                  Value (To_Chars_Ptr'Result) (I) = Item (Item'First + I)))),
      Global         => null;
+   --  Value returns the prefix of Item.all up to and including the first
+   --  occurrence of nul.
 
    function Value (Item : chars_ptr) return char_array
    with
-     Pre    => Item /= Null_Ptr,
+     Pre    => (SPARKlib_Defensive => Item /= Null_Ptr),
      Post   =>
-       Value'Result'First = 0
-       and then Value'Result'Last = Strlen (Item)
-       and then Value'Result (Strlen (Item)) = nul
-       and then
-         (for all I in 0 .. Strlen (Item) =>
-            (if I < Strlen (Item) then Value'Result (I) /= nul)),
+       (SPARKlib_Full =>
+          Value'Result'First = 0
+          and then Value'Result'Last = Strlen (Item)
+          and then Value'Result (Strlen (Item)) = nul
+          and then
+            (for all I in 0 .. Strlen (Item) =>
+               (if I < Strlen (Item) then Value'Result (I) /= nul))),
      Global => null;
    --  Value returns the prefix of the value pointed by Item up to and
    --  including the first occurrence of nul.
 
    function Value (Item : chars_ptr; Length : size_t) return char_array
    with
-     Pre    => Item /= Null_Ptr and then Length /= 0,
+     Pre    => (SPARKlib_Defensive => Item /= Null_Ptr and then Length /= 0),
      Post   =>
-       Value'Result'First = 0
-       and then Value'Result'Last = size_t'Min (Length - 1, Strlen (Item))
-       and then
-         (for all I in 0 .. size_t'(Value'Result'Length - 1) =>
-            Value'Result (I) = char_array'(Value (Item)) (I)),
+       (SPARKlib_Full =>
+          Value'Result'First = 0
+          and then Value'Result'Last = size_t'Min (Length - 1, Strlen (Item))
+          and then
+            (for all I in 0 .. size_t'(Value'Result'Length - 1) =>
+               Value'Result (I) = char_array'(Value (Item)) (I))),
      Global => null;
    --  Value returns the longest prefix of Value (Item) containing at most
    --  Length elements.
@@ -132,15 +138,18 @@ is
    function Value (Item : chars_ptr) return String
    with
      Pre    =>
-       Item /= Null_Ptr and then Strlen (Item) <= size_t (Natural'Last),
+       (SPARKlib_Defensive =>
+          Item /= Null_Ptr and then Strlen (Item) <= size_t (Natural'Last)),
      Post   =>
-       Value'Result'First = 1
-       and then Value'Result'Length = Strlen (Item)
-       and then
-         (for all I in Value'Result'Range => Value'Result (I) /= To_Ada (nul))
-       and then
-         (for all I in Value'Result'Range =>
-            Value'Result (I) = To_Ada (Value (Item) (size_t (I - 1)))),
+       (SPARKlib_Full =>
+          Value'Result'First = 1
+          and then Value'Result'Length = Strlen (Item)
+          and then
+            (for all I in Value'Result'Range =>
+               Value'Result (I) /= To_Ada (nul))
+          and then
+            (for all I in Value'Result'Range =>
+               Value'Result (I) = To_Ada (Value (Item) (size_t (I - 1))))),
      Global => null;
    --  Value returns the prefix of the value pointed by Item up to but
    --  excluding the first occurrence of nul.
@@ -148,28 +157,30 @@ is
    function Value (Item : chars_ptr; Length : size_t) return String
    with
      Pre    =>
-       Item /= Null_Ptr
-       and then Length /= 0
-       and then
-         (Strlen (Item) <= size_t (Natural'Last)
-          or else Length <= size_t (Natural'Last)),
+       (SPARKlib_Defensive =>
+          Item /= Null_Ptr
+          and then Length /= 0
+          and then
+            (Strlen (Item) <= size_t (Natural'Last)
+             or else Length <= size_t (Natural'Last))),
      Post   =>
-       Value'Result'First = 1
-       and then Value'Result'Length = size_t'Min (Length, Strlen (Item))
-       and then
-         (for all I in Value'Result'Range =>
-            Value'Result (I) = To_Ada (Value (Item) (size_t (I - 1))))
-       and then
-         (if Strlen (Item) <= size_t (Natural'Last)
-          then
+       (SPARKlib_Full =>
+          Value'Result'First = 1
+          and then Value'Result'Length = size_t'Min (Length, Strlen (Item))
+          and then
             (for all I in Value'Result'Range =>
-               Value'Result (I) = Value (Item) (I))),
+               Value'Result (I) = To_Ada (Value (Item) (size_t (I - 1))))
+          and then
+            (if Strlen (Item) <= size_t (Natural'Last)
+             then
+               (for all I in Value'Result'Range =>
+                  Value'Result (I) = Value (Item) (I)))),
      Global => null;
    --  Value returns the longest prefix of Value (Item) containing at most
    --  Length elements.
 
    function Strlen (Item : chars_ptr) return size_t
-   with Pre => Item /= Null_Ptr, Global => null;
+   with Pre => (SPARKlib_Defensive => Item /= Null_Ptr), Global => null;
    --  Strlen returns the number of elements before the first occurrence of nul
    --  in the value pointed by Item.
 

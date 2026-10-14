@@ -3,8 +3,6 @@
 --
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-pragma Assertion_Policy (Ignore);
-
 package body SPARK.C.Strings
   with SPARK_Mode => Off
 is
