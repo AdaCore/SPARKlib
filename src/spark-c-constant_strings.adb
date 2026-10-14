@@ -3,8 +3,6 @@
 --
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-pragma Assertion_Policy (Ignore);
-
 with Ada.Unchecked_Conversion;
 
 package body SPARK.C.Constant_Strings

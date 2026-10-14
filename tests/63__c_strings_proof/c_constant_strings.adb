@@ -1,5 +1,3 @@
-pragma Assertion_Policy (Ignore);
-
 with SPARK.Cut_Operations; use SPARK.Cut_Operations;
 
 package body C_Constant_Strings with SPARK_Mode => On is
@@ -9,12 +7,12 @@ package body C_Constant_Strings with SPARK_Mode => On is
    -----------------------
 
    function Find_Nul (Chars : Char_Array) return Size_T with
-     Pre  => Is_Nul_Terminated (Chars),
-     Post => Find_Nul'Result = Chars'First + C_Length_Ghost (Chars);
+     Pre  => (Static => Is_Nul_Terminated (Chars)),
+     Post => (Static => Find_Nul'Result = Chars'First + C_Length_Ghost (Chars));
 
    function Value_Def (Item : chars_ptr) return char_array is
       (for I in 0 .. Strlen (Item) => Item (Item'First + I))
-   with Pre => Item /= Null_Ptr,
+   with Pre => (Static => Item /= Null_Ptr),
      Annotate => (GNATprove, Hide_Info, "Expression_Function_Body");
 
    --------------
@@ -28,7 +26,7 @@ package body C_Constant_Strings with SPARK_Mode => On is
             return I;
          end if;
          pragma Loop_Invariant
-           (for all J in Chars'First .. I => Chars (J) /= Nul);
+           (Static => (for all J in Chars'First .. I => Chars (J) /= Nul));
       end loop;
       raise Program_Error;
    end Find_Nul;
@@ -130,8 +128,8 @@ package body C_Constant_Strings with SPARK_Mode => On is
    begin
       return Res : String := To_Ada (Value (Item), Trim_Nul => True) do
          pragma Assert
-           (for all I in Res'Range =>
-              Res (I) = To_Ada (Value (Item) (Size_T (I - 1))));
+           (Static => (for all I in Res'Range =>
+              Res (I) = To_Ada (Value (Item) (Size_T (I - 1)))));
       end return;
    end Value;
 
@@ -142,43 +140,43 @@ package body C_Constant_Strings with SPARK_Mode => On is
       Res_V : constant Char_Array := Value (Item, Length);
    begin
       if Is_Nul_Terminated (Res_V) then
-         pragma Assert (Length > Strlen (Item));
-         pragma Assert (for all I in Res_V'Range =>
-                          (if I /= Res_V'Last then Res_V (I) /= Nul));
+         pragma Assert (Static => (Length > Strlen (Item)));
+         pragma Assert (Static => (for all I in Res_V'Range =>
+                          (if I /= Res_V'Last then Res_V (I) /= Nul)));
          declare
             Res : constant String := To_Ada (Res_V, Trim_Nul => True);
          begin
-            pragma Assert (Res'Length = C_Length_Ghost (Res_V));
-            pragma Assert (for all I in Res'Range =>
+            pragma Assert (Static => (Res'Length = C_Length_Ghost (Res_V)));
+            pragma Assert (Static => (for all I in Res'Range =>
                              By
                                (Res (I) = To_Ada (Value (Item) (Size_T (I - 1))),
-                                Res (I) = To_Ada (Res_V (Size_T (I) - 1 + 0))));
-            pragma Assert (if Strlen (Item) <= Size_T (Natural'Last)
+                                Res (I) = To_Ada (Res_V (Size_T (I) - 1 + 0)))));
+            pragma Assert (Static => (if Strlen (Item) <= Size_T (Natural'Last)
                            then (for all I in Res'Range =>
                                    By
                                      (Res (I) = Value (Item) (I),
-                                      Value (Item) (I) = To_Ada (Value (Item) (Size_T (I - 1))))));
+                                      Value (Item) (I) = To_Ada (Value (Item) (Size_T (I - 1)))))));
             return Res;
          end;
       else
-         pragma Assert (for all I in Res_V'Range => Value (Item) (I) /= Nul);
-         pragma Assert (Strlen (Item) >= Length);
+         pragma Assert (Static => (for all I in Res_V'Range => Value (Item) (I) /= Nul));
+         pragma Assert (Static => (Strlen (Item) >= Length));
          declare
             Res_N : constant Char_Array := Res_V & Nul;
-            pragma Assert (Res_N (Res_N'Last) = Nul);
-            pragma Assert (Is_Nul_Terminated (Res_N));
+            pragma Assert (Static => (Res_N (Res_N'Last) = Nul));
+            pragma Assert (Static => (Is_Nul_Terminated (Res_N)));
             Res   : constant String := To_Ada (Res_N, Trim_Nul => True);
          begin
-            pragma Assert (Res'Length = Res_V'Length);
-            pragma Assert (for all I in Res'Range =>
+            pragma Assert (Static => (Res'Length = Res_V'Length));
+            pragma Assert (Static => (for all I in Res'Range =>
                              By
                                (Res (I) = To_Ada (Value (Item) (Size_T (I - 1))),
-                                Res (I) = To_Ada (Res_V (Size_T (I) - 1 + 0))));
-            pragma Assert (if Strlen (Item) <= Size_T (Natural'Last)
+                                Res (I) = To_Ada (Res_V (Size_T (I) - 1 + 0)))));
+            pragma Assert (Static => (if Strlen (Item) <= Size_T (Natural'Last)
                            then (for all I in Res'Range =>
                                    By
                                      (Res (I) = Value (Item) (I),
-                                      Value (Item) (I) = To_Ada (Value (Item) (Size_T (I - 1))))));
+                                      Value (Item) (I) = To_Ada (Value (Item) (Size_T (I - 1)))))));
             return Res;
          end;
       end if;
