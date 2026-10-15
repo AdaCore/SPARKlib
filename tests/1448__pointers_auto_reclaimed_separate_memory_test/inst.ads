@@ -7,11 +7,11 @@ with Ada.Unchecked_Deallocation;
 with SPARK.Pointers.Auto_Reclaimed.Separate_Memory;
 with SPARK.Pointers.Handles.Auto_Reclaimed_Handles;
 
---  Execution test for SPARK.Pointers.Auto_Reclaimed.Separate_Memory, the
---  counterpart of 1448__pointers_auto_reclaimed_global_memory_test. Same unit but
---  with the memory as an object, so every operation takes one.
+--  Fixtures shared by the proved and executed ordinary pointer tests
 
-package Inst with SPARK_Mode is
+package Inst
+  with SPARK_Mode
+is
 
    --  A plain designated object
 
@@ -25,10 +25,8 @@ package Inst with SPARK_Mode is
 
    package Plain_Ops is new Plain_Pointers.Copy_Operations;
 
-   --  A designated object subject to ownership. Reclaim frees the cell and
-   --  bumps a counter, so the test can observe that the library reclaims,
-   --  both when a cell is overwritten by Assign and when the last pointer to
-   --  it disappears.
+   --  A designated object subject to ownership. Reclamation only releases its
+   --  owned data; observations of reclamation use a separate instance.
 
    type Int_Acc is access Integer;
 
@@ -45,8 +43,14 @@ package Inst with SPARK_Mode is
      SPARK.Pointers.Auto_Reclaimed.Separate_Memory (Owning_Object, Reclaim);
 
    function Copy_Owning (O : Owning_Object) return Owning_Object
-   is (D => new Integer'(O.D.all))
-   with Pre => O.D /= null;
+   with
+     Global => null,
+     Post   =>
+       (if O.D = null
+        then Copy_Owning'Result.D = null
+        else
+          Copy_Owning'Result.D /= null
+          and then Copy_Owning'Result.D.all = O.D.all);
    --  The designated object owns a cell, so copying it has to duplicate that
    --  cell. Deref therefore hands out a value the caller owns and must free.
 
@@ -60,7 +64,9 @@ package Inst with SPARK_Mode is
    --  The standalone allocator over the plain object too, so Create is
    --  covered as well as Create_Copy.
 
-   function Make_Plain (V : Integer) return Plain_Object is (F => V, G => V + 1);
+   function Make_Plain (V : Integer) return Plain_Object
+   is (F => V, G => V)
+   with Global => null;
    procedure Create_From_Int is new
      Plain_Pointers.Create (Integer, Make_Plain);
 

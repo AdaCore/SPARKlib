@@ -1,4 +1,6 @@
-package body Counters with SPARK_Mode => Off is
+package body Counters
+  with SPARK_Mode => Off
+is
 
    procedure Bump is
    begin

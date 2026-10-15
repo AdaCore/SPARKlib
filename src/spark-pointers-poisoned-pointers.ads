@@ -136,8 +136,10 @@ is
      Pre    => P /= Null_Pointer,
      Post   =>
        (Static =>
-          Object_Logic_Equal
-            (Peek (At_End (P)), At_End (Reference'Result).all));
+          At_End (P) /= Null_Pointer
+          and then
+            Object_Logic_Equal
+              (Peek (At_End (P)), At_End (Reference'Result).all));
 
    --  Construct or reclaim a holder
 

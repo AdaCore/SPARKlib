@@ -1,8 +1,11 @@
+with Ada.Unchecked_Deallocation;
 with SPARK.Pointers.Handles.Owning_Handles;
 with SPARK.Pointers.Poisoned.Pointers;
 with SPARK.Pointers.Poisoned.Views;
 
-package Inst with SPARK_Mode is
+package Inst
+  with SPARK_Mode
+is
    pragma Unevaluated_Use_Of_Old (Allow);
    --  Needed where Array_Operations is instantiated: the pragma on the
    --  library unit does not reach the instance.
@@ -19,11 +22,11 @@ package Inst with SPARK_Mode is
    --  Is_Poisoned would otherwise hide each other.
 
    package Pointer_Side is
-      package Pointers is new
-        SPARK.Pointers.Poisoned.Pointers (Object);
+      package Pointers is new SPARK.Pointers.Poisoned.Pointers (Object);
       use Pointers;
 
-      function Id (O : Object) return Object is (O);
+      function Id (O : Object) return Object
+      is (O);
       function Create_Pointer is new Pointers.Create (Object, Id);
 
       type Pointer_Array is array (Index range <>) of Pointer;
@@ -47,9 +50,38 @@ package Inst with SPARK_Mode is
         Pointers.Handle_Operations.Create_Handle (Object, Create_Pointer);
    end Pointer_Side;
 
+   package Owning_Side is
+      type Int_Access is access Integer;
+      type Owning_Object is record
+         D : Int_Access;
+      end record;
+
+      function Is_Reclaimed (O : Owning_Object) return Boolean
+      is (O.D = null)
+      with Ghost => Static;
+
+      procedure Free is new Ada.Unchecked_Deallocation (Integer, Int_Access);
+
+      package Pointers is new
+        SPARK.Pointers.Poisoned.Pointers (Owning_Object, Is_Reclaimed);
+
+      function Copy (O : Owning_Object) return Owning_Object
+      with
+        Global => null,
+        Post   =>
+          ((O.D = null) = (Copy'Result.D = null))
+          and then (if O.D /= null then Copy'Result.D.all = O.D.all);
+
+      package Copy_Ops is new Pointers.Copy_Operations (Copy);
+
+      procedure Reclaim (P : in out Pointers.Pointer)
+      with
+        Pre  => (Static => not Pointers.Is_Poisoned (P)),
+        Post => (Static => Pointers."=" (P, Pointers.Null_Pointer));
+   end Owning_Side;
+
    package View_Side is
-      package Views is new
-        SPARK.Pointers.Poisoned.Views (Object);
+      package Views is new SPARK.Pointers.Poisoned.Views (Object);
       use Views;
 
       type Object_Array is array (Index range <>) of aliased Object;
@@ -57,7 +89,8 @@ package Inst with SPARK_Mode is
 
       --  Create builds a view of a new value, which can fill a poisoned view
 
-      function Make (V : Natural) return Object is ((V => V));
+      function Make (V : Natural) return Object
+      is ((V => V));
       function Create_View is new Views.Create (Natural, Make);
    end View_Side;
 

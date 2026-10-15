@@ -2,14 +2,15 @@ with Ada.Text_IO;
 with SPARK.Pointers.Handles.Plain_Handles;
 with Inst; use Inst;
 
---  Execution test for SPARK.Pointers.Explicit_Reclamation.Global_Memory. Proof of the same API is
---  in testsuite/gnatprove/tests/U908-033__hidden_pointers.
+--  Proof and execution tests for explicit reclamation with global memory
 
-procedure Test with SPARK_Mode => Off is
+procedure Test with SPARK_Mode is
 
    use Pointers;
    use Ops;
 
+   procedure Assert (B : Boolean; S : String)
+   with Pre => B;
    procedure Assert (B : Boolean; S : String) is
    begin
       if not B then
@@ -77,13 +78,16 @@ procedure Test with SPARK_Mode => Off is
    begin
       Ops.Create_Copy ((F => 5, G => 6), P);
       H := Handle_Operations.To_Handle (P);
-      Assert (Deref (Handle_Operations.Of_Handle (H)).F = 5,
-              "Round trip through a handle");
-      Assert (Handle_Operations."=" (H, Handle_Operations.To_Handle (P)),
-              "Equality on handles to the same cell");
-      Assert (Handle_Operations.Of_Handle (Handle_Operations.Null_Handle)
-              = Null_Pointer,
-              "Null_Handle designates Null_Pointer");
+      Assert
+        (Deref (Handle_Operations.Of_Handle (H)).F = 5,
+         "Round trip through a handle");
+      Assert
+        (Handle_Operations."=" (H, Handle_Operations.To_Handle (P)),
+         "Equality on handles to the same cell");
+      Assert
+        (Handle_Operations.Of_Handle (Handle_Operations.Null_Handle)
+         = Null_Pointer,
+         "Null_Handle designates Null_Pointer");
       declare
          P2 : Pointer := Handle_Operations.Of_Handle (H);
       begin
@@ -91,10 +95,70 @@ procedure Test with SPARK_Mode => Off is
       end;
    end Test_Handles;
 
+   procedure Test_Owning_Copy is
+      package Cells renames Owning.Pointers;
+      package Copies renames Owning.Ops;
+      use type Owning.Int_Access;
+      O : Owning.Object := (D => new Integer'(5));
+      P : Cells.Pointer;
+   begin
+      Copies.Create_Copy (O, P);
+      O.D.all := 7;
+      declare
+         C : Owning.Object := Copies.Deref (P);
+      begin
+         Assert (C.D.all = 5, "Create_Copy duplicates owned data");
+         C.D.all := 9;
+         Owning.Free (C.D);
+      end;
+      declare
+         R : access Owning.Object := Cells.Reference (Cells.Memory, P);
+      begin
+         Assert (R.D.all = 5, "Changing a copy leaves its source alone");
+         Owning.Free (R.D);
+      end;
+      Copies.Assign (P, O);
+      Owning.Free (O.D);
+      declare
+         R : access Owning.Object := Cells.Reference (Cells.Memory, P);
+      begin
+         Assert (R.D.all = 7, "Assign duplicates owned data");
+         Owning.Free (R.D);
+      end;
+      Cells.Dealloc (P);
+      Copies.Create_Copy (O, P);
+      declare
+         C : Owning.Object := Copies.Deref (P);
+      begin
+         Assert (C.D = null, "Copying a reclaimed object preserves null");
+      end;
+      Cells.Dealloc (P);
+   end Test_Owning_Copy;
+
+   procedure Test_Null_And_Reuse is
+      P : Pointer;
+   begin
+      Assert (P = Null_Pointer, "Default pointer is null");
+      Assert
+        (Handle_Operations.Of_Handle (Handle_Operations.Null_Handle) = P,
+         "Null handle designates null");
+      Ops.Create_Copy ((F => 0, G => 0), P);
+      Assign (P, (F => Integer'First, G => Integer'Last));
+      Assert
+        (Deref (P).F = Integer'First and Deref (P).G = Integer'Last,
+         "Assign preserves boundary values");
+      Dealloc (P);
+      Ops.Create_Copy ((F => 9, G => 10), P);
+      Assert (Deref (P).F = 9, "A reclaimed pointer can be reused");
+      Dealloc (P);
+   end Test_Null_And_Reuse;
+
 begin
    Test_Create_Deref_Dealloc;
    Test_Create;
    Test_Aliasing;
    Test_In_Place_Update;
    Test_Handles;
+   Test_Null_And_Reuse;
+   Test_Owning_Copy;
 end Test;
