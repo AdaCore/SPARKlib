@@ -1,0 +1,151 @@
+inst.adb:12:43: info: pointer dereference check proved (CVC5: 1 VC)
+inst.ads:27:16: info: implicit aspect Always_Terminates on "Is_Reclaimed" has been proved, subprogram will terminate
+inst.ads:38:16: info: implicit aspect Always_Terminates on "Copy" has been proved, subprogram will terminate
+inst.ads:40:09: info: data dependencies proved
+inst.ads:42:11: info: postcondition proved (CVC5: 3 VC; Trivial: 1 VC)
+inst.ads:43:55: info: pointer dereference check proved (CVC5: 1 VC)
+inst.ads:43:65: info: pointer dereference check proved (CVC5: 1 VC)
+inst.ads:49:13: info: implicit aspect Always_Terminates on "Make" has been proved, subprogram will terminate
+inst.ads:50:23: info: overflow check proved (CVC5: 2 VC)
+test.adb:23:07: info: absence of resource or memory leak at end of scope proved (CVC5: 1 VC)
+test.adb:24:07: info: initialization of "P" proved
+test.adb:27:07: info: precondition proved (CVC5: 1 VC)
+test.adb:27:15: info: precondition proved (CVC5: 1 VC)
+test.adb:28:07: info: precondition proved (CVC5: 2 VC)
+test.adb:29:07: info: precondition proved (CVC5: 1 VC)
+test.adb:29:15: info: precondition proved (CVC5: 1 VC)
+test.adb:30:07: info: precondition proved (CVC5: 1 VC)
+test.adb:30:16: warning: "M" is set by "Dealloc" but not used after the call
+test.adb:31:07: info: precondition proved (CVC5: 1 VC)
+test.adb:38:07: info: absence of resource or memory leak at end of scope proved (CVC5: 1 VC)
+test.adb:39:07: info: absence of resource or memory leak at end of scope proved (CVC5: 1 VC)
+test.adb:40:07: info: initialization of "P" proved
+test.adb:40:10: info: initialization of "Q" proved
+test.adb:43:07: info: precondition proved (CVC5: 1 VC)
+test.adb:43:15: info: precondition proved (CVC5: 1 VC)
+test.adb:44:07: info: precondition proved (CVC5: 1 VC)
+test.adb:44:15: info: precondition proved (CVC5: 1 VC)
+test.adb:47:07: medium: precondition might fail
+test.adb:48:07: info: precondition proved (CVC5: 1 VC)
+test.adb:48:15: info: precondition proved (CVC5: 1 VC)
+test.adb:50:07: info: precondition proved (CVC5: 1 VC)
+test.adb:50:07: warning: statement has no effect
+test.adb:50:16: warning: "M1" is set by "Dealloc" but not used after the call
+test.adb:51:07: info: precondition proved (CVC5: 1 VC)
+test.adb:51:07: warning: statement has no effect
+test.adb:51:16: warning: "M2" is set by "Dealloc" but not used after the call
+test.adb:55:07: info: absence of resource or memory leak at end of scope proved (CVC5: 1 VC)
+test.adb:56:07: info: initialization of "P" proved
+test.adb:60:31: info: precondition proved (CVC5: 1 VC)
+test.adb:62:11: info: pointer dereference check proved (CVC5: 1 VC)
+test.adb:64:07: info: precondition proved (CVC5: 1 VC)
+test.adb:64:15: info: precondition proved (CVC5: 1 VC)
+test.adb:65:07: info: precondition proved (CVC5: 1 VC)
+test.adb:65:15: info: precondition proved (CVC5: 1 VC)
+test.adb:66:07: info: precondition proved (CVC5: 1 VC)
+test.adb:66:07: warning: statement has no effect
+test.adb:66:16: warning: "M" is set by "Dealloc" but not used after the call
+test.adb:74:07: info: absence of resource or memory leak at end of scope proved (CVC5: 1 VC)
+test.adb:75:07: info: initialization of "P" proved
+test.adb:76:07: info: initialization of "H" proved
+test.adb:80:07: info: precondition proved (CVC5: 1 VC)
+test.adb:81:10: info: precondition proved (CVC5: 1 VC)
+test.adb:81:37: info: precondition proved (CVC5: 1 VC)
+test.adb:86:07: info: precondition proved (CVC5: 1 VC)
+test.adb:87:27: info: precondition proved (CVC5: 2 VC)
+test.adb:90:07: info: precondition proved (CVC5: 1 VC)
+test.adb:91:27: info: precondition proved (CVC5: 1 VC)
+test.adb:96:10: warning: initialization of "P2" has no effect
+test.adb:96:43: info: precondition proved (CVC5: 1 VC)
+test.adb:98:10: info: precondition proved (CVC5: 1 VC)
+test.adb:98:10: warning: statement has no effect
+test.adb:98:19: warning: "M" is set by "Dealloc" but not used after the call
+test.adb:103:07: info: absence of resource or memory leak at end of scope proved (Z3: 1 VC)
+test.adb:104:07: info: absence of resource or memory leak at end of scope proved (Z3: 1 VC)
+test.adb:105:07: info: initialization of "P" proved
+test.adb:106:07: info: initialization of "Q" proved
+test.adb:108:16: info: implicit aspect Always_Terminates on "Is_Q" has been proved, subprogram will terminate
+test.adb:121:07: info: precondition proved (CVC5: 1 VC)
+test.adb:121:28: info: precondition proved (CVC5: 1 VC)
+test.adb:122:07: info: precondition proved (CVC5: 1 VC)
+test.adb:122:15: info: precondition proved (CVC5: 1 VC)
+test.adb:123:07: info: precondition proved (CVC5: 1 VC)
+test.adb:123:15: info: precondition proved (CVC5: 1 VC)
+test.adb:127:07: info: precondition proved (CVC5: 1 VC)
+test.adb:127:20: warning: "M1" is set by "Move_Memory" but not used after the call
+test.adb:127:28: info: precondition proved (CVC5: 1 VC)
+test.adb:128:07: info: precondition proved (CVC5: 1 VC)
+test.adb:128:15: info: precondition proved (CVC5: 1 VC)
+test.adb:130:07: info: precondition proved (CVC5: 1 VC)
+test.adb:130:07: warning: statement has no effect
+test.adb:130:16: warning: "M2" is set by "Dealloc" but not used after the call
+test.adb:131:07: info: precondition proved (CVC5: 1 VC)
+test.adb:131:07: warning: statement has no effect
+test.adb:131:16: warning: "M2" is set by "Dealloc" but not used after the call
+test.adb:135:07: info: absence of resource or memory leak at end of scope proved (CVC5: 1 VC)
+test.adb:136:07: info: absence of resource or memory leak at end of scope proved (CVC5: 1 VC)
+test.adb:137:07: info: initialization of "P" proved
+test.adb:137:10: info: initialization of "Q" proved
+test.adb:137:13: info: initialization of "R" proved
+test.adb:139:07: info: precondition proved (CVC5: 1 VC)
+test.adb:140:32: info: assertion proved (CVC5: 2 VC)
+test.adb:144:07: info: precondition proved (CVC5: 1 VC)
+test.adb:144:28: info: precondition proved (CVC5: 1 VC)
+test.adb:144:33: info: precondition proved (CVC5: 1 VC)
+test.adb:145:32: info: assertion proved (CVC5: 1 VC)
+test.adb:146:07: info: precondition proved (CVC5: 1 VC)
+test.adb:147:10: info: precondition proved (CVC5: 1 VC)
+test.adb:147:34: info: precondition proved (CVC5: 1 VC)
+test.adb:149:07: info: precondition proved (CVC5: 1 VC)
+test.adb:149:15: info: precondition proved (CVC5: 1 VC)
+test.adb:150:07: info: precondition proved (CVC5: 1 VC)
+test.adb:150:28: info: precondition proved (CVC5: 1 VC)
+test.adb:151:07: info: precondition proved (CVC5: 2 VC)
+test.adb:152:07: info: precondition proved (CVC5: 1 VC)
+test.adb:153:10: info: precondition proved (CVC5: 1 VC)
+test.adb:154:07: info: precondition proved (Z3: 1 VC)
+test.adb:154:15: info: precondition proved (Z3: 1 VC)
+test.adb:155:07: info: precondition proved (Z3: 1 VC)
+test.adb:156:07: info: precondition proved (Z3: 1 VC)
+test.adb:157:07: info: precondition proved (Z3: 1 VC)
+test.adb:158:32: info: assertion proved (Z3: 2 VC)
+test.adb:165:07: info: absence of resource or memory leak at end of scope proved (Z3: 1 VC)
+test.adb:167:07: info: absence of resource or memory leak at end of scope proved (CVC5: 1 VC)
+test.adb:168:07: info: initialization of "P" proved
+test.adb:171:11: info: pointer dereference check proved (CVC5: 1 VC)
+test.adb:173:10: info: absence of resource or memory leak at end of scope proved (CVC5: 1 VC)
+test.adb:173:37: info: precondition proved (CVC5: 1 VC)
+test.adb:175:10: info: precondition proved (CVC5: 1 VC)
+test.adb:175:22: info: pointer dereference check proved (CVC5: 1 VC)
+test.adb:176:14: info: pointer dereference check proved (CVC5: 1 VC)
+test.adb:180:43: info: precondition proved (CVC5: 1 VC)
+test.adb:182:10: info: precondition proved (CVC5: 1 VC)
+test.adb:182:19: info: pointer dereference check proved (CVC5: 1 VC)
+test.adb:182:22: info: pointer dereference check proved (CVC5: 1 VC)
+test.adb:183:24: info: pointer dereference check proved (CVC5: 1 VC)
+test.adb:185:13: info: precondition proved (CVC5: 2 VC)
+test.adb:188:43: info: precondition proved (CVC5: 1 VC)
+test.adb:190:10: info: precondition proved (CVC5: 1 VC)
+test.adb:190:19: info: pointer dereference check proved (CVC5: 1 VC)
+test.adb:190:22: info: pointer dereference check proved (CVC5: 1 VC)
+test.adb:191:24: info: pointer dereference check proved (CVC5: 1 VC)
+test.adb:193:12: info: precondition proved (CVC5: 1 VC)
+test.adb:196:10: info: absence of resource or memory leak at end of scope proved (Z3: 1 VC)
+test.adb:196:37: info: precondition proved (CVC5: 1 VC)
+test.adb:198:10: info: precondition proved (Z3: 1 VC)
+test.adb:200:12: info: precondition proved (Z3: 1 VC)
+test.adb:200:12: warning: statement has no effect
+test.adb:200:22: warning: "M" is set by "Dealloc" but not used after the call
+test.adb:204:07: info: absence of resource or memory leak at end of scope proved (CVC5: 1 VC)
+test.adb:205:07: info: initialization of "P" proved
+test.adb:207:07: info: precondition proved (CVC5: 1 VC)
+test.adb:209:07: info: precondition proved (CVC5: 2 VC)
+test.adb:210:07: info: precondition proved (CVC5: 1 VC)
+test.adb:211:10: info: precondition proved (CVC5: 1 VC)
+test.adb:211:45: info: precondition proved (CVC5: 1 VC)
+test.adb:213:07: info: precondition proved (CVC5: 1 VC)
+test.adb:215:07: info: precondition proved (CVC5: 1 VC)
+test.adb:215:15: info: precondition proved (CVC5: 1 VC)
+test.adb:216:07: info: precondition proved (CVC5: 1 VC)
+test.adb:216:07: warning: statement has no effect
+test.adb:216:16: warning: "M" is set by "Dealloc" but not used after the call

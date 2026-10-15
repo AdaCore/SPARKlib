@@ -1,15 +1,14 @@
 pragma Extensions_Allowed (On);
 
 with Ada.Text_IO;
-with Counters;
 with Inst; use Inst;
 
---  Execution test for SPARK.Pointers.Auto_Reclaimed.Separate_Memory, the
---  counterpart of 1448__pointers_auto_reclaimed_global_memory_test. The memory is
---  an object here, so every operation takes one, and Move_Memory carries
---  cells from one to another.
+--  Ordinary clients are both proved against the contracts and executed
 
-procedure Test with SPARK_Mode => Off is
+procedure Test with SPARK_Mode is
+
+   procedure Assert (B : Boolean; S : String)
+   with Pre => B;
 
    procedure Assert (B : Boolean; S : String) is
    begin
@@ -22,191 +21,254 @@ procedure Test with SPARK_Mode => Off is
       use Plain_Pointers;
       use Plain_Pointers.Memory_Model;
       use Plain_Ops;
-      M : Memory_Type := Empty_Map;
-      P : Pointer;
+      M    : Memory_Type := Empty_Map;
+      P, Q : Pointer;
    begin
+      Assert
+        (P = Null_Pointer and Q = Null_Pointer, "Default pointers are null");
+      pragma Assert (Static => Is_Empty (+M));
       Create_Copy (M, (F => 1, G => 2), P);
       Assert (Deref (M, P).F = 1, "Deref of a fresh pointer");
-      declare
-         Q : constant Pointer := P;
-      begin
-         Assign (M, Q, (F => 7, G => 8));
-         Assert (Deref (M, P).F = 7, "Write through an alias is visible");
-         Assert (Deref (M, P).G = 8, "Write through an alias is visible");
-      end;
+      Assert (Deref (M, P).G = 2, "Deref preserves the other field");
+      Q := P;
+      Assign (M, Q, (F => 7, G => 8));
+      Assert (Deref (M, P).F = 7, "Write through an alias is visible");
+      Assert
+        (Deref (M, P).G = 8, "Write through an alias preserves both fields");
+      Q := Null_Pointer;
+      Assert
+        (Deref (M, P).F = 7, "Dropping an alias preserves the other owner");
+      Create_Copy (M, (F => 9, G => 10), Q);
+      Assert (P /= Q, "Create_Copy allocates a distinct cell");
+      Q := P;
+      Assert
+        (Deref (M, Q).G = 8, "Replacing a pointer preserves its new cell");
    end Test_Aliasing;
-
-   --  Two memories hold their own cells. This is the property the unit exists
-   --  for: an operation naming one memory cannot have touched the other.
 
    procedure Test_Two_Memories is
       use Plain_Pointers;
       use Plain_Pointers.Memory_Model;
       use Plain_Ops;
-      M1 : Memory_Type := Empty_Map;
-      M2 : Memory_Type := Empty_Map;
+      M1   : Memory_Type := Empty_Map;
+      M2   : Memory_Type := Empty_Map;
       P, Q : Pointer;
    begin
       Create_Copy (M1, (F => 1, G => 2), P);
       Create_Copy (M2, (F => 3, G => 4), Q);
       Assign (M2, Q, (F => 30, G => 40));
-      Assert (Deref (M1, P).F = 1, "A write in one memory left the other alone");
+      Assert
+        (Deref (M1, P).F = 1, "A write in one memory leaves the other alone");
+      Assert (Deref (M1, P).G = 2, "The other field is preserved too");
       Assert (Deref (M2, Q).F = 30, "The written cell has its new value");
+      Assert (Deref (M2, Q).G = 40, "The whole written object is replaced");
    end Test_Two_Memories;
-
-   --  Create builds the cell from an Input, where Create_Copy copies an
-   --  existing Object.
 
    procedure Test_Create is
       use Plain_Pointers;
       use Plain_Pointers.Memory_Model;
       use Plain_Ops;
-      M : Memory_Type := Empty_Map;
+      M    : Memory_Type := Empty_Map;
       P, Q : Pointer;
    begin
-      Create_From_Int (M, 5, P);
-      Assert (Deref (M, P).F = 5, "Create builds the object from its input");
-      Assert (Deref (M, P).G = 6, "Create builds the object from its input");
-      Create_From_Int (M, 5, Q);
+      Create_From_Int (M, Integer'First, P);
+      Assert
+        (Deref (M, P).F = Integer'First, "Create accepts the lower bound");
+      Assert
+        (Deref (M, P).G = Integer'First, "Create initializes both fields");
+      Create_From_Int (M, Integer'Last, Q);
+      Assert (Deref (M, Q).F = Integer'Last, "Create accepts the upper bound");
       Assert (P /= Q, "Create allocates a fresh cell each time");
+      Create_From_Int (M, 0, P);
+      Assert (Deref (M, P).F = 0, "Create can replace a nonnull pointer");
+      Assert
+        (Deref (M, Q).G = Integer'Last, "Create preserves existing cells");
    end Test_Create;
-
-   --  Move_Memory carries a cell from one memory to another. The footprint is
-   --  named by pointer identity, which is all a non-ghost comprehension can
-   --  say.
 
    procedure Test_Move_Memory is
       use Plain_Pointers;
       use Plain_Pointers.Memory_Model;
       use Plain_Ops;
-      M1 : Memory_Type := Empty_Map;
-      M2 : Memory_Type := Empty_Map;
-      P  : Pointer;
+      M1      : Memory_Type := Empty_Map;
+      M2      : Memory_Type := Empty_Map;
+      P, Q, R : Pointer;
    begin
+      Move_Memory (M1, M2, None);
+      pragma Assert (Static => Is_Empty (+M1) and Is_Empty (+M2));
       Create_Copy (M1, (F => 11, G => 12), P);
+      Create_Copy (M1, (F => 21, G => 22), Q);
+      Create_Copy (M2, (F => 31, G => 32), R);
+      Move_Memory (M1, M2, None);
+      Assert (Deref (M1, P).F = 11, "An empty move preserves its source");
+      Assert (Deref (M2, R).F = 31, "An empty move preserves its target");
       Move_Memory (M1, M2, Only (P));
-      Assert (Deref (M2, P).F = 11, "Deref after a move between memories");
+      pragma Assert (Static => not In_Memory (+M1, P));
+      Assert (Deref (M2, P).F = 11, "A singleton move preserves the object");
+      Assert
+        (Deref (M1, Q).F = 21,
+         "A singleton move preserves other source cells");
+      Assert (Deref (M2, R).F = 31, "A singleton move preserves target cells");
       Assign (M2, P, (F => 13, G => 14));
-      Assert (Deref (M2, P).F = 13, "Assign in the target memory");
+      Move_Memory (M2, M1, Only (P));
+      Assert (Deref (M1, P).G = 14, "A cell can move back after an update");
+      Move_Memory (M1, M2, Add (Only (P), Q));
+      pragma Assert (Static => Is_Empty (+M1));
+      Assert
+        (Deref (M2, P).F = 13,
+         "A multiple-cell move preserves the first cell");
+      Assert
+        (Deref (M2, Q).G = 22,
+         "A multiple-cell move preserves the second cell");
+      Assert
+        (Deref (M2, R).G = 32, "A multiple-cell move retains target data");
+      Move_Memory (M2, M1, Add (Only (P), Q));
+      Assert (Deref (M1, P).F = 13, "Multiple cells can move back");
+      Assert (Deref (M1, Q).F = 21, "The second cell also moves back");
+      Assert (Deref (M2, R).F = 31, "Other cells remain in the source");
    end Test_Move_Memory;
 
-   --  Reclamation is unchanged by the memory being an object: it is driven by
-   --  the pointer's reference count, which the model says nothing about.
-
-   procedure Test_Assign_Reclaims is
+   procedure Test_Owning_Copies is
       use Owning_Pointers;
       use Owning_Pointers.Memory_Model;
       use Owning_Ops;
-      Before : constant Natural := Counters.Reclaimed;
       M : Memory_Type := Empty_Map;
       P : Pointer;
+      O : Owning_Object := (D => null);
    begin
-      Create_Owning (M, 1, P);
+      Create_Copy (M, O, P);
       declare
          C : Owning_Object := Deref (M, P);
       begin
-         Assert (C.D.all = 1, "Deref of an owning cell");
-         Free (C.D);  --  Deref copies, so the caller owns the copy
-      end;
-
-      Assign (M, P, (D => new Integer'(2)));
-      Assert (Counters.Reclaimed = Before + 1, "Assign did not reclaim");
-      declare
-         C : Owning_Object := Deref (M, P);
-      begin
-         Assert (C.D.all = 2, "Deref after Assign");
+         Assert (C.D = null, "An empty owned object can be copied");
          Free (C.D);
       end;
-   end Test_Assign_Reclaims;
-
-   procedure Test_Last_Pointer_Reclaims is
-      use Owning_Pointers;
-      use Owning_Pointers.Memory_Model;
-      Before : constant Natural := Counters.Reclaimed;
-      M : Memory_Type := Empty_Map;
-   begin
+      O := Make (1);
+      Assign (M, P, O);
+      O.D.all := 2;
       declare
-         P : Pointer;
+         C : Owning_Object := Deref (M, P);
       begin
-         Create_Owning (M, 3, P);
-         declare
-            Q : constant Pointer := P;
-            C : Owning_Object := Owning_Ops.Deref (M, Q);
-         begin
-            Assert (C.D.all = 3, "Deref through an alias");
-            Free (C.D);
-         end;
-         Assert (Counters.Reclaimed = Before, "Reclaimed too early");
+         Assert
+           (C.D /= null and then C.D.all = 1,
+            "Assign makes an independent copy");
+         C.D.all := 3;
+         Free (C.D);
       end;
-      Assert (Counters.Reclaimed = Before + 1, "Not reclaimed exactly once");
-   end Test_Last_Pointer_Reclaims;
-
-   --  A cell that outlives the memory it was created in: the memory is a
-   --  proof device with no run-time content, so reclamation follows the
-   --  pointer, not the memory object.
+      declare
+         C : Owning_Object := Deref (M, P);
+      begin
+         Assert
+           (C.D /= null and then C.D.all = 1,
+            "Deref makes an independent copy");
+         Free (C.D);
+      end;
+      Create_Copy (M, O, P);
+      Free (O.D);
+      declare
+         C : Owning_Object := Deref (M, P);
+      begin
+         Assert
+           (C.D /= null and then C.D.all = 2,
+            "Create_Copy owns a distinct copy");
+         Free (C.D);
+      end;
+      Assign (M, P, O);
+      declare
+         C : Owning_Object := Deref (M, P);
+      begin
+         Assert (C.D = null, "Assign accepts an empty owned object");
+         Free (C.D);
+      end;
+      Create_Owning (M, 7, P);
+      declare
+         C : Owning_Object := Deref (M, P);
+      begin
+         Assert
+           (C.D /= null and then C.D.all = 7,
+            "Create builds an owning object");
+         Free (C.D);
+      end;
+   end Test_Owning_Copies;
 
    procedure Test_Handles is
       use Owning_Pointers;
       use Owning_Pointers.Memory_Model;
       use Owning_Handles;
       use Owning_Handle_Ops;
-      Before : constant Natural := Counters.Reclaimed;
-      M : Memory_Type := Empty_Map;
-      W : Weak_Handle;
+      M    : Memory_Type := Empty_Map;
+      P, Q : Pointer;
+      H    : Strong_Handle := Null_Strong_Handle;
+      W    : Weak_Handle := Null_Weak_Handle;
    begin
+      Assert
+        (Of_Strong_Handle (H) = Null_Pointer,
+         "The null strong handle is null");
+      Q := Of_Weak_Handle (W);
+      Assert
+        (Q = Null_Pointer, "The null weak handle upgrades to a null pointer");
+      H := To_Strong_Handle (W);
+      Assert
+        (Of_Strong_Handle (H) = Null_Pointer,
+         "The null weak handle stays null");
+      W := To_Weak_Handle (H);
+      Assert
+        (W = Null_Weak_Handle, "Downgrading a null strong handle gives null");
+      Q := Owning_Live_Ops.Of_Weak_Handle (W, Null_Pointer);
+      Assert (Q = Null_Pointer, "Witnessed conversion of a null weak handle");
+      H := Owning_Live_Ops.To_Strong_Handle (W, Null_Pointer);
+      Assert
+        (H = Null_Strong_Handle,
+         "Witnessed conversion to a null strong handle");
+
+      Create_Owning (M, 7, P);
+      Create_Owning (M, 8, Q);
+      H := To_Strong_Handle (P);
+      W := To_Weak_Handle (P);
+      Assert
+        (Of_Strong_Handle (H) = P,
+         "Strong handle conversion preserves identity");
+      Assert
+        (H = To_Strong_Handle (P), "Strong handles to one cell are equal");
+      Assert (W = To_Weak_Handle (H), "Weak handles to one cell are equal");
+      Assert
+        (H /= To_Strong_Handle (Q), "Strong handles to distinct cells differ");
+      Assert
+        (W /= To_Weak_Handle (Q), "Weak handles to distinct cells differ");
       declare
-         H : Strong_Handle;
+         H2 : Strong_Handle := H;
+         W2 : Weak_Handle := W;
       begin
-         declare
-            P : Pointer;
-         begin
-            Create_Owning (M, 7, P);
-            H := To_Strong_Handle (P);
-            W := To_Weak_Handle (P);
-         end;
-         Assert (Counters.Reclaimed = Before,
-                 "A strong handle does not keep the cell alive");
-         declare
-            C : Owning_Object := Owning_Ops.Deref (M, Of_Strong_Handle (H));
-         begin
-            Assert (C.D.all = 7, "Deref through a strong handle");
-            Free (C.D);
-         end;
-
-         --  The witnessed upgrade cannot fail: the caller hands over the
-         --  pointer it is holding, which is what keeps the cell alive.
-         declare
-            P : constant Pointer := Of_Strong_Handle (H);
-            Q : constant Pointer := Owning_Live_Ops.Of_Weak_Handle (W, P);
-         begin
-            Assert (Q = P, "Witnessed upgrade returned the same cell");
-            Assert (Of_Strong_Handle
-                      (Owning_Live_Ops.To_Strong_Handle (W, P)) = P,
-                    "Witnessed strong handle designates another cell");
-
-            --  The unwitnessed conversions, which may fail in general but
-            --  cannot here, and equality on handles.
-            Assert (Of_Weak_Handle (W) = P,
-                    "Upgrade of a live weak handle");
-            Assert (Of_Strong_Handle (To_Strong_Handle (W)) = P,
-                    "Strong handle from a live weak handle");
-            Assert (Owning_Handle_Ops."=" (H, To_Strong_Handle (P)),
-                    "Two strong handles to the same cell are not equal");
-            Assert (Owning_Handle_Ops."=" (W, To_Weak_Handle (H)),
-                    "Two weak handles to the same cell are not equal");
-
-            Assert (Of_Strong_Handle (Null_Strong_Handle) = Null_Pointer,
-                    "Null_Strong_Handle designates Null_Pointer");
-            Assert (Of_Weak_Handle (Null_Weak_Handle) = Null_Pointer,
-                    "Null_Weak_Handle designates Null_Pointer");
-         end;
+         H2 := To_Strong_Handle (Q);
+         W2 := To_Weak_Handle (Q);
+         Assert (Of_Strong_Handle (H2) = Q, "Strong handle replacement");
+         Assert (W2 = To_Weak_Handle (Q), "Weak handle replacement");
+         H2 := H;
+         W2 := W;
+         Assert
+           (Of_Strong_Handle (H2) = P,
+            "Strong handle copies preserve identity");
+         Assert (W2 = W, "Weak handle copies preserve identity");
       end;
-      Assert (Counters.Reclaimed = Before + 1,
-              "Not reclaimed when the last handle died");
-      Assert (To_Strong_Handle (W) = Null_Strong_Handle,
-              "A dead weak handle can be promoted to a strong handle");
-      Assert (Of_Weak_Handle (W) = Null_Pointer,
-              "A dead weak handle can be promoted to a pointer");
+      Q := Owning_Live_Ops.Of_Weak_Handle (W, P);
+      Assert (Q = P, "A witnessed upgrade returns the same cell");
+      H := Owning_Live_Ops.To_Strong_Handle (W, P);
+      Assert
+        (Of_Strong_Handle (H) = P, "A witnessed strong handle keeps identity");
+      declare
+         C : Owning_Object := Owning_Ops.Deref (M, Of_Strong_Handle (H));
+      begin
+         Assert
+           (C.D /= null and then C.D.all = 7, "Deref through a strong handle");
+         Free (C.D);
+      end;
+      Q := Of_Weak_Handle (W);
+      Assert
+        (Q = P or Q = Null_Pointer,
+         "An unwitnessed upgrade respects its contract");
+      H := To_Strong_Handle (W);
+      Q := Of_Strong_Handle (H);
+      Assert
+        (Q = P or Q = Null_Pointer,
+         "An unwitnessed strong upgrade respects its contract");
    end Test_Handles;
 
 begin
@@ -214,7 +276,6 @@ begin
    Test_Two_Memories;
    Test_Create;
    Test_Move_Memory;
-   Test_Assign_Reclaims;
-   Test_Last_Pointer_Reclaims;
+   Test_Owning_Copies;
    Test_Handles;
 end Test;

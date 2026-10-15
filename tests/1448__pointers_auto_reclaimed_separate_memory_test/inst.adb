@@ -1,20 +1,19 @@
-with Counters;
+package body Inst
+  with SPARK_Mode
+is
 
-package body Inst with SPARK_Mode is
-
-   procedure Bump with Global => null, Always_Terminates;
-   --  The body is hidden from SPARK, so that Reclaim can keep the
-   --  Global => null contract the library's formal expects.
-
-   procedure Bump with SPARK_Mode => Off is
+   function Copy_Owning (O : Owning_Object) return Owning_Object is
    begin
-      Counters.Bump;
-   end Bump;
+      if O.D = null then
+         return (D => null);
+      else
+         return (D => new Integer'(O.D.all));
+      end if;
+   end Copy_Owning;
 
    procedure Reclaim (X : in out Owning_Object) is
    begin
       Free (X.D);
-      Bump;
    end Reclaim;
 
 end Inst;

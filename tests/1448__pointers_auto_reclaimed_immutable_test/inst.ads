@@ -8,7 +8,9 @@ with SPARK.Big_Integers; use SPARK.Big_Integers;
 with SPARK.Pointers.Auto_Reclaimed.Immutable;
 with SPARK.Pointers.Handles.Auto_Reclaimed_Handles;
 
-package Inst with SPARK_Mode is
+package Inst
+  with SPARK_Mode
+is
 
    --  A plain designated object
 
@@ -17,9 +19,11 @@ package Inst with SPARK_Mode is
       G : Integer;
    end record;
 
-   package Plain_Pointers is new SPARK.Pointers.Auto_Reclaimed.Immutable (Plain_Object);
+   package Plain_Pointers is new
+     SPARK.Pointers.Auto_Reclaimed.Immutable (Plain_Object);
 
-   function Id (O : Plain_Object) return Plain_Object is (O);
+   function Id (O : Plain_Object) return Plain_Object
+   is (O);
    function Create_Plain is new Plain_Pointers.Create (Plain_Object, Id);
 
    --  Deref, which copies the designated value, as opposed to
@@ -27,8 +31,7 @@ package Inst with SPARK_Mode is
 
    package Plain_Ops is new Plain_Pointers.Copy_Operations;
 
-   --  A designated object subject to ownership. Reclaim frees the cell and
-   --  bumps a counter, so the test can observe that the library reclaims.
+   --  A designated object subject to ownership
 
    type Int_Acc is access Integer;
 
@@ -48,6 +51,15 @@ package Inst with SPARK_Mode is
    is (D => new Integer'(V));
 
    function Create_Owning is new Owning_Pointers.Create (Integer, Make);
+
+   function Copy (O : Owning_Object) return Owning_Object
+   with
+     Global => null,
+     Post   =>
+       (Copy'Result.D = null) = (O.D = null)
+       and then (if O.D /= null then Copy'Result.D.all = O.D.all);
+
+   package Owning_Ops is new Owning_Pointers.Copy_Operations (Copy);
 
    --  Handles over the owning pointers. Immutable data cannot form a cycle,
    --  so the flavour without weak handles is the right one.
@@ -79,16 +91,17 @@ package Inst with SPARK_Mode is
    package List_Handle_Ops is new
      List_Pointers.Handle_Operations (List_Handles);
 
-   function Id_Cell (C : List_Cell) return List_Cell is (C);
+   function Id_Cell (C : List_Cell) return List_Cell
+   is (C);
    function Create_Cell is new List_Pointers.Create (List_Cell, Id_Cell);
 
-   function Cell_Next (O : not null access constant List_Cell)
-     return access constant List_Handles.Handle
+   function Cell_Next
+     (O : not null access constant List_Cell)
+      return access constant List_Handles.Handle
    is (O.Next'Access)
    with Global => null;
 
-   package List_Variant is new
-     List_Handle_Ops.Structural_Variant (Cell_Next);
+   package List_Variant is new List_Handle_Ops.Structural_Variant (Cell_Next);
 
    use type List_Pointers.Pointer;
 
@@ -99,10 +112,10 @@ package Inst with SPARK_Mode is
        or else
          (List_Handle_Ops.Valid_Handle
             (Cell_Next (List_Pointers.Constant_Reference (P)).all)
-          and then Valid_Chain
-                     (List_Handle_Ops.Of_Handle
-                        (Cell_Next
-                           (List_Pointers.Constant_Reference (P)).all))))
+          and then
+            Valid_Chain
+              (List_Handle_Ops.Of_Handle
+                 (Cell_Next (List_Pointers.Constant_Reference (P)).all))))
    with
      Ghost              => Static,
      Global             => null,
@@ -111,10 +124,11 @@ package Inst with SPARK_Mode is
    function Sum (P : List_Pointers.Pointer) return Big_Integer
    is (if P = List_Pointers.Null_Pointer
        then Big_Integer'(0)
-       else To_Big_Integer (List_Pointers.Constant_Reference (P).Value)
-            + Sum (List_Handle_Ops.Of_Handle
-                     (Cell_Next
-                        (List_Pointers.Constant_Reference (P)).all)))
+       else
+         To_Big_Integer (List_Pointers.Constant_Reference (P).Value)
+         + Sum
+             (List_Handle_Ops.Of_Handle
+                (Cell_Next (List_Pointers.Constant_Reference (P)).all)))
    with
      Ghost              => Static,
      Global             => null,
@@ -125,6 +139,13 @@ package Inst with SPARK_Mode is
    --  use it, including non-ghost code, by giving the variant at that level.
 
    function Count (P : List_Pointers.Pointer) return Big_Natural
+   is (if P = List_Pointers.Null_Pointer
+       then Big_Natural'(0)
+       else
+         1
+         + Count
+             (List_Handle_Ops.Of_Handle
+                (Cell_Next (List_Pointers.Constant_Reference (P)).all)))
    with
      Global             => null,
      Pre                => (Static => Valid_Chain (P)),
@@ -153,9 +174,19 @@ package Inst with SPARK_Mode is
    package Tree_Handle_Ops is new
      Tree_Pointers.Handle_Operations (Tree_Handles);
 
-   function Tree_Next (O : not null access constant Tree_Node; W : Way)
-     return access constant Tree_Handles.Handle
-   with Global => null;
+   function Tree_Next
+     (O : not null access constant Tree_Node; W : Way)
+      return access constant Tree_Handles.Handle
+   with
+     Global => null,
+     Post   =>
+       (Static =>
+          (Tree_Next'Result = null) = (W > O.Arity)
+          and then
+            (if W <= O.Arity
+             then
+               Tree_Handle_Ops.Logical_Eq
+                 (Tree_Next'Result.all, O.Children (W))));
    --  Null along a way the node does not have. SPARK requires 'Access to sit
    --  directly in a return statement, so this cannot be an expression
    --  function.
@@ -173,14 +204,46 @@ package Inst with SPARK_Mode is
              then
                Tree_Handle_Ops.Valid_Handle
                  (Tree_Next (Tree_Pointers.Constant_Reference (P), W).all)
-               and then Valid_Tree
-                          (Tree_Handle_Ops.Of_Handle
-                             (Tree_Next
-                                (Tree_Pointers.Constant_Reference (P),
-                                 W).all)))))
+               and then
+                 Valid_Tree
+                   (Tree_Handle_Ops.Of_Handle
+                      (Tree_Next
+                         (Tree_Pointers.Constant_Reference (P), W).all)))))
    with
      Ghost              => Static,
      Global             => null,
      Subprogram_Variant => (Decreases => Tree_Variant.Weight (P));
+
+   function Id_Node (O : Tree_Node) return Tree_Node
+   is (O);
+   function Create_Node is new Tree_Pointers.Create (Tree_Node, Id_Node);
+
+   function Tree_Count (P : Tree_Pointers.Pointer) return Big_Natural
+   is (if P = Tree_Pointers.Null_Pointer
+       then Big_Natural'(0)
+       else
+         1
+         + (if Tree_Pointers.Constant_Reference (P).Arity >= 1
+            then
+              Tree_Count
+                (Tree_Handle_Ops.Of_Handle
+                   (Tree_Pointers.Constant_Reference (P).Children (1)))
+            else 0)
+         + (if Tree_Pointers.Constant_Reference (P).Arity >= 2
+            then
+              Tree_Count
+                (Tree_Handle_Ops.Of_Handle
+                   (Tree_Pointers.Constant_Reference (P).Children (2)))
+            else 0)
+         + (if Tree_Pointers.Constant_Reference (P).Arity >= 3
+            then
+              Tree_Count
+                (Tree_Handle_Ops.Of_Handle
+                   (Tree_Pointers.Constant_Reference (P).Children (3)))
+            else 0))
+   with
+     Global             => null,
+     Pre                => (Static => Valid_Tree (P)),
+     Subprogram_Variant => (Static => (Decreases => Tree_Variant.Weight (P)));
 
 end Inst;
