@@ -18,6 +18,21 @@ is
      with SPARK_Mode => Off
    is
 
+      ----------------------
+      -- Constant_Element --
+      ----------------------
+
+      function Constant_Element
+        (V : aliased View) return not null access constant Object
+      is
+         type View_Access is access constant View;
+         type Object_Access is access constant Object;
+         function From_View is new
+           Ada.Unchecked_Conversion (View_Access, Object_Access);
+      begin
+         return From_View (V'Access).all'Unchecked_Access;
+      end Constant_Element;
+
       --------------
       -- Get_View --
       --------------
@@ -37,6 +52,13 @@ is
       -- Move --
       ----------
 
+      procedure Move (Source : in out View_Array; Target : in out View_Array)
+      is
+         pragma Unmodified (Source);
+      begin
+         Target := Source;
+      end Move;
+
       procedure Move
         (Source       : in out View_Array;
          Source_From  : Index_Type'Base;
@@ -53,6 +75,21 @@ is
          Target (Target_From .. Target_Up_To) :=
            Source (Source_From .. Source_Up_To);
       end Move;
+
+      -----------------------
+      -- Reference_Element --
+      -----------------------
+
+      function Reference_Element
+        (V : aliased in out View) return not null access Object
+      is
+         type View_Access is access all View;
+         type Object_Access is access all Object;
+         function From_View is new
+           Ada.Unchecked_Conversion (View_Access, Object_Access);
+      begin
+         return From_View (V'Access).all'Unchecked_Access;
+      end Reference_Element;
 
       --------------
       -- Relocate --

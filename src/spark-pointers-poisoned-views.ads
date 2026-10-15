@@ -270,6 +270,29 @@ is
         Post     => Logical_Eq (Copy'Result, A),
         Annotate => (GNATprove, Inline_For_Proof);
 
+      --  Accessors for array cells
+
+      function Constant_Element
+        (V : aliased View) return not null access constant Object
+      with
+        Global => null,
+        Pre    => (Static => not Is_Poisoned (V)),
+        Post   =>
+          (Static =>
+             Object_Logic_Equal (Constant_Element'Result.all, Peek (V)));
+
+      function Reference_Element
+        (V : aliased in out View) return not null access Object
+      with
+        Global => null,
+        Pre    => (Static => not Is_Poisoned (V)),
+        Post   =>
+          (Static =>
+             not Is_Poisoned (At_End (V))
+             and then
+               Object_Logic_Equal
+                 (Peek (At_End (V)), At_End (Reference_Element'Result).all));
+
       --  Construct a view from an existing array
 
       function At_End (A : Object_Array) return Object_Array
@@ -370,6 +393,32 @@ is
                (for all I in Source_From .. Source_Up_To =>
                   Logical_Eq
                     (Copy (A)'Old (I), A (I - Source_From + Target_From))));
+
+      procedure Move (Source : in out View_Array; Target : in out View_Array)
+      with
+        --  Move all cells to an array of the same length. This is equivalent
+        --  to:
+        --
+        --  Target := Source;
+
+        Global => null,
+        Pre    =>
+          (Static =>
+             Source'Length = Target'Length
+             and then (for all V of Target => Is_Reclaimed (V))),
+        Post   =>
+          (Static =>
+             (for all V of Source => Is_Poisoned (V))
+             and then
+               (for all I in Target'Range =>
+                  Logical_Eq
+                    (Target (I),
+                     Copy (Source)'Old (Source'First + (I - Target'First))))
+             and then
+               (for all I in Source'Range =>
+                  Logical_Eq
+                    (Copy (Source)'Old (I),
+                     Target (Target'First + (I - Source'First)))));
 
       procedure Move
         (Source       : in out View_Array;

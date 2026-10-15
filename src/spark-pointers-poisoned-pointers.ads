@@ -350,6 +350,36 @@ is
                     (Copy (A)'Old (I), A (I - Source_From + Target_From))));
 
       procedure Move
+        (Source : in out Pointer_Array; Target : in out Pointer_Array)
+      with
+        --  Move all cells to an array of the same length. This is equivalent
+        --  to:
+        --
+        --  Target := Source;
+
+        Global => null,
+        Pre    =>
+          (Static =>
+             Source'Length = Target'Length
+             and then (for all P of Target => Is_Reclaimed (P))),
+        Post   =>
+          (Static =>
+             (for all I in Source'Range =>
+                (if Copy (Source)'Old (I) = Null_Pointer
+                 then Source (I) = Null_Pointer
+                 else Is_Poisoned (Source (I))))
+             and then
+               (for all I in Target'Range =>
+                  Extensional_Eq
+                    (Target (I),
+                     Copy (Source)'Old (Source'First + (I - Target'First))))
+             and then
+               (for all I in Source'Range =>
+                  Extensional_Eq
+                    (Copy (Source)'Old (I),
+                     Target (Target'First + (I - Source'First)))));
+
+      procedure Move
         (Source       : in out Pointer_Array;
          Source_From  : Index_Type'Base;
          Source_Up_To : Index_Type'Base;

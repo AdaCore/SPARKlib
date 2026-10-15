@@ -131,6 +131,25 @@ procedure Test with SPARK_Mode => Off is
       Assert (A (3).V = 1, "Swap through a view moved the first element");
    end Test_View_Array;
 
+   --  The whole array Move on views
+
+   procedure Test_View_Array_Move is
+      use Views;
+      use View_Arrays;
+      Source : View_Array (1 .. 3) :=
+        [Create_View (1), Create_View (2), Create_View (3)];
+      Target : View_Array (1 .. 3);
+   begin
+      Move (Source, Target);
+      Assert (Constant_Element (Target (1)).V = 1, "Move carried the array");
+      Assert (Constant_Element (Target (3)).V = 3, "Move carried the array");
+
+      Reference_Element (Target (2)).V := 4;
+      Assert (Constant_Element (Target (2)).V = 4,
+              "Reference_Element wrote through the view");
+      --  Source is poisoned throughout, so it owns nothing
+   end Test_View_Array_Move;
+
    --  The slice operations. Relocate shifts 4 .. 6 down onto 1 .. 3 inside
    --  one array; the cells it moves out of are left poisoned, so only the
    --  landing cells are reclaimed at the end.
@@ -177,6 +196,26 @@ procedure Test with SPARK_Mode => Off is
       end loop;
       --  Source is poisoned throughout, so it owns nothing
    end Test_Pointer_Move_Slice;
+
+   --  The whole array Move
+
+   procedure Test_Pointer_Array_Move is
+      use Pointers;
+      use Pointer_Arrays;
+      Source : Pointer_Array (1 .. 3) :=
+        [Create_Pointer ((V => 1)), Create_Pointer ((V => 2)),
+         Create_Pointer ((V => 3))];
+      Target : Pointer_Array (1 .. 3);
+   begin
+      Move (Source, Target);
+      Assert (Constant_Reference (Target (1)).V = 1, "Move carried the array");
+      Assert (Constant_Reference (Target (3)).V = 3, "Move carried the array");
+
+      for I in Target'Range loop
+         Reclaim (Target (I));
+      end loop;
+      --  Source is poisoned throughout, so it owns nothing
+   end Test_Pointer_Array_Move;
 
    --  A view of a single object, rather than of an array
 
@@ -273,8 +312,10 @@ begin
    Test_Handles;
    Test_Pointer_Array;
    Test_Pointer_Slice;
+   Test_Pointer_Array_Move;
    Test_Pointer_Move_Slice;
    Test_View_Array;
+   Test_View_Array_Move;
    Test_View_Scalar;
    Test_View_Slice;
    Test_View_Create;
