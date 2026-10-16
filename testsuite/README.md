@@ -6,7 +6,9 @@ driver, so the usual options apply:
 
 ```sh
 ./run-tests                     # run everything
-./run-tests 665__c_strings_test # run one test
+./run-tests coverage_test/c_strings # run one test
+./run-tests coverage_proof/functional_trees
+./run-tests coverage_test       # run the execution group
 ./run-tests -j8 --disc=large
 ./run-tests <test> -d temp      # keep the working directory for inspection
 ```
@@ -24,6 +26,73 @@ By default the tests use the SPARKlib of the SPARK installation that provides
 This builds an installed-tree layout out of the sources with
 `scripts/sparklib_tree.py` and exports `SPARKLIB_PROJECT_PATH`, which is the
 same mechanism the CI jobs use.
+
+## Tests of this testsuite
+
+A test of this testsuite is a directory under `../tests` whose `test.yaml`
+names a driver. Migrated coverage clients live in
+`../tests/coverage_test/<name>`, with their proofs in
+`../tests/coverage_proof/<name>`. Select them using paths relative to
+`../tests`, such as `coverage_test/functional_trees`, also in `--testlist`
+files. Results use e3-testsuite's canonical names, with `/` replaced by `__`
+(for example, `coverage_test__functional_trees`); `--testlist` also accepts
+these names. Unmigrated tests keep their existing names.
+Baselines are kept to a minimum: an execution test has none,
+and a proof test files only what gnatprove reports as a failure, never the
+messages about checks that are proved.
+
+### `driver: exec`
+
+Builds a client of SPARKlib against the body-mode library, with assertions
+enabled, and runs it. The library contracts are checked at run time, so the
+test passes when the build and the program succeed and the program prints
+nothing.
+
+```yaml
+driver: exec
+large: true            # run only with the "large" discriminant
+timeout: 1500          # seconds, for each process the test runs
+runs:                  # what to build and run; the default is the entry below
+  - project: test.gpr
+    binary: obj/test
+```
+
+### `driver: proof`
+
+Runs gnatprove on a client of SPARKlib and compares what it reports against
+`test.out`. The tool is asked for failures only (`--report=fail`), so the
+baseline holds what the test is about — the checks the client does not prove,
+and the warnings it gets — rather than a line per proved check. A client that
+proves entirely files no baseline at all. Lines are compared as a set, since
+proving on several cores reports in no particular order, and `--rewrite`
+refreshes a baseline from a run.
+
+```yaml
+driver: proof
+sources: ../../coverage_test/formal_vectors # relative to this test directory
+jobs: 4                # cores for gnatprove, and slots taken in the run
+body_mode: false       # analyse the library bodies too (default: true)
+level: 2               # or "steps:", which defaults to 200
+replay: session        # replay the recorded sessions in proof/sessions
+switches: ["--no-inlining"]
+project: test.gpr      # the project to prove, if not test.gpr
+large: true
+timeout: 3000
+```
+
+The execution and the proof of one client are two tests so that each gets its
+own timeout, its own result, and its own share of the machine; `sources` is
+what keeps the program itself in a single place. A proof test declares how
+many cores it takes with `jobs`, and the run schedules it against that weight,
+so that `-j16` means sixteen cores rather than sixteen tests.
+
+## Coverage
+
+`sparklib-coverage.py` runs the tests listed in `../tests/coverage.manifest`
+with instrumentation and produces an HTML report of the SPARKlib code they
+exercise, in `sparklib-report`. It needs `gnatcov` on the PATH, and reports on
+the same SPARKlib the tests ran against, so point it with
+`SPARKLIB_PROJECT_PATH` as the CI job does.
 
 ## Migration in progress
 

@@ -26,10 +26,7 @@ sys.path.append(os.path.join(testsuite_dir, "lib"))
 sys.path.append(os.path.join(sparklib_dir, "scripts"))
 
 import sparklib_tree  # noqa: E402
-
-# Environment variable naming the SPARKlib to test. It is read by the drivers
-# of both testsuites, so setting it here also directs the unmigrated tests.
-sparklib_project_path_env = "SPARKLIB_PROJECT_PATH"
+from sparklib_support import sparklib_project_path_env  # noqa: E402
 
 # Environment variable overriding the location of the gnatprove testsuite
 # support library, for setups in which neither default location applies.
@@ -66,14 +63,16 @@ sys.path.append(spark2014_lib)
 
 from spark_drivers import SPARKTestFinder  # noqa: E402
 
-# The drivers of this testsuite, by the name a test.yaml selects them with.
-# It is empty as long as no test has been migrated, which makes any "driver"
-# key an error rather than a silently ignored one.
-drivers = {}
+import exec_driver  # noqa: E402
+import proof_driver  # noqa: E402
 
-# The test.yaml keys a migrated test may use. Anything else is rejected, so
-# that a mistyped key cannot quietly turn into a no-op.
-known_yaml_keys = {"driver", "large", "timeout"}
+# The drivers of this testsuite, by the name a test.yaml selects them with,
+# each with the keys its tests may use. Anything else is rejected, so that a
+# mistyped key cannot quietly turn into a no-op.
+drivers = {
+    "exec": (exec_driver.ExecTestDriver, exec_driver.known_yaml_keys),
+    "proof": (proof_driver.ProofTestDriver, proof_driver.known_yaml_keys),
+}
 
 
 class SparklibTestFinder(TestFinder):
@@ -89,13 +88,14 @@ class SparklibTestFinder(TestFinder):
         self.only_large = only_large
 
     def probe(self, testsuite, dirpath, dirnames, filenames):
-        # Only a direct subdirectory of the tests directory can be a test.
-        if os.path.dirname(os.path.abspath(dirpath)) != self.tests_dir:
-            return None
+        relpath = os.path.relpath(dirpath, self.tests_dir).replace(os.sep, "/")
+        if relpath in ("coverage_test", "coverage_proof"):
+            # These are groups, not legacy tests. Claim them without pruning
+            # their children, so the legacy finder does not stop discovery.
+            return []
         if "test.yaml" not in filenames:
             return None
-
-        testname = os.path.basename(dirpath)
+        testname = testsuite.test_name(dirpath)
         yaml_file = os.path.join(dirpath, "test.yaml")
         try:
             test_env = e3.yaml.load_with_config(yaml_file, {})
@@ -112,18 +112,23 @@ class SparklibTestFinder(TestFinder):
         driver_name = test_env["driver"]
         if driver_name not in drivers:
             raise ProbingError(f"{testname}: unknown driver {driver_name}")
+        driver, known_yaml_keys = drivers[driver_name]
         unknown = sorted(set(test_env) - known_yaml_keys)
         if unknown:
             raise ProbingError(
                 f"{testname}: unknown test.yaml keys: {', '.join(unknown)}"
             )
 
-        if self.testlist and testname not in self.testlist:
+        if (
+            self.testlist
+            and testname not in self.testlist
+            and relpath not in self.testlist
+        ):
             return None
         if self.only_large and not test_env.get("large"):
             return None
 
-        return ParsedTest(testname, drivers[driver_name], test_env, dirpath)
+        return ParsedTest(testname, driver, test_env, dirpath)
 
 
 class SparklibTestsuite(Testsuite):
@@ -227,6 +232,35 @@ class SparklibTestsuite(Testsuite):
         if self.main.args.coverage:
             os.environ["coverage"] = "true"
         return dict(os.environ)
+
+    def run_standard_mainloop(self, dag):
+        """Run the tests, each taking the share of the machine it asks for.
+
+        e3-testsuite gives every test the same weight, which is wrong here: an
+        execution test takes one core, while a proof test hands gnatprove
+        several, and a run wide enough to keep the machine busy with the
+        former would multiply the latter by as many proof tests as it starts
+        at once. The scheduler underneath does support weighted jobs, it just
+        does not expose them, so declare the weight each driver asks for.
+        """
+        import e3.testsuite.fragment as fragment
+
+        max_tokens = self.main.args.jobs or os.cpu_count() or 1
+        plain_fragment = fragment.ThreadTestFragment
+
+        class WeightedTestFragment(plain_fragment):
+            def __init__(self, *args, **kwargs):
+                super().__init__(*args, **kwargs)
+                # A test asking for more than the whole pool would never be
+                # scheduled, and the run would hang rather than fail.
+                weight = getattr(self.driver, "tokens", 1)
+                self.tokens = max(1, min(weight, max_tokens))
+
+        fragment.ThreadTestFragment = WeightedTestFragment
+        try:
+            super().run_standard_mainloop(dag)
+        finally:
+            fragment.ThreadTestFragment = plain_fragment
 
     def set_up(self):
         super().set_up()

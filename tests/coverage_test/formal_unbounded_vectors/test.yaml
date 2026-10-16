@@ -1,0 +1,7 @@
+driver: exec
+large: true
+runs:
+  - project: test.gpr
+    binary: obj/test
+  - project: test_resize.gpr
+    binary: r_obj/test_resize
