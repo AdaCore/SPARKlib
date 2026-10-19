@@ -1224,7 +1224,7 @@ is
      Pre    =>
        (SPARKlib_Defensive =>
           Length (Source) - Length (Target and Source)
-          <= Count_Type'Last - Length (Target) + Length (Target and Source)),
+          <= Count_Type'Last - Length (Target)),
      Post   =>
        (SPARKlib_Full =>
           E.Big (Length (Target))
