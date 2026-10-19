@@ -1,0 +1,5 @@
+driver: proof
+sources: ../../coverage_test/access_conversions
+jobs: 4
+steps: 8000
+switches: ["-u", "inst.ads", "test.adb", "--no-inlining"]
