@@ -25,7 +25,7 @@ is
        and then Count < Container.Capacity
        and then Container.Nodes (New_Node).Prev'Initialized
        and then Container.Nodes (New_Node).Next'Initialized
-       and then Container.Nodes (New_Node).Element'Initialized
+       and then Container.Elements (New_Node).V'Initialized
        and then
          not Memory_Index_Sets.Contains (Active_Set (Container), New_Node)
        and then Active_List_Valid (Container, Count)
@@ -416,7 +416,7 @@ is
          Lemma_Reachable_Def (LI, Memory (Left));
          Lemma_Reachable_Def (RI, Memory (Right));
 
-         if Left.Nodes (LI).Element /= Right.Nodes (RI).Element then
+         if Left.Elements (LI).V /= Right.Elements (RI).V then
             return False;
          end if;
 
@@ -456,12 +456,12 @@ is
          --  New_Node is the head of the free chain, hence a free node: it is
          --  deallocated (Prev = -1) and disjoint from the active list.
 
-         N (New_Node).Element := New_Item;
+         Container.Elements (New_Node).V := New_Item;
          Container.Free := N (New_Node).Next;
 
       else
          New_Node := abs Container.Free;
-         N (New_Node).Element := New_Item;
+         Container.Elements (New_Node).V := New_Item;
 
          --  Initialize the bookkeeping links of the freshly exposed node
          --  before it becomes "touched" (which only happens once Free is
@@ -554,7 +554,7 @@ is
          Lemma_Reachable_Def (J, Memory (Source));
          Lemma_Is_Acyclic_Def (J, Memory (Source));
 
-         Append (Target, N (J).Element, 1);
+         Append (Target, Source.Elements (J).V, 1);
          J := N (J).Next;
       end loop;
    end Assign;
@@ -603,7 +603,7 @@ is
          raise Program_Error with "Position cursor has no element";
       end if;
 
-      return Container.Nodes (Position.Node).Element'Access;
+      return Container.Elements (Position.Node).V'Access;
    end Constant_Reference;
 
    --------------
@@ -726,12 +726,13 @@ is
            with "Requested capacity is less than Source length";
       end if;
 
-      --  Copy the touched region as a single slice assignment (not field by
-      --  field): it copies the whole node records, so Source's untouched tail
-      --  with its uninitialized fields is carried over without a read of an
-      --  uninitialized scalar.
+      --  Copy the link and element arrays as slices so that Source's
+      --  untouched tail is carried over without reading uninitialized
+      --  scalars. Each element is copied once.
 
       P.Nodes (1 .. Source.Capacity) := Source.Nodes (1 .. Source.Capacity);
+      P.Elements (1 .. Source.Capacity) :=
+        Source.Elements (1 .. Source.Capacity);
 
       P.Length := Source.Length;
       P.First := Source.First;
@@ -1004,7 +1005,7 @@ is
          raise Constraint_Error with "Position cursor has no element";
       end if;
 
-      return Container.Nodes (Position.Node).Element;
+      return Container.Elements (Position.Node).V;
    end Element;
 
    ----------------
@@ -1017,7 +1018,8 @@ is
        Length   => 0,
        First    => 0,
        Last     => 0,
-       Nodes    => (1 .. Capacity => <>));
+       Nodes    => (1 .. Capacity => <>),
+       Elements => (1 .. Capacity => <>));
 
    ----------
    -- Find --
@@ -1056,7 +1058,7 @@ is
            (Container.First, From, Memory (Container));
          Lemma_Reachable_Def (From, Memory (Container));
 
-         if Container.Nodes (From).Element = Item then
+         if Container.Elements (From).V = Item then
             return (Node => From);
          end if;
 
@@ -1084,7 +1086,7 @@ is
       if F = 0 then
          raise Constraint_Error with "list is empty";
       else
-         return Container.Nodes (F).Element;
+         return Container.Elements (F).V;
       end if;
    end First_Element;
 
@@ -1340,7 +1342,9 @@ is
               (Container.First, Node, Memory (Container));
             Lemma_Reachable_Def (Node, Memory (Container));
 
-            if Nodes (Nodes (Node).Next).Element < Nodes (Node).Element then
+            if Container.Elements (Nodes (Node).Next).V
+              < Container.Elements (Node).V
+            then
                return False;
             else
                Node := Nodes (Node).Next;
@@ -1428,7 +1432,7 @@ is
                return;
             end if;
 
-            if RN (RI.Node).Element < LN (LI.Node).Element then
+            if Source.Elements (RI.Node).V < Target.Elements (LI.Node).V then
                declare
                   RJ : Cursor := RI;
 
@@ -1492,8 +1496,12 @@ is
          --  call's own entry and exit, not the sort's entry.
 
          function Segment_Valid
-           (M : Nodes_Type_Base; D : List_Descriptor) return Boolean
-         is (Valid_Memory (M)
+           (M        : Nodes_Type_Base;
+            Elements : Elements_Array;
+            D        : List_Descriptor) return Boolean
+         is (M'First >= Elements'First
+             and then M'Last <= Elements'Last
+             and then Valid_Memory (M)
              and then (for all N of M => N.Prev'Initialized)
              and then D.First in M'Range | 0
              and then Is_Acyclic (D.First, M)
@@ -1511,7 +1519,7 @@ is
              and then
                (for all I of Reachable_Set (D.First, M) =>
                   M (I).Prev in 0 .. M'Last
-                  and then M (I).Element'Initialized
+                  and then Elements (I).V'Initialized
                   and then (if M (I).Next = 0 then I = D.Last)
                   and then
                     (if M (I).Prev = 0
@@ -1520,10 +1528,10 @@ is
                        Reachable (D.First, M, M (I).Prev)
                        and then M (M (I).Prev).Next = I)))
          with Ghost => Static;
-         --  D is a well-formed doubly linked segment of the memory M: an
-         --  acyclic chain of D.Length allocated nodes running from D.First to
-         --  D.Last, with the Prev links mirroring the Next links inside the
-         --  segment.
+         --  D is a well-formed doubly linked segment of M, with initialized
+         --  values in Elements. Its D.Length allocated nodes form an acyclic
+         --  chain from D.First to D.Last, with Prev links mirroring Next links
+         --  inside the segment.
 
          function Untouched_Outside
            (M1, M2 : Nodes_Type_Base; S : Memory_Index_Set) return Boolean
@@ -1533,16 +1541,12 @@ is
              and then (for all N of M2 => N.Prev'Initialized)
              and then
                (for all I in M1'Range =>
-                  M1 (I).Element'Initialized = M2 (I).Element'Initialized)
-             and then
-               (for all I in M1'Range =>
                   (if not Memory_Index_Sets.Contains (S, I)
                    then
                      M1 (I).Prev = M2 (I).Prev
                      and then M1 (I).Next = M2 (I).Next)))
          with Ghost => Static;
-         --  The frame of the sort helpers: they only ever relink the nodes of
-         --  the segments they are given, and never touch an element
+         --  The links outside S are unchanged
 
          Whole : List_Descriptor :=
            (First  => Container.First,
@@ -1564,17 +1568,19 @@ is
            Pre      =>
              (Static =>
                 Container.Free = Old_Free
-                and then Segment_Valid (Memory (Container), Source)
+                and then
+                  Segment_Valid
+                    (Memory (Container), Container.Elements, Source)
                 and then Source.Length >= 1),
            Post     =>
              (Static =>
-                Segment_Valid (Memory (Container), Source)
+                Segment_Valid (Memory (Container), Container.Elements, Source)
                 and then Detached = Source'Old.First
                 and then Detached in Memory (Container)'Range
                 and then Source.Length = Source'Old.Length - 1
                 and then Memory (Container) (Detached).Prev = 0
                 and then Memory (Container) (Detached).Next = 0
-                and then Memory (Container) (Detached).Element'Initialized
+                and then Container.Elements (Detached).V'Initialized
                 and then
                   Is_Add
                     (Reachable_Set (Source.First, Memory (Container)),
@@ -1597,16 +1603,18 @@ is
            Pre      =>
              (Static =>
                 Container.Free = Old_Free
-                and then Segment_Valid (Memory (Container), Target)
+                and then
+                  Segment_Valid
+                    (Memory (Container), Container.Elements, Target)
                 and then New_Node in Memory (Container)'Range
                 and then Memory (Container) (New_Node).Prev = 0
                 and then Memory (Container) (New_Node).Next = 0
-                and then Memory (Container) (New_Node).Element'Initialized
+                and then Container.Elements (New_Node).V'Initialized
                 and then
                   not Reachable (Target.First, Memory (Container), New_Node)),
            Post     =>
              (Static =>
-                Segment_Valid (Memory (Container), Target)
+                Segment_Valid (Memory (Container), Container.Elements, Target)
                 and then Target.Length = Target'Old.Length + 1
                 and then
                   Is_Add
@@ -1626,8 +1634,10 @@ is
            Pre  =>
              (Static =>
                 Container.Free = Old_Free
-                and then Segment_Valid (Memory (Container), Part1)
-                and then Segment_Valid (Memory (Container), Part2)
+                and then
+                  Segment_Valid (Memory (Container), Container.Elements, Part1)
+                and then
+                  Segment_Valid (Memory (Container), Container.Elements, Part2)
                 and then
                   Memory_Index_Sets.No_Overlap
                     (Reachable_Set (Part1.First, Memory (Container)),
@@ -1636,7 +1646,9 @@ is
            Post =>
              (Static =>
                 Container.Free = Old_Free
-                and then Segment_Valid (Memory (Container), Merged)
+                and then
+                  Segment_Valid
+                    (Memory (Container), Container.Elements, Merged)
                 and then Container.First = Container.First'Old
                 and then Container.Last = Container.Last'Old
                 and then Container.Length = Container.Length'Old
@@ -1664,11 +1676,13 @@ is
            Pre                =>
              (Static =>
                 Container.Free = Old_Free
-                and then Segment_Valid (Memory (Container), Arg)),
+                and then
+                  Segment_Valid (Memory (Container), Container.Elements, Arg)),
            Post               =>
              (Static =>
                 Container.Free = Old_Free
-                and then Segment_Valid (Memory (Container), Arg)
+                and then
+                  Segment_Valid (Memory (Container), Container.Elements, Arg)
                 and then Container.First = Container.First'Old
                 and then Container.Last = Container.Last'Old
                 and then Container.Length = Container.Length'Old
@@ -1691,13 +1705,17 @@ is
            Pre  =>
              (Static =>
                 Container.Free = Old_Free
-                and then Segment_Valid (Memory (Container), Unsplit)
+                and then
+                  Segment_Valid
+                    (Memory (Container), Container.Elements, Unsplit)
                 and then Unsplit.Length >= 2),
            Post =>
              (Static =>
                 Container.Free = Old_Free
-                and then Segment_Valid (Memory (Container), Part1)
-                and then Segment_Valid (Memory (Container), Part2)
+                and then
+                  Segment_Valid (Memory (Container), Container.Elements, Part1)
+                and then
+                  Segment_Valid (Memory (Container), Container.Elements, Part2)
                 and then Container.First = Container.First'Old
                 and then Container.Last = Container.Last'Old
                 and then Container.Length = Container.Length'Old
@@ -1823,15 +1841,15 @@ is
                   Lemma_Is_Acyclic_Preserved
                     (Source.First, M_Interm, Memory (Container));
                end;
-            end if;
 
-            pragma
-              Assert
-                (Static =>
-                   Is_Add
-                     (Reachable_Set (Source.First, Memory (Container)),
-                      Reachable_Set (S_Old.First, M_Old),
-                      Detached));
+               pragma
+                 Assert
+                   (Static =>
+                      Is_Add
+                        (Reachable_Set (Source.First, Memory (Container)),
+                         Reachable_Set (S_Old.First, M_Old),
+                         Detached));
+            end if;
          end Detach_First;
 
          -----------------
@@ -1935,13 +1953,19 @@ is
                       and then Container.Length = Container.Length'Loop_Entry);
                pragma
                  Loop_Invariant
-                   (Static => Segment_Valid (Memory (Container), P1));
+                   (Static =>
+                      Segment_Valid
+                        (Memory (Container), Container.Elements, P1));
                pragma
                  Loop_Invariant
-                   (Static => Segment_Valid (Memory (Container), P2));
+                   (Static =>
+                      Segment_Valid
+                        (Memory (Container), Container.Elements, P2));
                pragma
                  Loop_Invariant
-                   (Static => Segment_Valid (Memory (Container), Merged));
+                   (Static =>
+                      Segment_Valid
+                        (Memory (Container), Container.Elements, Merged));
                pragma
                  Loop_Invariant
                    (Static =>
@@ -2017,8 +2041,8 @@ is
                   --  must be False in order to ensure stability.
 
                   Take_From_P2 :=
-                    Container.Nodes (P2.First).Element
-                    < Container.Nodes (P1.First).Element;
+                    Container.Elements (P2.First).V
+                    < Container.Elements (P1.First).V;
                end if;
 
                --  The other part and the merged list lie outside the part the
@@ -2050,6 +2074,11 @@ is
                   with Ghost => Static;
 
                begin
+                  pragma
+                    Assert
+                      (Static =>
+                         Segment_Valid (M_Det, Container.Elements, P1));
+
                   Append_Node (Merged, Detached);
 
                   Lemma_Reachable_Preserved
@@ -2183,6 +2212,12 @@ is
                             Reachable_Set (Part2.First, Memory (Container))),
                          Cells));
             end;
+
+            pragma
+              Assert
+                (Static =>
+                   Segment_Valid
+                     (Memory (Container), Container.Elements, Part1));
 
             Merge_Parts (Part1, Part2, Arg);
          end Merge_Sort;
@@ -2664,7 +2699,7 @@ is
       if L = 0 then
          raise Constraint_Error with "list is empty";
       else
-         return Container.Nodes (L).Element;
+         return Container.Elements (L).V;
       end if;
    end Last_Element;
 
@@ -2746,7 +2781,7 @@ is
            (Container.First, Position, Memory (Container));
          Lemma_Reachable_Def (Position, Memory (Container));
 
-         R := M.Add (R, Container.Nodes (Position).Element);
+         R := M.Add (R, Container.Elements (Position).V);
          Position := Container.Nodes (Position).Next;
       end loop;
 
@@ -2760,7 +2795,6 @@ is
    procedure Move (Target : in out List; Source : in out List) is
       Same : constant Boolean := Same_Object (Target, Source);
 
-      N    : Node_Array renames Source.Nodes;
       X    : Count_Type;
       Orig : constant Count_Type := Source.Length
       with Ghost => Static;
@@ -2789,7 +2823,7 @@ is
          pragma Loop_Variant (Static => (Decreases => Source.Length));
 
          X := Source.First;
-         Append (Target, N (X).Element);
+         Append (Target, Source.Elements (X).V);
          Unlink_First_Node (Source);
          Source.Length := Source.Length - 1;
          Free (Source, X);
@@ -2800,7 +2834,7 @@ is
          --  Copy the last element, then drop the sole node
 
          X := Source.First;
-         Append (Target, N (X).Element);
+         Append (Target, Source.Elements (X).V);
          Unlink_Sole_Node (Source);
          Source.Length := Source.Length - 1;
          Free (Source, X);
@@ -2953,7 +2987,7 @@ is
 
       return
          R : constant not null access Element_Type :=
-           Container.Nodes (Position.Node).Element'Access
+           Container.Elements (Position.Node).V'Access
       do
          Lemma_Reachable_Preserved
            (Container.First, M_Old, Memory (At_End (Container)));
@@ -2982,7 +3016,7 @@ is
          raise Program_Error with "Position cursor has no element";
       end if;
 
-      Container.Nodes (Position.Node).Element := New_Item;
+      Container.Elements (Position.Node).V := New_Item;
 
       --  Only the element changed; every Next link is intact, so both the
       --  active list (from First) and the free chain (from Free, when
@@ -3333,7 +3367,7 @@ is
                           (Reachable_Set (CFirst, Memory (Container)))));
             pragma Warnings (On, "condition is always True");
 
-            if Container.Nodes (CFirst).Element = Item then
+            if Container.Elements (CFirst).V = Item then
                return (Node => CFirst);
             else
                CFirst := Container.Nodes (CFirst).Prev;
@@ -3352,8 +3386,6 @@ is
      (Target : in out List; Before : Cursor; Source : in out List)
    is
       Same : constant Boolean := Same_Object (Target, Source);
-
-      SN : Node_Array renames Source.Nodes;
 
       Orig_Sum : Count_Type
       with Ghost => Static;
@@ -3398,7 +3430,7 @@ is
          pragma Loop_Invariant (Static => Orig_Sum <= Target.Capacity);
          pragma Loop_Variant (Static => (Decreases => Source.Length));
 
-         Insert (Target, Before, SN (Source.First).Element);
+         Insert (Target, Before, Source.Elements (Source.First).V);
          declare
             X : constant Count_Type := Source.First;
          begin
@@ -3412,7 +3444,7 @@ is
 
          --  Insert the last element, then drop the sole node in Source
 
-         Insert (Target, Before, SN (Source.First).Element);
+         Insert (Target, Before, Source.Elements (Source.First).V);
          declare
             X : constant Count_Type := Source.First;
          begin
@@ -3463,7 +3495,7 @@ is
       Insert
         (Container => Target,
          Before    => Before,
-         New_Item  => Source.Nodes (Position.Node).Element,
+         New_Item  => Source.Elements (Position.Node).V,
          Position  => Target_Position);
 
       --  Take Position's node off Source. Delete exports the active-set
@@ -3604,15 +3636,14 @@ is
       end if;
 
       declare
-         NN : Node_Array renames Container.Nodes;
-         NI : Node_Type renames NN (I.Node);
-         NJ : Node_Type renames NN (J.Node);
+         EI : Element_Type renames Container.Elements (I.Node).V;
+         EJ : Element_Type renames Container.Elements (J.Node).V;
 
-         EI_Copy : constant Element_Type := NI.Element;
+         EI_Copy : constant Element_Type := EI;
 
       begin
-         NI.Element := NJ.Element;
-         NJ.Element := EI_Copy;
+         EI := EJ;
+         EJ := EI_Copy;
       end;
 
       --  Only two elements changed; every Next link is intact, so the active

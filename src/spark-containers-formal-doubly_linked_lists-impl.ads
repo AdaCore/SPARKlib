@@ -104,7 +104,7 @@ is
        then Nodes_Type_Base (Container.Nodes)
        else Nodes_Type_Base (Container.Nodes (1 .. -(Container.Free + 1))))
    with Ghost => Static;
-   --  The node array as a Positive_Count_Type-indexed memory for the
+   --  The link array as a Positive_Count_Type-indexed memory for the
    --  reachability model. When Free is negative only the touched prefix
    --  (1 .. abs Free - 1) has initialized links, so the never-used tail is
    --  sliced off (Valid_Memory would otherwise read uninitialized Next).

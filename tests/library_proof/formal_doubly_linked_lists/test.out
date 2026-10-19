@@ -1,7 +1,7 @@
-spark-containers-formal-doubly_linked_lists-impl.adb:1449:47: warning: "RJ" is set by "Splice" but not used after the call, in instantiation at spark-containers-formal-doubly_linked_lists-public_impl.ads:20, in instantiation at test_instances.ads:16
-spark-containers-formal-doubly_linked_lists-impl.adb:2432:44: warning: "Position" is set by "Insert" but not used after the call, in instantiation at spark-containers-formal-doubly_linked_lists-public_impl.ads:19, in instantiation at test_instances.ads:16
-spark-containers-formal-doubly_linked_lists-impl.adb:2441:44: warning: "Position" is set by "Insert" but not used after the call, in instantiation at spark-containers-formal-doubly_linked_lists-public_impl.ads:19, in instantiation at test_instances.ads:16
-spark-containers-formal-doubly_linked_lists-impl.adb:3475:23: warning: "Position" is set by "Delete" but not used after the call, in instantiation at spark-containers-formal-doubly_linked_lists-public_impl.ads:19, in instantiation at test_instances.ads:16
+spark-containers-formal-doubly_linked_lists-impl.adb:1453:47: warning: "RJ" is set by "Splice" but not used after the call, in instantiation at spark-containers-formal-doubly_linked_lists-public_impl.ads:20, in instantiation at test_instances.ads:16
+spark-containers-formal-doubly_linked_lists-impl.adb:2467:44: warning: "Position" is set by "Insert" but not used after the call, in instantiation at spark-containers-formal-doubly_linked_lists-public_impl.ads:19, in instantiation at test_instances.ads:16
+spark-containers-formal-doubly_linked_lists-impl.adb:2476:44: warning: "Position" is set by "Insert" but not used after the call, in instantiation at spark-containers-formal-doubly_linked_lists-public_impl.ads:19, in instantiation at test_instances.ads:16
+spark-containers-formal-doubly_linked_lists-impl.adb:3507:23: warning: "Position" is set by "Delete" but not used after the call, in instantiation at spark-containers-formal-doubly_linked_lists-public_impl.ads:19, in instantiation at test_instances.ads:16
 test_instances.ads:12:04: warning: assuming "Eq_Reflexive" always terminates
 test_instances.ads:12:04: warning: assuming "Eq_Symmetric" always terminates
 test_instances.ads:12:04: warning: assuming "Eq_Transitive" always terminates
@@ -25,9 +25,11 @@ in unit element_type_defs, 1 subprograms and packages out of 6 analyzed
   Element_Type_Defs.Eq_Transitive at element_type_defs.ads skipped; body is SPARK_Mode => Off
 in unit spark-containers-formal-doubly_linked_lists-public_impl, 0 subprograms and packages out of 0 analyzed
 flow analysis and proof skipped for this unit (generic unit is not analyzed)
-in unit test_instances, 196 subprograms and packages out of 430 analyzed
+in unit test_instances, 197 subprograms and packages out of 433 analyzed
   Test_Instances at test_instances.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test_Instances.Lists at test_instances.ads skipped; body is SPARK_Mode => Off
+  Test_Instances.Lists."=" at spark-containers-formal-doubly_linked_lists.ads, instantiated at test_instances.ads skipped; body is SPARK_Mode => Off
+  Test_Instances.Lists."=" at spark-containers-formal-doubly_linked_lists.ads, instantiated at test_instances.ads skipped; body is SPARK_Mode => Off
   Test_Instances.Lists."=" at spark-containers-formal-doubly_linked_lists.ads, instantiated at test_instances.ads skipped; body is SPARK_Mode => Off
   Test_Instances.Lists."=" at spark-containers-formal-doubly_linked_lists.ads, instantiated at test_instances.ads skipped; body is SPARK_Mode => Off
   Test_Instances.Lists."=" at spark-containers-formal-doubly_linked_lists.ads, instantiated at test_instances.ads skipped; body is SPARK_Mode => Off
@@ -214,6 +216,7 @@ in unit test_instances, 196 subprograms and packages out of 430 analyzed
   Test_Instances.Lists.Previous at spark-containers-formal-doubly_linked_lists.ads, instantiated at test_instances.ads skipped; body is SPARK_Mode => Off
   Test_Instances.Lists.Previous at spark-containers-formal-doubly_linked_lists.ads, instantiated at test_instances.ads skipped; body is SPARK_Mode => Off
   Test_Instances.Lists.Reference at spark-containers-formal-doubly_linked_lists.ads, instantiated at test_instances.ads skipped; body is SPARK_Mode => Off
+  Test_Instances.Lists.Relaxed_Element at spark-containers-formal-doubly_linked_lists.ads, instantiated at test_instances.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test_Instances.Lists.Replace_Element at spark-containers-formal-doubly_linked_lists.ads, instantiated at test_instances.ads skipped; body is SPARK_Mode => Off
   Test_Instances.Lists.Reverse_Elements at spark-containers-formal-doubly_linked_lists.ads, instantiated at test_instances.ads skipped; body is SPARK_Mode => Off
   Test_Instances.Lists.Reverse_Find at spark-containers-formal-doubly_linked_lists.ads, instantiated at test_instances.ads skipped; body is SPARK_Mode => Off

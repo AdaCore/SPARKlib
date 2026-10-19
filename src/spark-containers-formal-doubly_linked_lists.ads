@@ -1966,16 +1966,15 @@ is
 private
    pragma SPARK_Mode (SPARKlib_Config.Body_Mode);
 
-   --  The whole node is marked Relaxed_Initialization, so that a node that
-   --  has never been allocated (in the never-used tail of the free region)
-   --  need have none of its fields initialized. The Element field is aliased
-   --  so that Reference and Constant_Reference can hand out an access
-   --  designating it.
+   --  Links and elements are stored separately so that structural snapshots
+   --  contain only links. Both records have Relaxed_Initialization: the
+   --  never-used tail need not have initialized links, and only allocated
+   --  nodes need initialized elements. The element is aliased so that
+   --  Reference and Constant_Reference can hand out an access designating it.
 
    type Node_Type is record
-      Prev    : Count_Type'Base;
-      Next    : Count_Type;
-      Element : aliased Element_Type;
+      Prev : Count_Type'Base;
+      Next : Count_Type;
    end record
    with Relaxed_Initialization;
 
@@ -1984,12 +1983,23 @@ private
    type Node_Array is array (Count_Type range <>) of Node_Type;
    function "=" (L, R : Node_Array) return Boolean is abstract;
 
+   type Relaxed_Element is record
+      V : aliased Element_Type;
+   end record
+   with Relaxed_Initialization;
+
+   function "=" (L, R : Relaxed_Element) return Boolean is abstract;
+
+   type Elements_Array is array (Count_Type range <>) of Relaxed_Element;
+   function "=" (L, R : Elements_Array) return Boolean is abstract;
+
    type List (Capacity : Count_Type) is record
-      Free   : Count_Type'Base := -1;
-      Length : Count_Type := 0;
-      First  : Count_Type := 0;
-      Last   : Count_Type := 0;
-      Nodes  : Node_Array (1 .. Capacity);
+      Free     : Count_Type'Base := -1;
+      Length   : Count_Type := 0;
+      First    : Count_Type := 0;
+      Last     : Count_Type := 0;
+      Nodes    : Node_Array (1 .. Capacity);
+      Elements : Elements_Array (1 .. Capacity);
    end record
    with
      Ghost_Predicate =>
@@ -2012,7 +2022,7 @@ private
                     <= (if Free >= 0 then Capacity else -(Free + 1))
                   and then
                     (if Nodes (I).Prev /= -1
-                     then Nodes (I).Element'Initialized))));
+                     then Elements (I).V'Initialized))));
    --  The free-list encoding determines which nodes have their Prev/Next
    --  bookkeeping initialized: when Free is non-negative every node has been
    --  touched (the free list is an explicit chain over all cells); when Free
