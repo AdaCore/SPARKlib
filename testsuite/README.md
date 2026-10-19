@@ -8,6 +8,7 @@ driver, so the usual options apply:
 ./run-tests                     # run everything
 ./run-tests coverage_test/c_strings # run one test
 ./run-tests coverage_proof/functional_trees
+./run-tests library_proof/formal_vectors
 ./run-tests coverage_test       # run the execution group
 ./run-tests -j8 --disc=large
 ./run-tests <test> -d temp      # keep the working directory for inspection
@@ -32,7 +33,9 @@ same mechanism the CI jobs use.
 A test of this testsuite is a directory under `../tests` whose `test.yaml`
 names a driver. Migrated coverage clients live in
 `../tests/coverage_test/<name>`, with their proofs in
-`../tests/coverage_proof/<name>`. Select them using paths relative to
+`../tests/coverage_proof/<name>`. Component proofs of library implementations,
+models, and lemmas live in `../tests/library_proof/<name>` and use the same
+`proof` driver. Select them using paths relative to
 `../tests`, such as `coverage_test/functional_trees`, also in `--testlist`
 files. Results use e3-testsuite's canonical names, with `/` replaced by `__`
 (for example, `coverage_test__functional_trees`); `--testlist` also accepts
@@ -59,19 +62,25 @@ runs:                  # what to build and run; the default is the entry below
 
 ### `driver: proof`
 
-Runs gnatprove on a client of SPARKlib and compares what it reports against
-`test.out`. The tool is asked for failures only (`--report=fail`), so the
-baseline holds what the test is about — the checks the client does not prove,
-and the warnings it gets — rather than a line per proved check. A client that
-proves entirely files no baseline at all. Lines are compared as a set, since
+Runs gnatprove on a client or component proof of SPARKlib and compares what it
+reports against `test.out`. With `--report=fail`, the baseline contains warnings
+and unproved checks. A test that proves entirely files no baseline at all.
+Lines are compared as a set, since
 proving on several cores reports in no particular order, and `--rewrite`
 refreshes a baseline from a run.
+
+Tests in `library_proof` keep their proof harnesses and recorded sessions in
+their own directory. Generic instantiations make the library bodies part of
+the analysis, including implementation generics exposed by test-only children.
+Their baselines record known unproved obligations explicitly, including the
+15 intended unproved checks in `library_proof/higher_order_fold`. The
+whole-library replay, including Coq, remains a legacy test.
 
 ```yaml
 driver: proof
 sources: ../../coverage_test/formal_vectors # relative to this test directory
 jobs: 4                # cores for gnatprove, and slots taken in the run
-body_mode: false       # analyse the library bodies too (default: true)
+body_mode: false       # use normal library visibility (default: true)
 level: 2               # or "steps:", which defaults to 200
 replay: session        # replay the recorded sessions in proof/sessions
 switches: ["--no-inlining"]

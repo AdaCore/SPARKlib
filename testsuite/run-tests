@@ -89,7 +89,7 @@ class SparklibTestFinder(TestFinder):
 
     def probe(self, testsuite, dirpath, dirnames, filenames):
         relpath = os.path.relpath(dirpath, self.tests_dir).replace(os.sep, "/")
-        if relpath in ("coverage_test", "coverage_proof"):
+        if relpath in ("coverage_test", "coverage_proof", "library_proof"):
             # These are groups, not legacy tests. Claim them without pruning
             # their children, so the legacy finder does not stop discovery.
             return []
