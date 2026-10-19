@@ -327,11 +327,15 @@ is
                Node := Node + 1;
             end loop;
 
-            while Node <= Target.Capacity loop
-               N := Node;
-               Free (Tree => Target, X => N);
-               Node := Node + 1;
-            end loop;
+            --  An implicit free suffix already extends to the new capacity
+
+            if Target.Content.Free >= 0 then
+               while Node <= Target.Capacity loop
+                  N := Node;
+                  Free (Tree => Target, X => N);
+                  Node := Node + 1;
+               end loop;
+            end if;
          end if;
       end return;
    end Copy;
