@@ -1192,7 +1192,7 @@ is
      Global => null,
      Pre    =>
        Length (Source) - Length (Target and Source) <=
-         Target.Capacity - Length (Target) + Length (Target and Source),
+         Target.Capacity - Length (Target),
      Post   =>
        E.Big (Length (Target)) = E.Big (Length (Target)'Old) -
          2 * M.Num_Overlaps (Model (Target)'Old, Model (Source)) +
