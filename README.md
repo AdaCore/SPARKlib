@@ -15,25 +15,43 @@ blog](https://blog.adacore.com/).
 Documentation about what is provided in the SPARKlib and how to use it can be
 found in the [SPARK User's Guide](https://docs.adacore.com/spark2014-docs/html/ug/en/source/spark_libraries.html#spark-library).
 
-# 4. Testing
+# 4. Configuration and testing
 
-Some units or subprograms are hidden from analysis for regular use, but
-`SPARK_Mode` should be enabled for specific tests. For this use case, these
-tests use sparklib in a special body mode. The affected pragmas and aspects
-name the static Boolean constant `SPARK.Body_Mode.Enabled` instead of `On` or
-`Off`:
+`SPARKlib_Config` contains the static Boolean constants used by the library's
+`SPARK_Mode` pragmas and aspects. By default, `Body_Mode` is `False` and
+`Reachability_Body_Mode` follows `Body_Mode`, so both are disabled. Body mode
+exposes library bodies and the private parts they rely on for analysis.
+Reachability body mode controls only `SPARK.Higher_Order.Reachability`;
+`SPARK.Pointers.Abstract_Reachability` follows the general body mode.
+
+To customize these switches, write a file named `sparklib_config.ads`:
+
+```ada
+package SPARKlib_Config
+  with SPARK_Mode, Pure
+is
+   Body_Mode : constant Boolean := True;
+   Reachability_Body_Mode : constant Boolean := False;
+end SPARKlib_Config;
 ```
-   pragma SPARK_Mode (SPARK.Body_Mode.Enabled);
-```
-and
+
+Pass its directory to both build and proof commands, for example:
 
 ```
-  with SPARK_Mode => SPARK.Body_Mode.Enabled
+gnatprove -P client.gpr -XSPARKLIB_BODY_MODE=On -XSPARKLIB_CONFIG_DIR=/absolute/path/to/config
 ```
 
-Two variants of `SPARK.Body_Mode` exist, one for each value of the constant.
-The library project files select between them, and between the two variants of
-the root `SPARK` unit, through the `SPARKLIB_BODY_MODE` external, whose value
-is `On` or `Off` (the default). Neither variant follows the Ada naming scheme,
-so only the one named by the projects' `Naming` package is ever a source of the
-library.
+The directory becomes a source directory of the SPARKlib project. Dedicate it
+to this configuration package, and define every constant from the supplied
+configuration. When upgrading SPARKlib, add any newly introduced constants to
+custom configurations. The installed library need not be modified. The supplied
+variants have nonstandard file names, so only the selected configuration is a
+library source. Client projects should inherit the library's source directories,
+as shown in `sparklib.gpr.templ`.
+
+`SPARKLIB_BODY_MODE=On` selects a supplied configuration with both switches
+enabled when no custom directory is given. It also selects the root `SPARK`
+variant allowing execution of all assertion levels; `Off` (the default) retains
+the regular assertion levels. A custom configuration replaces the Boolean
+settings only, so use `SPARKLIB_BODY_MODE=On` as well when testing executable
+contracts. There is no separate scenario variable for reachability.

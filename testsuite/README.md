@@ -81,6 +81,7 @@ driver: proof
 sources: ../../coverage_test/formal_vectors # relative to this test directory
 jobs: 4                # cores for gnatprove, and slots taken in the run
 body_mode: false       # use normal library visibility (default: true)
+config_dir: config # hide the higher-order reachability body
 level: 2               # or "steps:", which defaults to 200
 replay: session        # replay the recorded sessions in proof/sessions
 switches: ["--no-inlining"]
@@ -94,6 +95,13 @@ own timeout, its own result, and its own share of the machine; `sources` is
 what keeps the program itself in a single place. A proof test declares how
 many cores it takes with `jobs`, and the run schedules it against that weight,
 so that `-j16` means sixteen cores rather than sixteen tests.
+
+A proof test can set `config_dir` to a directory containing its own
+`sparklib_config.ads`, relative to the test working directory. The driver passes
+its absolute path through `-XSPARKLIB_CONFIG_DIR`. Without this key, the supplied
+configuration follows `body_mode`. The doubly-linked list implementation proof
+uses a custom configuration to expose the list implementation while keeping
+reachability abstract.
 
 ## Coverage
 

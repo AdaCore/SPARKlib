@@ -4,10 +4,10 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
-with SPARK.Body_Mode;
+with SPARKlib_Config;
 
 package body SPARK.Pointers.Abstract_Reachability
-  with SPARK_Mode => SPARK.Body_Mode.Enabled
+  with SPARK_Mode => SPARKlib_Config.Body_Mode
 is
 
    --  Local functions

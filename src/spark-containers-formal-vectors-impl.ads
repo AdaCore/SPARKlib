@@ -10,7 +10,7 @@
 --  parent's Vector type rather than redefining the representation. That
 --  representation lives in the private part of Formal.Vectors, which is
 --  hidden from analysis in normal builds; proving this unit relies on body
---  mode (see SPARK.Body_Mode) to expose it in the proof test
+--  mode (see SPARKlib_Config) to expose it in the proof test
 --  tests/library_proof/formal_vectors.
 --
 --  It carries no gold (model-based) postconditions, only what silver needs:
