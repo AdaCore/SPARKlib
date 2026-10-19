@@ -1,13 +1,12 @@
 """Driver for the SPARKlib proof tests.
 
-A proof test runs gnatprove on a client of SPARKlib and compares what the tool
-reports against a baseline. The tool is asked for failures only
-(`--report=fail`): a message about a check that is proved says nothing about
-SPARKlib, and changes with every change of a gnatprove message, which is what
-made the old baselines large. What is left is what these tests are about: the
-checks the clients do not prove, and the warnings they get.
+A proof test runs gnatprove on a SPARKlib client or component proof and
+compares the reported warnings and failures against a baseline. The tool
+reports failures only (`--report=fail`), omitting messages about proved
+checks. Those messages made the old baselines large and sensitive to changes
+in how gnatprove reports successful checks.
 
-A client that proves entirely has no baseline file at all; its expected output
+A test that proves entirely has no baseline file at all; its expected output
 is empty.
 """
 
@@ -47,7 +46,7 @@ default_memlimit = 2000
 
 
 class ProofTestDriver(SparklibDriverMixin, DiffTestDriver):
-    """Prove a SPARKlib client and compare the reported failures"""
+    """Prove a SPARKlib client or component and compare the reported failures"""
 
     @property
     def jobs(self):

@@ -11,7 +11,7 @@
 --  representation lives in the private part of Formal.Vectors, which is
 --  hidden from analysis in normal builds; proving this unit relies on body
 --  mode (see SPARK.Body_Mode) to expose it in the proof test
---  tests/1376__formal_vectors_impl_proof.
+--  tests/library_proof/formal_vectors.
 --
 --  It carries no gold (model-based) postconditions, only what silver needs:
 --  the non-model preconditions guarding implicit run-time errors, the

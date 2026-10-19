@@ -12,7 +12,7 @@
 --  Formal.Doubly_Linked_Lists, which is hidden from analysis in normal
 --  builds; proving this unit relies on body mode (see SPARK.Body_Mode) to
 --  expose it in the proof test
---  tests/1376__formal_doubly_linked_lists_impl_proof.
+--  tests/library_proof/formal_doubly_linked_lists.
 --
 --  It carries no gold (model-based) postconditions, only what silver needs:
 --  the non-model preconditions guarding implicit run-time errors, the
