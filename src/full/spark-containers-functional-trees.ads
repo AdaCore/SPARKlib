@@ -20,6 +20,15 @@ generic
    with function "=" (Left, Right : Element_Type) return Boolean is <>;
 
    Use_Logical_Equality : Boolean := False;
+   --  This constant should only be set to True when "=" is the logical
+   --  equality on Element_Type.
+
+   --  Ghost lemma to prove that "=" is the logical equality. It only matters
+   --  if Use_Logical_Equality is True.
+
+   with
+     procedure Eq_Logical_Eq (X, Y : Element_Type) is null
+     with Ghost => Static;
 
    --  Ghost lemmas used to prove that "=" is an equivalence relation
 
@@ -278,11 +287,13 @@ is
 
    package Eq_Checks is new
      SPARK.Containers.Parameter_Checks.Equivalence_Checks
-       (T                   => Element_Type,
-        Eq                  => "=",
-        Param_Eq_Reflexive  => Eq_Reflexive,
-        Param_Eq_Symmetric  => Eq_Symmetric,
-        Param_Eq_Transitive => Eq_Transitive);
+       (T                    => Element_Type,
+        Eq                   => "=",
+        Param_Eq_Reflexive   => Eq_Reflexive,
+        Param_Eq_Symmetric   => Eq_Symmetric,
+        Param_Eq_Transitive  => Eq_Transitive,
+        Use_Logical_Equality => Use_Logical_Equality,
+        Param_Eq_Logical_Eq  => Eq_Logical_Eq);
    --  Check that the actual parameter for "=" is an equivalence relation
 
 private
