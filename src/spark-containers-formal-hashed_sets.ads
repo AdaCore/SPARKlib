@@ -1282,7 +1282,7 @@ is
      Pre    =>
        (SPARKlib_Defensive =>
           Length (Source) - Length (Target and Source)
-          <= Target.Capacity - Length (Target) + Length (Target and Source)),
+          <= Target.Capacity - Length (Target)),
      Post   =>
        (SPARKlib_Full =>
           E.Big (Length (Target))
