@@ -225,7 +225,7 @@ def choose_mode():
 sparklib_gen_content = """
 with "sparklib_common";
 project sparklib_gen is
-   for Source_Dirs use ("src", "src/full");
+   for Source_Dirs use ("src", "src/full") & SPARKlib_common.Config_Source_Dirs;
    for Object_Dir use "obj2";
    package Naming renames SPARKlib_common.Naming;
    package Compiler is

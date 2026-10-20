@@ -11,32 +11,41 @@ abstract project SPARKlib_common is
    type SPARKlib_Installed_T is ("True", "False");
    SPARKlib_Installed : SPARKlib_Installed_T := External("SPARKLIB_INSTALLED", "True");
 
-   --  Environment variable SPARKLIB_BODY_MODE controls whether the library
-   --  bodies, and the private parts they rely on, are analysed (value "On")
-   --  or hidden from analysis (value "Off", the default). The two settings
-   --  select different variants of the root SPARK unit and of SPARK.Body_Mode,
-   --  the unit holding the static Boolean that the SPARK_Mode pragmas and
-   --  aspects of the library are written against.
+   --  Body mode selects executable assertion levels in the root SPARK unit
+   --  and a default configuration enabling analysis of library bodies.
 
    type SPARKlib_Body_Mode_T is ("On", "Off");
    SPARKlib_Body_Mode : SPARKlib_Body_Mode_T :=
      External ("SPARKLIB_BODY_MODE", "Off");
 
-   --  Files providing the mode-dependent units. They do not follow the Ada
-   --  naming scheme, so that only the variant named by the Naming package
-   --  below is ever a source of the library. Projects that restrict
-   --  Source_Files explicitly need to name them, as the names vary with the
-   --  mode.
+   --  A client can replace the default static switches with its own
+   --  sparklib_config.ads. Use an absolute directory name; relative names
+   --  are resolved relative to the project files that use them.
 
-   Mode_Source_Files := ();
+   Config_Dir := External ("SPARKLIB_CONFIG_DIR", "");
+   Config_Source_Dirs := ();
+   Config_File := "sparklib_config.ads";
+   case Config_Dir is
+      when "" =>
+         case SPARKlib_Body_Mode is
+            when "On" =>
+               Config_File := "sparklib_config__body_mode.ads.in";
+            when "Off" =>
+               Config_File := "sparklib_config__default.ads.in";
+         end case;
+      when others =>
+         Config_Source_Dirs := (Config_Dir);
+   end case;
 
+   --  Only the variants named by Naming are library sources. Projects with
+   --  an explicit Source_Files list must include Mode_Source_Files.
+
+   Mode_Source_Files := (Config_File);
    case SPARKlib_Body_Mode is
       when "On" =>
-         Mode_Source_Files :=
-           ("spark__exec.ads.in", "spark-body_mode__on.ads.in");
+         Mode_Source_Files := Mode_Source_Files & ("spark__exec.ads.in");
       when "Off" =>
-         Mode_Source_Files :=
-           ("spark__prove.ads.in", "spark-body_mode__off.ads.in");
+         Mode_Source_Files := Mode_Source_Files & ("spark__prove.ads.in");
    end case;
 
    --  Enforce GNAT style checks, except for multiple blank lines and
@@ -60,13 +69,13 @@ abstract project SPARKlib_common is
    end Compiler;
 
    package Naming is
+      for Spec ("SPARKlib_Config") use Config_File;
+
       case SPARKlib_Body_Mode is
          when "On" =>
             for Spec ("SPARK") use "spark__exec.ads.in";
-            for Spec ("SPARK.Body_Mode") use "spark-body_mode__on.ads.in";
          when "Off" =>
             for Spec ("SPARK") use "spark__prove.ads.in";
-            for Spec ("SPARK.Body_Mode") use "spark-body_mode__off.ads.in";
       end case;
    end Naming;
 

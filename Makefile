@@ -18,20 +18,21 @@ generate: $(ALL_COQ)
 clean:
 	find proof -name "*.v" -delete
 
-# -gnatwU is needed because the only use some units make of SPARK.Body_Mode is
+# -gnatwU is needed because the only use some units make of SPARKlib_Config is
 # in a SPARK_Mode pragma or aspect, and the front end does not record that as a
 # reference, so -gnatg would report the with clause as unused.
 # ??? Drop it once the front end records such references.
 CHECK_SWITCHES=-c -f -gnatc -gnatg -gnatwU -gnat2022 -gnatwe -k
 
 # Both libraries are checked in the default mode, and the full one is checked
-# in body mode as well.
+# in body mode with reachability analysis both enabled and disabled.
 # We don't check light library in body mode due to a front-end crash:
 #   eng/toolchain/gnat#2015
 check:
 	SPARKLIB_INSTALLED=False gprbuild -P sparklib_internal.gpr $(CHECK_SWITCHES)
 	SPARKLIB_INSTALLED=False gprbuild -P sparklib_light_internal.gpr $(CHECK_SWITCHES)
 	SPARKLIB_INSTALLED=False SPARKLIB_BODY_MODE=On gprbuild -P sparklib_internal.gpr $(CHECK_SWITCHES)
+	SPARKLIB_INSTALLED=False SPARKLIB_BODY_MODE=On SPARKLIB_CONFIG_DIR=$(CURDIR)/tests/library_proof/formal_doubly_linked_lists/config gprbuild -P sparklib_internal.gpr $(CHECK_SWITCHES)
 
 format:
 	SPARKLIB_INSTALLED=False gnatformat -P sparklib_internal.gpr

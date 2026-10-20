@@ -7,7 +7,7 @@
 pragma Ada_2022;
 
 package body SPARK.Containers.Functional.Total_Maps
-  with SPARK_Mode => SPARK.Body_Mode.Enabled
+  with SPARK_Mode => SPARKlib_Config.Body_Mode
 is
 
    ---------

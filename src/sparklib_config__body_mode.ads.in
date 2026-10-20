@@ -1,0 +1,18 @@
+--
+--  Copyright (C) 2026, AdaCore
+--
+--  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+--
+
+--  Static switches controlling analysis of library bodies and private parts.
+--  To customize them, provide sparklib_config.ads through SPARKLIB_CONFIG_DIR.
+--  A custom package must define every switch declared here.
+
+package SPARKlib_Config
+  with SPARK_Mode, Pure
+is
+
+   Body_Mode              : constant Boolean := True;
+   Reachability_Body_Mode : constant Boolean := Body_Mode;
+
+end SPARKlib_Config;

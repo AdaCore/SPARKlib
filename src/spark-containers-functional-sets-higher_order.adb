@@ -6,11 +6,11 @@
 
 pragma Ada_2022;
 
-with SPARK.Body_Mode;
+with SPARKlib_Config;
 with SPARK.Big_Integers; use SPARK.Big_Integers;
 
 package body SPARK.Containers.Functional.Sets.Higher_Order
-  with SPARK_Mode => SPARK.Body_Mode.Enabled
+  with SPARK_Mode => SPARKlib_Config.Body_Mode
 is
 
    -----------------------------------

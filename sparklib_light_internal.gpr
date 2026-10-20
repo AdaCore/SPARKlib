@@ -14,7 +14,9 @@ project SPARKlib_Light_Internal is
    -- of excluded source files Excluded_Source_Files (so that you only compile and
    -- analyse files from the library that you need).
 
-   for Source_Dirs use (SPARKlib_common.Root, SPARKlib_common.Root & "/light");
+   for Source_Dirs use
+     (SPARKlib_common.Root, SPARKlib_common.Root & "/light")
+     & SPARKlib_common.Config_Source_Dirs;
 
    case SPARKlib_common.SPARKlib_Installed is
       when "True" =>

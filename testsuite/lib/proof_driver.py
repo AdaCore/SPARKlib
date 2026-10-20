@@ -29,6 +29,7 @@ known_yaml_keys = {
     "large",
     "level",
     "project",
+    "config_dir",
     "replay",
     "sources",
     "steps",
@@ -84,6 +85,10 @@ class ProofTestDriver(SparklibDriverMixin, DiffTestDriver):
         # SPARKlib itself is proved by its own test, not again by each client.
         cmd += ["--no-subprojects", "-aP", sparklib_project_dir()]
         cmd += body_mode_switch(body_mode)
+        config_dir = self.test_env.get("config_dir")
+        if config_dir is not None:
+            config_dir = os.path.abspath(self.working_dir(config_dir))
+            cmd += [f"-XSPARKLIB_CONFIG_DIR={config_dir}"]
         # Keep going after an error, so that one failure does not hide the
         # others, and report failures only.
         cmd += [

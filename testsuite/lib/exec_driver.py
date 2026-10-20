@@ -51,9 +51,18 @@ class ExecTestDriver(SparklibDriverMixin, ClassicTestDriver):
                 project,
             ] + body_mode_switch(True)
             if coverage:
+                # GNATcov does not accept gprbuild's -aP switch. Select the
+                # same library through a subprocess-local project path,
+                # retaining the coverage runtime's project directory.
+                instrument_env = os.environ.copy()
+                project_path = instrument_env.get("GPR_PROJECT_PATH")
+                instrument_env["GPR_PROJECT_PATH"] = sparklib_project_dir()
+                if project_path:
+                    instrument_env["GPR_PROJECT_PATH"] += os.pathsep + project_path
                 self.shell(
                     ["gnatcov", "instrument", "-P", project, "--level=stmt"]
                     + body_mode_switch(True),
+                    env=instrument_env,
                     analyze_output=False,
                 )
                 build_opt += [

@@ -4,7 +4,7 @@
 --  SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 --
 
-with SPARK.Body_Mode;
+with SPARKlib_Config;
 
 package body SPARK.Higher_Order.Fold
   with SPARK_Mode
@@ -21,7 +21,7 @@ is
       ------------------
 
       procedure Count_Length (A : Array_Type)
-      with SPARK_Mode => SPARK.Body_Mode.Enabled
+      with SPARK_Mode => SPARKlib_Config.Body_Mode
       is
       begin
          for I in A'Range loop
@@ -37,7 +37,7 @@ is
       ----------------
 
       procedure Count_Zero (A : Array_Type)
-      with SPARK_Mode => SPARK.Body_Mode.Enabled
+      with SPARK_Mode => SPARKlib_Config.Body_Mode
       is
       begin
          for I in A'Range loop
@@ -53,7 +53,7 @@ is
       ------------------
 
       procedure Update_Count (A1, A2 : Array_Type; I : Index_Type)
-      with SPARK_Mode => SPARK.Body_Mode.Enabled
+      with SPARK_Mode => SPARKlib_Config.Body_Mode
       is
          C : constant Integer :=
            (if (Choose (A1 (I)) and Choose (A2 (I)))
@@ -93,7 +93,7 @@ is
       ------------------
 
       procedure Count_Length (A : Array_Type)
-      with SPARK_Mode => SPARK.Body_Mode.Enabled
+      with SPARK_Mode => SPARKlib_Config.Body_Mode
       is
 
          function Count_Length (I : Index_1; J : Index_2) return Boolean
@@ -171,7 +171,7 @@ is
       ----------------
 
       procedure Count_Zero (A : Array_Type)
-      with SPARK_Mode => SPARK.Body_Mode.Enabled
+      with SPARK_Mode => SPARKlib_Config.Body_Mode
       is
       begin
          if A'Length (2) > 0 then
@@ -206,7 +206,7 @@ is
       ------------------
 
       procedure Update_Count (A1, A2 : Array_Type; I : Index_1; J : Index_2)
-      with SPARK_Mode => SPARK.Body_Mode.Enabled
+      with SPARK_Mode => SPARKlib_Config.Body_Mode
       is
          C : constant Integer :=
            (if Choose (A1 (I, J)) = Choose (A2 (I, J))
@@ -291,7 +291,7 @@ is
       ----------
 
       function Fold (A : Array_Type; Init : Element_Out) return Element_Out
-      with SPARK_Mode => SPARK.Body_Mode.Enabled
+      with SPARK_Mode => SPARKlib_Config.Body_Mode
       is
       begin
          return R : Element_Out := Init do
@@ -334,7 +334,7 @@ is
       ----------
 
       function Fold (A : Array_Type; Init : Element_Out) return Acc_Array
-      with SPARK_Mode => SPARK.Body_Mode.Enabled
+      with SPARK_Mode => SPARKlib_Config.Body_Mode
       is
          Acc : Element_Out := Init;
       begin
@@ -471,7 +471,7 @@ is
       ----------
 
       function Fold (A : Array_Type; Init : Element_Out) return Element_Out
-      with SPARK_Mode => SPARK.Body_Mode.Enabled
+      with SPARK_Mode => SPARKlib_Config.Body_Mode
       is
       begin
          return R : Element_Out := Init do
@@ -500,7 +500,7 @@ is
       ----------
 
       function Fold (A : Array_Type; Init : Element_Out) return Acc_Array
-      with SPARK_Mode => SPARK.Body_Mode.Enabled
+      with SPARK_Mode => SPARKlib_Config.Body_Mode
       is
          Acc : Element_Out := Init;
       begin
@@ -558,7 +558,7 @@ is
       ----------
 
       function Fold (A : Array_Type; Init : Element_Out) return Element_Out
-      with SPARK_Mode => SPARK.Body_Mode.Enabled
+      with SPARK_Mode => SPARKlib_Config.Body_Mode
       is
       begin
          return R : Element_Out := Init do
@@ -587,7 +587,7 @@ is
       ----------
 
       function Fold (A : Array_Type; Init : Element_Out) return Acc_Array
-      with SPARK_Mode => SPARK.Body_Mode.Enabled
+      with SPARK_Mode => SPARKlib_Config.Body_Mode
       is
          Acc : Element_Out := Init;
       begin
@@ -645,7 +645,7 @@ is
       ----------
 
       function Fold (A : Array_Type; Init : Element_Out) return Element_Out
-      with SPARK_Mode => SPARK.Body_Mode.Enabled
+      with SPARK_Mode => SPARKlib_Config.Body_Mode
       is
       begin
          return R : Element_Out := Init do
@@ -674,7 +674,7 @@ is
       ----------
 
       function Fold (A : Array_Type; Init : Element_Out) return Acc_Array
-      with SPARK_Mode => SPARK.Body_Mode.Enabled
+      with SPARK_Mode => SPARKlib_Config.Body_Mode
       is
          Acc : Element_Out := Init;
       begin
@@ -738,7 +738,7 @@ is
          -------------
 
          procedure Sum_Cst (A : Array_Type; C : Element_Out)
-         with SPARK_Mode => SPARK.Body_Mode.Enabled
+         with SPARK_Mode => SPARKlib_Config.Body_Mode
          is
          begin
             for I in A'Range loop
@@ -762,7 +762,7 @@ is
          ----------------
 
          procedure Update_Sum (A1, A2 : Array_Type; I : Index_Type)
-         with SPARK_Mode => SPARK.Body_Mode.Enabled
+         with SPARK_Mode => SPARKlib_Config.Body_Mode
          is
 
          begin
@@ -804,7 +804,7 @@ is
       ---------
 
       function Sum (A : Array_Type) return Element_Out
-      with SPARK_Mode => SPARK.Body_Mode.Enabled
+      with SPARK_Mode => SPARKlib_Config.Body_Mode
       is
          R : Element_Out := Zero;
       begin
@@ -843,7 +843,7 @@ is
          -------------
 
          procedure Sum_Cst (A : Array_Type; C : Element_Out)
-         with SPARK_Mode => SPARK.Body_Mode.Enabled
+         with SPARK_Mode => SPARKlib_Config.Body_Mode
          is
             function Sum_Cst (I : Index_1; J : Index_2) return Boolean
             is (Fold_Sum.Acc.Fold (A, 0) (I, J)
@@ -887,7 +887,7 @@ is
          ----------------
 
          procedure Update_Sum (A1, A2 : Array_Type; I : Index_1; J : Index_2)
-         with SPARK_Mode => SPARK.Body_Mode.Enabled
+         with SPARK_Mode => SPARKlib_Config.Body_Mode
          is
          begin
             for K in A1'Range (1) loop
@@ -947,7 +947,7 @@ is
       ---------
 
       function Sum (A : Array_Type) return Element_Out
-      with SPARK_Mode => SPARK.Body_Mode.Enabled
+      with SPARK_Mode => SPARKlib_Config.Body_Mode
       is
          R : Element_Out := Zero;
       begin
