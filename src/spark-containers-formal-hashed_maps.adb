@@ -234,11 +234,15 @@ is
          N := N + 1;
       end loop;
 
-      while N <= C loop
-         Cu := (Node => N);
-         Free (Target, Cu.Node);
-         N := N + 1;
-      end loop;
+      --  An implicit free suffix already extends to the new capacity
+
+      if Target.Content.Free >= 0 then
+         while N <= C loop
+            Cu := (Node => N);
+            Free (Target, Cu.Node);
+            N := N + 1;
+         end loop;
+      end if;
 
       return Target;
    end Copy;
