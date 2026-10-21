@@ -104,6 +104,8 @@ procedure Test_Gen with SPARK_Mode is
       X, Y : Set;
    begin
       Create_Non_Empty_Set (X);
+      Assign (X, X);
+      Assert (Length (X) = 5, "Assign on itself");
       Assign (X, Y);
       Assert (Length (X) = 0, "Assign on empty set");
       Create_Non_Empty_Set (X);

@@ -105,6 +105,11 @@ procedure Test_Gen with SPARK_Mode is
       X, Y : Map;
    begin
       Create_Non_Empty_Map (X);
+      Assign (X, X);
+      Assert
+        (Length (X) = 5 and then Contains (X, 1)
+         and then Contains (X, 5),
+         "Assign on itself");
       Assign (X, Y);
       Assert (Length (X) = 0, "Assign on empty map");
       Create_Non_Empty_Map (X);
