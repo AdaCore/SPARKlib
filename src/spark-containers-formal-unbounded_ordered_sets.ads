@@ -1296,7 +1296,7 @@ is
      Global => null,
      Pre    =>
        Length (Source) - Length (Target and Source) <=
-         Count_Type'Last - Length (Target) + Length (Target and Source),
+         Count_Type'Last - Length (Target),
      Post   =>
        E.Big (Length (Target)) = E.Big (Length (Target)'Old) -
          2 * M.Num_Overlaps (Model (Target)'Old, Model (Source)) +
