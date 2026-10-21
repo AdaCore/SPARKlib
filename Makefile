@@ -37,3 +37,16 @@ check:
 format:
 	SPARKLIB_INSTALLED=False gnatformat -P sparklib_internal.gpr
 	SPARKLIB_INSTALLED=False gnatformat -P sparklib_light_internal.gpr
+
+# The tests instrument both their own executables and SPARKlib. Report only
+# SPARKlib units, using the traces from every test in the coverage manifest.
+coverage-report:
+	find "$(COVERAGE_TRACES_DIR)" -type f -name '*.srctrace' > "$(COVERAGE_TRACES_DIR)/tracefiles"
+	find "$(COVERAGE_TRACES_DIR)" -type f -name '*.sid' -path '*/sparklib_obj/*' > "$(COVERAGE_TRACES_DIR)/sidfiles"
+	test -s "$(COVERAGE_TRACES_DIR)/tracefiles"
+	test -s "$(COVERAGE_TRACES_DIR)/sidfiles"
+	rm -rf sparklib-report
+	gnatcov coverage --level=stmt --annotate=dhtml --externally-built-projects \
+		--output-dir=sparklib-report --sid=@"$(COVERAGE_TRACES_DIR)/sidfiles" \
+		-P "$(SPARKLIB_PROJECT_PATH)/lib/gnat/sparklib_internal.gpr" \
+		-XSPARKLIB_BODY_MODE=On @"$(COVERAGE_TRACES_DIR)/tracefiles"
