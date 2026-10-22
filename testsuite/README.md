@@ -84,6 +84,8 @@ body_mode: false       # use normal library visibility (default: true)
 config_dir: config # hide the higher-order reachability body
 level: 2               # or "steps:", which defaults to 200
 replay: session        # replay the recorded sessions in proof/sessions
+session_opt:           # options for regenerating sessions only
+  level: 3             # level, steps, or switches; defaults to the test settings
 switches: ["--no-inlining"]
 project: test.gpr      # the project to prove, if not test.gpr
 large: true
@@ -102,6 +104,49 @@ its absolute path through `-XSPARKLIB_CONFIG_DIR`. Without this key, the supplie
 configuration follows `body_mode`. The doubly-linked list implementation proof
 uses a custom configuration to expose the list implementation while keeping
 reachability abstract.
+
+### Updating recorded sessions
+
+Use `update-session-test` for migrated tests with `driver: proof` and
+`replay: session`:
+
+```sh
+./update-session-test library_proof/higher_order_fold --sparklib-source
+./update-session-test library_proof__higher_order_fold --sparklib-source -j8
+./update-session-test library_proof/higher_order_fold --sparklib-source -j0
+```
+
+It accepts one or more test paths or canonical names, enables large tests,
+and uses the same library selection as `run-tests` (the installed SPARKlib
+unless `--sparklib-source` is given). Sessions are generated afresh in the
+testsuite's working copy using the test settings plus `session_opt`. This
+mapping can override `level`, `steps`, and `switches`; `switches` replaces the
+test's list. Regeneration uses all available cores by default (`-j0`), or
+the number given by `-j N`. Selected tests run one at a time, each using that
+worker budget. The replay keeps the test's normal `jobs` setting, and both
+invocations retain its process timeout.
+
+The script uses SPARK 2014's `clean_sessions.py` to remove unsuccessful and
+duplicate proof attempts and unused prover declarations. It imports this module
+from the same support library that `run-tests` already loads: from the enclosing
+SPARK 2014 checkout, from `../lib/python` in a nightly installation, or from
+`SPARK2014_TESTSUITE_LIB` when explicitly set. For a standalone SPARKlib checkout:
+
+```sh
+export SPARK2014_TESTSUITE_LIB=/path/to/spark2014/testsuite/gnatprove/lib/python
+```
+
+Sessions are cleaned before replay and again before copying them back. Shape
+files and `*.bak` backups are excluded from the recorded sessions. The script
+replays the fresh sessions using the normal test settings. After both
+gnatprove invocations complete successfully, it replaces the test's recorded
+`proof/sessions`. The replay output is compared with the existing baseline;
+an output difference makes the command fail but leaves the regenerated
+sessions available for inspection. Baselines are never rewritten. Review the
+session changes with `git diff` before committing them.
+
+This supports automatic Why3 sessions only. Legacy tests, manifest replay,
+and manual proofs are outside its scope.
 
 ## Coverage
 
