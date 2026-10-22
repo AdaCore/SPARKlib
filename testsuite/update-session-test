@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+
+"""Regenerate and replay the sessions of migrated SPARKlib proof tests."""
+
+import argparse
+import os
+from pathlib import Path
+import subprocess
+import sys
+import tempfile
+
+import yaml
+
+
+def main():
+    suite = Path(__file__).resolve().parent
+    tests = suite.parent / "tests"
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("tests", nargs="+", help="test paths or canonical test names")
+    parser.add_argument(
+        "-j",
+        type=int,
+        default=0,
+        help="workers for session regeneration (default: 0, all cores)",
+    )
+    parser.add_argument(
+        "--sparklib-source",
+        nargs="?",
+        const=str(suite.parent),
+        metavar="DIR",
+        help="test checkout sources instead of the installed SPARKlib",
+    )
+    args = parser.parse_args()
+    if args.j < 0:
+        parser.error("-j must be nonnegative")
+    available = {
+        str(path.parent.relative_to(tests)).replace("/", "__"): path
+        for path in tests.rglob("test.yaml")
+    }
+    names = []
+    for name in args.tests:
+        canonical = name.rstrip("/").replace("/", "__")
+        path = available.get(canonical)
+        if path is None:
+            parser.error(f"unknown test: {name}")
+        with path.open() as stream:
+            config = yaml.safe_load(stream)
+        if (
+            not isinstance(config, dict)
+            or config.get("driver") != "proof"
+            or config.get("replay") != "session"
+        ):
+            parser.error(f"{name}: requires driver: proof and replay: session")
+        if canonical not in names:
+            names.append(canonical)
+
+    # An exact test list prevents a name from also selecting similarly named tests.
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".txt") as testlist:
+        testlist.write("\n".join(names) + "\n")
+        testlist.flush()
+        command = [
+            sys.executable,
+            str(suite / "run-tests"),
+            "--update-sessions",
+            "--disc=large",
+            "--diffs",
+            "--testlist",
+            testlist.name,
+        ]
+        # The scheduler needs a positive slot count; regeneration uses that
+        # entire budget for each test, including when the user asks for -j0.
+        command.append(f"-j{args.j or os.cpu_count() or 1}")
+        if args.sparklib_source is not None:
+            command.append(f"--sparklib-source={args.sparklib_source}")
+        return subprocess.run(command, cwd=suite).returncode
+
+
+if __name__ == "__main__":
+    sys.exit(main())

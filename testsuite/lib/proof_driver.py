@@ -11,6 +11,9 @@ is empty.
 """
 
 import os.path
+from pathlib import Path
+import shutil
+import tempfile
 
 from e3.testsuite.driver.diff import DiffTestDriver, Substitute
 
@@ -31,6 +34,7 @@ known_yaml_keys = {
     "project",
     "config_dir",
     "replay",
+    "session_opt",
     "sources",
     "steps",
     "switches",
@@ -56,6 +60,8 @@ class ProofTestDriver(SparklibDriverMixin, DiffTestDriver):
 
     @property
     def tokens(self):
+        if self.env.update_sessions:
+            return max(self.jobs, self.env.session_jobs)
         return self.jobs
 
     @property
@@ -76,10 +82,22 @@ class ProofTestDriver(SparklibDriverMixin, DiffTestDriver):
             return (filename, "", is_regexp)
         return super().baseline
 
-    def gnatprove_command(self):
+    def gnatprove_command(self, generate_session=False):
         """Build the gnatprove invocation for this test"""
-        project = self.test_env.get("project", "test.gpr")
-        body_mode = self.test_env.get("body_mode", True)
+        config = dict(self.test_env)
+        if generate_session:
+            options = config.get("session_opt", {})
+            unknown = set(options) - {"level", "steps", "switches"}
+            if unknown:
+                raise ValueError(
+                    f"unknown session_opt keys: {', '.join(sorted(unknown))}"
+                )
+            config.update(options)
+            if "steps" in options and "level" not in options:
+                config.pop("level", None)
+        project = config.get("project", "test.gpr")
+        body_mode = config.get("body_mode", True)
+        jobs = self.env.session_jobs if generate_session else self.jobs
 
         cmd = ["gnatprove", "-P", project]
         # SPARKlib itself is proved by its own test, not again by each client.
@@ -98,25 +116,75 @@ class ProofTestDriver(SparklibDriverMixin, DiffTestDriver):
             "--report=fail",
             "--warnings=continue",
             "--mode=all",
-            f"-j{self.jobs}",
+            f"-j{jobs}",
             f"--memlimit={default_memlimit}",
         ]
 
-        if self.test_env.get("replay"):
+        if config.get("replay") and not generate_session:
             cmd += ["--replay"]
 
-        level = self.test_env.get("level")
+        level = config.get("level")
         if level is None:
-            steps = self.test_env.get("steps", default_steps)
+            steps = config.get("steps", default_steps)
             cmd += [f"--steps={steps}", f"--timeout={default_vc_timeout}"]
         else:
             cmd += [f"--level={level}"]
 
         cmd += ["--prover=" + ",".join(default_provers)]
-        cmd += self.test_env.get("switches", [])
+        cmd += config.get("switches", [])
         return cmd
+
+    def regenerate_sessions(self):
+        """Generate fresh automatic sessions in the test's working copy"""
+        if self.test_env.get("replay") != "session":
+            raise ValueError("session updates require replay: session")
+
+        from clean_sessions import clean_session_file
+
+        sessions = Path(self.test_env["working_dir"]) / "proof" / "sessions"
+        if sessions.exists():
+            shutil.rmtree(sessions)
+        self.shell(self.gnatprove_command(generate_session=True), analyze_output=False)
+        session_files = sorted(sessions.rglob("why3session.xml"))
+        if not session_files:
+            raise RuntimeError("gnatprove generated no sessions in proof/sessions")
+        for path in session_files:
+            clean_session_file(str(path))
+        for path in sessions.rglob("why3shapes*"):
+            path.unlink()
+
+    def save_sessions(self):
+        """Replace recorded sessions after both prover invocations complete"""
+        from clean_sessions import clean_session_file
+
+        sessions = Path(self.test_env["working_dir"]) / "proof" / "sessions"
+        # Replay can add proof attempts to the freshly generated sessions.
+        for path in sorted(sessions.rglob("why3session.xml")):
+            clean_session_file(str(path))
+        target = Path(self.test_env["test_dir"]) / "proof" / "sessions"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(dir=target.parent) as staging:
+            staging = Path(staging)
+            shutil.copytree(
+                sessions,
+                staging / "new",
+                ignore=shutil.ignore_patterns("why3shapes*", "*.bak"),
+            )
+            had_sessions = target.exists()
+            if had_sessions:
+                target.rename(staging / "old")
+            try:
+                (staging / "new").rename(target)
+            except OSError:
+                if had_sessions:
+                    (staging / "old").rename(target)
+                raise
 
     def run(self):
         create_sparklib(self.test_env["working_dir"])
         self.copy_sources()
+        if self.env.update_sessions:
+            self.regenerate_sessions()
         self.shell(self.gnatprove_command())
+        if self.env.update_sessions:
+            self.save_sessions()

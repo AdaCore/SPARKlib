@@ -127,6 +127,10 @@ class SparklibTestFinder(TestFinder):
             return None
         if self.only_large and not test_env.get("large"):
             return None
+        if testsuite.env.update_sessions and (
+            driver_name != "proof" or test_env.get("replay") != "session"
+        ):
+            return []
 
         return ParsedTest(testname, driver, test_env, dirpath)
 
@@ -140,12 +144,16 @@ class SparklibTestsuite(Testsuite):
 
     @property
     def test_finders(self):
-        return [
+        finders = [
             SparklibTestFinder(
                 self.test_dir,
                 testlist=self.testlist,
                 only_large=self.env.only_large,
             ),
+        ]
+        if self.main.args.update_sessions:
+            return finders
+        return finders + [
             # The gnatprove testsuite's finder expects the tests to sit in a
             # directory named "tests" directly below the root it is given.
             SPARKTestFinder(
@@ -157,6 +165,11 @@ class SparklibTestsuite(Testsuite):
         ]
 
     def add_options(self, parser):
+        parser.add_argument(
+            "--update-sessions",
+            action="store_true",
+            help="Regenerate migrated proof-test sessions before replaying them",
+        )
         parser.add_argument(
             "--cache", action="store_true", help="Use memcached to run testsuite faster"
         )
@@ -284,6 +297,8 @@ class SparklibTestsuite(Testsuite):
         self.env.skipped_reasons = {"rules": []}
         self.env.only_replay = self.main.args.only_replay
         self.env.rewrite_baselines = self.main.args.rewrite
+        self.env.update_sessions = self.main.args.update_sessions
+        self.env.session_jobs = self.main.args.jobs or os.cpu_count() or 1
         self.setup_sparklib()
         self.env.test_environ = self.compute_environ()
         if self.main.args.testlist:
