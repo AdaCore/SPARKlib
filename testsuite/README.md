@@ -9,6 +9,7 @@ driver, so the usual options apply:
 ./run-tests coverage_test/c_strings # run one test
 ./run-tests coverage_proof/functional_trees
 ./run-tests library_proof/formal_vectors
+./run-tests --disc=large build_test # run the migrated assertion profiles
 ./run-tests coverage_test       # run the execution group
 ./run-tests -j8 --disc=large
 ./run-tests <test> -d temp      # keep the working directory for inspection
@@ -40,9 +41,11 @@ models, and lemmas live in `../tests/library_proof/<name>` and use the same
 files. Results use e3-testsuite's canonical names, with `/` replaced by `__`
 (for example, `coverage_test__functional_trees`); `--testlist` also accepts
 these names. Unmigrated tests keep their existing names.
+Build and assertion-profile tests live in `../tests/build_test/<profile>`.
 Baselines are kept to a minimum: an execution test has none,
 and a proof test files only what gnatprove reports as a failure, never the
-messages about checks that are proved.
+messages about checks that are proved. Build/profile tests retain their
+existing diagnostic and program-output baselines initially.
 
 ### `driver: exec`
 
@@ -147,6 +150,35 @@ session changes with `git diff` before committing them.
 
 This supports automatic Why3 sessions only. Legacy tests, manifest replay,
 and manual proofs are outside its scope.
+
+### `driver: build`
+
+Runs analysis, build, and execution together for one assertion profile. The
+analysis preserves the legacy `do_flow()` settings: mode `all`, CVC5 with one
+proof step, and informational messages. The driver retains the test's own
+`sparklib.gpr`, project switches, and configuration pragmas, which select the
+assertion policy being tested. It does not force body mode or enable assertions
+on behalf of the project.
+
+Each entry declares its analysis workers and scheduler slots with `jobs`,
+which defaults to one. Compilation uses one worker. All three processes must
+succeed, and their combined output must match `test.out`. Analysis and build
+diagnostics are sorted separately; program output keeps its original order.
+Known unproved checks and intentional output
+such as `SPARKlib_Logic:ON` are part of the baseline.
+
+```yaml
+driver: build
+jobs: 4                # cores for gnatprove, and slots taken in the run
+large: true
+project: test.gpr       # default
+binary: main            # relative to the working directory; default
+timeout: 780            # seconds per process; default
+```
+
+The six full-runtime profiles are migrated under `build_test/full*` and use
+four analysis workers each; the four light-runtime profiles remain legacy
+tests. These profile tests are outside the runtime coverage manifest.
 
 ## Coverage
 

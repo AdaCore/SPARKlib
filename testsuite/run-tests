@@ -63,6 +63,7 @@ sys.path.append(spark2014_lib)
 
 from spark_drivers import SPARKTestFinder  # noqa: E402
 
+import build_driver  # noqa: E402
 import exec_driver  # noqa: E402
 import proof_driver  # noqa: E402
 
@@ -70,6 +71,7 @@ import proof_driver  # noqa: E402
 # each with the keys its tests may use. Anything else is rejected, so that a
 # mistyped key cannot quietly turn into a no-op.
 drivers = {
+    "build": (build_driver.BuildTestDriver, build_driver.known_yaml_keys),
     "exec": (exec_driver.ExecTestDriver, exec_driver.known_yaml_keys),
     "proof": (proof_driver.ProofTestDriver, proof_driver.known_yaml_keys),
 }
@@ -89,7 +91,12 @@ class SparklibTestFinder(TestFinder):
 
     def probe(self, testsuite, dirpath, dirnames, filenames):
         relpath = os.path.relpath(dirpath, self.tests_dir).replace(os.sep, "/")
-        if relpath in ("coverage_test", "coverage_proof", "library_proof"):
+        if relpath in (
+            "build_test",
+            "coverage_test",
+            "coverage_proof",
+            "library_proof",
+        ):
             # These are groups, not legacy tests. Claim them without pruning
             # their children, so the legacy finder does not stop discovery.
             return []

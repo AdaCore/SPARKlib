@@ -64,7 +64,8 @@ class SparklibDriverMixin:
     """Behavior shared by the SPARKlib test drivers.
 
     It is mixed into the e3-testsuite driver each one builds on: a plain one
-    for the execution tests, the baseline-comparing one for the proof tests.
+    for the execution tests, the baseline-comparing one for proof and profile
+    tests.
     """
 
     copy_test_directory = True
