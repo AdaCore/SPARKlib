@@ -7,6 +7,7 @@ program output, including known unproved checks.
 """
 
 import re
+import time
 
 from e3.testsuite.driver.diff import DiffTestDriver, Substitute
 
@@ -80,6 +81,7 @@ class BuildTestDriver(SparklibDriverMixin, DiffTestDriver):
         ]
 
     def run(self):
+        start_time = time.monotonic()
         # Keep the test's own sparklib.gpr and configuration pragmas. Neither
         # generating a project nor forcing body mode preserves these profiles.
         analysis = self.shell(self.analysis_command(), analyze_output=False)
@@ -112,3 +114,4 @@ class BuildTestDriver(SparklibDriverMixin, DiffTestDriver):
         # Program output is meaningful and keeps its original order. shell
         # checks all three exit statuses independently of baseline matching.
         self.shell([self.working_dir(self.test_env.get("binary", "main"))])
+        self.result.time = time.monotonic() - start_time
