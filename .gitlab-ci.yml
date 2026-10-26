@@ -95,6 +95,41 @@ commit-level-checks:
         python scripts/check_issue_trailer.py .gitlab_commit_msg
       done
 
+sparklib:
+  stage: build
+  services:
+     - image:pe-base
+     - cpu:16
+  needs: []
+  interruptible: true
+  variables:
+    ANOD_QUALIFIERS: large
+  script:
+    - generic_anod_ci $GENERIC_ANOD_CI_OPTIONS
+    - cat /tmp/ci_env.sh
+    - . /tmp/ci_env.sh
+    - cd $ANOD_DEFAULT_SANDBOX_DIR
+    # Use the same e3-testsuite to run the tests and process their results.
+    - anod install e3-for-testing --latest
+    - eval $(anod printenv e3-for-testing)
+    # Exercise this checkout's library with the installed SPARK tools.
+    - python3 $CI_PROJECT_DIR/scripts/sparklib_tree.py install-tree
+        --dest $CI_PROJECT_DIR/.sparklib-install --link
+    - export SPARKLIB_PROJECT_PATH=$CI_PROJECT_DIR/.sparklib-install
+    - anod test sparklib --qualifier=$ANOD_QUALIFIERS --latest
+    - ANOD_BUILDSPACE=`anod eval sparklib build_space_name --primitive test --qualifier=$ANOD_QUALIFIERS`
+    - testsuite_reports || testsuite_exit_code=$?
+    - mv $ANOD_DEFAULT_SANDBOX_DIR/x86_64-linux/$ANOD_BUILDSPACE/results/new/ $CI_PROJECT_DIR/testsuite-results
+    - exit ${testsuite_exit_code:-0}
+  artifacts:
+    when: always
+    paths:
+      - xunit-*.xml
+      - __results*
+      - testsuite-results
+    reports:
+      junit: xunit-*.xml
+
 coverage:
   stage: build
   services:
@@ -114,18 +149,6 @@ coverage:
     - for i in gnat spark2014 gnatcov ; do eval $(anod printenv $i) ; done
     - section_end "anod_setup"
     - section_start "project_setup" "Setup testsuite and locations"
-    - |
-      if [ -d /tmp/checkouts/spark2014 ]; then
-        export SPARK2014_DIR=/tmp/checkouts/spark2014
-      else
-        export SPARK2014_DIR=/tmp/spark2014
-        rm -rf $SPARK2014_DIR
-        git clone $GIT_CLONE_BASE/eng/spark/spark2014 --depth 1 $SPARK2014_DIR
-      fi
-    # The tests that have not been migrated to this testsuite yet are run by
-    # the gnatprove testsuite's drivers, which our entry point loads from the
-    # spark2014 checkout above. This goes away with the last such test.
-    - export SPARK2014_TESTSUITE_LIB=$SPARK2014_DIR/testsuite/gnatprove/lib/python
     - cd $CI_PROJECT_DIR
     - rm -rf $CI_PROJECT_DIR/.sparklib-install
     - python3 $CI_PROJECT_DIR/scripts/sparklib_tree.py install-tree
