@@ -156,9 +156,9 @@ and manual proofs are outside its scope.
 Runs analysis, build, and execution together for one assertion profile. The
 analysis preserves the legacy `do_flow()` settings: mode `all`, CVC5 with one
 proof step, and informational messages. The driver retains the test's own
-`sparklib.gpr`, project switches, and configuration pragmas, which select the
-assertion policy being tested. It does not force body mode or enable assertions
-on behalf of the project.
+`sparklib.gpr` or `sparklib_light.gpr`, project switches, and configuration
+pragmas, which select the runtime and assertion policy being tested. It does
+not force body mode or enable assertions on behalf of the project.
 
 Each entry declares its analysis workers and scheduler slots with `jobs`,
 which defaults to one. Compilation uses one worker. All three processes must
@@ -176,9 +176,13 @@ binary: main            # relative to the working directory; default
 timeout: 780            # seconds per process; default
 ```
 
-The six full-runtime profiles are migrated under `build_test/full*` and use
-four analysis workers each; the four light-runtime profiles remain legacy
-tests. These profile tests are outside the runtime coverage manifest.
+The six full-runtime profiles live under `build_test/full*` and the four
+light-runtime profiles under `build_test/light*`. All use four analysis workers
+each. The full-runtime profiles require `--disc=large`; the light-runtime
+profiles run by default. The light runtime's last-chance handler prints the
+expected exception message and exits with status zero, so its output is checked
+against the baseline along with the analysis and build diagnostics. These
+profile tests are outside the runtime coverage manifest.
 
 ## Coverage
 
