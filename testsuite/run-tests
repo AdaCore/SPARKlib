@@ -65,6 +65,7 @@ from spark_drivers import SPARKTestFinder  # noqa: E402
 
 import build_driver  # noqa: E402
 import exec_driver  # noqa: E402
+import library_replay_driver  # noqa: E402
 import proof_driver  # noqa: E402
 import versions_driver  # noqa: E402
 
@@ -74,6 +75,10 @@ import versions_driver  # noqa: E402
 drivers = {
     "build": (build_driver.BuildTestDriver, build_driver.known_yaml_keys),
     "exec": (exec_driver.ExecTestDriver, exec_driver.known_yaml_keys),
+    "library-replay": (
+        library_replay_driver.LibraryReplayDriver,
+        library_replay_driver.known_yaml_keys,
+    ),
     "proof": (proof_driver.ProofTestDriver, proof_driver.known_yaml_keys),
     "versions": (versions_driver.VersionsDriver, versions_driver.known_yaml_keys),
 }
