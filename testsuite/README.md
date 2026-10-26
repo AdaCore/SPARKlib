@@ -9,6 +9,7 @@ driver, so the usual options apply:
 ./run-tests coverage_test/c_strings # run one test
 ./run-tests coverage_proof/functional_trees
 ./run-tests library_proof/formal_vectors
+./run-tests --disc=coq -j4 library_proof/main
 ./run-tests --disc=large build_test # run the migrated assertion profiles
 ./run-tests coverage_test       # run the execution group
 ./run-tests -j8 --disc=large
@@ -76,8 +77,7 @@ Tests in `library_proof` keep their proof harnesses and recorded sessions in
 their own directory. Generic instantiations make the library bodies part of
 the analysis, including implementation generics exposed by test-only children.
 Their baselines record known unproved obligations explicitly, including the
-15 intended unproved checks in `library_proof/higher_order_fold`. The
-whole-library replay, including Coq, remains a legacy test.
+15 intended unproved checks in `library_proof/higher_order_fold`.
 
 ```yaml
 driver: proof
@@ -107,6 +107,24 @@ its absolute path through `-XSPARKLIB_CONFIG_DIR`. Without this key, the supplie
 configuration follows `body_mode`. The doubly-linked list implementation proof
 uses a custom configuration to expose the list implementation while keeping
 reachability abstract.
+
+### `driver: library-replay`
+
+Replays the whole-library proof, including Coq, in
+`library_proof/main`. This test requires the `coq` discriminant.
+This driver works with the library in source ode, copies the sessions
+and replays proof, including the Coq proofs. The library is run with
+body mode enabled.
+
+```yaml
+driver: library-replay
+jobs: 4                # cores for gnatprove, and slots taken in the run
+timeout: 780           # seconds per process; default
+```
+
+The driver only replays existing proofs. It is excluded from `--update-sessions`
+and `update-session-test`: its sessions need to be replayed with the
+`generate_sessions.py` script.
 
 ### Updating recorded sessions
 
