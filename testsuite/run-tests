@@ -66,6 +66,7 @@ from spark_drivers import SPARKTestFinder  # noqa: E402
 import build_driver  # noqa: E402
 import exec_driver  # noqa: E402
 import proof_driver  # noqa: E402
+import versions_driver  # noqa: E402
 
 # The drivers of this testsuite, by the name a test.yaml selects them with,
 # each with the keys its tests may use. Anything else is rejected, so that a
@@ -74,6 +75,7 @@ drivers = {
     "build": (build_driver.BuildTestDriver, build_driver.known_yaml_keys),
     "exec": (exec_driver.ExecTestDriver, exec_driver.known_yaml_keys),
     "proof": (proof_driver.ProofTestDriver, proof_driver.known_yaml_keys),
+    "versions": (versions_driver.VersionsDriver, versions_driver.known_yaml_keys),
 }
 
 
@@ -132,7 +134,8 @@ class SparklibTestFinder(TestFinder):
             and relpath not in self.testlist
         ):
             return None
-        if self.only_large and not test_env.get("large"):
+        # Keep tool versions in both ordinary and large-only nightly reports.
+        if self.only_large and not test_env.get("large") and driver_name != "versions":
             return None
         if testsuite.env.update_sessions and (
             driver_name != "proof" or test_env.get("replay") != "session"
