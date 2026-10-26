@@ -15,3 +15,52 @@ test.adb:279:07: medium: precondition might fail [provers reached step limit bef
 test.adb:280:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:288:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:289:07: medium: precondition might fail [provers reached step limit before completing the proof]
+
+Analyzed 1 unit
+in unit test, 24 subprograms and packages out of 46 analyzed
+  Test at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Assert at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Int_Trees at test.adb skipped; body is SPARK_Mode => Off
+  Test.Int_Trees."=" at spark-containers-functional-trees.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Int_Trees.Child at spark-containers-functional-trees.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Int_Trees.Copy_Element at spark-containers-functional-trees.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Int_Trees.Count at spark-containers-functional-trees.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Int_Trees.Count_Children at spark-containers-functional-trees.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Int_Trees.Create at spark-containers-functional-trees.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Int_Trees.Create at spark-containers-functional-trees.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Int_Trees.Element_Logic_Equal at spark-containers-functional-trees.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Int_Trees.Empty_Tree at spark-containers-functional-trees.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Int_Trees.Eq_Checks at spark-containers-functional-trees.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Int_Trees.Eq_Checks.Eq_Logical_Eq at spark-containers-parameter_checks.ads, instantiated at spark-containers-functional-trees.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Int_Trees.Eq_Checks.Eq_Reflexive at spark-containers-parameter_checks.ads, instantiated at spark-containers-functional-trees.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Int_Trees.Eq_Checks.Eq_Symmetric at spark-containers-parameter_checks.ads, instantiated at spark-containers-functional-trees.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Int_Trees.Eq_Checks.Eq_Transitive at spark-containers-parameter_checks.ads, instantiated at spark-containers-functional-trees.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Int_Trees.Eq_Checks.Logical_Eq at spark-containers-parameter_checks.ads, instantiated at spark-containers-functional-trees.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Int_Trees.Eq_Logical_Eq at spark-containers-functional-trees.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Int_Trees.Eq_Reflexive at spark-containers-functional-trees.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Int_Trees.Eq_Symmetric at spark-containers-functional-trees.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Int_Trees.Eq_Transitive at spark-containers-functional-trees.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Int_Trees.Get at spark-containers-functional-trees.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Int_Trees.Height at spark-containers-functional-trees.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Int_Trees.Is_Empty at spark-containers-functional-trees.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Int_Trees.Lemma_Count_Children_Tail at spark-containers-functional-trees.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Int_Trees.Lemma_Eq_Extensional at spark-containers-functional-trees.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Int_Trees.Lemma_Eq_Reflexive at spark-containers-functional-trees.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Int_Trees.Lemma_Eq_Symmetric at spark-containers-functional-trees.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Int_Trees.Lemma_Eq_Transtive at spark-containers-functional-trees.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Int_Trees.Set_Child at spark-containers-functional-trees.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Int_Trees.Set_Root at spark-containers-functional-trees.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Int_Trees.Tree at spark-containers-functional-trees.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Int_Trees.Tree_Logic_Equal at spark-containers-functional-trees.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Test_Child at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Count at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Count_Children at test.adb flow analyzed (0 errors, 1 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Create_1 at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Create_2 at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test.Test_Default_Init at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Empty_Tree at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Eq at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Get at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Height at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Set_Child at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test.Test_Set_Root at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved

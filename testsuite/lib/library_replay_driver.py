@@ -11,7 +11,8 @@ import time
 
 from e3.testsuite.driver.diff import DiffTestDriver, OutputRefiner, Substitute
 
-from base import InfoFilterRefiner, SparklibDriverMixin, SortLinesRefiner
+from base import InfoFilterRefiner, SparklibDriverMixin
+from proof_report import SortDiagnosticsRefiner, analysis_report
 from sparklib_support import body_mode_switch, resolve_sparklib_location
 from sparklib_tree import source_mode
 
@@ -29,7 +30,7 @@ class CoqWarningFilterRefiner(OutputRefiner):
 
 
 class LibraryReplayDriver(SparklibDriverMixin, DiffTestDriver):
-    """Replay every library unit, retaining warnings and unproved checks"""
+    """Replay every library unit, checking diagnostics and the analysis report"""
 
     @property
     def jobs(self):
@@ -50,7 +51,7 @@ class LibraryReplayDriver(SparklibDriverMixin, DiffTestDriver):
             Substitute(self.test_env["working_dir"], "<working_dir>"),
             InfoFilterRefiner(),
             CoqWarningFilterRefiner(),
-            SortLinesRefiner(),
+            SortDiagnosticsRefiner(),
         ]
 
     def gnatprove_command(self):
@@ -93,4 +94,5 @@ class LibraryReplayDriver(SparklibDriverMixin, DiffTestDriver):
             ["make", "-B", "-f", str(makefile), "generate"], analyze_output=False
         )
         self.shell(self.gnatprove_command())
+        self.output += analysis_report(self.test_env["working_dir"])
         self.result.time = time.monotonic() - start_time

@@ -39,3 +39,164 @@ test.adb:611:16: warning: "Target" is set by "Reclaim" but not used after the ca
 test.adb:612:25: warning: "Vs" is set by "Move" but not used after the call
 test.adb:67:18: warning: "H" is set by "Take" but not used after the call
 test.adb:99:13: warning: "Source" is set by "Move" but not used after the call
+
+Analyzed 2 units
+in unit inst, 25 subprograms and packages out of 128 analyzed
+  Inst at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning_Side at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning_Side.Copy at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning_Side.Copy_Ops at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Copy_Ops.Assign at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Copy_Ops.Create_Copy at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Copy_Ops.Deref at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Freegp2172 at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning_Side.Freegp2172.Free at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Is_Reclaimed at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning_Side.Pointers at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Pointers.At_End at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Pointers.At_End at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Pointers.Constant_Reference at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Pointers.Copy at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Pointers.Extensional_Eq at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Pointers.Handle_Operations at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Pointers.Handle_Operations.At_End at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Pointers.Handle_Operations.At_End at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Pointers.Handle_Operations.Constant_Reference at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Pointers.Handle_Operations.Null_Handle at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Pointers.Handle_Operations.Peek at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Pointers.Handle_Operations.Reference at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Pointers.Handle_Operations.Valid_Handle at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Pointers.Is_Poisoned at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Pointers.Is_Reclaimed at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Pointers.Logical_Eq at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Pointers.Move at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Pointers.Object_Logic_Equal at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Pointers.Peek at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Pointers.Readable_Pointerpredicate at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning_Side.Pointers.Reclaim at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Pointers.Reclamation_Checks at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning_Side.Pointers.Reclamation_Checks.Check_Reclamation at spark-pointers-parameter_checks.ads, instantiated at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning_Side.Pointers.Reclamation_Checks.Check_Reclamation.Reclaimed_Value at spark-pointers-parameter_checks.adb, instantiated at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Pointers.Reference at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Pointers.Take at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Reclaim at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointer_Side at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointer_Side.Copy_Ops at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Copy_Ops.Assign at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Copy_Ops.Copy at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointer_Side.Copy_Ops.Create_Copy at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Copy_Ops.Deref at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Create_Object_Handlegp1771 at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Create_Object_Handlegp1771.Create_Object_Handle at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Create_Pointergp923 at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Create_Pointergp923.Create_Pointer at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Id at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointer_Side.Pointer_Arrays at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointer_Arrays.Copy at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointer_Arrays.Logical_Eq at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointer_Arrays.Move at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointer_Arrays.Move at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointer_Arrays.Relocate at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointer_Arrays.Relocate at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointers at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointers.At_End at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointers.At_End at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointers.Constant_Reference at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointers.Copy at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointers.Extensional_Eq at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointers.Handle_Operations at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointers.Handle_Operations.At_End at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointers.Handle_Operations.At_End at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointers.Handle_Operations.Constant_Reference at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointers.Handle_Operations.Null_Handle at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointers.Handle_Operations.Peek at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointers.Handle_Operations.Reference at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointers.Handle_Operations.Valid_Handle at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointers.Is_Poisoned at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointers.Is_Reclaimed at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads flow analyzed (0 errors, 1 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointer_Side.Pointers.Is_Reclaimed at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointers.Logical_Eq at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointers.Move at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointers.Object_Logic_Equal at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointers.Peek at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointers.Readable_Pointerpredicate at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointer_Side.Pointers.Reclaim at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointers.Reclamation_Checks at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointer_Side.Pointers.Reclamation_Checks.Check_Reclamation at spark-pointers-parameter_checks.ads, instantiated at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointer_Side.Pointers.Reclamation_Checks.Check_Reclamation.Reclaimed_Value at spark-pointers-parameter_checks.adb, instantiated at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointers.Reference at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Pointers.Take at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.View_Side.Create_Viewgp3271 at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.Create_Viewgp3271.Create_View at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.Make at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.View_Side.View_Arrays at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.View_Arrays.At_End at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.View_Arrays.At_End at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.View_Arrays.Constant_Element at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.View_Arrays.Copy at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.View_Arrays.Get_View at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.View_Arrays.Logical_Eq at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.View_Arrays.Move at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.View_Arrays.Move at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.View_Arrays.Readable_Arraypredicate at spark-pointers-poisoned-views.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.View_Side.View_Arrays.Reference_Element at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.View_Arrays.Relocate at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.View_Arrays.Relocate at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.Views at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.Views.Assignment_Checks at spark-pointers-poisoned-views.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.View_Side.Views.Assignment_Checks.Check_Assignment at spark-pointers-parameter_checks.ads, instantiated at spark-pointers-poisoned-views.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.View_Side.Views.Assignment_Checks.Logical_Eq at spark-pointers-parameter_checks.ads, instantiated at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.Views.At_End at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.Views.At_End at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.Views.At_End at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.Views.At_End at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.Views.Constant_Reference at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.Views.Copy at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.Views.Extensional_Eq at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.Views.Get_View at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.Views.Is_Poisoned at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.Views.Is_Reclaimed at spark-pointers-poisoned-views.ads, instantiated at inst.ads flow analyzed (0 errors, 1 warnings and 0 pragma Assume statements) and proved
+  Inst.View_Side.Views.Is_Reclaimed at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.Views.Logical_Eq at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.Views.Move at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.Views.Move at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.Views.Object_Logic_Equal at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.Views.Peek at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.Views.Readable_Viewpredicate at spark-pointers-poisoned-views.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.View_Side.Views.Reclamation_Checks at spark-pointers-poisoned-views.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.View_Side.Views.Reclamation_Checks.Check_Reclamation at spark-pointers-parameter_checks.ads, instantiated at spark-pointers-poisoned-views.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.View_Side.Views.Reclamation_Checks.Check_Reclamation.Reclaimed_Value at spark-pointers-parameter_checks.adb, instantiated at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.Views.Reference at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.Views.Take at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.Views.Take at spark-pointers-poisoned-views.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+in unit test, 29 subprograms and packages out of 29 analyzed
+  Test at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Assert at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Is_Readable at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Reclaim_Array at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Copy_Operations at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Empty_Arrays at test.adb flow analyzed (0 errors, 16 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Handles at test.adb flow analyzed (0 errors, 1 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Move at test.adb flow analyzed (0 errors, 1 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Null_And_Poisoned at test.adb flow analyzed (0 errors, 1 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Owning_Copy at test.adb flow analyzed (0 errors, 6 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Pointer at test.adb flow analyzed (0 errors, 1 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Pointer_Array at test.adb flow analyzed (0 errors, 2 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Pointer_Array_Move at test.adb flow analyzed (0 errors, 2 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Pointer_Move_Slice at test.adb flow analyzed (0 errors, 3 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Pointer_Overlaps at test.adb flow analyzed (0 errors, 2 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Pointer_Slice at test.adb flow analyzed (0 errors, 2 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Singleton_Moves at test.adb flow analyzed (0 errors, 3 warnings and 0 pragma Assume statements) and proved
+  Test.Test_View_Array at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_View_Array.Swap at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_View_Array_Move at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_View_Create at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_View_Create.Refill at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_View_Overlaps at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_View_Scalar at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_View_Slice at test.adb flow analyzed (0 errors, 1 warnings and 0 pragma Assume statements) and proved
+  Test.Test_View_Slice.Slide at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_View_Slice.Transfer at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_View_To_Object at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_View_To_Object.Extract at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved

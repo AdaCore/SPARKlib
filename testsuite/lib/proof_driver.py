@@ -1,13 +1,12 @@
 """Driver for the SPARKlib proof tests.
 
 A proof test runs gnatprove on a SPARKlib client or component proof and
-compares the reported warnings and failures against a baseline. The tool
-reports failures only (`--report=fail`), omitting messages about proved
-checks. Those messages made the old baselines large and sensitive to changes
-in how gnatprove reports successful checks.
-
-A test that proves entirely has no baseline file at all; its expected output
-is empty.
+compares warnings, failures, and the detailed analysis report against a
+baseline. The tool reports failures only (`--report=fail`), omitting individual
+messages about proved checks. The analysis report records each entity's SPARK
+and analysis status, so that disabling proof changes the baseline even when
+no diagnostics are emitted. Its banner, source line numbers, and check counts
+are omitted.
 """
 
 import os.path
@@ -17,7 +16,8 @@ import tempfile
 
 from e3.testsuite.driver.diff import DiffTestDriver, Substitute
 
-from base import InfoFilterRefiner, SparklibDriverMixin, SortLinesRefiner
+from base import InfoFilterRefiner, SparklibDriverMixin
+from proof_report import SortDiagnosticsRefiner, analysis_report
 from sparklib_support import (
     body_mode_switch,
     create_sparklib,
@@ -51,7 +51,7 @@ default_memlimit = 2000
 
 
 class ProofTestDriver(SparklibDriverMixin, DiffTestDriver):
-    """Prove a SPARKlib client or component and compare the reported failures"""
+    """Prove a SPARKlib client or component and check diagnostics and analysis"""
 
     @property
     def jobs(self):
@@ -69,18 +69,8 @@ class ProofTestDriver(SparklibDriverMixin, DiffTestDriver):
         return super().output_refiners + [
             Substitute(self.test_env["working_dir"], "<working_dir>"),
             InfoFilterRefiner(),
-            SortLinesRefiner(),
+            SortDiagnosticsRefiner(),
         ]
-
-    @property
-    def baseline(self):
-        # A client that proves entirely files no baseline, rather than an
-        # empty file that would look like an oversight.
-        filename, is_regexp = self.baseline_file
-        filename = self.test_dir(filename)
-        if not os.path.isfile(filename):
-            return (filename, "", is_regexp)
-        return super().baseline
 
     def gnatprove_command(self, generate_session=False):
         """Build the gnatprove invocation for this test"""
@@ -186,5 +176,6 @@ class ProofTestDriver(SparklibDriverMixin, DiffTestDriver):
         if self.env.update_sessions:
             self.regenerate_sessions()
         self.shell(self.gnatprove_command())
+        self.output += analysis_report(self.test_env["working_dir"])
         if self.env.update_sessions:
             self.save_sessions()

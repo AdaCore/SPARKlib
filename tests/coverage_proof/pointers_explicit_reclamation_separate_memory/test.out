@@ -18,3 +18,169 @@ test.adb:66:16: warning: "M" is set by "Dealloc" but not used after the call
 test.adb:96:10: warning: initialization of "P2" has no effect
 test.adb:98:10: warning: statement has no effect
 test.adb:98:19: warning: "M" is set by "Dealloc" but not used after the call
+
+Analyzed 2 units
+in unit inst, 46 subprograms and packages out of 151 analyzed
+  Inst at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Create_From_Intgp1382 at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Create_From_Intgp1382.Create_From_Int at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Make at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Ops at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Ops.Assign at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Ops.Copy at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Ops.Create_Copy at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Ops.Deref at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Copy at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Freegp723 at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Freegp723.Free at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Is_Reclaimed at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Ops at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Ops.Assign at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Ops.Create_Copy at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Ops.Deref at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.At_End at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Pointers.At_End at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Pointers.Constant_Reference at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Dealloc at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Definitions at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Definitions."=" at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Definitions.Pointer at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Handle_Operations at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Handle_Operations."=" at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Handle_Operations.Null_Handle at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Handle_Operations.Of_Handle at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Handle_Operations.To_Handle at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Handle_Operations.Valid_Handle at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Pointers.Memory_Model.Allocates at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Pointers.Memory_Model.Deallocates at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Pointers.Memory_Model.Footprint at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Memory_Type at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Object_Logic_Equal at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_Sets at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_Sets."=" at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_Sets.Add at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_Sets.All_Elements_Chosen at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_Sets.Contains at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_Sets.Copy_Element at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Pointers.Memory_Model.Pointer_Sets.Element_Logic_Equal at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_Sets.Elements at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_Sets.Empty_Set at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_Sets.Is_Empty at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Pointers.Memory_Model.Pointer_Sets.Iter_First at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_Sets.Iter_Next at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_Sets.Logical_Eq at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_Sets.Set at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_Sets.Singleton at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_Sets.T119S at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Pointers.Memory_Model.Pointer_Sets.T121S at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps."+" at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps."+" at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps."=" at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps."=" at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps."=" at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps.Copy_Key at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps.Empty_Map at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps.Empty_Map at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps.Empty_Map at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps.Get at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps.Has_Key at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps.Is_Empty at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps.Is_Empty at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps.Is_Empty at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps.Iter_First at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps.Iter_Next at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps.Logical_Eq at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps.Logical_Eq at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps.Logical_Eq at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps.Map at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps.Owning_Map at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps.Owning_Map_Needs_Reclamation at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Memory_Model.Writes at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Pointers.Move_Memory at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Reclamation_Checks at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Pointers.Reclamation_Checks.Check_Reclamation at spark-pointers-parameter_checks.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Pointers.Reclamation_Checks.Check_Reclamation.Reclaimed_Value at spark-pointers-parameter_checks.adb, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Pointers.Reference at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.At_End at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointers.At_End at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointers.Constant_Reference at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Dealloc at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Definitions at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Definitions."=" at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Definitions.Pointer at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Handle_Operations at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Handle_Operations."=" at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Handle_Operations.Null_Handle at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Handle_Operations.Of_Handle at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Handle_Operations.To_Handle at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Handle_Operations.Valid_Handle at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Is_Reclaimed at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 1 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointers.Memory_Model at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointers.Memory_Model.Allocates at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointers.Memory_Model.Deallocates at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointers.Memory_Model.Footprint at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Memory_Type at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Object_Logic_Equal at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_Sets at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_Sets."=" at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_Sets.Add at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_Sets.All_Elements_Chosen at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_Sets.Contains at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_Sets.Copy_Element at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointers.Memory_Model.Pointer_Sets.Element_Logic_Equal at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_Sets.Elements at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_Sets.Empty_Set at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_Sets.Is_Empty at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointers.Memory_Model.Pointer_Sets.Iter_First at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_Sets.Iter_Next at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_Sets.Logical_Eq at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_Sets.Set at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_Sets.Singleton at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_Sets.T42S at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointers.Memory_Model.Pointer_Sets.T44S at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointers.Memory_Model.Pointer_To_Object_Maps at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointers.Memory_Model.Pointer_To_Object_Maps."+" at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_To_Object_Maps."+" at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_To_Object_Maps."=" at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_To_Object_Maps."=" at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_To_Object_Maps."=" at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_To_Object_Maps.Copy_Key at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointers.Memory_Model.Pointer_To_Object_Maps.Empty_Map at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_To_Object_Maps.Empty_Map at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_To_Object_Maps.Empty_Map at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_To_Object_Maps.Get at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_To_Object_Maps.Has_Key at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_To_Object_Maps.Is_Empty at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointers.Memory_Model.Pointer_To_Object_Maps.Is_Empty at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointers.Memory_Model.Pointer_To_Object_Maps.Is_Empty at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointers.Memory_Model.Pointer_To_Object_Maps.Iter_First at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_To_Object_Maps.Iter_Next at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_To_Object_Maps.Logical_Eq at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_To_Object_Maps.Logical_Eq at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointers.Memory_Model.Pointer_To_Object_Maps.Logical_Eq at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointers.Memory_Model.Pointer_To_Object_Maps.Map at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_To_Object_Maps.Owning_Map at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Pointer_To_Object_Maps.Owning_Map_Needs_Reclamation at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Memory_Model.Writes at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointers.Move_Memory at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Reclamation_Checks at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointers.Reclamation_Checks.Check_Reclamation at spark-pointers-parameter_checks.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Pointers.Reclamation_Checks.Check_Reclamation.Reclaimed_Value at spark-pointers-parameter_checks.adb, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointers.Reference at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+in unit test, 11 subprograms and packages out of 11 analyzed
+  Test at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Assert at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Create at test.adb flow analyzed (0 errors, 4 warnings and 0 pragma Assume statements) and not proved
+  Test.Test_Create_Deref_Dealloc at test.adb flow analyzed (0 errors, 1 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Empty_And_Multiple_Moves at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Handles at test.adb flow analyzed (0 errors, 3 warnings and 0 pragma Assume statements) and proved
+  Test.Test_In_Place_Update at test.adb flow analyzed (0 errors, 2 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Move_Memory at test.adb flow analyzed (0 errors, 5 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Move_Memory.Is_Q at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Null_And_Reuse at test.adb flow analyzed (0 errors, 2 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Owning_Copy at test.adb flow analyzed (0 errors, 2 warnings and 0 pragma Assume statements) and proved
