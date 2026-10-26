@@ -110,13 +110,13 @@ sparklib:
     - . /tmp/ci_env.sh
     - cd $ANOD_DEFAULT_SANDBOX_DIR
     # Use the same e3-testsuite to run the tests and process their results.
-    - anod install e3-for-testing --latest
+    - anod install e3-for-testing
     - eval $(anod printenv e3-for-testing)
     # Exercise this checkout's library with the installed SPARK tools.
     - python3 $CI_PROJECT_DIR/scripts/sparklib_tree.py install-tree
         --dest $CI_PROJECT_DIR/.sparklib-install --link
     - export SPARKLIB_PROJECT_PATH=$CI_PROJECT_DIR/.sparklib-install
-    - anod test sparklib --qualifier=$ANOD_QUALIFIERS --latest
+    - anod run test_sparklib --plan "$CI_PROJECT_DIR/plans/ci.plan"
     - ANOD_BUILDSPACE=`anod eval sparklib build_space_name --primitive test --qualifier=$ANOD_QUALIFIERS`
     - testsuite_reports || testsuite_exit_code=$?
     - mv $ANOD_DEFAULT_SANDBOX_DIR/x86_64-linux/$ANOD_BUILDSPACE/results/new/ $CI_PROJECT_DIR/testsuite-results
