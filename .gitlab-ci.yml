@@ -90,6 +90,9 @@ commit-level-checks:
         # directly as opposed to via pre-commit to enforce also the checking of
         # commented lines.
         python -m support.check_attribution .gitlab_commit_msg
+
+        # Enforce the Issue trailer in CI for every commit in the MR.
+        python scripts/check_issue_trailer.py .gitlab_commit_msg
       done
 
 coverage:
