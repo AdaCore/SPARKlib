@@ -2,9 +2,11 @@
 
 The library is copied into the test's working directory in source-tree form.
 Both automatic sessions and manual proofs come from the selected SPARKlib,
-and any artifacts produced by replay stay in that working copy.
+and Coq files are generated from its proof templates in that working copy.
+Any artifacts produced by replay stay there too.
 """
 
+from pathlib import Path
 import time
 
 from e3.testsuite.driver.diff import DiffTestDriver, OutputRefiner, Substitute
@@ -84,5 +86,11 @@ class LibraryReplayDriver(SparklibDriverMixin, DiffTestDriver):
         start_time = time.monotonic()
         _, root = resolve_sparklib_location()
         source_mode(self.test_env["working_dir"], from_tree=root)
+        # Regenerate the copied Coq files, including when the selected library
+        # already contains generated files from an earlier build.
+        makefile = Path(__file__).resolve().parents[2] / "Makefile"
+        self.shell(
+            ["make", "-B", "-f", str(makefile), "generate"], analyze_output=False
+        )
         self.shell(self.gnatprove_command())
         self.result.time = time.monotonic() - start_time

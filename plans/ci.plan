@@ -1,0 +1,13 @@
+import os
+
+
+def test_sparklib():
+    # generic_anod_ci creates this checkout for an explicit Depends-On or
+    # --add-dep. Otherwise, install SPARK even though it embeds SPARKlib.
+    checkout = os.path.join(os.environ["ACI_SUBPROJECTS_ROOT"], "spark2014")
+    if os.path.isdir(checkout):
+        anod_build("spark2014")
+    else:
+        anod_install("spark2014")
+
+    anod_test("sparklib", qualifier=os.environ["ANOD_QUALIFIERS"])

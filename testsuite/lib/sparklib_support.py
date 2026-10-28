@@ -23,9 +23,7 @@ from sparklib_tree import (  # noqa: E402
     test_project,
 )
 
-# Environment variable naming the SPARKlib to test. It is read by the drivers
-# of both testsuites, so setting it also directs the tests that have not been
-# migrated yet.
+# Environment variable naming the SPARKlib to test
 sparklib_project_path_env = "SPARKLIB_PROJECT_PATH"
 
 # External of the SPARKlib projects selecting body mode, the configuration in

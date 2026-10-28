@@ -2,14 +2,9 @@
 
 """Testsuite entry point for SPARKlib.
 
-A test that has been migrated to this testsuite carries a "driver" key in its
-test.yaml and is claimed by SparklibTestFinder. Every other test is claimed by
-the gnatprove testsuite's own finder, which runs it exactly as before.
-e3-testsuite hands a test directory to the first finder that claims it, so
-each test runs exactly once, whether or not it has been migrated.
-
-The second finder, and with it the dependency on the gnatprove testsuite,
-disappears once the last test has been migrated.
+Each test selects a SPARKlib driver in its test.yaml. Ordinary runs use only
+this testsuite's support code; session updates also need clean_sessions.py
+from the gnatprove testsuite.
 """
 
 from e3.testsuite import Testsuite
@@ -28,18 +23,15 @@ sys.path.append(os.path.join(sparklib_dir, "scripts"))
 import sparklib_tree  # noqa: E402
 from sparklib_support import sparklib_project_path_env  # noqa: E402
 
-# Environment variable overriding the location of the gnatprove testsuite
-# support library, for setups in which neither default location applies.
+# Environment variable overriding the location of clean_sessions.py
 spark2014_lib_env = "SPARK2014_TESTSUITE_LIB"
 
 
-def spark2014_lib_dir():
-    """Locate the gnatprove testsuite support library.
+def session_support_dir():
+    """Locate clean_sessions.py for session updates.
 
-    This is only needed as long as unmigrated tests remain, as those are run
-    by the gnatprove testsuite's finder and drivers. Nightly runs sync that
-    library next to this testsuite; in a developer checkout SPARKlib sits
-    inside the spark2014 tree.
+    Nightly runs sync the support library next to this testsuite; in a
+    developer checkout SPARKlib sits inside the spark2014 tree.
     """
     in_spark2014 = os.path.join(
         sparklib_dir, os.pardir, "testsuite", "gnatprove", "lib", "python"
@@ -50,18 +42,12 @@ def spark2014_lib_dir():
         in_spark2014,
     ]
     for candidate in candidates:
-        if candidate and os.path.isdir(candidate):
+        if candidate and os.path.isfile(os.path.join(candidate, "clean_sessions.py")):
             return os.path.abspath(candidate)
     raise RuntimeError(
-        "cannot find the gnatprove testsuite support library; "
-        f"set {spark2014_lib_env}"
+        "cannot find clean_sessions.py for session updates; " f"set {spark2014_lib_env}"
     )
 
-
-spark2014_lib = spark2014_lib_dir()
-sys.path.append(spark2014_lib)
-
-from spark_drivers import SPARKTestFinder  # noqa: E402
 
 import build_driver  # noqa: E402
 import exec_driver  # noqa: E402
@@ -85,11 +71,7 @@ drivers = {
 
 
 class SparklibTestFinder(TestFinder):
-    """Claim the tests that have been migrated to this testsuite.
-
-    A migrated test is one whose test.yaml carries a "driver" key. Everything
-    else is left to the next finder.
-    """
+    """Find tests whose test.yaml selects a SPARKlib driver"""
 
     def __init__(self, tests_dir, testlist=None, only_large=False):
         self.tests_dir = os.path.abspath(tests_dir)
@@ -98,15 +80,6 @@ class SparklibTestFinder(TestFinder):
 
     def probe(self, testsuite, dirpath, dirnames, filenames):
         relpath = os.path.relpath(dirpath, self.tests_dir).replace(os.sep, "/")
-        if relpath in (
-            "build_test",
-            "coverage_test",
-            "coverage_proof",
-            "library_proof",
-        ):
-            # These are groups, not legacy tests. Claim them without pruning
-            # their children, so the legacy finder does not stop discovery.
-            return []
         if "test.yaml" not in filenames:
             return None
         testname = testsuite.test_name(dirpath)
@@ -116,11 +89,8 @@ class SparklibTestFinder(TestFinder):
         except e3.yaml.YamlError as exc:
             raise ProbingError(f"invalid syntax for test.yaml in {testname}") from exc
         if not isinstance(test_env, dict) or "driver" not in test_env:
-            return None
+            raise ProbingError(f"{testname}: test.yaml must select a driver")
 
-        # From here on the test claims to be migrated, so a problem with it is
-        # an error: leaving it to the legacy finder would run it in a way its
-        # author did not ask for.
         del dirnames[:]
 
         driver_name = test_env["driver"]
@@ -159,23 +129,11 @@ class SparklibTestsuite(Testsuite):
 
     @property
     def test_finders(self):
-        finders = [
+        return [
             SparklibTestFinder(
                 self.test_dir,
                 testlist=self.testlist,
                 only_large=self.env.only_large,
-            ),
-        ]
-        if self.main.args.update_sessions:
-            return finders
-        return finders + [
-            # The gnatprove testsuite's finder expects the tests to sit in a
-            # directory named "tests" directly below the root it is given.
-            SPARKTestFinder(
-                os.path.dirname(os.path.abspath(self.test_dir)),
-                testlist=self.testlist,
-                only_large=self.env.only_large,
-                only_replay=self.env.only_replay,
             ),
         ]
 
@@ -183,7 +141,7 @@ class SparklibTestsuite(Testsuite):
         parser.add_argument(
             "--update-sessions",
             action="store_true",
-            help="Regenerate migrated proof-test sessions before replaying them",
+            help="Regenerate proof-test sessions before replaying them",
         )
         parser.add_argument(
             "--cache", action="store_true", help="Use memcached to run testsuite faster"
@@ -250,11 +208,6 @@ class SparklibTestsuite(Testsuite):
 
     def compute_environ(self):
         """Compute the environment the test drivers run with."""
-        pypath = "PYTHONPATH"
-        if pypath in os.environ:
-            os.environ[pypath] += os.path.pathsep + spark2014_lib
-        else:
-            os.environ[pypath] = spark2014_lib
         if self.main.args.cache:
             os.environ["cache"] = "true"
         if self.main.args.coverage:
@@ -313,6 +266,8 @@ class SparklibTestsuite(Testsuite):
         self.env.only_replay = self.main.args.only_replay
         self.env.rewrite_baselines = self.main.args.rewrite
         self.env.update_sessions = self.main.args.update_sessions
+        if self.env.update_sessions:
+            sys.path.append(session_support_dir())
         self.env.session_jobs = self.main.args.jobs or os.cpu_count() or 1
         self.setup_sparklib()
         self.env.test_environ = self.compute_environ()
