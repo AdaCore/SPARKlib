@@ -1,1 +1,1312 @@
 test.gpr: warning: there are no sources of language "Ada" in this project
+
+Analyzed 95 units
+in unit spark-big_integers, 0 subprograms and packages out of 0 analyzed
+in unit spark-big_intervals, 5 subprograms and packages out of 5 analyzed
+  SPARK.Big_Intervals at spark-big_intervals.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  SPARK.Big_Intervals.First at spark-big_intervals.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+effects on parameters and Global variables of SPARK.Big_Intervals.First fully established
+absence of run-time errors of SPARK.Big_Intervals.First fully established
+  SPARK.Big_Intervals.In_Range at spark-big_intervals.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+effects on parameters and Global variables of SPARK.Big_Intervals.In_Range depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+absence of run-time errors of SPARK.Big_Intervals.In_Range depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  SPARK.Big_Intervals.Interval at spark-big_intervals.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+absence of run-time errors of SPARK.Big_Intervals.Interval fully established
+  SPARK.Big_Intervals.Next at spark-big_intervals.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+effects on parameters and Global variables of SPARK.Big_Intervals.Next depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.From_String
+absence of run-time errors of SPARK.Big_Intervals.Next depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.From_String
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."+"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.From_String
+in unit spark-big_reals, 0 subprograms and packages out of 0 analyzed
+in unit spark-c, 1 subprograms and packages out of 1 analyzed
+  SPARK.C at spark-c.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+in unit spark-c-constant_strings, 0 subprograms and packages out of 8 analyzed
+  SPARK.C.Constant_Strings at spark-c-constant_strings.ads skipped; body is SPARK_Mode => Off
+  SPARK.C.Constant_Strings.Is_Null at spark-c-constant_strings.ads skipped; body is SPARK_Mode => Off
+  SPARK.C.Constant_Strings.Strlen at spark-c-constant_strings.ads skipped; body is SPARK_Mode => Off
+  SPARK.C.Constant_Strings.To_Chars_Ptr at spark-c-constant_strings.ads skipped; body is SPARK_Mode => Off
+  SPARK.C.Constant_Strings.Value at spark-c-constant_strings.ads skipped; body is SPARK_Mode => Off
+  SPARK.C.Constant_Strings.Value at spark-c-constant_strings.ads skipped; body is SPARK_Mode => Off
+  SPARK.C.Constant_Strings.Value at spark-c-constant_strings.ads skipped; body is SPARK_Mode => Off
+  SPARK.C.Constant_Strings.Value at spark-c-constant_strings.ads skipped; body is SPARK_Mode => Off
+in unit spark-c-strings, 0 subprograms and packages out of 15 analyzed
+  SPARK.C.Strings at spark-c-strings.ads skipped; body is SPARK_Mode => Off
+  SPARK.C.Strings.C_Length_Ghost at spark-c-strings.ads skipped; body is SPARK_Mode => Off
+  SPARK.C.Strings.C_Length_Ghost at spark-c-strings.ads skipped; body is SPARK_Mode => Off
+  SPARK.C.Strings.Free at spark-c-strings.ads skipped; body is SPARK_Mode => Off
+  SPARK.C.Strings.Is_Nul_Terminated_Ghost at spark-c-strings.ads skipped; body is SPARK_Mode => Off
+  SPARK.C.Strings.Is_Null at spark-c-strings.ads skipped; body is SPARK_Mode => Off
+  SPARK.C.Strings.New_Char_Array at spark-c-strings.ads skipped; body is SPARK_Mode => Off
+  SPARK.C.Strings.New_String at spark-c-strings.ads skipped; body is SPARK_Mode => Off
+  SPARK.C.Strings.Strlen at spark-c-strings.ads skipped; body is SPARK_Mode => Off
+  SPARK.C.Strings.Update at spark-c-strings.ads skipped; body is SPARK_Mode => Off
+  SPARK.C.Strings.Update at spark-c-strings.ads skipped; body is SPARK_Mode => Off
+  SPARK.C.Strings.Value at spark-c-strings.ads skipped; body is SPARK_Mode => Off
+  SPARK.C.Strings.Value at spark-c-strings.ads skipped; body is SPARK_Mode => Off
+  SPARK.C.Strings.Value at spark-c-strings.ads skipped; body is SPARK_Mode => Off
+  SPARK.C.Strings.Value at spark-c-strings.ads skipped; body is SPARK_Mode => Off
+in unit spark-containers, 1 subprograms and packages out of 1 analyzed
+  SPARK.Containers at spark-containers.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+in unit spark-containers-formal, 1 subprograms and packages out of 1 analyzed
+  SPARK.Containers.Formal at spark-containers-formal.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+in unit spark-containers-formal-doubly_linked_lists, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-formal-doubly_linked_lists-impl, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-formal-hash_tables, 0 subprograms and packages out of 0 analyzed
+in unit spark-containers-formal-hash_tables-generic_keys, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-formal-hash_tables-generic_operations, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-formal-hash_tables-prime_numbers, 0 subprograms and packages out of 1 analyzed
+  SPARK.Containers.Formal.Hash_Tables.Prime_Numbers.To_Prime at spark-containers-formal-hash_tables-prime_numbers.ads skipped; SPARK_Mode => Off
+in unit spark-containers-formal-hashed_maps, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-formal-hashed_sets, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-formal-holders, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-formal-impl, 1 subprograms and packages out of 1 analyzed
+  SPARK.Containers.Formal.Impl at spark-containers-formal-impl.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+in unit spark-containers-formal-impl-address_space, 0 subprograms and packages out of 1 analyzed
+  SPARK.Containers.Formal.Impl.Address_Space at spark-containers-formal-impl-address_space.ads skipped; body is SPARK_Mode => Off
+in unit spark-containers-formal-ordered_maps, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-formal-ordered_sets, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-formal-trees, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-formal-unbounded_doubly_linked_lists, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-formal-unbounded_hashed_maps, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-formal-unbounded_hashed_sets, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-formal-unbounded_ordered_maps, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-formal-unbounded_ordered_sets, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-formal-unbounded_trees, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-formal-unbounded_vectors, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-formal-vectors, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-formal-vectors-impl, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-functional, 1 subprograms and packages out of 1 analyzed
+  SPARK.Containers.Functional at spark-containers-functional.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+in unit spark-containers-functional-base, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-functional-holder, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-functional-infinite_sequences, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-functional-infinite_sequences-higher_order, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-functional-maps, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-functional-maps-higher_order, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-functional-multisets, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-functional-sets, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-functional-sets-higher_order, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-functional-total_maps, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-functional-trees, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-functional-vectors, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-functional-vectors-higher_order, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-containers-hash, 0 subprograms and packages out of 2 analyzed
+  SPARK.Containers.Hash at spark-containers-hash.ads skipped; body is SPARK_Mode => Off
+  SPARK.Containers.Hash.String_Hash_Equivalent at spark-containers-hash.ads skipped; body is SPARK_Mode => Off
+in unit spark-containers-parameter_checks, 1 subprograms and packages out of 1 analyzed
+  SPARK.Containers.Parameter_Checks at spark-containers-parameter_checks.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+in unit spark-containers-stable_sorting, 0 subprograms and packages out of 1 analyzed
+  SPARK.Containers.Stable_Sorting at spark-containers-stable_sorting.ads skipped; body is SPARK_Mode => Off
+in unit spark-containers-types, 0 subprograms and packages out of 0 analyzed
+in unit spark-conversions, 1 subprograms and packages out of 1 analyzed
+  SPARK.Conversions at spark-conversions.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+in unit spark-conversions-access_conversions, 1 subprograms and packages out of 1 analyzed
+  SPARK.Conversions.Access_Conversions at spark-conversions-access_conversions.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+in unit spark-conversions-float_conversions, 2 subprograms and packages out of 6 analyzed
+  SPARK.Conversions.Float_Conversions at spark-conversions-float_conversions.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  SPARK.Conversions.Float_Conversions.Conv at a-nbnbre.adb, instantiated at spark-conversions-float_conversions.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  SPARK.Conversions.Float_Conversions.Conv.From_Big_Integer at a-nbnbin.ads, instantiated at a-nbnbre.adb, instantiated at spark-conversions-float_conversions.ads skipped; body is SPARK_Mode => Off
+  SPARK.Conversions.Float_Conversions.Conv.To_Big_Integer at a-nbnbin.ads, instantiated at a-nbnbre.adb, instantiated at spark-conversions-float_conversions.ads skipped; body is SPARK_Mode => Off
+  SPARK.Conversions.Float_Conversions.From_Big_Real at a-nbnbre.ads, instantiated at spark-conversions-float_conversions.ads skipped; body is SPARK_Mode => Off
+  SPARK.Conversions.Float_Conversions.To_Big_Real at a-nbnbre.ads, instantiated at spark-conversions-float_conversions.ads skipped; body is SPARK_Mode => Off
+in unit spark-conversions-long_float_conversions, 2 subprograms and packages out of 6 analyzed
+  SPARK.Conversions.Long_Float_Conversions at spark-conversions-long_float_conversions.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  SPARK.Conversions.Long_Float_Conversions.Conv at a-nbnbre.adb, instantiated at spark-conversions-long_float_conversions.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  SPARK.Conversions.Long_Float_Conversions.Conv.From_Big_Integer at a-nbnbin.ads, instantiated at a-nbnbre.adb, instantiated at spark-conversions-long_float_conversions.ads skipped; body is SPARK_Mode => Off
+  SPARK.Conversions.Long_Float_Conversions.Conv.To_Big_Integer at a-nbnbin.ads, instantiated at a-nbnbre.adb, instantiated at spark-conversions-long_float_conversions.ads skipped; body is SPARK_Mode => Off
+  SPARK.Conversions.Long_Float_Conversions.From_Big_Real at a-nbnbre.ads, instantiated at spark-conversions-long_float_conversions.ads skipped; body is SPARK_Mode => Off
+  SPARK.Conversions.Long_Float_Conversions.To_Big_Real at a-nbnbre.ads, instantiated at spark-conversions-long_float_conversions.ads skipped; body is SPARK_Mode => Off
+in unit spark-conversions-long_integer_conversions, 1 subprograms and packages out of 3 analyzed
+  SPARK.Conversions.Long_Integer_Conversions at spark-conversions-long_integer_conversions.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  SPARK.Conversions.Long_Integer_Conversions.From_Big_Integer at a-nbnbin.ads, instantiated at spark-conversions-long_integer_conversions.ads skipped; body is SPARK_Mode => Off
+  SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer at a-nbnbin.ads, instantiated at spark-conversions-long_integer_conversions.ads skipped; body is SPARK_Mode => Off
+in unit spark-cut_operations, 0 subprograms and packages out of 3 analyzed
+  SPARK.Cut_Operations at spark-cut_operations.ads skipped; body is SPARK_Mode => Off
+  SPARK.Cut_Operations.By at spark-cut_operations.ads skipped; body is SPARK_Mode => Off
+  SPARK.Cut_Operations.So at spark-cut_operations.ads skipped; body is SPARK_Mode => Off
+in unit spark-higher_order, 1 subprograms and packages out of 1 analyzed
+  SPARK.Higher_Order at spark-higher_order.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+in unit spark-higher_order-fold, 1 subprograms and packages out of 1 analyzed
+  SPARK.Higher_Order.Fold at spark-higher_order-fold.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+in unit spark-higher_order-reachability, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-lemmas, 1 subprograms and packages out of 1 analyzed
+  SPARK.Lemmas at spark-lemmas.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+in unit spark-lemmas-arithmetic, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-lemmas-constrained_array, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-lemmas-fixed_point_arithmetic, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-lemmas-float_arithmetic, 23 subprograms and packages out of 25 analyzed
+  SPARK.Lemmas.Float_Arithmetic at spark-lemmas-float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+absence of run-time errors of SPARK.Lemmas.Float_Arithmetic depends on
+  effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Integer_64_Conversions
+  absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Integer_64_Conversions
+  SPARK.Lemmas.Float_Arithmetic.Integer_64_Conversions at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  SPARK.Lemmas.Float_Arithmetic.Integer_64_Conversions.Inst at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Integer_64_Conversions.Inst fully established
+  SPARK.Lemmas.Float_Arithmetic.Integer_64_Conversions.Inst.From_Big_Integer at a-nbnbin.ads, instantiated at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-float_arithmetic.ads skipped; body is SPARK_Mode => Off
+  SPARK.Lemmas.Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer at a-nbnbin.ads, instantiated at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-float_arithmetic.ads skipped; body is SPARK_Mode => Off
+  SPARK.Lemmas.Float_Arithmetic.Is_Float at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Is_Float fully established
+absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Is_Float fully established
+  SPARK.Lemmas.Float_Arithmetic.Is_Float at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Is_Float fully established
+absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Is_Float fully established
+  SPARK.Lemmas.Float_Arithmetic.Is_Integer at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Is_Integer fully established
+absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Is_Integer fully established
+  SPARK.Lemmas.Float_Arithmetic.Is_Integer_32 at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Is_Integer_32 fully established
+absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Is_Integer_32 fully established
+  SPARK.Lemmas.Float_Arithmetic.Is_Integer_64 at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Is_Integer_64 fully established
+absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Is_Integer_64 fully established
+  SPARK.Lemmas.Float_Arithmetic.Lemma_Add_Is_Monotonic at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Float_Arithmetic.Lemma_Add_Is_Monotonic fully established
+effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Lemma_Add_Is_Monotonic fully established
+absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Lemma_Add_Is_Monotonic fully established
+  SPARK.Lemmas.Float_Arithmetic.Lemma_Div_Is_Monotonic at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Float_Arithmetic.Lemma_Div_Is_Monotonic fully established
+effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Lemma_Div_Is_Monotonic fully established
+absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Lemma_Div_Is_Monotonic fully established
+  SPARK.Lemmas.Float_Arithmetic.Lemma_Div_Left_Is_Monotonic at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Float_Arithmetic.Lemma_Div_Left_Is_Monotonic fully established
+effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Lemma_Div_Left_Is_Monotonic fully established
+absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Lemma_Div_Left_Is_Monotonic fully established
+  SPARK.Lemmas.Float_Arithmetic.Lemma_Div_Right_Negative_Is_Monotonic at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Float_Arithmetic.Lemma_Div_Right_Negative_Is_Monotonic fully established
+effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Lemma_Div_Right_Negative_Is_Monotonic fully established
+absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Lemma_Div_Right_Negative_Is_Monotonic fully established
+  SPARK.Lemmas.Float_Arithmetic.Lemma_Integer_Add_Exact at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Float_Arithmetic.Lemma_Integer_Add_Exact depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."+"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Lemma_Integer_Add_Exact depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Lemma_Integer_Add_Exact depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."+"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+  SPARK.Lemmas.Float_Arithmetic.Lemma_Integer_Mul_Exact at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Float_Arithmetic.Lemma_Integer_Mul_Exact depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Lemma_Integer_Mul_Exact depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Lemma_Integer_Mul_Exact depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+  SPARK.Lemmas.Float_Arithmetic.Lemma_Integer_Sub_Exact at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Float_Arithmetic.Lemma_Integer_Sub_Exact depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Lemma_Integer_Sub_Exact depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Lemma_Integer_Sub_Exact depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+  SPARK.Lemmas.Float_Arithmetic.Lemma_Mult_By_Less_Than_One at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Float_Arithmetic.Lemma_Mult_By_Less_Than_One fully established
+effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Lemma_Mult_By_Less_Than_One fully established
+absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Lemma_Mult_By_Less_Than_One fully established
+  SPARK.Lemmas.Float_Arithmetic.Lemma_Mult_Is_Monotonic at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Float_Arithmetic.Lemma_Mult_Is_Monotonic fully established
+effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Lemma_Mult_Is_Monotonic fully established
+absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Lemma_Mult_Is_Monotonic fully established
+  SPARK.Lemmas.Float_Arithmetic.Lemma_Mult_Right_Negative_Is_Monotonic at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Float_Arithmetic.Lemma_Mult_Right_Negative_Is_Monotonic fully established
+effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Lemma_Mult_Right_Negative_Is_Monotonic fully established
+absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Lemma_Mult_Right_Negative_Is_Monotonic fully established
+  SPARK.Lemmas.Float_Arithmetic.Lemma_Rounding_Error_Add at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Float_Arithmetic.Lemma_Rounding_Error_Add depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Float_Conversions.To_Big_Real
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  absence of run-time errors of SPARK.Conversions.Float_Conversions.To_Big_Real
+effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Lemma_Rounding_Error_Add depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Float_Conversions.To_Big_Real
+absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Lemma_Rounding_Error_Add depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Float_Conversions.To_Big_Real
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  absence of run-time errors of SPARK.Conversions.Float_Conversions.To_Big_Real
+  SPARK.Lemmas.Float_Arithmetic.Lemma_Rounding_Error_Div at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Float_Arithmetic.Lemma_Rounding_Error_Div depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."/"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Float_Conversions.To_Big_Real
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."/"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  absence of run-time errors of SPARK.Conversions.Float_Conversions.To_Big_Real
+effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Lemma_Rounding_Error_Div depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."/"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Float_Conversions.To_Big_Real
+absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Lemma_Rounding_Error_Div depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."/"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Float_Conversions.To_Big_Real
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."/"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  absence of run-time errors of SPARK.Conversions.Float_Conversions.To_Big_Real
+  SPARK.Lemmas.Float_Arithmetic.Lemma_Rounding_Error_Mul at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Float_Arithmetic.Lemma_Rounding_Error_Mul depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Float_Conversions.To_Big_Real
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  absence of run-time errors of SPARK.Conversions.Float_Conversions.To_Big_Real
+effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Lemma_Rounding_Error_Mul depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Float_Conversions.To_Big_Real
+absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Lemma_Rounding_Error_Mul depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Float_Conversions.To_Big_Real
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  absence of run-time errors of SPARK.Conversions.Float_Conversions.To_Big_Real
+  SPARK.Lemmas.Float_Arithmetic.Lemma_Rounding_Error_Sub at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Float_Arithmetic.Lemma_Rounding_Error_Sub depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Float_Conversions.To_Big_Real
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  absence of run-time errors of SPARK.Conversions.Float_Conversions.To_Big_Real
+effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Lemma_Rounding_Error_Sub depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Float_Conversions.To_Big_Real
+absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Lemma_Rounding_Error_Sub depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Float_Conversions.To_Big_Real
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  absence of run-time errors of SPARK.Conversions.Float_Conversions.To_Big_Real
+  SPARK.Lemmas.Float_Arithmetic.Lemma_Sub_Is_Monotonic at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Float_Arithmetic.Lemma_Sub_Is_Monotonic fully established
+effects on parameters and Global variables of SPARK.Lemmas.Float_Arithmetic.Lemma_Sub_Is_Monotonic fully established
+absence of run-time errors of SPARK.Lemmas.Float_Arithmetic.Lemma_Sub_Is_Monotonic fully established
+in unit spark-lemmas-floating_point_arithmetic, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-lemmas-integer_arithmetic, 13 subprograms and packages out of 13 analyzed
+  SPARK.Lemmas.Integer_Arithmetic at spark-lemmas-integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+absence of run-time errors of SPARK.Lemmas.Integer_Arithmetic fully established
+  SPARK.Lemmas.Integer_Arithmetic.Lemma_Div_Is_Monotonic at spark-lemmas-arithmetic.ads, instantiated at spark-lemmas-integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Integer_Arithmetic.Lemma_Div_Is_Monotonic fully established
+effects on parameters and Global variables of SPARK.Lemmas.Integer_Arithmetic.Lemma_Div_Is_Monotonic fully established
+absence of run-time errors of SPARK.Lemmas.Integer_Arithmetic.Lemma_Div_Is_Monotonic fully established
+  SPARK.Lemmas.Integer_Arithmetic.Lemma_Div_Right_Is_Monotonic at spark-lemmas-arithmetic.ads, instantiated at spark-lemmas-integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Integer_Arithmetic.Lemma_Div_Right_Is_Monotonic fully established
+effects on parameters and Global variables of SPARK.Lemmas.Integer_Arithmetic.Lemma_Div_Right_Is_Monotonic fully established
+absence of run-time errors of SPARK.Lemmas.Integer_Arithmetic.Lemma_Div_Right_Is_Monotonic fully established
+  SPARK.Lemmas.Integer_Arithmetic.Lemma_Exp_Is_Monotonic at spark-lemmas-arithmetic.ads, instantiated at spark-lemmas-integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Integer_Arithmetic.Lemma_Exp_Is_Monotonic depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."**"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."**"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+effects on parameters and Global variables of SPARK.Lemmas.Integer_Arithmetic.Lemma_Exp_Is_Monotonic depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."**"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+absence of run-time errors of SPARK.Lemmas.Integer_Arithmetic.Lemma_Exp_Is_Monotonic depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."**"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."**"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  SPARK.Lemmas.Integer_Arithmetic.Lemma_Exp_Is_Monotonic_2 at spark-lemmas-arithmetic.ads, instantiated at spark-lemmas-integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Integer_Arithmetic.Lemma_Exp_Is_Monotonic_2 depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."**"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."**"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+effects on parameters and Global variables of SPARK.Lemmas.Integer_Arithmetic.Lemma_Exp_Is_Monotonic_2 depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."**"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+absence of run-time errors of SPARK.Lemmas.Integer_Arithmetic.Lemma_Exp_Is_Monotonic_2 depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."**"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."**"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  SPARK.Lemmas.Integer_Arithmetic.Lemma_Mod_Range at spark-lemmas-arithmetic.ads, instantiated at spark-lemmas-integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Integer_Arithmetic.Lemma_Mod_Range fully established
+effects on parameters and Global variables of SPARK.Lemmas.Integer_Arithmetic.Lemma_Mod_Range fully established
+absence of run-time errors of SPARK.Lemmas.Integer_Arithmetic.Lemma_Mod_Range fully established
+  SPARK.Lemmas.Integer_Arithmetic.Lemma_Mod_Symmetry at spark-lemmas-arithmetic.ads, instantiated at spark-lemmas-integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Integer_Arithmetic.Lemma_Mod_Symmetry depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."mod"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."mod"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+effects on parameters and Global variables of SPARK.Lemmas.Integer_Arithmetic.Lemma_Mod_Symmetry depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."mod"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+absence of run-time errors of SPARK.Lemmas.Integer_Arithmetic.Lemma_Mod_Symmetry depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."mod"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."mod"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  SPARK.Lemmas.Integer_Arithmetic.Lemma_Mult_Is_Monotonic at spark-lemmas-arithmetic.ads, instantiated at spark-lemmas-integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Integer_Arithmetic.Lemma_Mult_Is_Monotonic depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+effects on parameters and Global variables of SPARK.Lemmas.Integer_Arithmetic.Lemma_Mult_Is_Monotonic depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+absence of run-time errors of SPARK.Lemmas.Integer_Arithmetic.Lemma_Mult_Is_Monotonic depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  SPARK.Lemmas.Integer_Arithmetic.Lemma_Mult_Is_Strictly_Monotonic at spark-lemmas-arithmetic.ads, instantiated at spark-lemmas-integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Integer_Arithmetic.Lemma_Mult_Is_Strictly_Monotonic depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."<"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+effects on parameters and Global variables of SPARK.Lemmas.Integer_Arithmetic.Lemma_Mult_Is_Strictly_Monotonic depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+absence of run-time errors of SPARK.Lemmas.Integer_Arithmetic.Lemma_Mult_Is_Strictly_Monotonic depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."<"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  SPARK.Lemmas.Integer_Arithmetic.Lemma_Mult_Protect at spark-lemmas-arithmetic.ads, instantiated at spark-lemmas-integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Integer_Arithmetic.Lemma_Mult_Protect depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+effects on parameters and Global variables of SPARK.Lemmas.Integer_Arithmetic.Lemma_Mult_Protect depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+absence of run-time errors of SPARK.Lemmas.Integer_Arithmetic.Lemma_Mult_Protect depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  SPARK.Lemmas.Integer_Arithmetic.Lemma_Mult_Scale at spark-lemmas-arithmetic.ads, instantiated at spark-lemmas-integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Integer_Arithmetic.Lemma_Mult_Scale depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."/"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."abs"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."/"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."abs"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+effects on parameters and Global variables of SPARK.Lemmas.Integer_Arithmetic.Lemma_Mult_Scale depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."/"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."abs"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+absence of run-time errors of SPARK.Lemmas.Integer_Arithmetic.Lemma_Mult_Scale depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."/"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."abs"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."/"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."abs"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  SPARK.Lemmas.Integer_Arithmetic.Lemma_Mult_Then_Div_Is_Ident at spark-lemmas-arithmetic.ads, instantiated at spark-lemmas-integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Integer_Arithmetic.Lemma_Mult_Then_Div_Is_Ident depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."/"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."/"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+effects on parameters and Global variables of SPARK.Lemmas.Integer_Arithmetic.Lemma_Mult_Then_Div_Is_Ident depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."/"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+absence of run-time errors of SPARK.Lemmas.Integer_Arithmetic.Lemma_Mult_Then_Div_Is_Ident depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."/"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."/"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  SPARK.Lemmas.Integer_Arithmetic.Lemma_Mult_Then_Mod_Is_Zero at spark-lemmas-arithmetic.ads, instantiated at spark-lemmas-integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Integer_Arithmetic.Lemma_Mult_Then_Mod_Is_Zero depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."mod"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."mod"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+effects on parameters and Global variables of SPARK.Lemmas.Integer_Arithmetic.Lemma_Mult_Then_Mod_Is_Zero depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."mod"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+absence of run-time errors of SPARK.Lemmas.Integer_Arithmetic.Lemma_Mult_Then_Mod_Is_Zero depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."mod"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."mod"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.To_Big_Integer
+in unit spark-lemmas-long_float_arithmetic, 23 subprograms and packages out of 25 analyzed
+  SPARK.Lemmas.Long_Float_Arithmetic at spark-lemmas-long_float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic depends on
+  effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Integer_64_Conversions
+  absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Integer_64_Conversions
+  SPARK.Lemmas.Long_Float_Arithmetic.Integer_64_Conversions at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-long_float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  SPARK.Lemmas.Long_Float_Arithmetic.Integer_64_Conversions.Inst at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-long_float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Integer_64_Conversions.Inst fully established
+  SPARK.Lemmas.Long_Float_Arithmetic.Integer_64_Conversions.Inst.From_Big_Integer at a-nbnbin.ads, instantiated at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-long_float_arithmetic.ads skipped; body is SPARK_Mode => Off
+  SPARK.Lemmas.Long_Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer at a-nbnbin.ads, instantiated at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-long_float_arithmetic.ads skipped; body is SPARK_Mode => Off
+  SPARK.Lemmas.Long_Float_Arithmetic.Is_Float at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-long_float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Is_Float fully established
+absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Is_Float fully established
+  SPARK.Lemmas.Long_Float_Arithmetic.Is_Float at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-long_float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Is_Float fully established
+absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Is_Float fully established
+  SPARK.Lemmas.Long_Float_Arithmetic.Is_Integer at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-long_float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Is_Integer fully established
+absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Is_Integer fully established
+  SPARK.Lemmas.Long_Float_Arithmetic.Is_Integer_32 at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-long_float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Is_Integer_32 fully established
+absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Is_Integer_32 fully established
+  SPARK.Lemmas.Long_Float_Arithmetic.Is_Integer_64 at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-long_float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Is_Integer_64 fully established
+absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Is_Integer_64 fully established
+  SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Add_Is_Monotonic at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-long_float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Add_Is_Monotonic fully established
+effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Add_Is_Monotonic fully established
+absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Add_Is_Monotonic fully established
+  SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Div_Is_Monotonic at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-long_float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Div_Is_Monotonic fully established
+effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Div_Is_Monotonic fully established
+absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Div_Is_Monotonic fully established
+  SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Div_Left_Is_Monotonic at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-long_float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Div_Left_Is_Monotonic fully established
+effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Div_Left_Is_Monotonic fully established
+absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Div_Left_Is_Monotonic fully established
+  SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Div_Right_Negative_Is_Monotonic at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-long_float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Div_Right_Negative_Is_Monotonic fully established
+effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Div_Right_Negative_Is_Monotonic fully established
+absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Div_Right_Negative_Is_Monotonic fully established
+  SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Integer_Add_Exact at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-long_float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Integer_Add_Exact depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."+"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Integer_Add_Exact depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Integer_Add_Exact depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."+"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+  SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Integer_Mul_Exact at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-long_float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Integer_Mul_Exact depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Integer_Mul_Exact depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Integer_Mul_Exact depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+  SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Integer_Sub_Exact at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-long_float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Integer_Sub_Exact depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Integer_Sub_Exact depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Integer_Sub_Exact depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers.In_Range
+  absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Integer_64_Conversions.Inst.To_Big_Integer
+  SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Mult_By_Less_Than_One at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-long_float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Mult_By_Less_Than_One fully established
+effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Mult_By_Less_Than_One fully established
+absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Mult_By_Less_Than_One fully established
+  SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Mult_Is_Monotonic at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-long_float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Mult_Is_Monotonic fully established
+effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Mult_Is_Monotonic fully established
+absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Mult_Is_Monotonic fully established
+  SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Mult_Right_Negative_Is_Monotonic at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-long_float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Mult_Right_Negative_Is_Monotonic fully established
+effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Mult_Right_Negative_Is_Monotonic fully established
+absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Mult_Right_Negative_Is_Monotonic fully established
+  SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Rounding_Error_Add at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-long_float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Rounding_Error_Add depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Long_Float_Conversions.To_Big_Real
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  absence of run-time errors of SPARK.Conversions.Long_Float_Conversions.To_Big_Real
+effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Rounding_Error_Add depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Long_Float_Conversions.To_Big_Real
+absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Rounding_Error_Add depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Long_Float_Conversions.To_Big_Real
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  absence of run-time errors of SPARK.Conversions.Long_Float_Conversions.To_Big_Real
+  SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Rounding_Error_Div at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-long_float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Rounding_Error_Div depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."/"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Long_Float_Conversions.To_Big_Real
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."/"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  absence of run-time errors of SPARK.Conversions.Long_Float_Conversions.To_Big_Real
+effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Rounding_Error_Div depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."/"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Long_Float_Conversions.To_Big_Real
+absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Rounding_Error_Div depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."/"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Long_Float_Conversions.To_Big_Real
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."/"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  absence of run-time errors of SPARK.Conversions.Long_Float_Conversions.To_Big_Real
+  SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Rounding_Error_Mul at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-long_float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Rounding_Error_Mul depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Long_Float_Conversions.To_Big_Real
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  absence of run-time errors of SPARK.Conversions.Long_Float_Conversions.To_Big_Real
+effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Rounding_Error_Mul depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Long_Float_Conversions.To_Big_Real
+absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Rounding_Error_Mul depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Long_Float_Conversions.To_Big_Real
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  absence of run-time errors of SPARK.Conversions.Long_Float_Conversions.To_Big_Real
+  SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Rounding_Error_Sub at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-long_float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Rounding_Error_Sub depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Long_Float_Conversions.To_Big_Real
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  absence of run-time errors of SPARK.Conversions.Long_Float_Conversions.To_Big_Real
+effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Rounding_Error_Sub depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Long_Float_Conversions.To_Big_Real
+absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Rounding_Error_Sub depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Long_Float_Conversions.To_Big_Real
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."+"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Reals."abs"
+  absence of run-time errors of SPARK.Conversions.Long_Float_Conversions.To_Big_Real
+  SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Sub_Is_Monotonic at spark-lemmas-floating_point_arithmetic.ads, instantiated at spark-lemmas-long_float_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Sub_Is_Monotonic fully established
+effects on parameters and Global variables of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Sub_Is_Monotonic fully established
+absence of run-time errors of SPARK.Lemmas.Long_Float_Arithmetic.Lemma_Sub_Is_Monotonic fully established
+in unit spark-lemmas-long_integer_arithmetic, 13 subprograms and packages out of 13 analyzed
+  SPARK.Lemmas.Long_Integer_Arithmetic at spark-lemmas-long_integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+absence of run-time errors of SPARK.Lemmas.Long_Integer_Arithmetic fully established
+  SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Div_Is_Monotonic at spark-lemmas-arithmetic.ads, instantiated at spark-lemmas-long_integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Div_Is_Monotonic fully established
+effects on parameters and Global variables of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Div_Is_Monotonic fully established
+absence of run-time errors of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Div_Is_Monotonic fully established
+  SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Div_Right_Is_Monotonic at spark-lemmas-arithmetic.ads, instantiated at spark-lemmas-long_integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Div_Right_Is_Monotonic fully established
+effects on parameters and Global variables of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Div_Right_Is_Monotonic fully established
+absence of run-time errors of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Div_Right_Is_Monotonic fully established
+  SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Exp_Is_Monotonic at spark-lemmas-arithmetic.ads, instantiated at spark-lemmas-long_integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Exp_Is_Monotonic depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."**"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."**"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  absence of run-time errors of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+effects on parameters and Global variables of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Exp_Is_Monotonic depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."**"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+absence of run-time errors of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Exp_Is_Monotonic depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."**"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."**"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  absence of run-time errors of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Exp_Is_Monotonic_2 at spark-lemmas-arithmetic.ads, instantiated at spark-lemmas-long_integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Exp_Is_Monotonic_2 depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."**"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."**"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  absence of run-time errors of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+effects on parameters and Global variables of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Exp_Is_Monotonic_2 depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."**"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+absence of run-time errors of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Exp_Is_Monotonic_2 depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."**"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."**"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  absence of run-time errors of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mod_Range at spark-lemmas-arithmetic.ads, instantiated at spark-lemmas-long_integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mod_Range fully established
+effects on parameters and Global variables of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mod_Range fully established
+absence of run-time errors of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mod_Range fully established
+  SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mod_Symmetry at spark-lemmas-arithmetic.ads, instantiated at spark-lemmas-long_integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mod_Symmetry depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."mod"
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."mod"
+  absence of run-time errors of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+effects on parameters and Global variables of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mod_Symmetry depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."mod"
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+absence of run-time errors of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mod_Symmetry depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."mod"
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."-"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."mod"
+  absence of run-time errors of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mult_Is_Monotonic at spark-lemmas-arithmetic.ads, instantiated at spark-lemmas-long_integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mult_Is_Monotonic depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  absence of run-time errors of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+effects on parameters and Global variables of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mult_Is_Monotonic depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+absence of run-time errors of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mult_Is_Monotonic depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  absence of run-time errors of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mult_Is_Strictly_Monotonic at spark-lemmas-arithmetic.ads, instantiated at spark-lemmas-long_integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mult_Is_Strictly_Monotonic depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<"
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."<"
+  absence of run-time errors of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+effects on parameters and Global variables of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mult_Is_Strictly_Monotonic depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<"
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+absence of run-time errors of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mult_Is_Strictly_Monotonic depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<"
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."<"
+  absence of run-time errors of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mult_Protect at spark-lemmas-arithmetic.ads, instantiated at spark-lemmas-long_integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mult_Protect depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  absence of run-time errors of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+effects on parameters and Global variables of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mult_Protect depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+absence of run-time errors of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mult_Protect depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  absence of run-time errors of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mult_Scale at spark-lemmas-arithmetic.ads, instantiated at spark-lemmas-long_integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mult_Scale depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."/"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."/"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."abs"
+  absence of run-time errors of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+effects on parameters and Global variables of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mult_Scale depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."/"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+absence of run-time errors of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mult_Scale depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."/"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."abs"
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."/"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."<="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."abs"
+  absence of run-time errors of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mult_Then_Div_Is_Ident at spark-lemmas-arithmetic.ads, instantiated at spark-lemmas-long_integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mult_Then_Div_Is_Ident depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."/"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."="
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."/"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."="
+  absence of run-time errors of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+effects on parameters and Global variables of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mult_Then_Div_Is_Ident depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."/"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."="
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+absence of run-time errors of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mult_Then_Div_Is_Ident depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."/"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."="
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."/"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."="
+  absence of run-time errors of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mult_Then_Mod_Is_Zero at spark-lemmas-arithmetic.ads, instantiated at spark-lemmas-long_integer_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mult_Then_Mod_Is_Zero depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."mod"
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."mod"
+  absence of run-time errors of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+effects on parameters and Global variables of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mult_Then_Mod_Is_Zero depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."mod"
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+absence of run-time errors of SPARK.Lemmas.Long_Integer_Arithmetic.Lemma_Mult_Then_Mod_Is_Zero depends on
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."="
+  effects on parameters and Global variables of Ada.Numerics.Big_Numbers.Big_Integers."mod"
+  effects on parameters and Global variables of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."*"
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."="
+  absence of run-time errors of Ada.Numerics.Big_Numbers.Big_Integers."mod"
+  absence of run-time errors of SPARK.Conversions.Long_Integer_Conversions.To_Big_Integer
+in unit spark-lemmas-mod32_arithmetic, 9 subprograms and packages out of 9 analyzed
+  SPARK.Lemmas.Mod32_Arithmetic at spark-lemmas-mod32_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+absence of run-time errors of SPARK.Lemmas.Mod32_Arithmetic fully established
+  SPARK.Lemmas.Mod32_Arithmetic.Lemma_Div_Is_Monotonic at spark-lemmas-mod_arithmetic.ads, instantiated at spark-lemmas-mod32_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Mod32_Arithmetic.Lemma_Div_Is_Monotonic fully established
+effects on parameters and Global variables of SPARK.Lemmas.Mod32_Arithmetic.Lemma_Div_Is_Monotonic fully established
+absence of run-time errors of SPARK.Lemmas.Mod32_Arithmetic.Lemma_Div_Is_Monotonic fully established
+  SPARK.Lemmas.Mod32_Arithmetic.Lemma_Div_Then_Mult_Bounds at spark-lemmas-mod_arithmetic.ads, instantiated at spark-lemmas-mod32_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Mod32_Arithmetic.Lemma_Div_Then_Mult_Bounds fully established
+effects on parameters and Global variables of SPARK.Lemmas.Mod32_Arithmetic.Lemma_Div_Then_Mult_Bounds fully established
+absence of run-time errors of SPARK.Lemmas.Mod32_Arithmetic.Lemma_Div_Then_Mult_Bounds fully established
+  SPARK.Lemmas.Mod32_Arithmetic.Lemma_Mult_Is_Monotonic at spark-lemmas-mod_arithmetic.ads, instantiated at spark-lemmas-mod32_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Mod32_Arithmetic.Lemma_Mult_Is_Monotonic fully established
+effects on parameters and Global variables of SPARK.Lemmas.Mod32_Arithmetic.Lemma_Mult_Is_Monotonic fully established
+absence of run-time errors of SPARK.Lemmas.Mod32_Arithmetic.Lemma_Mult_Is_Monotonic fully established
+  SPARK.Lemmas.Mod32_Arithmetic.Lemma_Mult_Is_Strictly_Monotonic at spark-lemmas-mod_arithmetic.ads, instantiated at spark-lemmas-mod32_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Mod32_Arithmetic.Lemma_Mult_Is_Strictly_Monotonic fully established
+effects on parameters and Global variables of SPARK.Lemmas.Mod32_Arithmetic.Lemma_Mult_Is_Strictly_Monotonic fully established
+absence of run-time errors of SPARK.Lemmas.Mod32_Arithmetic.Lemma_Mult_Is_Strictly_Monotonic fully established
+  SPARK.Lemmas.Mod32_Arithmetic.Lemma_Mult_Protect at spark-lemmas-mod_arithmetic.ads, instantiated at spark-lemmas-mod32_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Mod32_Arithmetic.Lemma_Mult_Protect fully established
+effects on parameters and Global variables of SPARK.Lemmas.Mod32_Arithmetic.Lemma_Mult_Protect fully established
+absence of run-time errors of SPARK.Lemmas.Mod32_Arithmetic.Lemma_Mult_Protect fully established
+  SPARK.Lemmas.Mod32_Arithmetic.Lemma_Mult_Scale at spark-lemmas-mod_arithmetic.ads, instantiated at spark-lemmas-mod32_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Mod32_Arithmetic.Lemma_Mult_Scale fully established
+effects on parameters and Global variables of SPARK.Lemmas.Mod32_Arithmetic.Lemma_Mult_Scale fully established
+absence of run-time errors of SPARK.Lemmas.Mod32_Arithmetic.Lemma_Mult_Scale fully established
+  SPARK.Lemmas.Mod32_Arithmetic.Lemma_Mult_Then_Div_Is_Ident at spark-lemmas-mod_arithmetic.ads, instantiated at spark-lemmas-mod32_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Mod32_Arithmetic.Lemma_Mult_Then_Div_Is_Ident fully established
+effects on parameters and Global variables of SPARK.Lemmas.Mod32_Arithmetic.Lemma_Mult_Then_Div_Is_Ident fully established
+absence of run-time errors of SPARK.Lemmas.Mod32_Arithmetic.Lemma_Mult_Then_Div_Is_Ident fully established
+  SPARK.Lemmas.Mod32_Arithmetic.Lemma_Mult_Then_Mod_Is_Zero at spark-lemmas-mod_arithmetic.ads, instantiated at spark-lemmas-mod32_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Mod32_Arithmetic.Lemma_Mult_Then_Mod_Is_Zero fully established
+effects on parameters and Global variables of SPARK.Lemmas.Mod32_Arithmetic.Lemma_Mult_Then_Mod_Is_Zero fully established
+absence of run-time errors of SPARK.Lemmas.Mod32_Arithmetic.Lemma_Mult_Then_Mod_Is_Zero fully established
+in unit spark-lemmas-mod64_arithmetic, 9 subprograms and packages out of 9 analyzed
+  SPARK.Lemmas.Mod64_Arithmetic at spark-lemmas-mod64_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+absence of run-time errors of SPARK.Lemmas.Mod64_Arithmetic fully established
+  SPARK.Lemmas.Mod64_Arithmetic.Lemma_Div_Is_Monotonic at spark-lemmas-mod_arithmetic.ads, instantiated at spark-lemmas-mod64_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Mod64_Arithmetic.Lemma_Div_Is_Monotonic fully established
+effects on parameters and Global variables of SPARK.Lemmas.Mod64_Arithmetic.Lemma_Div_Is_Monotonic fully established
+absence of run-time errors of SPARK.Lemmas.Mod64_Arithmetic.Lemma_Div_Is_Monotonic fully established
+  SPARK.Lemmas.Mod64_Arithmetic.Lemma_Div_Then_Mult_Bounds at spark-lemmas-mod_arithmetic.ads, instantiated at spark-lemmas-mod64_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Mod64_Arithmetic.Lemma_Div_Then_Mult_Bounds fully established
+effects on parameters and Global variables of SPARK.Lemmas.Mod64_Arithmetic.Lemma_Div_Then_Mult_Bounds fully established
+absence of run-time errors of SPARK.Lemmas.Mod64_Arithmetic.Lemma_Div_Then_Mult_Bounds fully established
+  SPARK.Lemmas.Mod64_Arithmetic.Lemma_Mult_Is_Monotonic at spark-lemmas-mod_arithmetic.ads, instantiated at spark-lemmas-mod64_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Mod64_Arithmetic.Lemma_Mult_Is_Monotonic fully established
+effects on parameters and Global variables of SPARK.Lemmas.Mod64_Arithmetic.Lemma_Mult_Is_Monotonic fully established
+absence of run-time errors of SPARK.Lemmas.Mod64_Arithmetic.Lemma_Mult_Is_Monotonic fully established
+  SPARK.Lemmas.Mod64_Arithmetic.Lemma_Mult_Is_Strictly_Monotonic at spark-lemmas-mod_arithmetic.ads, instantiated at spark-lemmas-mod64_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Mod64_Arithmetic.Lemma_Mult_Is_Strictly_Monotonic fully established
+effects on parameters and Global variables of SPARK.Lemmas.Mod64_Arithmetic.Lemma_Mult_Is_Strictly_Monotonic fully established
+absence of run-time errors of SPARK.Lemmas.Mod64_Arithmetic.Lemma_Mult_Is_Strictly_Monotonic fully established
+  SPARK.Lemmas.Mod64_Arithmetic.Lemma_Mult_Protect at spark-lemmas-mod_arithmetic.ads, instantiated at spark-lemmas-mod64_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Mod64_Arithmetic.Lemma_Mult_Protect fully established
+effects on parameters and Global variables of SPARK.Lemmas.Mod64_Arithmetic.Lemma_Mult_Protect fully established
+absence of run-time errors of SPARK.Lemmas.Mod64_Arithmetic.Lemma_Mult_Protect fully established
+  SPARK.Lemmas.Mod64_Arithmetic.Lemma_Mult_Scale at spark-lemmas-mod_arithmetic.ads, instantiated at spark-lemmas-mod64_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Mod64_Arithmetic.Lemma_Mult_Scale fully established
+effects on parameters and Global variables of SPARK.Lemmas.Mod64_Arithmetic.Lemma_Mult_Scale fully established
+absence of run-time errors of SPARK.Lemmas.Mod64_Arithmetic.Lemma_Mult_Scale fully established
+  SPARK.Lemmas.Mod64_Arithmetic.Lemma_Mult_Then_Div_Is_Ident at spark-lemmas-mod_arithmetic.ads, instantiated at spark-lemmas-mod64_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Mod64_Arithmetic.Lemma_Mult_Then_Div_Is_Ident fully established
+effects on parameters and Global variables of SPARK.Lemmas.Mod64_Arithmetic.Lemma_Mult_Then_Div_Is_Ident fully established
+absence of run-time errors of SPARK.Lemmas.Mod64_Arithmetic.Lemma_Mult_Then_Div_Is_Ident fully established
+  SPARK.Lemmas.Mod64_Arithmetic.Lemma_Mult_Then_Mod_Is_Zero at spark-lemmas-mod_arithmetic.ads, instantiated at spark-lemmas-mod64_arithmetic.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Lemmas.Mod64_Arithmetic.Lemma_Mult_Then_Mod_Is_Zero fully established
+effects on parameters and Global variables of SPARK.Lemmas.Mod64_Arithmetic.Lemma_Mult_Then_Mod_Is_Zero fully established
+absence of run-time errors of SPARK.Lemmas.Mod64_Arithmetic.Lemma_Mult_Then_Mod_Is_Zero fully established
+in unit spark-lemmas-mod_arithmetic, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-lemmas-unconstrained_array, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-pointers, 0 subprograms and packages out of 1 analyzed
+  SPARK.Pointers at spark-pointers.ads skipped; body is SPARK_Mode => Off
+in unit spark-pointers-abstract_maps, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-pointers-abstract_reachability, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-pointers-abstract_sets, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-pointers-auto_reclaimed, 1 subprograms and packages out of 1 analyzed
+  SPARK.Pointers.Auto_Reclaimed at spark-pointers-auto_reclaimed.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+in unit spark-pointers-auto_reclaimed-global_memory, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-pointers-auto_reclaimed-immutable, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-pointers-auto_reclaimed-separate_memory, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-pointers-explicit_reclamation, 1 subprograms and packages out of 1 analyzed
+  SPARK.Pointers.Explicit_Reclamation at spark-pointers-explicit_reclamation.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+in unit spark-pointers-explicit_reclamation-global_memory, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-pointers-explicit_reclamation-separate_memory, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-pointers-handles, 1 subprograms and packages out of 1 analyzed
+  SPARK.Pointers.Handles at spark-pointers-handles.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+in unit spark-pointers-handles-auto_reclaimed_handles, 0 subprograms and packages out of 1 analyzed
+  SPARK.Pointers.Handles.Auto_Reclaimed_Handles at spark-pointers-handles-auto_reclaimed_handles.ads skipped; body is SPARK_Mode => Off
+in unit spark-pointers-handles-owning_handles, 1 subprograms and packages out of 5 analyzed
+  SPARK.Pointers.Handles.Owning_Handles at spark-pointers-handles-owning_handles.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  SPARK.Pointers.Handles.Owning_Handles."=" at spark-pointers-handles-owning_handles.ads skipped; body is SPARK_Mode => Off
+  SPARK.Pointers.Handles.Owning_Handles.Handle at spark-pointers-handles-owning_handles.ads skipped; body is SPARK_Mode => Off
+  SPARK.Pointers.Handles.Owning_Handles.Is_Reclaimed at spark-pointers-handles-owning_handles.ads skipped; body is SPARK_Mode => Off
+  SPARK.Pointers.Handles.Owning_Handles.Is_Uninitialized at spark-pointers-handles-owning_handles.ads skipped; body is SPARK_Mode => Off
+in unit spark-pointers-handles-plain_handles, 1 subprograms and packages out of 3 analyzed
+  SPARK.Pointers.Handles.Plain_Handles at spark-pointers-handles-plain_handles.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  SPARK.Pointers.Handles.Plain_Handles."=" at spark-pointers-handles-plain_handles.ads skipped; body is SPARK_Mode => Off
+  SPARK.Pointers.Handles.Plain_Handles.Handle at spark-pointers-handles-plain_handles.ads skipped; body is SPARK_Mode => Off
+in unit spark-pointers-parameter_checks, 1 subprograms and packages out of 1 analyzed
+  SPARK.Pointers.Parameter_Checks at spark-pointers-parameter_checks.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+in unit spark-pointers-poisoned, 1 subprograms and packages out of 1 analyzed
+  SPARK.Pointers.Poisoned at spark-pointers-poisoned.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+in unit spark-pointers-poisoned-pointers, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-pointers-poisoned-views, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-pointers-ref_counting, 0 subprograms and packages out of 0 analyzed
+flow analysis and proof skipped for this unit (generic unit is not analyzed)
+in unit spark-tests, 1 subprograms and packages out of 1 analyzed
+  SPARK.Tests at spark-tests.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+in unit spark-tests-array_lemmas, 9 subprograms and packages out of 9 analyzed
+  SPARK.Tests.Array_Lemmas at spark-tests-array_lemmas.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+absence of run-time errors of SPARK.Tests.Array_Lemmas depends on
+  effects on parameters and Global variables of SPARK.Tests.Array_Lemmas.Test_Ufloat
+  effects on parameters and Global variables of SPARK.Tests.Array_Lemmas.Test_Uint
+  SPARK.Tests.Array_Lemmas.Test_Transitive_Order_Float at spark-tests-array_lemmas.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Tests.Array_Lemmas.Test_Transitive_Order_Float fully established
+effects on parameters and Global variables of SPARK.Tests.Array_Lemmas.Test_Transitive_Order_Float fully established
+absence of run-time errors of SPARK.Tests.Array_Lemmas.Test_Transitive_Order_Float fully established
+  SPARK.Tests.Array_Lemmas.Test_Transitive_Order_Float at spark-tests-array_lemmas.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Tests.Array_Lemmas.Test_Transitive_Order_Float fully established
+effects on parameters and Global variables of SPARK.Tests.Array_Lemmas.Test_Transitive_Order_Float fully established
+absence of run-time errors of SPARK.Tests.Array_Lemmas.Test_Transitive_Order_Float fully established
+  SPARK.Tests.Array_Lemmas.Test_Transitive_Order_Int at spark-tests-array_lemmas.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Tests.Array_Lemmas.Test_Transitive_Order_Int fully established
+effects on parameters and Global variables of SPARK.Tests.Array_Lemmas.Test_Transitive_Order_Int fully established
+absence of run-time errors of SPARK.Tests.Array_Lemmas.Test_Transitive_Order_Int fully established
+  SPARK.Tests.Array_Lemmas.Test_Transitive_Order_Int at spark-tests-array_lemmas.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Tests.Array_Lemmas.Test_Transitive_Order_Int fully established
+effects on parameters and Global variables of SPARK.Tests.Array_Lemmas.Test_Transitive_Order_Int fully established
+absence of run-time errors of SPARK.Tests.Array_Lemmas.Test_Transitive_Order_Int fully established
+  SPARK.Tests.Array_Lemmas.Test_Ufloat at spark-tests-array_lemmas.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+absence of run-time errors of SPARK.Tests.Array_Lemmas.Test_Ufloat fully established
+  SPARK.Tests.Array_Lemmas.Test_Ufloat.Lemma_Transitive_Order at spark-lemmas-unconstrained_array.ads, instantiated at spark-tests-array_lemmas.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Tests.Array_Lemmas.Test_Ufloat.Lemma_Transitive_Order fully established
+effects on parameters and Global variables of SPARK.Tests.Array_Lemmas.Test_Ufloat.Lemma_Transitive_Order fully established
+absence of run-time errors of SPARK.Tests.Array_Lemmas.Test_Ufloat.Lemma_Transitive_Order fully established
+  SPARK.Tests.Array_Lemmas.Test_Uint at spark-tests-array_lemmas.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+absence of run-time errors of SPARK.Tests.Array_Lemmas.Test_Uint fully established
+  SPARK.Tests.Array_Lemmas.Test_Uint.Lemma_Transitive_Order at spark-lemmas-unconstrained_array.ads, instantiated at spark-tests-array_lemmas.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+the postcondition of SPARK.Tests.Array_Lemmas.Test_Uint.Lemma_Transitive_Order fully established
+effects on parameters and Global variables of SPARK.Tests.Array_Lemmas.Test_Uint.Lemma_Transitive_Order fully established
+absence of run-time errors of SPARK.Tests.Array_Lemmas.Test_Uint.Lemma_Transitive_Order fully established
+in unit spark__exec.ads, 1 subprograms and packages out of 1 analyzed
+  SPARK at spark__exec.ads.in flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+in unit sparklib_config__body_mode.ads, 1 subprograms and packages out of 1 analyzed
+  SPARKlib_Config at sparklib_config__body_mode.ads.in flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved

@@ -9,3 +9,114 @@ test.adb:87:18: warning: unused assignment
 test.adb:89:10: warning: statement has no effect
 test.adb:89:19: warning: "D" is set by "Reclaim" but not used after the call
 test.adb:94:09: warning: unused assignment
+
+Analyzed 2 units
+in unit inst, 29 subprograms and packages out of 100 analyzed
+  Inst at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Cell_Next at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Copy at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Count at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Create_Cellgp2987 at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Create_Cellgp2987.Create_Cell at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Create_Nodegp7316 at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Create_Nodegp7316.Create_Node at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Create_Owninggp1506 at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Create_Owninggp1506.Create_Owning at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Create_Plaingp725 at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Create_Plaingp725.Create_Plain at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Freegp1133 at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Freegp1133.Free at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Id at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Id_Cell at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Id_Node at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.List_Handle_Ops at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.List_Handle_Ops.Extensional_Eq at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.List_Handle_Ops.Logical_Eq at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.List_Handle_Ops.Null_Handle at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.List_Handle_Ops.Of_Handle at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.List_Handle_Ops.To_Handle at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.List_Handle_Ops.Valid_Handle at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.List_Handles at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.List_Handles."=" at spark-pointers-handles-auto_reclaimed_handles.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.List_Handles.Handle at spark-pointers-handles-auto_reclaimed_handles.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.List_Pointers at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.List_Pointers.Constant_Reference at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.List_Pointers.Extensional_Eq at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.List_Pointers.Logical_Eq at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.List_Pointers.Object_Logic_Equal at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.List_Pointers.Reclaim at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.List_Pointers.Reclamation_Checks at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.List_Pointers.Reclamation_Checks.Check_Reclamation at spark-pointers-parameter_checks.ads, instantiated at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.List_Pointers.Reclamation_Checks.Check_Reclamation.Any_Value at spark-pointers-parameter_checks.adb, instantiated at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.List_Variant at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.List_Variant.Weight at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Make at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning_Handle_Ops at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Handle_Ops.Extensional_Eq at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Handle_Ops.Logical_Eq at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Handle_Ops.Null_Handle at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Handle_Ops.Of_Handle at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Handle_Ops.To_Handle at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Handle_Ops.Valid_Handle at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Handles at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Handles."=" at spark-pointers-handles-auto_reclaimed_handles.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Handles.Handle at spark-pointers-handles-auto_reclaimed_handles.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Ops at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Ops.Create_Copy at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Ops.Deref at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Pointers at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Pointers.Constant_Reference at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Pointers.Extensional_Eq at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Pointers.Logical_Eq at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Pointers.Object_Logic_Equal at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Pointers.Reclamation_Checks at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning_Pointers.Reclamation_Checks.Check_Reclamation at spark-pointers-parameter_checks.ads, instantiated at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning_Pointers.Reclamation_Checks.Check_Reclamation.Any_Value at spark-pointers-parameter_checks.adb, instantiated at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Plain_Ops at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Plain_Ops.Copy at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Plain_Ops.Create_Copy at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Plain_Ops.Deref at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Plain_Pointers at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Plain_Pointers.Constant_Reference at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Plain_Pointers.Extensional_Eq at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Plain_Pointers.Logical_Eq at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Plain_Pointers.Object_Logic_Equal at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Plain_Pointers.Reclaim at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Plain_Pointers.Reclamation_Checks at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Plain_Pointers.Reclamation_Checks.Check_Reclamation at spark-pointers-parameter_checks.ads, instantiated at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Plain_Pointers.Reclamation_Checks.Check_Reclamation.Any_Value at spark-pointers-parameter_checks.adb, instantiated at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Reclaim at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Sum at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Tree_Count at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Tree_Handle_Ops at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Tree_Handle_Ops.Extensional_Eq at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Tree_Handle_Ops.Logical_Eq at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Tree_Handle_Ops.Null_Handle at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Tree_Handle_Ops.Of_Handle at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Tree_Handle_Ops.To_Handle at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Tree_Handle_Ops.Valid_Handle at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Tree_Handles at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Tree_Handles."=" at spark-pointers-handles-auto_reclaimed_handles.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Tree_Handles.Handle at spark-pointers-handles-auto_reclaimed_handles.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Tree_Next at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Tree_Pointers at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Tree_Pointers.Constant_Reference at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Tree_Pointers.Extensional_Eq at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Tree_Pointers.Logical_Eq at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Tree_Pointers.Object_Logic_Equal at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Tree_Pointers.Reclaim at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Tree_Pointers.Reclamation_Checks at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Tree_Pointers.Reclamation_Checks.Check_Reclamation at spark-pointers-parameter_checks.ads, instantiated at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Tree_Pointers.Reclamation_Checks.Check_Reclamation.Any_Value at spark-pointers-parameter_checks.adb, instantiated at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Tree_Variant at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Tree_Variant.Weight at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Valid_Chain at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Valid_Tree at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+in unit test, 7 subprograms and packages out of 7 analyzed
+  Test at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Assert at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Handle at test.adb flow analyzed (0 errors, 3 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Multiway_Variant at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Owning at test.adb flow analyzed (0 errors, 7 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Plain at test.adb flow analyzed (0 errors, 1 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Variant at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved

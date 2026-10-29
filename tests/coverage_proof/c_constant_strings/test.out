@@ -6,3 +6,14 @@ test_constant_string.adb:46:38: medium: resource or memory leak might occur [pos
 test_constant_string.adb:56:38: medium: resource or memory leak might occur [possible explanation: allocator for an access-to-constant type leaks memory]
 test_constant_string.adb:79:38: medium: resource or memory leak might occur [possible explanation: allocator for an access-to-constant type leaks memory]
 test_constant_string.adb:89:38: medium: resource or memory leak might occur [possible explanation: allocator for an access-to-constant type leaks memory]
+
+Analyzed 1 unit
+in unit test_constant_string, 8 subprograms and packages out of 8 analyzed
+  Test_Constant_String at test_constant_string.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test_Constant_String.Assert at test_constant_string.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Constant_String.Test_Strlen at test_constant_string.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Constant_String.Test_To_Chars_Ptr at test_constant_string.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test_Constant_String.Test_Value at test_constant_string.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test_Constant_String.Test_Value_Length at test_constant_string.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test_Constant_String.Test_Value_String at test_constant_string.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test_Constant_String.Test_Value_String_Length at test_constant_string.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved

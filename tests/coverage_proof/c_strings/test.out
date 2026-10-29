@@ -5,3 +5,18 @@ test_string.adb:188:10: medium: precondition might fail [provers reached step li
 test_string.adb:46:10: medium: precondition might fail [provers reached step limit before completing the proof]
 test_string.adb:55:10: medium: precondition might fail [provers reached step limit before completing the proof]
 test_string.adb:55:37: medium: precondition might fail, cannot prove Strlen (Item) <= size_t (Natural'Last) [provers reached step limit before completing the proof]
+
+Analyzed 1 unit
+in unit test_string, 12 subprograms and packages out of 12 analyzed
+  Test_String at test_string.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_String.Assert at test_string.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_String.Test_Free at test_string.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_String.Test_New_Char_Array at test_string.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_String.Test_New_String at test_string.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test_String.Test_Strlen at test_string.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_String.Test_Update at test_string.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_String.Test_Update_String at test_string.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test_String.Test_Value at test_string.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_String.Test_Value_Length at test_string.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_String.Test_Value_String at test_string.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_String.Test_Value_String_Length at test_string.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved

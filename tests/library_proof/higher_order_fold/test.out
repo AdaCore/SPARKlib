@@ -13,3 +13,207 @@ spark-higher_order-fold.ads:550:17: medium: postcondition might fail, in instant
 spark-higher_order-fold.ads:663:11: medium: precondition might fail, in instantiation at test_higher_order3.ads:77
 spark-higher_order-fold.ads:673:17: medium: postcondition might fail, in instantiation at test_higher_order3.ads:77 [possible fix: you should consider adding a postcondition to function "To_Big" or turning it into an expression function in its unit spec]
 spark-higher_order-fold.ads:677:27: medium: postcondition might fail, in instantiation at test_higher_order3.ads:77 [possible fix: you should consider adding a postcondition to function "To_Big" or turning it into an expression function in its unit spec]
+
+Analyzed 4 units
+in unit test_higher_order, 13 subprograms and packages out of 16 analyzed
+  Test_Higher_Order at test_higher_order.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order.F at test_higher_order.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order.Final_Prop at test_higher_order.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order.Ind_Prop at test_higher_order.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order.My_Fold_Left at test_higher_order.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order.My_Fold_Left.Acc at spark-higher_order-fold.ads, instantiated at test_higher_order.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order.My_Fold_Left.Acc.Fold at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order.My_Fold_Left.Acc.Prove_Ind at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test_Higher_Order.My_Fold_Left.Acc.Prove_Last at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test_Higher_Order.My_Fold_Left.Fold at spark-higher_order-fold.ads, instantiated at test_higher_order.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order.My_Fold_Right at test_higher_order.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order.My_Fold_Right.Acc at spark-higher_order-fold.ads, instantiated at test_higher_order.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order.My_Fold_Right.Acc.Fold at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order.My_Fold_Right.Acc.Prove_Ind at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test_Higher_Order.My_Fold_Right.Acc.Prove_Last at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test_Higher_Order.My_Fold_Right.Fold at spark-higher_order-fold.ads, instantiated at test_higher_order.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+in unit test_higher_order1, 8 subprograms and packages out of 11 analyzed
+  Test_Higher_Order1 at test_higher_order1.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order1.F_2 at test_higher_order1.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order1.Final_Prop at test_higher_order1.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order1.Ind_Prop at test_higher_order1.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order1.My_Fold_2 at test_higher_order1.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order1.My_Fold_2.Acc at spark-higher_order-fold.ads, instantiated at test_higher_order1.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order1.My_Fold_2.Acc.Fold at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order1.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order1.My_Fold_2.Acc.Prove_Ind_Col at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order1.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test_Higher_Order1.My_Fold_2.Acc.Prove_Ind_Row at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order1.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test_Higher_Order1.My_Fold_2.Acc.Prove_Last at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order1.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test_Higher_Order1.My_Fold_2.Fold at spark-higher_order-fold.ads, instantiated at test_higher_order1.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+in unit test_higher_order2, 54 subprograms and packages out of 67 analyzed
+  Test_Higher_Order2 at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.Add at test_higher_order2.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order2.Add_Pre at test_higher_order2.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order2.F at test_higher_order2.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order2.F at test_higher_order2.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order2.Final_Prop at test_higher_order2.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order2.In_Range at test_higher_order2.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order2.Ind_Prop at test_higher_order2.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order2.My_Fold_Left_I at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Fold_Left_I.Acc at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Fold_Left_I.Acc.Fold at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Fold_Left_I.Acc.Prove_Ind at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test_Higher_Order2.My_Fold_Left_I.Acc.Prove_Last at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test_Higher_Order2.My_Fold_Left_I.Fold at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum."+" at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test_Higher_Order2.My_Sum.Big_Integer_Sum at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum.Big_Integer_Sum.Add_Value at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum.Big_Integer_Sum.Always_True at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum.Big_Integer_Sum.Always_True at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum.Big_Integer_Sum.Index_Conv at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum.Big_Integer_Sum.Index_Conv.From_Big_Integer at a-nbnbin.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order2.My_Sum.Big_Integer_Sum.Index_Conv.To_Big_Integer at a-nbnbin.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order2.My_Sum.Big_Integer_Sum.Length at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum.Big_Integer_Sum.Sum at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum.Big_Integer_Sum.Sum_Cst at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum.Big_Integer_Sum.Sum_Left at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum.Big_Integer_Sum.Sum_Left.Acc at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum.Big_Integer_Sum.Sum_Left.Acc.Fold at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum.Big_Integer_Sum.Sum_Left.Acc.Prove_Ind at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum.Big_Integer_Sum.Sum_Left.Acc.Prove_Last at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum.Big_Integer_Sum.Sum_Left.Fold at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum.Big_Integer_Sum.Update_Sum at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum.No_Overflows at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum.No_Overflows at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum.Prove_Add at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test_Higher_Order2.My_Sum.Prove_Zero at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test_Higher_Order2.My_Sum.Sum at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum_Int at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum_Int."+" at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum_Int.Big_Integer_Sum at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum_Int.Big_Integer_Sum.Add_Value at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum_Int.Big_Integer_Sum.Always_True at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum_Int.Big_Integer_Sum.Always_True at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum_Int.Big_Integer_Sum.Index_Conv at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum_Int.Big_Integer_Sum.Index_Conv.From_Big_Integer at a-nbnbin.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order2.My_Sum_Int.Big_Integer_Sum.Index_Conv.To_Big_Integer at a-nbnbin.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order2.My_Sum_Int.Big_Integer_Sum.Length at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum_Int.Big_Integer_Sum.Sum at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum_Int.Big_Integer_Sum.Sum_Cst at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum_Int.Big_Integer_Sum.Sum_Left at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum_Int.Big_Integer_Sum.Sum_Left.Acc at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum_Int.Big_Integer_Sum.Sum_Left.Acc.Fold at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum_Int.Big_Integer_Sum.Sum_Left.Acc.Prove_Ind at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum_Int.Big_Integer_Sum.Sum_Left.Acc.Prove_Last at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum_Int.Big_Integer_Sum.Sum_Left.Fold at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum_Int.Big_Integer_Sum.Update_Sum at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum_Int.No_Overflows at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum_Int.No_Overflows at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum_Int.Prove_Add at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum_Int.Prove_Zero at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.My_Sum_Int.Sum at spark-higher_order-fold.ads, instantiated at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.Prove_No_Overflows at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.Sum_Int at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.To_Big at test_higher_order2.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order2.Valid_Integer at test_higher_order2.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order2.Value at test_higher_order2.ads skipped; body is SPARK_Mode => Off
+in unit test_higher_order3, 90 subprograms and packages out of 104 analyzed
+  Test_Higher_Order3 at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.Add at test_higher_order3.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order3.Add_Pre at test_higher_order3.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order3.Choose at test_higher_order3.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order3.In_Range at test_higher_order3.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order3.My_Count at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count.Add_One at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count.Count at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count.Count_Left at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count.Count_Left.Acc at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count.Count_Left.Acc.Fold at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count.Count_Left.Acc.Prove_Ind at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count.Count_Left.Acc.Prove_Last at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count.Count_Left.Fold at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count.Count_Length at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count.Count_Zero at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count.In_Range at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count.In_Range_Last at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count.Update_Count at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count_2 at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count_2.Add_One at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count_2.Count at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count_2.Count_Length at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count_2.Count_Length.Count_Length at spark-higher_order-fold.adb, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count_2.Count_Length.Count_Length at spark-higher_order-fold.adb, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count_2.Count_Length.Prove_Next at spark-higher_order-fold.adb, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count_2.Count_Zero at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count_2.Fold_Count at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count_2.Fold_Count.Acc at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count_2.Fold_Count.Acc.Fold at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count_2.Fold_Count.Acc.Prove_Ind_Col at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count_2.Fold_Count.Acc.Prove_Ind_Row at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count_2.Fold_Count.Acc.Prove_Last at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count_2.Fold_Count.Fold at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count_2.In_Range at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count_2.Result_In_Range at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count_2.Update_Count at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count_2.Update_Count.Prove_Next at spark-higher_order-fold.adb, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Count_2.Update_Count.Update_Count at spark-higher_order-fold.adb, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_2 at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_2."+" at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test_Higher_Order3.My_Sum_2.Big_Integer_Sum at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_2.Big_Integer_Sum.Add_Value at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_2.Big_Integer_Sum.Always_True at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_2.Big_Integer_Sum.Always_True at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_2.Big_Integer_Sum.Fold_Sum at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_2.Big_Integer_Sum.Fold_Sum.Acc at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_2.Big_Integer_Sum.Fold_Sum.Acc.Fold at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_2.Big_Integer_Sum.Fold_Sum.Acc.Prove_Ind_Col at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_2.Big_Integer_Sum.Fold_Sum.Acc.Prove_Ind_Row at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_2.Big_Integer_Sum.Fold_Sum.Acc.Prove_Last at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_2.Big_Integer_Sum.Fold_Sum.Fold at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_2.Big_Integer_Sum.Index_Conv_1 at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_2.Big_Integer_Sum.Index_Conv_1.From_Big_Integer at a-nbnbin.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order3.My_Sum_2.Big_Integer_Sum.Index_Conv_1.To_Big_Integer at a-nbnbin.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order3.My_Sum_2.Big_Integer_Sum.Index_Conv_2 at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_2.Big_Integer_Sum.Index_Conv_2.From_Big_Integer at a-nbnbin.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order3.My_Sum_2.Big_Integer_Sum.Index_Conv_2.To_Big_Integer at a-nbnbin.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order3.My_Sum_2.Big_Integer_Sum.Length_1 at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_2.Big_Integer_Sum.Length_2 at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_2.Big_Integer_Sum.Sum at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_2.Big_Integer_Sum.Sum_Cst at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_2.Big_Integer_Sum.Sum_Cst.Sum_Cst at spark-higher_order-fold.adb, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_2.Big_Integer_Sum.Update_Sum at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_2.No_Overflows at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_2.No_Overflows at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_2.Prove_Add at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test_Higher_Order3.My_Sum_2.Prove_Zero at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test_Higher_Order3.My_Sum_2.Sum at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int."+" at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int.Big_Integer_Sum at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int.Big_Integer_Sum.Add_Value at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int.Big_Integer_Sum.Always_True at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int.Big_Integer_Sum.Always_True at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int.Big_Integer_Sum.Fold_Sum at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int.Big_Integer_Sum.Fold_Sum.Acc at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int.Big_Integer_Sum.Fold_Sum.Acc.Fold at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int.Big_Integer_Sum.Fold_Sum.Acc.Prove_Ind_Col at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int.Big_Integer_Sum.Fold_Sum.Acc.Prove_Ind_Row at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int.Big_Integer_Sum.Fold_Sum.Acc.Prove_Last at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int.Big_Integer_Sum.Fold_Sum.Fold at spark-higher_order-fold.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int.Big_Integer_Sum.Index_Conv_1 at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int.Big_Integer_Sum.Index_Conv_1.From_Big_Integer at a-nbnbin.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order3.My_Sum_Int.Big_Integer_Sum.Index_Conv_1.To_Big_Integer at a-nbnbin.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order3.My_Sum_Int.Big_Integer_Sum.Index_Conv_2 at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int.Big_Integer_Sum.Index_Conv_2.From_Big_Integer at a-nbnbin.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order3.My_Sum_Int.Big_Integer_Sum.Index_Conv_2.To_Big_Integer at a-nbnbin.ads, instantiated at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order3.My_Sum_Int.Big_Integer_Sum.Length_1 at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int.Big_Integer_Sum.Length_2 at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int.Big_Integer_Sum.Sum at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int.Big_Integer_Sum.Sum_Cst at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int.Big_Integer_Sum.Sum_Cst.Sum_Cst at spark-higher_order-fold.adb, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int.Big_Integer_Sum.Update_Sum at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int.No_Overflows at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int.No_Overflows at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int.Prove_Add at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int.Prove_Zero at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.My_Sum_Int.Sum at spark-higher_order-fold.ads, instantiated at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.Prove_No_Overflows at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.Sum_Int at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.To_Big at test_higher_order3.ads skipped; body is SPARK_Mode => Off
+  Test_Higher_Order3.Valid_Integer at test_higher_order3.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test_Higher_Order3.Value at test_higher_order3.ads skipped; body is SPARK_Mode => Off

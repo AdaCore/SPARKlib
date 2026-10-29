@@ -44,9 +44,9 @@ files. Results use e3-testsuite's canonical names, with `/` replaced by `__`
 these names.
 Build and assertion-profile tests live in `../tests/build_test/<profile>`.
 Baselines are kept to a minimum: an execution test has none,
-and a proof test files only what gnatprove reports as a failure, never the
-messages about checks that are proved. Build/profile tests retain their
-existing diagnostic and program-output baselines initially.
+and a proof test records diagnostics and the detailed analysis report, omitting
+individual messages about checks that are proved. Build/profile tests retain
+their existing diagnostic and program-output baselines initially.
 
 ### `driver: exec`
 
@@ -67,11 +67,18 @@ runs:                  # what to build and run; the default is the entry below
 ### `driver: proof`
 
 Runs gnatprove on a client or component proof of SPARKlib and compares what it
-reports against `test.out`. With `--report=fail`, the baseline contains warnings
-and unproved checks. A test that proves entirely files no baseline at all.
-Lines are compared as a set, since
-proving on several cores reports in no particular order, and `--rewrite`
-refreshes a baseline from a run.
+reports against `test.out`. With `--report=fail`, the diagnostics contain warnings
+and unproved checks. Every proof test also records the "Detailed analysis report"
+section of `gnatprove.out`, including each entity's SPARK and analysis status.
+This detects bodies being excluded from SPARK and skipped analysis even when
+diagnostics are empty. A missing report or empty analysis section fails the test.
+Diagnostics are sorted, since proving on several cores reports them in no
+particular order; the analysis report keeps its unit and entity grouping.
+The report's banner, source line and column numbers, and flow and proof check
+counts are omitted, as are prover statistics and timings. Filenames and other
+counts, such as errors, warnings, and pragma Assume statements, are retained.
+Diagnostic messages retain their source locations. `--rewrite` refreshes a
+baseline from a run.
 
 Tests in `library_proof` keep their proof harnesses and recorded sessions in
 their own directory. Generic instantiations make the library bodies part of
@@ -114,7 +121,8 @@ Replays the whole-library proof, including Coq, in
 `library_proof/main`. This test requires the `coq` discriminant.
 This driver works with the library in source mode, copies the sessions
 and replays proof, including the Coq proofs. The library is run with
-body mode enabled.
+body mode enabled. Its baseline includes diagnostics and the detailed analysis
+report, just like the `proof` driver.
 
 ```yaml
 driver: library-replay
