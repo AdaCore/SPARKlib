@@ -1,0 +1,129 @@
+#!/usr/bin/env python3
+"""Trigger SPARKlib session regeneration in CI and apply its results.
+
+Use --setup to select an Anod setup, or --mr for a SPARKlib merge request.
+Use --no-wait to return immediately and --apply PIPELINE to retrieve later.
+Test names may be paths relative to tests/ or canonical names.
+"""
+
+import argparse
+import os
+from pathlib import Path
+import tarfile
+import tempfile
+import time
+
+from e3.auth.gitlab import GitlabRegistry
+from e3.fs import sync_tree
+import gitlab
+
+UPDATER_PROJECT = "1745"
+SPARKLIB_PROJECT = "200"
+JOBS = ("update-sparklib-sessions-nightly", "update-sparklib-sessions-mr")
+ROOT = Path(__file__).resolve().parent.parent
+
+
+def client():
+    proxy = os.environ.get("GITLAB_PROXY_URL")
+    if proxy:
+        return gitlab.Gitlab(proxy, keep_base_url=True)
+    return gitlab.Gitlab(
+        f"https://{GitlabRegistry.GITLAB_DOMAIN}", private_token=GitlabRegistry().token
+    )
+
+
+def apply_sessions(project, pipeline_id):
+    pipeline = project.pipelines.get(pipeline_id)
+    job = next(
+        (
+            j
+            for j in pipeline.jobs.list(iterator=True, include_retried=True)
+            if j.name in JOBS
+        ),
+        None,
+    )
+    if job is None:
+        raise SystemExit(
+            f"No SPARKlib session-update job found in pipeline {pipeline_id}"
+        )
+    artifact = project.jobs.get(job.id).artifact("sessions.tgz")
+    with tempfile.TemporaryDirectory() as directory:
+        archive = Path(directory) / "sessions.tgz"
+        archive.write_bytes(artifact)
+        extracted = Path(directory) / "extracted"
+        extracted.mkdir()
+        with tarfile.open(archive, "r:gz") as tar:
+            tar.extractall(extracted, filter="data")
+        sessions = sorted(extracted.glob("tests/*/*/proof/sessions"))
+        if not sessions:
+            raise SystemExit("Artifact contains no regenerated SPARKlib sessions")
+        for source in sessions:
+            relative = source.relative_to(extracted)
+            test = ROOT / relative.parent.parent
+            if not (test / "test.yaml").is_file():
+                raise SystemExit(f"Session test not found locally: {test}")
+        for source in sessions:
+            relative = source.relative_to(extracted)
+            updated, deleted = sync_tree(str(source), str(ROOT / relative), delete=True)
+            print(f"{relative}: {len(updated)} file(s) updated, {len(deleted)} deleted")
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--no-wait", action="store_true")
+    mode.add_argument("--apply", metavar="PIPELINE")
+    source = parser.add_mutually_exclusive_group()
+    source.add_argument("--mr", metavar="MR", help="use this SPARKlib merge request")
+    source.add_argument("--setup", help="nightly Anod setup (default: wave)")
+    parser.add_argument("--tests", nargs="*", default=[], metavar="TEST")
+    args = parser.parse_args()
+    if args.apply and (args.mr or args.setup or args.tests):
+        parser.error("--apply cannot be combined with --mr, --setup or --tests")
+
+    project = client().projects.get(UPDATER_PROJECT, lazy=True)
+    if args.apply:
+        apply_sessions(project, args.apply)
+        return
+    variables = {
+        "SESSION_UPDATE_SUITE": "sparklib",
+        "UPDATE_SESSION_TESTS": " ".join(args.tests),
+    }
+    if args.mr:
+        variables.update(
+            ACI_UPSTREAM_PROJECT_ID=SPARKLIB_PROJECT,
+            ACI_UPSTREAM_MERGE_REQUEST_IID=args.mr,
+        )
+    else:
+        variables["SESSION_UPDATE_SETUP"] = args.setup or "wave"
+    pipeline = project.pipelines.create(
+        {
+            "ref": "main",
+            "variables": [{"key": k, "value": v} for k, v in variables.items()],
+        }
+    )
+    print(f"Triggered pipeline {pipeline.id}: {pipeline.web_url}")
+    if args.no_wait:
+        print(
+            "Once the pipeline finishes, retrieve results with:\n"
+            f"  ./trigger-session-update --apply {pipeline.id}"
+        )
+        return
+    while True:
+        pipeline = project.pipelines.get(pipeline.id)
+        print(f"  pipeline {pipeline.id}: {pipeline.status}")
+        if pipeline.status in ("success", "failed", "canceled", "skipped"):
+            break
+        time.sleep(30)
+    if pipeline.status != "success":
+        raise SystemExit(
+            f"Pipeline {pipeline.id} ended with status {pipeline.status!r}; "
+            "no sessions applied"
+        )
+    apply_sessions(project, pipeline.id)
+
+
+if __name__ == "__main__":
+    main()

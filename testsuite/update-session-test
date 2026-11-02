@@ -30,6 +30,7 @@ def main():
         metavar="DIR",
         help="test checkout sources instead of the installed SPARKlib",
     )
+    parser.add_argument("--xunit-output", help="write a JUnit report to this path")
     args = parser.parse_args()
     if args.j < 0:
         parser.error("-j must be nonnegative")
@@ -72,6 +73,8 @@ def main():
         command.append(f"-j{args.j or os.cpu_count() or 1}")
         if args.sparklib_source is not None:
             command.append(f"--sparklib-source={args.sparklib_source}")
+        if args.xunit_output:
+            command.extend(["--xunit-output", args.xunit_output])
         return subprocess.run(command, cwd=suite).returncode
 
 
