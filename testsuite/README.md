@@ -178,6 +178,21 @@ session changes with `git diff` before committing them.
 This supports automatic Why3 sessions only. Manifest replay and manual proofs
 are outside its scope.
 
+To regenerate these sessions in CI using a nightly setup or a SPARKlib MR:
+
+```sh
+./trigger-session-update --tests library_proof/higher_order_fold
+./trigger-session-update --mr 123 --tests library_proof/higher_order_fold
+./trigger-session-update --no-wait
+./trigger-session-update --apply PIPELINE_ID
+```
+
+Without `--tests`, all proof tests configured for session replay are selected.
+`--setup` chooses the Anod setup (default `wave`), while `--mr` selects a
+SPARKlib merge request and its target-branch setup. The CI replay can fail on
+a baseline difference even when it produced sessions; `--apply` can retrieve
+the artifact for inspection. Review session changes before committing them.
+
 ### `driver: build`
 
 Runs analysis, build, and execution together for one assertion profile. The
