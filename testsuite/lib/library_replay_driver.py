@@ -70,7 +70,6 @@ class LibraryReplayDriver(SparklibDriverMixin, DiffTestDriver):
             "--output=oneline",
             "--report=fail",
             "--warnings=continue",
-            "--assumptions",
             "--mode=all",
             f"-j{self.jobs}",
             "--memlimit=2000",
