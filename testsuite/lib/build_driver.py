@@ -66,7 +66,6 @@ class BuildTestDriver(SparklibDriverMixin, DiffTestDriver):
             "--debug-disable-prover-feedback",
             "--output=oneline",
             "--warnings=continue",
-            "--assumptions",
             "--quiet",
             "--steps=1",
             "--memlimit=2000",
