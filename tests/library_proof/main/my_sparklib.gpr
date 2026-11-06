@@ -1,0 +1,9 @@
+project My_SPARKlib extends "sparklib_internal" is
+   for Object_Dir use "sparklib_obj";
+   for Source_Dirs use SPARKlib_Internal'Source_Dirs;
+   for Excluded_Source_Files use
+     SPARKlib_Internal'Excluded_Source_Files &
+       ("spark-strings.ads", "spark-strings-unicode.ads",
+        "spark-strings-unicode-models.ads",
+        "spark-strings-unicode-utf_8.ads", "spark-strings-unicode-utf_8.adb");
+end My_SPARKlib;

@@ -35,7 +35,10 @@ same mechanism the CI jobs use.
 A test of this testsuite is a directory under `../tests` whose `test.yaml`
 names a driver. Coverage clients live in
 `../tests/coverage_test/<name>`, with their proofs in
-`../tests/coverage_proof/<name>`. Component proofs of library implementations,
+`../tests/coverage_proof/<name>`. Contract-focused client proofs live in `../tests/client_proof/<name>` and use
+`driver: proof` with `body_mode: false` and `--no-inlining`, so they exercise
+the public API without relying on implementation visibility.
+Component proofs of library implementations,
 models, and lemmas live in `../tests/library_proof/<name>` and use the same
 `proof` driver. Select them using paths relative to
 `../tests`, such as `coverage_test/functional_trees`, also in `--testlist`
