@@ -1262,13 +1262,6 @@ private
           and then
             (for all I in 1 .. To_Array_Index (Last) =>
                Elements (I).V'Initialized));
-   pragma
-     Annotate
-       (GNATprove,
-        False_Positive,
-        "type ""Vector"" is not fully initialized",
-        "spurious: the Elements payload has Relaxed_Initialization, so a "
-        & "default-initialized Vector need not be fully initialized.");
    --  The used prefix fits in the capacity and is fully initialized.
    --  Structural invariant is carried in a Ghost_Predicate. A Type_Invariant
    --  would be nicer (it may be transiently broken inside the package and is

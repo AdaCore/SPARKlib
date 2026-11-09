@@ -2013,13 +2013,6 @@ private
                   and then
                     (if Nodes (I).Prev /= -1
                      then Nodes (I).Element'Initialized))));
-   pragma
-     Annotate
-       (GNATprove,
-        False_Positive,
-        "type ""List"" is not fully initialized",
-        "spurious: Node_Type has Relaxed_Initialization, so a "
-        & "default-initialized List need not be fully initialized.");
    --  The free-list encoding determines which nodes have their Prev/Next
    --  bookkeeping initialized: when Free is non-negative every node has been
    --  touched (the free list is an explicit chain over all cells); when Free
