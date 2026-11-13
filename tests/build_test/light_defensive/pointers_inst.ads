@@ -12,7 +12,9 @@ with SPARK.Pointers.Explicit_Reclamation.Global_Memory;
 with SPARK.Pointers.Explicit_Reclamation.Separate_Memory;
 with SPARK.Pointers.Handles.Auto_Reclaimed_Handles;
 with SPARK.Pointers.Poisoned.Pointers;
+with SPARK.Pointers.Poisoned.Pointers.Array_Operations;
 with SPARK.Pointers.Poisoned.Views;
+with SPARK.Pointers.Poisoned.Views.Array_Operations;
 
 --  Check that it is possible to instantiate all the generics of the pointer
 --  library, nested ones included.

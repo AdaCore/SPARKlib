@@ -8,6 +8,33 @@ package body SPARK.Pointers.Parameter_Checks
   with SPARK_Mode
 is
 
+   ------------------
+   -- Array_Checks --
+   ------------------
+
+   package body Array_Checks is
+
+      procedure Check_Array_Type
+        (X : in out Array_Type; Y : in out Local_Array)
+      is
+
+         --  For owning components, these declarations move X and Y into
+         --  the copies. The parameters must be in out to allow these moves,
+         --  and the copies must be variables so they can be moved back.
+
+         pragma Warnings (Off, "*could be declared constant*");
+         X_Copy : Local_Array := Local_Array (X);
+         Y_Copy : Array_Type := Array_Type (Y);
+         pragma Warnings (On, "*could be declared constant*");
+
+      begin
+         --  Restore each parameter so the check supports owning components.
+         X := Array_Type (X_Copy);
+         Y := Local_Array (Y_Copy);
+      end Check_Array_Type;
+
+   end Array_Checks;
+
    -----------------------
    -- Assignment_Checks --
    -----------------------

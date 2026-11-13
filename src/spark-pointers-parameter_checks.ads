@@ -13,6 +13,25 @@ package SPARK.Pointers.Parameter_Checks
   with SPARK_Mode
 is
 
+   --  Check that the actual array type admits the same component states
+   --  and bounds as an ordinary array of the index and component types.
+
+   generic
+      type Index_Type is (<>);
+      type Element_Type is private;
+      type Array_Type is array (Index_Type range <>) of Element_Type;
+
+   package Array_Checks with Ghost => Static
+   is
+
+      type Local_Array is array (Index_Type range <>) of Element_Type;
+
+      procedure Check_Array_Type
+        (X : in out Array_Type; Y : in out Local_Array)
+      with Global => null, Always_Terminates;
+
+   end Array_Checks;
+
    --  Check that Is_Reclaimed implies reclamation for type T
 
    generic
