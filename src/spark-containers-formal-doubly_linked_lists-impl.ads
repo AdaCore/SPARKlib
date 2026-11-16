@@ -30,10 +30,7 @@
 pragma Ada_2022;
 
 with SPARK.Containers.Formal.Impl.Address_Space;
-with SPARK.Containers.Functional.Infinite_Sequences;
-with SPARK.Containers.Functional.Sets;
 with SPARK.Containers.Types; use SPARK.Containers.Types;
-with SPARK.Higher_Order.Reachability;
 
 private generic
 package SPARK.Containers.Formal.Doubly_Linked_Lists.Impl with
@@ -57,204 +54,152 @@ is
    -- Structural (ghost) model  --
    -------------------------------
 
-   --  Reachability model over the Next links, used at silver to express
-   --  acyclicity of the active and free lists, the node count, the
-   --  doubly-linked consistency, and the loop variants for the traversal
-   --  loops.
+   --  Bounded views of the shared structural model. The predicates retain
+   --  record-based interfaces and delegate to Storage's link-array model.
 
-   package Structural_Model
-     with Ghost => Static
-   is
-
-      package Memory_Index_Sets is new
-        SPARK.Containers.Functional.Sets (Positive_Count_Type);
-
-      package Memory_Index_Sequences is new
-        SPARK.Containers.Functional.Infinite_Sequences
-          (Positive_Count_Type,
-           Use_Logical_Equality => True);
-
-      type Nodes_Type_Base is array (Positive_Count_Type range <>) of Node_Type
-      with Predicate => (for all N of Nodes_Type_Base => N.Next'Initialized);
-
-      function Next_Link (N : Node_Type) return Count_Type
-      is (N.Next)
-      with
-        Annotate => (GNATprove, Inline_For_Proof),
-        Pre      => N.Next'Initialized;
-
-      package Node_Reachability is new
-        SPARK.Higher_Order.Reachability
-          (Index_Type                            => Positive_Count_Type,
-           No_Index                              => 0,
-           Cell_Type                             => Node_Type,
-           Memory_Type                           => Nodes_Type_Base,
-           Next                                  => Next_Link,
-           Memory_Index_Sets                     => Memory_Index_Sets,
-           Memory_Index_Sequences                => Memory_Index_Sequences,
-           Automatically_Instantiate_Definitions => False);
-
-   end Structural_Model;
+   package Structural_Model renames Storage.Structural_Model;
 
    use Structural_Model;
    use Structural_Model.Node_Reachability;
 
    function Memory (Container : List) return Nodes_Type_Base
-   is (if Container.Free >= 0
-       then Nodes_Type_Base (Container.Nodes)
-       else Nodes_Type_Base (Container.Nodes (1 .. -(Container.Free + 1))))
-   with Ghost => Static;
-   --  The link array as a Positive_Count_Type-indexed memory for the
-   --  reachability model. When Free is negative only the touched prefix
-   --  (1 .. abs Free - 1) has initialized links, so the never-used tail is
-   --  sliced off (Valid_Memory would otherwise read uninitialized Next).
+   is (Storage.Memory (Container.Nodes, Container.Free))
+   with Ghost => Static, Annotate => (GNATprove, Inline_For_Proof);
+   --  Shared link memory restricted to the container's touched prefix
 
    function Active_Set (Container : List) return Memory_Index_Set
-   is (Reachable_Set (Container.First, Memory (Container)))
+   is (Storage.Active_Set (Container.Nodes, Container.Free, Container.First))
    with
-     Ghost => Static,
-     Pre   =>
+     Ghost    => Static,
+     Annotate => (GNATprove, Inline_For_Proof),
+     Pre      =>
        Valid_Memory (Memory (Container))
        and then Container.First in Memory (Container)'Range | 0;
-   --  The set of nodes on the active list (reachable from First via Next)
+   --  The shared active-node set for the bounded container
 
    function Active_List_Valid
      (Container : List; Count : Count_Type) return Boolean
-   is (Is_Acyclic (Container.First, Memory (Container))
-
-       --  The active list from First is acyclic and has exactly Count nodes
-
-       and then
-         Memory_Index_Sets.Length (Active_Set (Container))
-         = Big_Conversions.To_Big (Count)
-
-       --  Every node reachable from First is allocated (Prev /= -1) and
-       --  doubly linked with its neighbours.
-
-       and then
-         (for all I of Active_Set (Container) =>
-            Container.Nodes (I).Prev /= -1)
-       and then
-         (for all I of Active_Set (Container) =>
-            (if Container.Nodes (I).Next = 0 then I = Container.Last))
-       and then
-         (for all I of Active_Set (Container) =>
-            (if Container.Nodes (I).Prev = 0
-             then I = Container.First
-             else
-               Memory_Index_Sets.Contains
-                 (Active_Set (Container), Container.Nodes (I).Prev)
-               and then Container.Nodes (Container.Nodes (I).Prev).Next = I))
-
-       --  First and Last are the endpoints of the active list
-
-       and then
-         (if Container.First = 0
-          then Container.Last = 0 and Count = 0
-          else
-            Container.Nodes (Container.First).Prev = 0
-            and then Container.Last in Memory (Container)'Range
-            and then
-              Reachable (Container.First, Memory (Container), Container.Last)
-            and then Container.Nodes (Container.Last).Next = 0))
+   is (Storage.Active_List_Valid
+         (Container.Nodes,
+          Container.Free,
+          Container.First,
+          Container.Last,
+          Count))
    with
-     Ghost => Static,
-     Pre   =>
+     Ghost    => Static,
+     Annotate => (GNATprove, Inline_For_Proof),
+     Pre      =>
        Valid_Memory (Memory (Container))
        and then Container.First in Memory (Container)'Range | 0;
-   --  Structural facts about the active list
+   --  The shared structural predicate for the active list
 
    function Free_Chain_Valid
      (Container : List; Excluded : Memory_Index_Set) return Boolean
-   is (Container.Free < 0
-       or else
-         (Is_Acyclic (Container.Free, Memory (Container))
-          and then
-            (for all I of Reachable_Set (Container.Free, Memory (Container)) =>
-               not Memory_Index_Sets.Contains (Excluded, I)
-               and then Container.Nodes (I).Prev = -1)))
+   is (Storage.Free_Chain_Valid (Container.Nodes, Container.Free, Excluded))
    with
-     Ghost => Static,
-     Pre   =>
+     Ghost    => Static,
+     Annotate => (GNATprove, Inline_For_Proof),
+     Pre      =>
        Valid_Memory (Memory (Container))
        and then Container.First in Memory (Container)'Range | 0;
-   --  Structural part of the free list, without its length: when Free is
-   --  non-negative the free nodes form an explicit acyclic chain, each
-   --  deallocated (Prev = -1) and outside the Excluded set (the used nodes).
-   --  When Free is negative the free nodes are the implicit never-used tail,
-   --  so there is no chain to constrain. Kept length-free so the limbo state
-   --  between Allocate and Insert_Internal (which has a different count and a
-   --  larger used set) can reuse it.
+   --  The shared free-chain predicate, excluding the supplied node set
 
    function Free_Count_Correct
      (Container : List; Used : Count_Type) return Boolean
-   is (if Container.Free < 0
-       then Container.Free = -Used - 1
-       else
-         Memory_Index_Sets.Length
-           (Reachable_Set (Container.Free, Memory (Container)))
-         = Big_Conversions.To_Big (Container.Capacity - Used))
+   is (Storage.Free_Count_Correct (Container.Nodes, Container.Free, Used))
    with
-     Ghost => Static,
-     Pre   =>
+     Ghost    => Static,
+     Annotate => (GNATprove, Inline_For_Proof),
+     Pre      =>
        Valid_Memory (Memory (Container))
        and then Container.First in Memory (Container)'Range | 0;
-   --  The free nodes number Capacity - Used, where Used is the number of
-   --  touched nodes. When Free is negative the touched region is 1 .. Used, so
-   --  Free = -Used - 1 encodes the count directly.
+   --  The shared free-storage cardinality constraint for Used active nodes
 
    function Covered (Container : List; Extra : Extended_Index) return Boolean
-   is (if Container.Free >= 0
-       then
-         (for all I in 1 .. Container.Capacity =>
-            I = Extra
-            or else
-              (if Container.Nodes (I).Prev = -1
-               then Reachable (Container.Free, Memory (Container), I)
-               else Memory_Index_Sets.Contains (Active_Set (Container), I)))
-       else
-         (for all I in Memory (Container)'Range =>
-            I = Extra
-            or else Memory_Index_Sets.Contains (Active_Set (Container), I)))
+   is (Storage.Covered
+         (Container.Nodes, Container.Free, Container.First, Extra))
    with
-     Ghost => Static,
-     Pre   =>
+     Ghost    => Static,
+     Annotate => (GNATprove, Inline_For_Proof),
+     Pre      =>
        Valid_Memory (Memory (Container))
        and then Container.First in Memory (Container)'Range | 0;
-   --  Partition of the touched region: when Free is negative, every touched
-   --  node is then active or the exceptional dangling node Extra (a node in
-   --  limbo between the active and free lists; 0 means none). Otherwise, it is
-   --  active if its Prev field is positive and free otherwise.
+   --  Shared coverage of touched nodes, with Extra naming a detached node.
 
    function Structural_Invariant
      (Container : List; Count : Count_Type) return Boolean
-   is (Valid_Memory (Memory (Container))
-       and then Container.First in Memory (Container)'Range | 0
-       and then Active_List_Valid (Container, Count)
-       and then Free_Chain_Valid (Container, Active_Set (Container))
-       and then Free_Count_Correct (Container, Count)
-       and then Covered (Container, 0))
-   with Ghost => Static;
-   --  The structural invariant with the active-node count given explicitly as
-   --  Count rather than read from Container.Length. Used by the Length-neutral
-   --  Insert_*_Node primitives, whose Post is Structural_Invariant (Container,
-   --  Count + 1) while Container.Length still holds the pre-insert value; the
-   --  caller's single Length write then reconciles the field with the count.
+   is (Storage.Structural_Invariant
+         (Container.Nodes,
+          Container.Free,
+          Container.First,
+          Container.Last,
+          Count))
+   with Ghost => Static, Annotate => (GNATprove, Inline_For_Proof);
+   --  The shared structural invariant with an explicit active-node count
 
    function Structural_Invariant (Container : List) return Boolean
    is (Structural_Invariant (Container, Container.Length))
-   with Ghost => Static;
-   --  Silver structural invariant. Carried as Static Pre/Post on the
-   --  operations and threaded through their loop invariants/variants.
+   with Ghost => Static, Annotate => (GNATprove, Inline_For_Proof);
+   --  The shared structural invariant at the container's current length
 
    function Is_Add
      (S1, S2 : Memory_Index_Set; E : Positive_Count_Type) return Boolean
-   is (not Memory_Index_Sets.Contains (S1, E)
-       and then Memory_Index_Sets.Contains (S2, E)
-       and then Memory_Index_Sets."<=" (S1, S2)
-       and then Memory_Index_Sets.Included_Except (S2, S1, E))
-   with Ghost => Static;
-   --  Return True if S2 is obtained by adding E to S1
+   renames Storage.Is_Add;
+   --  The shared predicate for adding exactly E to S1
+
+   package List_Model
+     with Ghost => SPARKlib_Logic
+   is
+
+      generic
+         with function "<" (Left, Right : Element_Type) return Boolean is <>;
+      package Generic_Sorting is
+         function M_Elements_Sorted (Container : M.Sequence) return Boolean
+         with Global => null;
+      end Generic_Sorting;
+
+      function M_Elements_In_Union
+        (Container, Left, Right : M.Sequence) return Boolean
+      with Ghost => SPARKlib_Full, Global => null;
+
+      function M_Elements_Included
+        (Left  : M.Sequence;
+         L_Fst : Positive_Count_Type := 1;
+         L_Lst : Count_Type;
+         Right : M.Sequence;
+         R_Fst : Positive_Count_Type := 1;
+         R_Lst : Count_Type) return Boolean
+      with Ghost => SPARKlib_Full, Global => null;
+
+      function M_Elements_Reversed (Left, Right : M.Sequence) return Boolean
+      with Ghost => SPARKlib_Full, Global => null;
+
+      function M_Elements_Swapped
+        (Left, Right : M.Sequence; X, Y : Positive_Count_Type) return Boolean
+      with Ghost => SPARKlib_Full, Global => null;
+
+      function Mapping_Preserved
+        (M_Left, M_Right : M.Sequence; P_Left, P_Right : P.Map) return Boolean
+      with Ghost => SPARKlib_Full, Global => null;
+
+      function P_Positions_Shifted
+        (Small, Big : P.Map;
+         Cut        : Positive_Count_Type;
+         Count      : Count_Type := 1) return Boolean
+      with Global => null;
+
+      function P_Positions_Swapped
+        (Left, Right : P.Map; X, Y : Cursor) return Boolean
+      with Global => null;
+
+      function P_Positions_Truncated
+        (Small, Big : P.Map;
+         Cut        : Positive_Count_Type;
+         Count      : Count_Type := 1) return Boolean
+      with Global => null;
+
+   end List_Model;
+   --  Shared model predicates exposed to the public model delegation body
 
    --  Runtime-executable model functions (proved run-time-error-free)
 
@@ -482,6 +427,7 @@ is
       Position  : out Cursor;
       Count     : Count_Type)
    with
+     Inline,
      Global     => null,
      Pre        => (Static => Structural_Invariant (Container)),
      Post       =>

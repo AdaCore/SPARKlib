@@ -153,40 +153,8 @@ is
 
       function M_Elements_In_Union
         (Container : M.Sequence; Left : M.Sequence; Right : M.Sequence)
-         return Boolean is
-      begin
-         for Index in 1 .. M.Last (Container) loop
-            declare
-               Found : Boolean := False;
-            begin
-               for J in 1 .. M.Last (Left) loop
-                  if Element_Logic_Equal
-                       (Element (Container, Index), Element (Left, J))
-                  then
-                     Found := True;
-                     exit;
-                  end if;
-               end loop;
-
-               if not Found then
-                  for J in 1 .. M.Last (Right) loop
-                     if Element_Logic_Equal
-                          (Element (Container, Index), Element (Right, J))
-                     then
-                        Found := True;
-                        exit;
-                     end if;
-                  end loop;
-               end if;
-
-               if not Found then
-                  return False;
-               end if;
-            end;
-         end loop;
-
-         return True;
-      end M_Elements_In_Union;
+         return Boolean
+      renames List_Impl.List_Model.M_Elements_In_Union;
 
       -------------------------
       -- M_Elements_Included --
@@ -198,31 +166,8 @@ is
          L_Lst : Count_Type;
          Right : M.Sequence;
          R_Fst : Positive_Count_Type := 1;
-         R_Lst : Count_Type) return Boolean is
-      begin
-         for I in L_Fst .. L_Lst loop
-            declare
-               Found : Boolean := False;
-               J     : Count_Type := R_Fst - 1;
-
-            begin
-               while not Found and J < R_Lst loop
-                  J := J + 1;
-                  if Element_Logic_Equal
-                       (Element (Left, I), Element (Right, J))
-                  then
-                     Found := True;
-                  end if;
-               end loop;
-
-               if not Found then
-                  return False;
-               end if;
-            end;
-         end loop;
-
-         return True;
-      end M_Elements_Included;
+         R_Lst : Count_Type) return Boolean
+      renames List_Impl.List_Model.M_Elements_Included;
 
       -------------------------
       -- M_Elements_Reversed --
@@ -230,24 +175,7 @@ is
 
       function M_Elements_Reversed
         (Left : M.Sequence; Right : M.Sequence) return Boolean
-      is
-         L : constant M.Extended_Index := M.Last (Left);
-
-      begin
-         if L /= M.Last (Right) then
-            return False;
-         end if;
-
-         for I in 1 .. L loop
-            if not Element_Logic_Equal
-                     (Element (Left, I), Element (Right, L - I + 1))
-            then
-               return False;
-            end if;
-         end loop;
-
-         return True;
-      end M_Elements_Reversed;
+      renames List_Impl.List_Model.M_Elements_Reversed;
 
       ------------------------
       -- M_Elements_Swapped --
@@ -257,29 +185,8 @@ is
         (Left  : M.Sequence;
          Right : M.Sequence;
          X     : Positive_Count_Type;
-         Y     : Positive_Count_Type) return Boolean is
-      begin
-         if M.Last (Left) /= M.Last (Right)
-           or else
-             not Element_Logic_Equal (Element (Left, X), Element (Right, Y))
-           or else
-             not Element_Logic_Equal (Element (Left, Y), Element (Right, X))
-         then
-            return False;
-         end if;
-
-         for I in 1 .. M.Last (Left) loop
-            if I /= X
-              and then I /= Y
-              and then
-                not Element_Logic_Equal (Element (Left, I), Element (Right, I))
-            then
-               return False;
-            end if;
-         end loop;
-
-         return True;
-      end M_Elements_Swapped;
+         Y     : Positive_Count_Type) return Boolean
+      renames List_Impl.List_Model.M_Elements_Swapped;
 
       -----------------------
       -- Mapping_Preserved --
@@ -289,29 +196,8 @@ is
         (M_Left  : M.Sequence;
          M_Right : M.Sequence;
          P_Left  : P.Map;
-         P_Right : P.Map) return Boolean is
-      begin
-         for C of P_Left loop
-            if not P.Has_Key (P_Right, C)
-              or else P.Get (P_Left, C) > M.Last (M_Left)
-              or else P.Get (P_Right, C) > M.Last (M_Right)
-              or else
-                not Element_Logic_Equal
-                      (M.Get (M_Left, P.Get (P_Left, C)),
-                       M.Get (M_Right, P.Get (P_Right, C)))
-            then
-               return False;
-            end if;
-         end loop;
-
-         for C of P_Right loop
-            if not P.Has_Key (P_Left, C) then
-               return False;
-            end if;
-         end loop;
-
-         return True;
-      end Mapping_Preserved;
+         P_Right : P.Map) return Boolean
+      renames List_Impl.List_Model.Mapping_Preserved;
 
       -----------
       -- Model --
@@ -328,81 +214,16 @@ is
         (Small : P.Map;
          Big   : P.Map;
          Cut   : Positive_Count_Type;
-         Count : Count_Type := 1) return Boolean is
-      begin
-         for Cu of P.Iterate (Small) loop
-            if not P.Has_Key (Big, Cu) then
-               return False;
-            end if;
-         end loop;
-
-         for Cu of P.Iterate (Big) loop
-            declare
-               Pos : constant Positive_Count_Type := P.Get (Big, Cu);
-
-            begin
-               if Pos < Cut then
-                  if not P.Has_Key (Small, Cu) or else Pos /= P.Get (Small, Cu)
-                  then
-                     return False;
-                  end if;
-
-               elsif Pos >= Cut + Count then
-                  if not P.Has_Key (Small, Cu)
-                    or else Pos /= P.Get (Small, Cu) + Count
-                  then
-                     return False;
-                  end if;
-
-               else
-                  if P.Has_Key (Small, Cu) then
-                     return False;
-                  end if;
-               end if;
-            end;
-         end loop;
-
-         return True;
-      end P_Positions_Shifted;
+         Count : Count_Type := 1) return Boolean
+      renames List_Impl.List_Model.P_Positions_Shifted;
 
       -------------------------
       -- P_Positions_Swapped --
       -------------------------
 
       function P_Positions_Swapped
-        (Left : P.Map; Right : P.Map; X : Cursor; Y : Cursor) return Boolean is
-      begin
-         if not P.Has_Key (Left, X)
-           or not P.Has_Key (Left, Y)
-           or not P.Has_Key (Right, X)
-           or not P.Has_Key (Right, Y)
-         then
-            return False;
-         end if;
-
-         if P.Get (Left, X) /= P.Get (Right, Y)
-           or P.Get (Left, Y) /= P.Get (Right, X)
-         then
-            return False;
-         end if;
-
-         for C of P.Iterate (Left) loop
-            if not P.Has_Key (Right, C) then
-               return False;
-            end if;
-         end loop;
-
-         for C of P.Iterate (Right) loop
-            if not P.Has_Key (Left, C)
-              or else
-                (C /= X and C /= Y and P.Get (Left, C) /= P.Get (Right, C))
-            then
-               return False;
-            end if;
-         end loop;
-
-         return True;
-      end P_Positions_Swapped;
+        (Left : P.Map; Right : P.Map; X : Cursor; Y : Cursor) return Boolean
+      renames List_Impl.List_Model.P_Positions_Swapped;
 
       ---------------------------
       -- P_Positions_Truncated --
@@ -412,36 +233,8 @@ is
         (Small : P.Map;
          Big   : P.Map;
          Cut   : Positive_Count_Type;
-         Count : Count_Type := 1) return Boolean is
-      begin
-         for Cu of P.Iterate (Small) loop
-            if not P.Has_Key (Big, Cu) then
-               return False;
-            end if;
-         end loop;
-
-         for Cu of P.Iterate (Big) loop
-            declare
-               Pos : constant Positive_Count_Type := P.Get (Big, Cu);
-
-            begin
-               if Pos < Cut then
-                  if not P.Has_Key (Small, Cu) or else Pos /= P.Get (Small, Cu)
-                  then
-                     return False;
-                  end if;
-
-               elsif Pos >= Cut + Count then
-                  return False;
-
-               elsif P.Has_Key (Small, Cu) then
-                  return False;
-               end if;
-            end;
-         end loop;
-
-         return True;
-      end P_Positions_Truncated;
+         Count : Count_Type := 1) return Boolean
+      renames List_Impl.List_Model.P_Positions_Truncated;
 
       ---------------
       -- Positions --
@@ -467,36 +260,15 @@ is
 
       package body Formal_Model is
 
+         package Sorting_Model is new
+           List_Impl.List_Model.Generic_Sorting ("<");
+
          -----------------------
          -- M_Elements_Sorted --
          -----------------------
 
-         function M_Elements_Sorted (Container : M.Sequence) return Boolean is
-         begin
-            if M.Length (Container) = 0 then
-               return True;
-            end if;
-
-            declare
-               E1 : Element_Type := Element (Container, 1);
-
-            begin
-               for I in 2 .. M.Last (Container) loop
-                  declare
-                     E2 : constant Element_Type := Element (Container, I);
-
-                  begin
-                     if E2 < E1 then
-                        return False;
-                     end if;
-
-                     E1 := E2;
-                  end;
-               end loop;
-            end;
-
-            return True;
-         end M_Elements_Sorted;
+         function M_Elements_Sorted (Container : M.Sequence) return Boolean
+         renames Sorting_Model.M_Elements_Sorted;
 
       end Formal_Model;
 

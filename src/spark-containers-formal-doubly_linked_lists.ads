@@ -13,6 +13,8 @@ with SPARK.Containers.Parameter_Checks;
 with SPARK.Containers.Types; use SPARK.Containers.Types;
 with SPARK.Big_Integers;     use SPARK.Big_Integers;
 
+private with SPARK.Containers.Formal.Generic_List_Storage;
+
 generic
    type Element_Type is private;
    with function "=" (Left, Right : Element_Type) return Boolean is <>;
@@ -1972,17 +1974,6 @@ private
    --  nodes need initialized elements. The element is aliased so that
    --  Reference and Constant_Reference can hand out an access designating it.
 
-   type Node_Type is record
-      Prev : Count_Type'Base;
-      Next : Count_Type;
-   end record
-   with Relaxed_Initialization;
-
-   function "=" (L, R : Node_Type) return Boolean is abstract;
-
-   type Node_Array is array (Count_Type range <>) of Node_Type;
-   function "=" (L, R : Node_Array) return Boolean is abstract;
-
    type Relaxed_Element is record
       V : aliased Element_Type;
    end record
@@ -1990,8 +1981,11 @@ private
 
    function "=" (L, R : Relaxed_Element) return Boolean is abstract;
 
-   type Elements_Array is array (Count_Type range <>) of Relaxed_Element;
-   function "=" (L, R : Elements_Array) return Boolean is abstract;
+   package Storage is new Generic_List_Storage (Relaxed_Element);
+
+   subtype Node_Type is Storage.Node_Type;
+   subtype Node_Array is Storage.Node_Array;
+   subtype Elements_Array is Storage.Elements_Array;
 
    type List (Capacity : Count_Type) is record
       Free     : Count_Type'Base := -1;
