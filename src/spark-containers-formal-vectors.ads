@@ -14,6 +14,7 @@ pragma Ada_2022;
 
 with SPARKlib_Config;
 with SPARK.Containers.Types; use SPARK.Containers.Types;
+private with SPARK.Containers.Formal.Generic_Vector_Storage;
 with SPARK.Big_Integers;     use SPARK.Big_Integers;
 with SPARK.Containers.Functional.Vectors;
 with SPARK.Containers.Parameter_Checks;
@@ -1221,34 +1222,19 @@ private
    end record
    with Relaxed_Initialization;
 
-   subtype Array_Index is Capacity_Range range 1 .. Capacity_Range'Last;
-   type Elements_Array is array (Array_Index range <>) of Relaxed_Element;
+   package Storage is new
+     SPARK.Containers.Formal.Generic_Vector_Storage
+       (Last_Count  => Last_Count,
+        Index_Type  => Index_Type,
+        No_Index    => No_Index,
+        Holder_Type => Relaxed_Element);
+   --  The backing array type and the index arithmetic over it
 
-   function "=" (L, R : Elements_Array) return Boolean is abstract;
+   subtype Array_Index is Storage.Array_Index;
+   subtype Elements_Array is Storage.Elements_Array;
 
    function To_Array_Index (Index : Index_Type'Base) return Count_Type'Base
-   is
-      --  We know that
-      --    Index >= Index_Type'First
-      --  hence we also know that
-      --    Index - Index_Type'First >= 0
-
-      --  The issue is that even though 0 is guaranteed to be a value in
-      --  the type Index_Type'Base, there's no guarantee that the difference
-      --  is a value in that type. To prevent overflow we use the wider
-      --  of Count_Type'Base and Index_Type'Base to perform intermediate
-      --  calculations.
-
-      --  The array index subtype for all container element arrays always
-      --  starts with 1.
-
-      (if Index_Type'Base'Last >= Count_Type'Pos (Count_Type'Last)
-       then Count_Type'Base (Index - No_Index)
-       else Count_Type'Base (Index) - Count_Type'Base (No_Index))
-   with
-     Pre =>
-       Index >= No_Index
-       and then Index <= No_Index + Count_Type'Pos (Last_Count);
+   renames Storage.To_Array_Index;
 
    type Vector (Capacity : Capacity_Range) is record
       Last     : Extended_Index := No_Index;
