@@ -1,7 +1,9 @@
 with Ada.Unchecked_Deallocation;
 with SPARK.Pointers.Handles.Owning_Handles;
 with SPARK.Pointers.Poisoned.Pointers;
+with SPARK.Pointers.Poisoned.Pointers.Array_Operations;
 with SPARK.Pointers.Poisoned.Views;
+with SPARK.Pointers.Poisoned.Views.Array_Operations;
 
 package Inst
   with SPARK_Mode
