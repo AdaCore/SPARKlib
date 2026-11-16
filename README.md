@@ -15,7 +15,11 @@ blog](https://blog.adacore.com/).
 Documentation about what is provided in the SPARKlib and how to use it can be
 found in the [SPARK User's Guide](https://docs.adacore.com/spark2014-docs/html/ug/en/source/spark_libraries.html#spark-library).
 
-# 4. Configuration and testing
+Specification and implementation choices that differ from the corresponding
+Ada containers are being collected in [CONTAINERS_RM_DIFFERENCES.md](CONTAINERS_RM_DIFFERENCES.md)
+for a future update to the User's Guide.
+
+# 4. Configuration and Testing
 
 `SPARKlib_Config` contains the static Boolean constants used by the library's
 `SPARK_Mode` pragmas and aspects. By default, `Body_Mode` is `False` and
