@@ -1,0 +1,75 @@
+test.adb:17:14: warning: subprogram "Test_String" has no effect
+test.adb:18:14: warning: subprogram "Test_Shape" has no effect
+
+Analyzed 4 units
+in unit reclamation_test, 0 subprograms and packages out of 1 analyzed
+  Reclamation_Test at reclamation_test.ads skipped; body is SPARK_Mode => Off
+in unit same_object_test, 0 subprograms and packages out of 1 analyzed
+  Same_Object_Test at same_object_test.ads skipped; body is SPARK_Mode => Off
+in unit shapes, 2 subprograms and packages out of 2 analyzed
+  Shapes at shapes.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Shapes.Same_Position at shapes.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+in unit test, 27 subprograms and packages out of 63 analyzed
+  Test at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Shape_Holders at test.adb skipped; body is SPARK_Mode => Off
+  Test.Shape_Holders."=" at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Shape_Holders.Assign at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Shape_Holders.At_End at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Shape_Holders.At_End at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Shape_Holders.Clear at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Shape_Holders.Constant_Reference at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Shape_Holders.Copy at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Shape_Holders.Element at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Shape_Holders.Empty_Holder at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Shape_Holders.Eq_Reflexive at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Shape_Holders.Eq_Symmetric at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Shape_Holders.Eq_Transitive at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Shape_Holders.Formal_Model at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Shape_Holders.Formal_Model.Copy_Element at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Shape_Holders.Formal_Model.Element_Logic_Equal at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Shape_Holders.Formal_Model.Eq_Checks at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Shape_Holders.Formal_Model.Eq_Checks.Eq_Logical_Eq at spark-containers-parameter_checks.ads, instantiated at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Shape_Holders.Formal_Model.Eq_Checks.Eq_Reflexive at spark-containers-parameter_checks.ads, instantiated at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Shape_Holders.Formal_Model.Eq_Checks.Eq_Symmetric at spark-containers-parameter_checks.ads, instantiated at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Shape_Holders.Formal_Model.Eq_Checks.Eq_Transitive at spark-containers-parameter_checks.ads, instantiated at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Shape_Holders.Formal_Model.Eq_Checks.Logical_Eq at spark-containers-parameter_checks.ads, instantiated at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Shape_Holders.Formal_Model.Eq_Checks.Param_Eq_Logical_Eq at spark-containers-parameter_checks.ads, instantiated at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Shape_Holders.Holder at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Shape_Holders.Is_Empty at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Shape_Holders.Move at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Shape_Holders.Reference at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Shape_Holders.Replace_Element at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Shape_Holders.Swap at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Shape_Holders.To_Holder at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.String_Holders at test.adb skipped; body is SPARK_Mode => Off
+  Test.String_Holders."=" at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.String_Holders.Assign at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.String_Holders.At_End at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.String_Holders.At_End at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.String_Holders.Clear at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.String_Holders.Constant_Reference at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.String_Holders.Copy at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.String_Holders.Element at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.String_Holders.Empty_Holder at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.String_Holders.Eq_Reflexive at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.String_Holders.Eq_Symmetric at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.String_Holders.Eq_Transitive at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.String_Holders.Formal_Model at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.String_Holders.Formal_Model.Copy_Element at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.String_Holders.Formal_Model.Element_Logic_Equal at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.String_Holders.Formal_Model.Eq_Checks at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.String_Holders.Formal_Model.Eq_Checks.Eq_Logical_Eq at spark-containers-parameter_checks.ads, instantiated at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.String_Holders.Formal_Model.Eq_Checks.Eq_Reflexive at spark-containers-parameter_checks.ads, instantiated at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.String_Holders.Formal_Model.Eq_Checks.Eq_Symmetric at spark-containers-parameter_checks.ads, instantiated at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.String_Holders.Formal_Model.Eq_Checks.Eq_Transitive at spark-containers-parameter_checks.ads, instantiated at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.String_Holders.Formal_Model.Eq_Checks.Logical_Eq at spark-containers-parameter_checks.ads, instantiated at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.String_Holders.Formal_Model.Eq_Checks.Param_Eq_Logical_Eq at spark-containers-parameter_checks.ads, instantiated at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.String_Holders.Holder at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.String_Holders.Is_Empty at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.String_Holders.Move at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.String_Holders.Reference at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.String_Holders.Replace_Element at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.String_Holders.Swap at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.String_Holders.To_Holder at spark-containers-formal-unbounded_holders.ads, instantiated at test.adb skipped; body is SPARK_Mode => Off
+  Test.Test_Shape at test.adb flow analyzed (0 errors, 1 warnings and 0 pragma Assume statements) and proved
+  Test.Test_String at test.adb flow analyzed (0 errors, 1 warnings and 0 pragma Assume statements) and proved
