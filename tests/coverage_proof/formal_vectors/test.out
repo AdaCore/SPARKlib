@@ -1,17 +1,17 @@
 test_gen.adb:112:15: high: formal parameters "Target" and "Source" are aliased (SPARK RM 6.4.2), in instantiation at test.adb:11
 test_gen.adb:112:15: high: formal parameters "Target" and "Source" are aliased (SPARK RM 6.4.2), in instantiation at test.adb:14
-test_gen.adb:653:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:653:07: medium: precondition might fail, in instantiation at test.adb:14 [provers reached step limit before completing the proof]
-test_gen.adb:657:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:657:07: medium: precondition might fail, in instantiation at test.adb:14 [provers reached step limit before completing the proof]
-test_gen.adb:667:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:667:07: medium: precondition might fail, in instantiation at test.adb:14 [provers reached step limit before completing the proof]
-test_gen.adb:669:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:669:07: medium: precondition might fail, in instantiation at test.adb:14 [provers reached step limit before completing the proof]
-test_gen.adb:677:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:677:07: medium: precondition might fail, in instantiation at test.adb:14 [provers reached step limit before completing the proof]
+test_gen.adb:664:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:664:07: medium: precondition might fail, in instantiation at test.adb:14 [provers reached step limit before completing the proof]
+test_gen.adb:668:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:668:07: medium: precondition might fail, in instantiation at test.adb:14 [provers reached step limit before completing the proof]
 test_gen.adb:678:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
 test_gen.adb:678:07: medium: precondition might fail, in instantiation at test.adb:14 [provers reached step limit before completing the proof]
+test_gen.adb:680:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:680:07: medium: precondition might fail, in instantiation at test.adb:14 [provers reached step limit before completing the proof]
+test_gen.adb:688:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:688:07: medium: precondition might fail, in instantiation at test.adb:14 [provers reached step limit before completing the proof]
+test_gen.adb:689:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:689:07: medium: precondition might fail, in instantiation at test.adb:14 [provers reached step limit before completing the proof]
 
 Analyzed 4 units
 in unit gen_inst, 0 subprograms and packages out of 0 analyzed
@@ -298,7 +298,7 @@ in unit inst, 95 subprograms and packages out of 281 analyzed
   Inst.Small_Inst.Sorting.Lt_Transitive at spark-containers-formal-vectors.ads, instantiated at gen_inst.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Small_Inst.Sorting.Merge at spark-containers-formal-vectors.ads, instantiated at gen_inst.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Small_Inst.Sorting.Sort at spark-containers-formal-vectors.ads, instantiated at gen_inst.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
-in unit test, 119 subprograms and packages out of 119 analyzed
+in unit test, 121 subprograms and packages out of 121 analyzed
   Test at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Big_Indexesgp289 at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Big_Indexesgp289.Test_Big_Indexes at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
@@ -317,6 +317,7 @@ in unit test, 119 subprograms and packages out of 119 analyzed
   Test.Test_Big_Indexesgp289.Test_Big_Indexes.Test_Delete_1 at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Big_Indexesgp289.Test_Big_Indexes.Test_Delete_1.Test_Delete_First at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Big_Indexesgp289.Test_Big_Indexes.Test_Delete_1.Test_Delete_In_The_Middle at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Big_Indexesgp289.Test_Big_Indexes.Test_Delete_1.Test_Delete_Last at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Big_Indexesgp289.Test_Big_Indexes.Test_Delete_2 at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Big_Indexesgp289.Test_Big_Indexes.Test_Delete_2.Test_Delete_In_The_Middle at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Big_Indexesgp289.Test_Big_Indexes.Test_Delete_2.Test_Delete_Last at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
@@ -376,6 +377,7 @@ in unit test, 119 subprograms and packages out of 119 analyzed
   Test.Test_Small_Indexesgp392.Test_Small_Indexes.Test_Delete_1 at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Small_Indexesgp392.Test_Small_Indexes.Test_Delete_1.Test_Delete_First at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Small_Indexesgp392.Test_Small_Indexes.Test_Delete_1.Test_Delete_In_The_Middle at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Small_Indexesgp392.Test_Small_Indexes.Test_Delete_1.Test_Delete_Last at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Small_Indexesgp392.Test_Small_Indexes.Test_Delete_2 at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Small_Indexesgp392.Test_Small_Indexes.Test_Delete_2.Test_Delete_In_The_Middle at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Small_Indexesgp392.Test_Small_Indexes.Test_Delete_2.Test_Delete_Last at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
