@@ -35,6 +35,7 @@ procedure Main with SPARK_Mode is
       X at 0 range 0 .. 31;
       Y at 4 range 0 .. 31;
    end record;
+   pragma Universal_Aliasing (Tgt_Valid);
 
    type Src_PI is record
       A : Byte;
@@ -53,6 +54,7 @@ procedure Main with SPARK_Mode is
       X at 0 range 0 .. 7;
       Y at 1 range 0 .. 7;
    end record;
+   pragma Universal_Aliasing (Tgt_PI);
 
    package Constant_Conversions is new
      SPARK.Conversions.Access_Conversions.Access_Constant_Conversions

@@ -19,6 +19,8 @@ pragma Extensions_Allowed (On);
 --  Is_Initialized must guarantee initialization of all source components.
 --  It is checked before conversion. Mutable conversions also require the
 --  target type to guarantee initialization for the reverse conversion.
+--  Target types must have Universal_Aliasing so that accesses through the
+--  converted view can alias the source storage under optimization.
 
 with Ada.Unchecked_Conversion;
 
@@ -28,7 +30,7 @@ is
 
    generic
       type Source_Type is private;
-      type Target_Type is private;
+      type Target_Type is private with Universal_Aliasing;
       pragma Warnings (Off, "unused variable ""X""");
       with
         function Is_Initialized (X : Source_Type) return Boolean
@@ -69,7 +71,7 @@ is
 
    generic
       type Source_Type is private;
-      type Target_Type is private;
+      type Target_Type is private with Universal_Aliasing;
       pragma Warnings (Off, "unused variable ""X""");
       with
         function Is_Initialized (X : Source_Type) return Boolean
@@ -147,7 +149,7 @@ is
 
    generic
       type Source_Type is private;
-      type Target_Type is private;
+      type Target_Type is private with Universal_Aliasing;
       pragma Warnings (Off, "unused variable ""X""");
       with
         function Is_Initialized (X : Source_Type) return Boolean
@@ -197,7 +199,7 @@ is
 
    generic
       type Source_Type is private;
-      type Target_Type is private;
+      type Target_Type is private with Universal_Aliasing;
       pragma Warnings (Off, "unused variable ""X""");
       with
         function Is_Initialized (X : Source_Type) return Boolean
