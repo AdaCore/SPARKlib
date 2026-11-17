@@ -38,6 +38,7 @@ package Inst with SPARK_Mode is
       X at 0 range 0 .. 15;
       Y at 2 range 0 .. 15;
    end record;
+   pragma Universal_Aliasing (Tgt_Valid);
 
    type Src_PI is record
       A : Byte;
@@ -56,6 +57,7 @@ package Inst with SPARK_Mode is
       X at 0 range 0 .. 7;
       Y at 1 range 0 .. 7;
    end record;
+   pragma Universal_Aliasing (Tgt_PI);
 
    package Constant_Conversions is new
      SPARK.Conversions.Access_Conversions.Access_Constant_Conversions
