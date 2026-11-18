@@ -2,7 +2,7 @@
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
 "https://www.why3.org/why3session.dtd">
 <why3session shape_version="6">
-  <prover id="0" name="CVC5" version="0.0.7-gnatprove" timelimit="0" steplimit="599" memlimit="0" />
+  <prover id="0" name="CVC5" version="0.0.7-gnatprove" timelimit="0" steplimit="705" memlimit="0" />
   <file format="gnat-json" proved="true">
     <path name=".." />
     <path name=".." />
@@ -13,13 +13,23 @@
       <goal name="def'vc" proved="true">
         <transf name="split_goal_wp_conj" proved="true">
           <goal name="def'vc.0" proved="true">
-            <proof prover="0">
-              <result status="valid" steps="544" />
+            <proof prover="0" steplimit="662">
+              <result status="valid" steps="601" />
             </proof>
           </goal>
           <goal name="def'vc.1" proved="true">
-            <proof prover="0" steplimit="642">
-              <result status="valid" steps="583" />
+            <proof prover="0">
+              <result status="valid" steps="640" />
+            </proof>
+          </goal>
+          <goal name="def'vc.2" proved="true">
+            <proof prover="0" steplimit="662">
+              <result status="valid" steps="601" />
+            </proof>
+          </goal>
+          <goal name="def'vc.3" proved="true">
+            <proof prover="0">
+              <result status="valid" steps="640" />
             </proof>
           </goal>
         </transf>
