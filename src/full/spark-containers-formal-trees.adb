@@ -949,7 +949,7 @@ is
    -------------
 
    function Is_Root (Container : Tree; Position : Cursor) return Boolean
-   is (Position /= No_Element and Position = Container.Root);
+   is (Position.Node /= 0 and Position = Container.Root);
 
    ----------------
    -- Last_Child --

@@ -219,10 +219,11 @@ is
      (Container : aliased List; Position : Cursor)
       return not null access constant Element_Type is
    begin
-      if Position = No_Element then
-         raise Constraint_Error with "Position cursor is No_Element";
+      if Position.Node = 0 then
+         raise Constraint_Error with "Position cursor has no element";
       elsif not Has_Element (Container, Position) then
-         raise Program_Error with "Position cursor has no element";
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
 
       return Container.Elements (Position.Node).V'Access;
@@ -236,7 +237,7 @@ is
       Position : Cursor;
    begin
       Position := Find (Container, Item);
-      return Position /= No_Element;
+      return Position.Node /= 0;
    end Contains;
 
    ----------
@@ -290,8 +291,11 @@ is
    procedure Delete (Container : in out List; Position : in out Cursor) is
       X : constant Count_Type := Position.Node;
    begin
-      if not Has_Element (Container => Container, Position => Position) then
+      if Position.Node = 0 then
          raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container => Container, Position => Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
 
       Position := No_Element;
@@ -308,8 +312,11 @@ is
    procedure Delete
      (Container : in out List; Position : in out Cursor; Count : Count_Type) is
    begin
-      if not Has_Element (Container => Container, Position => Position) then
+      if Position.Node = 0 then
          raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container => Container, Position => Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
 
       Ops.Delete
@@ -372,8 +379,11 @@ is
    function Element (Container : List; Position : Cursor) return Element_Type
    is
    begin
-      if not Has_Element (Container => Container, Position => Position) then
+      if Position.Node = 0 then
          raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container => Container, Position => Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
 
       return Ops.Element (Container.Elements, Position.Node);
@@ -425,7 +435,8 @@ is
       return Cursor is
    begin
       if Position.Node /= 0 and then not Has_Element (Container, Position) then
-         raise Program_Error with "bad cursor in Find";
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
 
       return
@@ -578,7 +589,8 @@ is
       Count     : Count_Type) is
    begin
       if Before.Node /= 0 and then not Has_Element (Container, Before) then
-         raise Program_Error with "bad cursor in Insert";
+         raise Program_Error
+           with "Before cursor designates no element in Container";
       end if;
 
       if Count = 0 then
@@ -826,10 +838,9 @@ is
    begin
       if Position.Node = 0 then
          return No_Element;
-      end if;
-
-      if not Has_Element (Container, Position) then
-         raise Program_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
 
       return (Node => Container.Nodes (Position.Node).Next);
@@ -880,10 +891,9 @@ is
    begin
       if Position.Node = 0 then
          return No_Element;
-      end if;
-
-      if not Has_Element (Container, Position) then
-         raise Program_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
 
       return (Node => Container.Nodes (Position.Node).Prev);
@@ -910,10 +920,11 @@ is
       with Ghost => Static;
 
    begin
-      if Position = No_Element then
-         raise Constraint_Error with "Position cursor is No_Element";
+      if Position.Node = 0 then
+         raise Constraint_Error with "Position cursor has no element";
       elsif not Has_Element (Container, Position) then
-         raise Program_Error with "Position cursor has no element";
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
 
       --  Use an extended return so the borrow is live in the do-block, where
@@ -947,10 +958,11 @@ is
       with Ghost => Static;
 
    begin
-      if Position = No_Element then
-         raise Constraint_Error with "Position cursor is No_Element";
+      if Position.Node = 0 then
+         raise Constraint_Error with "Position cursor has no element";
       elsif not Has_Element (Container, Position) then
-         raise Program_Error with "Position cursor has no element";
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
 
       Ops.Replace_Element (Container.Elements (Position.Node), New_Item);
@@ -988,7 +1000,8 @@ is
       return Cursor is
    begin
       if Position.Node /= 0 and then not Has_Element (Container, Position) then
-         raise Program_Error with "bad cursor in Reverse_Find";
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
 
       return
@@ -1020,7 +1033,8 @@ is
       pragma Assume (Static => Same = Same_Object_Ghost);
 
       if Before.Node /= 0 and then not Has_Element (Target, Before) then
-         raise Program_Error with "bad cursor in Splice";
+         raise Program_Error
+           with "Before cursor designates no element in Target";
       end if;
 
       if Same or else Source.Length = 0 then
@@ -1070,14 +1084,16 @@ is
          return;
       end if;
 
-      if Before.Node /= 0 and then not Has_Element (Target, Before) then
-         raise Program_Error with "bad Before cursor in Splice";
-      end if;
-
       if Position.Node = 0 then
          raise Constraint_Error with "Position cursor has no element";
       elsif not Has_Element (Source, Position) then
-         raise Program_Error with "bad Position cursor in Splice";
+         raise Program_Error
+           with "Position cursor designates no element in Source";
+      end if;
+
+      if Before.Node /= 0 and then not Has_Element (Target, Before) then
+         raise Program_Error
+           with "Before cursor designates no element in Target";
       end if;
 
       if Target.Length = Count_Type'Last then
@@ -1106,14 +1122,16 @@ is
    procedure Splice
      (Container : in out List; Before : Cursor; Position : Cursor) is
    begin
-      if Before.Node /= 0 and then not Has_Element (Container, Before) then
-         raise Program_Error with "bad Before cursor in Splice";
-      end if;
-
       if Position.Node = 0 then
          raise Constraint_Error with "Position cursor has no element";
       elsif not Has_Element (Container, Position) then
-         raise Program_Error with "bad Position cursor in Splice";
+         raise Program_Error
+           with "Position cursor designates no element in Container";
+      end if;
+
+      if Before.Node /= 0 and then not Has_Element (Container, Before) then
+         raise Program_Error
+           with "Before cursor designates no element in Container";
       end if;
 
       Ops.Splice
@@ -1144,11 +1162,13 @@ is
       end if;
 
       if not Has_Element (Container, I) then
-         raise Program_Error with "bad I cursor in Swap";
+         raise Program_Error
+           with "I cursor designates no element in Container";
       end if;
 
       if not Has_Element (Container, J) then
-         raise Program_Error with "bad J cursor in Swap";
+         raise Program_Error
+           with "J cursor designates no element in Container";
       end if;
 
       if I.Node = J.Node then
@@ -1186,11 +1206,13 @@ is
       end if;
 
       if not Has_Element (Container, I) then
-         raise Program_Error with "bad I cursor in Swap_Links";
+         raise Program_Error
+           with "I cursor designates no element in Container";
       end if;
 
       if not Has_Element (Container, J) then
-         raise Program_Error with "bad J cursor in Swap_Links";
+         raise Program_Error
+           with "J cursor designates no element in Container";
       end if;
 
       Ops.Swap_Links

@@ -248,7 +248,7 @@ is
      Global     => Address_State,
      Exit_Cases =>
        (Target.Capacity < Length (Source) =>
-          (Exception_Raised => Constraint_Error));
+          (Exception_Raised => Capacity_Error));
 
    function Copy
      (Source : Vector; Capacity : Capacity_Range := 0) return Vector

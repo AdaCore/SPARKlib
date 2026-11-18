@@ -58,10 +58,6 @@ is
    --  Set the node following Node. Useb by Hash_Tables operation's functions.
    pragma Inline (Set_Next);
 
-   function Vet (Container : Map; Position : Cursor) return Boolean
-   with Inline;
-   --  Check if Position is correct in Container
-
    procedure Resize (Container : in out Map; Size : Count_Type := 0)
    with
      --  Allocate a new larger Map
@@ -208,6 +204,10 @@ is
       --  Start of processing for Assign
 
    begin
+      if Target'Address = Source'Address then
+         return;
+      end if;
+
       HT_Ops.Clear (Target.Content.all);
       Insert_Elements (Source.Content.all);
    end Assign;
@@ -229,14 +229,12 @@ is
      (Container : Map; Position : Cursor)
       return not null access constant Element_Type is
    begin
-      if not Has_Element (Container, Position) then
+      if Position.Node = 0 then
          raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
-
-      pragma
-        Assert
-          (Vet (Container, Position),
-           "bad cursor in function Constant_Reference");
 
       return
         EHT.Element_Access (Container.Content.Nodes (Position.Node).E_Holder);
@@ -313,12 +311,12 @@ is
 
    procedure Delete (Container : in out Map; Position : in out Cursor) is
    begin
-      if not Has_Element (Container, Position) then
-         raise Constraint_Error
-           with "Position cursor of Delete has no element";
+      if Position.Node = 0 then
+         raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
-
-      pragma Assert (Vet (Container, Position), "bad cursor in Delete");
 
       HT_Ops.Delete_Node_Sans_Free (Container.Content.all, Position.Node);
 
@@ -344,12 +342,12 @@ is
 
    function Element (Container : Map; Position : Cursor) return Element_Type is
    begin
-      if not Has_Element (Container, Position) then
-         raise Constraint_Error with "Position cursor equals No_Element";
+      if Position.Node = 0 then
+         raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
-
-      pragma
-        Assert (Vet (Container, Position), "bad cursor in function Element");
 
       return EHT.Element (Container.Content.Nodes (Position.Node).E_Holder);
    end Element;
@@ -692,7 +690,10 @@ is
       --  Start of processing for Insert
 
    begin
-      if Container.Content.Nodes'Length = Length (Container) then
+      --  An existing key needs no new node, even when the map is full
+      if Container.Content.Nodes'Length = Length (Container)
+        and then not Contains (Container, Key)
+      then
          Resize (Container);
       end if;
 
@@ -728,12 +729,12 @@ is
 
    function Key (Container : Map; Position : Cursor) return Key_Type is
    begin
-      if not Has_Element (Container, Position) then
-         raise Constraint_Error
-           with "Position cursor of function Key has no element";
+      if Position.Node = 0 then
+         raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
-
-      pragma Assert (Vet (Container, Position), "bad cursor in function Key");
 
       return KHT.Element (Container.Content.Nodes (Position.Node).K_Holder);
    end Key;
@@ -772,13 +773,10 @@ is
    begin
       if Position.Node = 0 then
          return No_Element;
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
-
-      if not Has_Element (Container, Position) then
-         raise Constraint_Error with "Position has no element";
-      end if;
-
-      pragma Assert (Vet (Container, Position), "bad cursor in function Next");
 
       declare
          Node : constant Count_Type :=
@@ -806,12 +804,12 @@ is
      (Container : Map; Position : Cursor) return not null access Element_Type
    is
    begin
-      if not Has_Element (Container, Position) then
+      if Position.Node = 0 then
          raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
-
-      pragma
-        Assert (Vet (Container, Position), "bad cursor in function Reference");
 
       return
         EHT.Element_Access (Container.Content.Nodes (Position.Node).E_Holder);
@@ -860,13 +858,12 @@ is
    procedure Replace_Element
      (Container : in out Map; Position : Cursor; New_Item : Element_Type) is
    begin
-      if not Has_Element (Container, Position) then
-         raise Constraint_Error
-           with "Position cursor of Replace_Element has no element";
+      if Position.Node = 0 then
+         raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
-
-      pragma
-        Assert (Vet (Container, Position), "bad cursor in Replace_Element");
 
       EHT.Replace_Element
         (Container.Content.Nodes (Position.Node).E_Holder, New_Item);
@@ -967,73 +964,5 @@ is
    begin
       Node.Next := Next;
    end Set_Next;
-
-   ---------
-   -- Vet --
-   ---------
-
-   function Vet (Container : Map; Position : Cursor) return Boolean is
-   begin
-      if Position.Node = 0 then
-         return True;
-      end if;
-
-      declare
-         X : Count_Type;
-
-      begin
-         if Container.Content = Empty_HT'Access then
-            return False;
-         end if;
-
-         if Container.Content.Length = 0 then
-            return False;
-         end if;
-
-         if Container.Content.Capacity = 0 then
-            return False;
-         end if;
-
-         if Container.Content.Buckets'Length = 0 then
-            return False;
-         end if;
-
-         if Position.Node > Container.Content.Capacity then
-            return False;
-         end if;
-
-         if Container.Content.Nodes (Position.Node).Next = Position.Node then
-            return False;
-         end if;
-
-         X :=
-           Container.Content.Buckets
-             (Key_Ops.Index
-                (Container.Content.all,
-                 KHT.Element
-                   (Container.Content.Nodes (Position.Node).K_Holder)));
-
-         for J in 1 .. Container.Content.Length loop
-            if X = Position.Node then
-               return True;
-            end if;
-
-            if X = 0 then
-               return False;
-            end if;
-
-            if X = Container.Content.Nodes (X).Next then
-
-               --  Prevent unnecessary looping
-
-               return False;
-            end if;
-
-            X := Container.Content.Nodes (X).Next;
-         end loop;
-
-         return False;
-      end;
-   end Vet;
 
 end SPARK.Containers.Formal.Unbounded_Hashed_Maps;

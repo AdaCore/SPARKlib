@@ -296,6 +296,10 @@ is
 
    procedure Assign (Target : in out Set; Source : Set) is
    begin
+      if Target'Address = Source'Address then
+         return;
+      end if;
+
       Clear (Target);
 
       if Target.Content.Capacity < Length (Source) then
@@ -347,8 +351,11 @@ is
      (Container : Set; Position : Cursor)
       return not null access constant Element_Type is
    begin
-      if not Has_Element (Container, Position) then
+      if Position.Node = 0 then
          raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
 
       pragma
@@ -395,8 +402,11 @@ is
 
    procedure Delete (Container : in out Set; Position : in out Cursor) is
    begin
-      if not Has_Element (Container, Position) then
+      if Position.Node = 0 then
          raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
 
       pragma
@@ -486,8 +496,11 @@ is
 
    function Element (Container : Set; Position : Cursor) return Element_Type is
    begin
-      if not Has_Element (Container, Position) then
+      if Position.Node = 0 then
          raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
 
       pragma
@@ -1294,8 +1307,11 @@ is
 
       function Key (Container : Set; Position : Cursor) return Key_Type is
       begin
-         if not Has_Element (Container, Position) then
+         if Position.Node = 0 then
             raise Constraint_Error with "Position cursor has no element";
+         elsif not Has_Element (Container, Position) then
+            raise Program_Error
+              with "Position cursor designates no element in Container";
          end if;
 
          pragma
@@ -1375,7 +1391,10 @@ is
       Inserted  : out Boolean) is
    begin
 
-      if Length (Container) >= Container.Content.Nodes'Length then
+      --  An existing element needs no new node, even when the set is full
+      if Length (Container) >= Container.Content.Nodes'Length
+        and then not Contains (Container, New_Item)
+      then
          Resize (Container);
       end if;
       Insert_Sans_Hint
@@ -1641,12 +1660,11 @@ is
 
    function Next (Container : Set; Position : Cursor) return Cursor is
    begin
-      if Position = No_Element then
+      if Position.Node = 0 then
          return No_Element;
-      end if;
-
-      if not Has_Element (Container, Position) then
-         raise Constraint_Error;
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
 
       pragma
@@ -1685,12 +1703,11 @@ is
 
    function Previous (Container : Set; Position : Cursor) return Cursor is
    begin
-      if Position = No_Element then
+      if Position.Node = 0 then
          return No_Element;
-      end if;
-
-      if not Has_Element (Container, Position) then
-         raise Constraint_Error;
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
 
       pragma
@@ -1820,8 +1837,11 @@ is
    procedure Replace_Element
      (Container : in out Set; Position : Cursor; New_Item : Element_Type) is
    begin
-      if not Has_Element (Container, Position) then
+      if Position.Node = 0 then
          raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
 
       pragma

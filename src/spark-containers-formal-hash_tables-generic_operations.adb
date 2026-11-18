@@ -11,8 +11,6 @@ use type System.Address;
 
 package body SPARK.Containers.Formal.Hash_Tables.Generic_Operations is
 
-   Checks : constant Boolean := Container_Checks'Enabled;
-
    -----------
    -- Clear --
    -----------
@@ -38,18 +36,19 @@ package body SPARK.Containers.Formal.Hash_Tables.Generic_Operations is
       Curr : Count_Type;
 
    begin
-      if Checks and then HT.Length = 0 then
-         raise Program_Error
-           with "attempt to delete node from empty hashed container";
-      end if;
+      pragma
+        Assert
+          (SPARKlib_Full =>
+             (HT.Length /= 0,
+              "attempt to delete node from empty hashed container"));
 
       Indx := Index (HT, HT.Nodes (X));
       Prev := HT.Buckets (Indx);
 
-      if Checks and then Prev = 0 then
-         raise Program_Error
-           with "attempt to delete node from empty hash bucket";
-      end if;
+      pragma
+        Assert
+          (SPARKlib_Full =>
+             (Prev /= 0, "attempt to delete node from empty hash bucket"));
 
       if Prev = X then
          HT.Buckets (Indx) := Next (HT.Nodes (Prev));
@@ -57,18 +56,20 @@ package body SPARK.Containers.Formal.Hash_Tables.Generic_Operations is
          return;
       end if;
 
-      if Checks and then HT.Length = 1 then
-         raise Program_Error
-           with "attempt to delete node not in its proper hash bucket";
-      end if;
+      pragma
+        Assert
+          (SPARKlib_Full =>
+             (HT.Length /= 1,
+              "attempt to delete node not in its proper hash bucket"));
 
       loop
          Curr := Next (HT.Nodes (Prev));
 
-         if Checks and then Curr = 0 then
-            raise Program_Error
-              with "attempt to delete node not in its proper hash bucket";
-         end if;
+         pragma
+           Assert
+             (SPARKlib_Full =>
+                (Curr /= 0,
+                 "attempt to delete node not in its proper hash bucket"));
 
          if Curr = X then
             Set_Next (HT.Nodes (Prev), Next => Next (HT.Nodes (Curr)));

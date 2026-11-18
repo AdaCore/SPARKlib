@@ -318,14 +318,12 @@ is
      (Container : Map; Position : Cursor)
       return not null access constant Element_Type is
    begin
-      if not Has_Element (Container, Position) then
+      if Position.Node = 0 then
          raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
-
-      pragma
-        Assert
-          (Vet (Container.Content.all, Position.Node),
-           "bad cursor in function Constant_Reference");
 
       return
         EHT.Element_Access (Container.Content.Nodes (Position.Node).E_Holder);
@@ -380,15 +378,12 @@ is
 
    procedure Delete (Container : in out Map; Position : in out Cursor) is
    begin
-      if not Has_Element (Container, Position) then
-         raise Constraint_Error
-           with "Position cursor of Delete has no element";
+      if Position.Node = 0 then
+         raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
-
-      pragma
-        Assert
-          (Vet (Container.Content.all, Position.Node),
-           "Position cursor of Delete is bad");
 
       Tree_Operations.Delete_Node_Sans_Free
         (Container.Content.all, Position.Node);
@@ -440,15 +435,12 @@ is
 
    function Element (Container : Map; Position : Cursor) return Element_Type is
    begin
-      if not Has_Element (Container, Position) then
-         raise Constraint_Error
-           with "Position cursor of function Element has no element";
+      if Position.Node = 0 then
+         raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
-
-      pragma
-        Assert
-          (Vet (Container.Content.all, Position.Node),
-           "Position cursor of function Element is bad");
 
       return EHT.Element (Container.Content.Nodes (Position.Node).E_Holder);
 
@@ -907,9 +899,12 @@ is
 
    begin
 
-      --  Make sure there is enough room for the new element
+      --  Make sure there is enough room only if a new element is needed.
+      --  An existing key can be found even when the map is full.
 
-      if Length (Container) = Container.Content.Capacity then
+      if Length (Container) = Container.Content.Capacity
+        and then not Contains (Container, Key)
+      then
          Resize (Container);
       end if;
 
@@ -967,15 +962,12 @@ is
 
    function Key (Container : Map; Position : Cursor) return Key_Type is
    begin
-      if not Has_Element (Container, Position) then
-         raise Constraint_Error
-           with "Position cursor of function Key has no element";
+      if Position.Node = 0 then
+         raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
-
-      pragma
-        Assert
-          (Vet (Container.Content.all, Position.Node),
-           "Position cursor of function Key is bad");
 
       return KHT.Element (Container.Content.Nodes (Position.Node).K_Holder);
    end Key;
@@ -1066,17 +1058,12 @@ is
 
    function Next (Container : Map; Position : Cursor) return Cursor is
    begin
-      if Position = No_Element then
+      if Position.Node = 0 then
          return No_Element;
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
-
-      if not Has_Element (Container, Position) then
-         raise Constraint_Error;
-      end if;
-
-      pragma
-        Assert
-          (Vet (Container.Content.all, Position.Node), "bad cursor in Next");
 
       return
         (Node => Tree_Operations.Next (Container.Content.all, Position.Node));
@@ -1102,18 +1089,12 @@ is
 
    function Previous (Container : Map; Position : Cursor) return Cursor is
    begin
-      if Position = No_Element then
+      if Position.Node = 0 then
          return No_Element;
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
-
-      if not Has_Element (Container, Position) then
-         raise Constraint_Error;
-      end if;
-
-      pragma
-        Assert
-          (Vet (Container.Content.all, Position.Node),
-           "bad cursor in Previous");
 
       declare
          Node : constant Count_Type :=
@@ -1136,14 +1117,12 @@ is
      (Container : Map; Position : Cursor) return not null access Element_Type
    is
    begin
-      if not Has_Element (Container, Position) then
+      if Position.Node = 0 then
          raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
-
-      pragma
-        Assert
-          (Vet (Container.Content.all, Position.Node),
-           "bad cursor in function Reference");
 
       return
         EHT.Element_Access (Container.Content.Nodes (Position.Node).E_Holder);
@@ -1191,15 +1170,12 @@ is
    procedure Replace_Element
      (Container : in out Map; Position : Cursor; New_Item : Element_Type) is
    begin
-      if not Has_Element (Container, Position) then
-         raise Constraint_Error
-           with "Position cursor of Replace_Element has no element";
+      if Position.Node = 0 then
+         raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
-
-      pragma
-        Assert
-          (Vet (Container.Content.all, Position.Node),
-           "Position cursor of Replace_Element is bad");
 
       EHT.Replace_Element
         (Container.Content.Nodes (Position.Node).E_Holder, New_Item);
