@@ -6,7 +6,6 @@
 
 pragma Ada_2022;
 
-with Ada.Containers.Generic_Array_Sort;
 with Ada.Unchecked_Deallocation;
 
 with System;
@@ -15,13 +14,12 @@ use type System.Address;
 package body SPARK.Containers.Formal.Unbounded_Vectors
   with SPARK_Mode => Off
 is
+   use type Element_Array_Access;
 
-   subtype Int is Long_Long_Integer;
-
-   --  The minimum size of the underlying array to avoid too much resizing
-
-   Min_Size : constant Capacity_Range :=
-     Count_Type'Min (100, Capacity_Range'Last);
+   --  Calls to Ops pass array storage and scalar controls separately. If an
+   --  element allocation raises Storage_Error, array updates can remain while
+   --  scalar out parameters are not copied back. No exceptional copy-back or
+   --  rollback is provided, as recovery from Storage_Error is not supported.
 
    -----------------------
    -- Local_Subprograms --
@@ -29,27 +27,13 @@ is
 
    function To_Array_Index (Index : Index_Type) return Array_Index;
 
-   procedure Free_Element is new
-     Ada.Unchecked_Deallocation (Element_Type, Element_Access);
-
    procedure Free_Element_Array is new
      Ada.Unchecked_Deallocation (Element_Array, Element_Array_Access);
-
-   procedure Insert_Space
-     (Container : in out Vector;
-      Before    : Extended_Index;
-      Count     : Count_Type := 1);
 
    function Length_Internal (Container : Vector) return Capacity_Range;
    --  Internal version of Length without a postcondition calling Model
 
-   procedure Resize (Container : in out Vector; Size : Count_Type := 0)
-   with
-     --  Widen the sub array of the Vector
-
-     Global => null,
-     Post   =>
-       (SPARKlib_Full => M.Equal (Model (Container), Model (Container)'Old));
+   package Vector_Model is new Ops.Generic_Model (Formal_Model.M);
 
    ---------
    -- "=" --
@@ -61,17 +45,15 @@ is
          return True;
       end if;
 
-      if Length (Left) /= Length (Right) then
-         return False;
+      if Left.Elements = null then
+         return Is_Empty (Right);
+      elsif Right.Elements = null then
+         return Is_Empty (Left);
       end if;
 
-      for J in 1 .. Length (Left) loop
-         if Left.Elements (J).all /= Right.Elements (J).all then
-            return False;
-         end if;
-      end loop;
-
-      return True;
+      return
+        Ops.Equal
+          (Left.Elements.all, Left.Last, Right.Elements.all, Right.Last);
    end "=";
 
    ------------
@@ -80,17 +62,14 @@ is
 
    procedure Adjust (V : in out Vector) is
       Dest : Element_Array_Access;
+      L    : constant Count_Type := Length_Internal (V);
    begin
       if V.Elements = null then
          return;
       end if;
 
       Dest := new Element_Array (1 .. V.Elements'Length);
-
-      for Idx in 1 .. Length (V) loop
-         Dest (Idx) := new Element_Type'(V.Elements (Idx).all);
-      end loop;
-
+      Indefinite_Ops.Copy (Dest (1 .. L), V.Elements (1 .. L));
       V.Elements := Dest;
    end Adjust;
 
@@ -140,13 +119,26 @@ is
    ------------
 
    procedure Assign (Target : in out Vector; Source : Vector) is
+      N : constant Count_Type := Length_Internal (Source);
    begin
       if Target'Address = Source'Address then
          return;
       end if;
 
-      Clear (Target);
-      Append_Vector (Target, Source);
+      if Target.Elements /= null then
+         Ops.Clear (Target.Elements.all, Target.Last);
+      end if;
+
+      if N = 0 then
+         return;
+      end if;
+
+      if Target.Elements = null or else Target.Elements'Length < N then
+         Indefinite_Ops.Resize (Target.Elements, Target.Last, N);
+      end if;
+
+      Ops.Assign
+        (Target.Elements.all, Target.Last, Source.Elements.all, Source.Last);
    end Assign;
 
    -----------
@@ -155,12 +147,9 @@ is
 
    procedure Clear (Container : in out Vector) is
    begin
-      for J in 1 .. Length (Container) loop
-         if Container.Elements (J) /= null then
-            Free_Element (Container.Elements (J));
-         end if;
-      end loop;
-      Container.Last := No_Index;
+      if Container.Elements /= null then
+         Ops.Clear (Container.Elements.all, Container.Last);
+      end if;
    end Clear;
 
    ------------------------
@@ -175,7 +164,8 @@ is
          raise Constraint_Error with "Index is out of range";
       end if;
 
-      return Container.Elements (To_Array_Index (Index));
+      return
+        Cells.Constant_Reference (Container.Elements (To_Array_Index (Index)));
    end Constant_Reference;
 
    --------------
@@ -209,118 +199,13 @@ is
    end Delete;
 
    procedure Delete
-     (Container : in out Vector; Index : Extended_Index; Count : Count_Type)
-   is
-      Old_Last : constant Index_Type'Base := Container.Last;
-      Old_Len  : constant Count_Type := Length (Container);
-      New_Last : Index_Type'Base;
-      Count2   : Count_Type'Base;  -- count of items from Index to Old_Last
-      Off      : Count_Type'Base;  -- Index expressed as offset from IT'First
-
+     (Container : in out Vector; Index : Extended_Index; Count : Count_Type) is
    begin
-      --  Delete removes items from the vector, the number of which is the
-      --  minimum of the specified Count and the items (if any) that exist from
-      --  Index to Container.Last. There are no constraints on the specified
-      --  value of Count (it can be larger than what's available at this
-      --  position in the vector, for example), but there are constraints on
-      --  the allowed values of the Index.
-
-      --  As a precondition on the generic actual Index_Type, the base type
-      --  must include Index_Type'Pred (Index_Type'First); this is the value
-      --  that Container.Last assumes when the vector is empty. However, we do
-      --  not allow that as the value for Index when specifying which items
-      --  should be deleted, so we must manually check. (That the user is
-      --  allowed to specify the value at all here is a consequence of the
-      --  declaration of the Extended_Index subtype, which includes the values
-      --  in the base range that immediately precede and immediately follow the
-      --  values in the Index_Type.)
-
-      if Index < Index_Type'First then
-         raise Constraint_Error with "Index is out of range (too small)";
+      Ops.Check_Deletion (Container.Last, Index);
+      if Container.Elements /= null then
+         Ops.Delete_Internal
+           (Container.Elements.all, Container.Last, Index, Count);
       end if;
-
-      --  We do allow a value greater than Container.Last to be specified as
-      --  the Index, but only if it's immediately greater. This allows the
-      --  corner case of deleting no items from the back end of the vector to
-      --  be treated as a no-op. (It is assumed that specifying an index value
-      --  greater than Last + 1 indicates some deeper flaw in the caller's
-      --  algorithm, so that case is treated as a proper error.)
-
-      if Index > Old_Last then
-         if Index > Old_Last + 1 then
-            raise Constraint_Error with "Index is out of range (too large)";
-         end if;
-
-         return;
-      end if;
-
-      --  Here and elsewhere we treat deleting 0 items from the container as a
-      --  no-op, so we simply return.
-
-      if Count = 0 then
-         return;
-      end if;
-
-      --  We first calculate what's available for deletion starting at
-      --  Index. Here and elsewhere we use the wider of Index_Type'Base and
-      --  Count_Type'Base as the type for intermediate values. (See function
-      --  Length for more information.)
-
-      if Count_Type'Base'Last >= Index_Type'Pos (Index_Type'Base'Last) then
-         Count2 := Count_Type'Base (Old_Last) - Count_Type'Base (Index) + 1;
-      else
-         Count2 := Count_Type'Base (Old_Last - Index + 1);
-      end if;
-
-      --  If more elements are requested (Count) for deletion than are
-      --  available (Count2) for deletion beginning at Index, then everything
-      --  from Index is deleted. There are no elements to slide down, and so
-      --  all we need to do is set the value of Container.Last.
-
-      if Count >= Count2 then
-
-         --  The elements between Index and Container.Last must be deallocated
-
-         for Idx in To_Array_Index (Index) .. To_Array_Index (Container.Last)
-         loop
-            Free_Element (Container.Elements (Idx));
-         end loop;
-
-         Container.Last := Index - 1;
-         return;
-      end if;
-
-      --  There are some elements aren't being deleted (the requested count was
-      --  less than the available count), so we must slide them down to Index.
-      --  We first calculate the index values of the respective array slices,
-      --  using the wider of Index_Type'Base and Count_Type'Base as the type
-      --  for intermediate calculations.
-
-      if Index_Type'Base'Last >= Count_Type'Pos (Count_Type'Last) then
-         Off := Count_Type'Base (Index - Index_Type'First);
-         New_Last := Old_Last - Index_Type'Base (Count);
-      else
-         Off := Count_Type'Base (Index) - Count_Type'Base (Index_Type'First);
-         New_Last := Index_Type'Base (Count_Type'Base (Old_Last) - Count);
-      end if;
-
-      --  The array index values for each slice have already been determined,
-      --  so we just slide down to Index the elements that weren't deleted.
-
-      declare
-         EA  : Element_Array_Access renames Container.Elements;
-         Idx : constant Count_Type := EA'First + Off;
-      begin
-
-         --  The elements between Idx and Idx + Count - 1 must be deallocated
-
-         for J in 0 .. Count - 1 loop
-            Free_Element (Container.Elements (Idx + J));
-         end loop;
-
-         EA (Idx .. Old_Len - Count) := EA (Idx + Count .. Old_Len);
-         Container.Last := New_Last;
-      end;
    end Delete;
 
    ------------------
@@ -334,15 +219,8 @@ is
 
    procedure Delete_First (Container : in out Vector; Count : Count_Type) is
    begin
-      if Count = 0 then
-         return;
-
-      elsif Count >= Length (Container) then
-         Clear (Container);
-         return;
-
-      else
-         Delete (Container, Index_Type'First, Count);
+      if Container.Elements /= null then
+         Ops.Delete_First (Container.Elements.all, Container.Last, Count);
       end if;
    end Delete_First;
 
@@ -356,35 +234,10 @@ is
    end Delete_Last;
 
    procedure Delete_Last (Container : in out Vector; Count : Count_Type) is
-      Index : Index_Type'Base;
    begin
-      if Count = 0 then
-         return;
+      if Container.Elements /= null then
+         Ops.Delete_Last (Container.Elements.all, Container.Last, Count);
       end if;
-
-      --  There is no restriction on how large Count can be when deleting
-      --  items. If it is equal or greater than the current length, then this
-      --  is equivalent to clearing the vector. (In particular, there's no need
-      --  for us to actually calculate the new value for Last.)
-
-      --  If the requested count is less than the current length, then we must
-      --  calculate the new value for Last. For the type we use the widest of
-      --  Index_Type'Base and Count_Type'Base for the intermediate values of
-      --  our calculation.
-
-      if Count >= Length (Container) then
-         Clear (Container);
-         return;
-
-      elsif Index_Type'Base'Last >= Count_Type'Pos (Count_Type'Last) then
-         Index := Container.Last - Index_Type'Base (Count) + 1;
-
-      else
-         Index :=
-           Index_Type'Base (Count_Type'Base (Container.Last) - Count + 1);
-      end if;
-
-      Delete (Container, Index, Count);
    end Delete_Last;
 
    -------------
@@ -394,11 +247,11 @@ is
    function Element
      (Container : Vector; Index : Extended_Index) return Element_Type is
    begin
-      if Index > Container.Last or Index = No_Index then
+      if Container.Elements = null then
          raise Constraint_Error with "Index is out of range";
       end if;
 
-      return Container.Elements (To_Array_Index (Index)).all;
+      return Ops.Element (Container.Elements.all, Container.Last, Index);
    end Element;
 
    --------------
@@ -411,13 +264,7 @@ is
          return;
       end if;
 
-      if V.Last /= No_Index then
-         for Idx in Array_Index'First .. To_Array_Index (V.Last) loop
-            Free_Element (V.Elements (Idx));
-         end loop;
-      end if;
-
-      V.Last := No_Index;
+      Ops.Clear (V.Elements.all, V.Last);
       Free_Element_Array (V.Elements);
    end Finalize;
 
@@ -430,13 +277,12 @@ is
       Item      : Element_Type;
       Index     : Index_Type := Index_Type'First) return Extended_Index is
    begin
-      for Indx in Index .. Container.Last loop
-         if Container.Elements (To_Array_Index (Indx)).all = Item then
-            return Indx;
-         end if;
-      end loop;
+      if Container.Elements = null then
+         return No_Index;
+      end if;
 
-      return No_Index;
+      return
+        Ops.Find_Index (Container.Elements.all, Container.Last, Item, Index);
    end Find_Index;
 
    -------------------
@@ -445,10 +291,10 @@ is
 
    function First_Element (Container : Vector) return Element_Type is
    begin
-      if Is_Empty (Container) then
+      if Container.Elements = null then
          raise Constraint_Error with "Container is empty";
       else
-         return Container.Elements (1).all;
+         return Ops.First_Element (Container.Elements.all, Container.Last);
       end if;
    end First_Element;
 
@@ -474,40 +320,8 @@ is
 
       function M_Elements_In_Union
         (Container : M.Sequence; Left : M.Sequence; Right : M.Sequence)
-         return Boolean is
-      begin
-         for Index in Index_Type'First .. M.Last (Container) loop
-            declare
-               Found : Boolean := False;
-            begin
-               for J in Index_Type'First .. M.Last (Left) loop
-                  if Element_Logic_Equal
-                       (Element (Container, Index), Element (Left, J))
-                  then
-                     Found := True;
-                     exit;
-                  end if;
-               end loop;
-
-               if not Found then
-                  for J in Index_Type'First .. M.Last (Right) loop
-                     if Element_Logic_Equal
-                          (Element (Container, Index), Element (Right, J))
-                     then
-                        Found := True;
-                        exit;
-                     end if;
-                  end loop;
-               end if;
-
-               if not Found then
-                  return False;
-               end if;
-            end;
-         end loop;
-
-         return True;
-      end M_Elements_In_Union;
+         return Boolean
+      renames Vector_Model.M_Elements_In_Union;
 
       -------------------------
       -- M_Elements_Included --
@@ -521,28 +335,9 @@ is
          R_Fst : Index_Type := Index_Type'First;
          R_Lst : Extended_Index) return Boolean is
       begin
-         for I in L_Fst .. L_Lst loop
-            declare
-               Found : Boolean := False;
-               J     : Extended_Index := R_Fst - 1;
-
-            begin
-               while not Found and J < R_Lst loop
-                  J := J + 1;
-                  if Element_Logic_Equal
-                       (Element (Left, I), Element (Right, J))
-                  then
-                     Found := True;
-                  end if;
-               end loop;
-
-               if not Found then
-                  return False;
-               end if;
-            end;
-         end loop;
-
-         return True;
+         return
+           Vector_Model.M_Elements_Included
+             (Left, L_Fst, L_Lst, Right, R_Fst, R_Lst);
       end M_Elements_Included;
 
       -------------------------
@@ -551,24 +346,7 @@ is
 
       function M_Elements_Reversed
         (Left : M.Sequence; Right : M.Sequence) return Boolean
-      is
-         L : constant Extended_Index := M.Last (Left);
-
-      begin
-         if L /= M.Last (Right) then
-            return False;
-         end if;
-
-         for I in Index_Type'First .. L loop
-            if not Element_Logic_Equal
-                     (Element (Left, I), Element (Right, L - I + 1))
-            then
-               return False;
-            end if;
-         end loop;
-
-         return True;
-      end M_Elements_Reversed;
+      renames Vector_Model.M_Elements_Reversed;
 
       ------------------------
       -- M_Elements_Swapped --
@@ -576,43 +354,20 @@ is
 
       function M_Elements_Swapped
         (Left : M.Sequence; Right : M.Sequence; X : Index_Type; Y : Index_Type)
-         return Boolean is
-      begin
-         if M.Length (Left) /= M.Length (Right)
-           or else
-             not Element_Logic_Equal (Element (Left, X), Element (Right, Y))
-           or else
-             not Element_Logic_Equal (Element (Left, Y), Element (Right, X))
-         then
-            return False;
-         end if;
-
-         for I in Index_Type'First .. M.Last (Left) loop
-            if I /= X
-              and then I /= Y
-              and then
-                not Element_Logic_Equal (Element (Left, I), Element (Right, I))
-            then
-               return False;
-            end if;
-         end loop;
-
-         return True;
-      end M_Elements_Swapped;
+         return Boolean
+      renames Vector_Model.M_Elements_Swapped;
 
       -----------
       -- Model --
       -----------
 
       function Model (Container : Vector) return M.Sequence is
-         R : M.Sequence;
-
       begin
-         for Position in 1 .. Length_Internal (Container) loop
-            R := M.Add (R, Container.Elements (Position).all);
-         end loop;
+         if Container.Elements = null then
+            return M.Empty_Sequence;
+         end if;
 
-         return R;
+         return Vector_Model.Model (Container.Elements.all, Container.Last);
       end Model;
 
    end Formal_Model;
@@ -625,49 +380,21 @@ is
      with SPARK_Mode => Off
    is
 
+      package Sorting is new Ops.Generic_Sorting ("<");
+
       ------------------
       -- Formal_Model --
       ------------------
 
-      function Strictly_Less (L, R : Element_Access) return Boolean
-      with
-        --  Compare Element with access check
-
-        Global => null;
-
       package body Formal_Model is
+         package Model_Sorting is new Vector_Model.Generic_Sorting ("<");
 
          -----------------------
          -- M_Elements_Sorted --
          -----------------------
 
-         function M_Elements_Sorted (Container : M.Sequence) return Boolean is
-         begin
-            if M.Length (Container) = 0 then
-               return True;
-            end if;
-
-            declare
-               E1 : Element_Type := Element (Container, Index_Type'First);
-
-            begin
-               for I in Index_Type'First + 1 .. M.Last (Container) loop
-                  declare
-                     E2 : constant Element_Type := Element (Container, I);
-
-                  begin
-                     if E2 < E1 then
-                        return False;
-                     end if;
-
-                     E1 := E2;
-                  end;
-               end loop;
-            end;
-
-            return True;
-         end M_Elements_Sorted;
-
+         function M_Elements_Sorted (Container : M.Sequence) return Boolean
+         renames Model_Sorting.M_Elements_Sorted;
       end Formal_Model;
 
       ---------------
@@ -675,16 +402,12 @@ is
       ---------------
 
       function Is_Sorted (Container : Vector) return Boolean is
-         L : constant Capacity_Range := Length (Container);
-
       begin
-         for J in 1 .. L - 1 loop
-            if Container.Elements (J + 1).all < Container.Elements (J).all then
-               return False;
-            end if;
-         end loop;
+         if Container.Elements = null then
+            return True;
+         end if;
 
-         return True;
+         return Sorting.Is_Sorted (Container.Elements.all, Container.Last);
       end Is_Sorted;
 
       -----------
@@ -692,56 +415,35 @@ is
       -----------
 
       procedure Merge (Target : in out Vector; Source : in out Vector) is
-         I : Count_Type;
-         J : Count_Type;
-
+         I : constant Count_Type := Length_Internal (Target);
+         N : constant Count_Type := Length_Internal (Source);
       begin
          if Target'Address = Source'Address then
             raise Program_Error with "Target and Source denote same container";
          end if;
 
-         if Length (Source) = 0 then
+         if N = 0 then
             return;
          end if;
 
-         if Length (Target) = 0 then
+         if I = 0 then
             Move (Target => Target, Source => Source);
             return;
          end if;
 
-         I := Length (Target);
-
-         --  Check if the merge of Source and Target will fit in a Vector
-
-         if Count_Type'Base (Last_Count) - I < Length (Source) then
+         if Count_Type'Base (Last_Count) - I < N then
             raise Constraint_Error with "Source too large for Target";
          end if;
 
-         Insert_Space (Target, Target.Last + 1, Length (Source));
+         if Target.Elements'Length < I + N then
+            Indefinite_Ops.Resize (Target.Elements, Target.Last, I + N);
+         end if;
 
-         declare
-            TA : Element_Array_Access renames Target.Elements;
-            SA : Element_Array_Access renames Source.Elements;
-
-         begin
-            J := Length_Internal (Target);
-            while Length (Source) /= 0 loop
-               if I = 0 then
-                  TA (1 .. J) := SA (1 .. Length (Source));
-                  Source.Last := No_Index;
-                  exit;
-               end if;
-               if SA (Length (Source)).all < TA (I).all then
-                  TA (J) := TA (I);
-                  I := I - 1;
-               else
-                  TA (J) := SA (Length (Source));
-                  Source.Last := Source.Last - 1;
-               end if;
-
-               J := J - 1;
-            end loop;
-         end;
+         Sorting.Merge
+           (Target.Elements.all,
+            Target.Last,
+            Source.Elements.all,
+            Source.Last);
       end Merge;
 
       ----------
@@ -749,34 +451,13 @@ is
       ----------
 
       procedure Sort (Container : in out Vector) is
-
-         procedure Sort is new
-           Generic_Array_Sort
-             (Index_Type   => Array_Index,
-              Element_Type => Element_Access,
-              Array_Type   => Element_Array,
-              "<"          => Strictly_Less);
-
-         Len : constant Capacity_Range := Length (Container);
-
       begin
          if Container.Last <= Index_Type'First then
             return;
-         else
-            Sort (Container.Elements (1 .. Len));
          end if;
+
+         Sorting.Sort (Container.Elements.all, Container.Last);
       end Sort;
-
-      -------------------
-      -- Strictly_Less --
-      -------------------
-
-      function Strictly_Less (L, R : Element_Access) return Boolean
-      is (if L = null
-          then R = null
-          elsif R = null
-          then L = null
-          else L.all < R.all);
 
    end Generic_Sorting;
 
@@ -808,228 +489,23 @@ is
       New_Item  : Element_Type;
       Count     : Count_Type)
    is
-      J : Count_Type'Base;  -- scratch
-
+      New_Length : Count_Type;
    begin
-      --  Use Insert_Space to create the "hole" (the destination slice)
-
-      Insert_Space (Container, Before, Count);
-
-      J := To_Array_Index (Before);
-
-      Container.Elements (J .. J - 1 + Count) :=
-        (others => new Element_Type'(New_Item));
-   end Insert;
-
-   ------------------
-   -- Insert_Space --
-   ------------------
-
-   procedure Insert_Space
-     (Container : in out Vector;
-      Before    : Extended_Index;
-      Count     : Count_Type := 1)
-   is
-      Old_Length : constant Count_Type := Length (Container);
-
-      Max_Length : Count_Type'Base;  -- determined from range of Index_Type
-      New_Length : Count_Type'Base;  -- sum of current length and Count
-
-      Index : Index_Type'Base;  -- scratch for intermediate values
-      J     : Count_Type'Base;  -- scratch
-
-   begin
-      --  As a precondition on the generic actual Index_Type, the base type
-      --  must include Index_Type'Pred (Index_Type'First); this is the value
-      --  that Container.Last assumes when the vector is empty. However, we do
-      --  not allow that as the value for Index when specifying where the new
-      --  items should be inserted, so we must manually check. (That the user
-      --  is allowed to specify the value at all here is a consequence of the
-      --  declaration of the Extended_Index subtype, which includes the values
-      --  in the base range that immediately precede and immediately follow the
-      --  values in the Index_Type.)
-
-      if Before < Index_Type'First then
-         raise Constraint_Error
-           with "Before index is out of range (too small)";
-      end if;
-
-      --  We do allow a value greater than Container.Last to be specified as
-      --  the Index, but only if it's immediately greater. This allows for the
-      --  case of appending items to the back end of the vector. (It is assumed
-      --  that specifying an index value greater than Last + 1 indicates some
-      --  deeper flaw in the caller's algorithm, so that case is treated as a
-      --  proper error.)
-
-      if Before > Container.Last and then Before - 1 > Container.Last then
-         raise Constraint_Error
-           with "Before index is out of range (too large)";
-      end if;
-
-      --  We treat inserting 0 items into the container as a no-op, so we
-      --  simply return.
-
+      Ops.Check_Insertion (Container.Last, Before, Count, New_Length);
       if Count = 0 then
          return;
       end if;
 
-      --  There are two constraints we need to satisfy. The first constraint is
-      --  that a container cannot have more than Count_Type'Last elements, so
-      --  we must check the sum of the current length and the insertion count.
-      --  Note that the value cannot be simply added because the result may
-      --  overflow.
-
-      if Old_Length > Count_Type'Last - Count then
-         raise Constraint_Error with "Count is out of range";
+      if Container.Elements = null
+        or else Container.Elements'Length < New_Length
+      then
+         Indefinite_Ops.Resize
+           (Container.Elements, Container.Last, New_Length);
       end if;
 
-      --  It is now safe compute the length of the new vector, without fear of
-      --  overflow.
-
-      New_Length := Old_Length + Count;
-
-      --  The second constraint is that the new Last index value cannot exceed
-      --  Index_Type'Last. In each branch below, we calculate the maximum
-      --  length (computed from the range of values in Index_Type), and then
-      --  compare the new length to the maximum length. If the new length is
-      --  acceptable, then we compute the new last index from that.
-
-      if Index_Type'Base'Last >= Count_Type'Pos (Count_Type'Last) then
-
-         --  We have to handle the case when there might be more values in the
-         --  range of Index_Type than in the range of Count_Type.
-
-         if Index_Type'First <= 0 then
-
-            --  We know that No_Index (the same as Index_Type'First - 1) is
-            --  less than 0, so it is safe to compute the following sum without
-            --  fear of overflow.
-
-            Index := No_Index + Index_Type'Base (Count_Type'Last);
-
-            if Index <= Index_Type'Last then
-
-               --  We have determined that range of Index_Type has at least as
-               --  many values as in Count_Type, so Count_Type'Last is the
-               --  maximum number of items that are allowed.
-
-               Max_Length := Count_Type'Last;
-
-            else
-               --  The range of Index_Type has fewer values than in Count_Type,
-               --  so the maximum number of items is computed from the range of
-               --  the Index_Type.
-
-               Max_Length := Count_Type'Base (Index_Type'Last - No_Index);
-            end if;
-
-         else
-            --  No_Index is equal or greater than 0, so we can safely compute
-            --  the difference without fear of overflow (which we would have to
-            --  worry about if No_Index were less than 0, but that case is
-            --  handled above).
-
-            if Index_Type'Last - No_Index >= Count_Type'Pos (Count_Type'Last)
-            then
-               --  We have determined that range of Index_Type has at least as
-               --  many values as in Count_Type, so Count_Type'Last is the
-               --  maximum number of items that are allowed.
-
-               Max_Length := Count_Type'Last;
-
-            else
-               --  The range of Index_Type has fewer values than in Count_Type,
-               --  so the maximum number of items is computed from the range of
-               --  the Index_Type.
-
-               Max_Length := Count_Type'Base (Index_Type'Last - No_Index);
-            end if;
-         end if;
-
-      elsif Index_Type'First <= 0 then
-
-         --  We know that No_Index (the same as Index_Type'First - 1) is less
-         --  than 0, so it is safe to compute the following sum without fear of
-         --  overflow.
-
-         J := Count_Type'Base (No_Index) + Count_Type'Last;
-
-         if J <= Count_Type'Base (Index_Type'Last) then
-
-            --  We have determined that range of Index_Type has at least as
-            --  many values as in Count_Type, so Count_Type'Last is the maximum
-            --  number of items that are allowed.
-
-            Max_Length := Count_Type'Last;
-
-         else
-            --  The range of Index_Type has fewer values than Count_Type does,
-            --  so the maximum number of items is computed from the range of
-            --  the Index_Type.
-
-            Max_Length :=
-              Count_Type'Base (Index_Type'Last) - Count_Type'Base (No_Index);
-         end if;
-
-      else
-         --  No_Index is equal or greater than 0, so we can safely compute the
-         --  difference without fear of overflow (which we would have to worry
-         --  about if No_Index were less than 0, but that case is handled
-         --  above).
-
-         Max_Length :=
-           Count_Type'Base (Index_Type'Last) - Count_Type'Base (No_Index);
-      end if;
-
-      --  We have just computed the maximum length (number of items). We must
-      --  now compare the requested length to the maximum length, as we do not
-      --  allow a vector expand beyond the maximum (because that would create
-      --  an internal array with a last index value greater than
-      --  Index_Type'Last, with no way to index those elements).
-
-      if New_Length > Max_Length then
-         raise Constraint_Error with "Count is out of range";
-
-      --  Raise Capacity_Error if the new length exceeds the container's
-      --  capacity.
-
-      elsif New_Length > Last_Count then
-         raise Capacity_Error with "New length is larger than capacity";
-      end if;
-
-      J := To_Array_Index (Before);
-
-      declare
-         EA : Element_Array_Access renames Container.Elements;
-      begin
-         if Container.Elements = null
-           or else Container.Elements'Length < New_Length
-         then
-
-            --  The array must be resized
-
-            Resize (Container, New_Length);
-         end if;
-
-         if Before <= Container.Last then
-
-            --  The new items are being inserted before some existing
-            --  elements, so we must slide the existing elements up to their
-            --  new home.
-
-            EA (J + Count .. New_Length) := EA (J .. Old_Length);
-            EA (J .. J + Count - 1) := (others => null);
-         end if;
-      end;
-
-      if Index_Type'Base'Last >= Count_Type'Pos (Count_Type'Last) then
-         Container.Last := No_Index + Index_Type'Base (New_Length);
-
-      else
-         Container.Last :=
-           Index_Type'Base (Count_Type'Base (No_Index) + New_Length);
-      end if;
-   end Insert_Space;
+      Ops.Insert_Internal
+        (Container.Elements.all, Container.Last, Before, New_Item, Count);
+   end Insert;
 
    -------------------
    -- Insert_Vector --
@@ -1038,36 +514,32 @@ is
    procedure Insert_Vector
      (Container : in out Vector; Before : Extended_Index; New_Item : Vector)
    is
-      N : constant Count_Type := Length (New_Item);
-      B : Count_Type;  -- index Before converted to Count_Type
-
+      N          : constant Count_Type := Length_Internal (New_Item);
+      New_Length : Count_Type;
    begin
       if Container'Address = New_Item'Address then
          raise Program_Error
            with "Container and New_Item denote same container";
       end if;
 
-      --  Use Insert_Space to create the "hole" (the destination slice) into
-      --  which we copy the source items.
-
-      Insert_Space (Container, Before, Count => N);
-
+      Ops.Check_Insertion (Container.Last, Before, N, New_Length);
       if N = 0 then
-
-         --  There's nothing else to do here (vetting of parameters was
-         --  performed already in Insert_Space), so we simply return.
-
          return;
       end if;
 
-      B := To_Array_Index (Before);
+      if Container.Elements = null
+        or else Container.Elements'Length < New_Length
+      then
+         Indefinite_Ops.Resize
+           (Container.Elements, Container.Last, New_Length);
+      end if;
 
-      --  Make a copy of all the elements to avoid sharing
-
-      for J in 1 .. N loop
-         Container.Elements (B - 1 + J) :=
-           new Element_Type'(New_Item.Elements (J).all);
-      end loop;
+      Ops.Insert_Slice
+        (Container.Elements.all,
+         Container.Last,
+         Before,
+         New_Item.Elements.all,
+         New_Item.Last);
    end Insert_Vector;
 
    --------------
@@ -1085,10 +557,10 @@ is
 
    function Last_Element (Container : Vector) return Element_Type is
    begin
-      if Is_Empty (Container) then
+      if Container.Elements = null then
          raise Constraint_Error with "Container is empty";
       else
-         return Container.Elements (Length (Container)).all;
+         return Ops.Last_Element (Container.Elements.all, Container.Last);
       end if;
    end Last_Element;
 
@@ -1114,14 +586,8 @@ is
    -- Length_Internal --
    ---------------------
 
-   function Length_Internal (Container : Vector) return Capacity_Range is
-      L : constant Int := Int (Container.Last);
-      F : constant Int := Int (Index_Type'First);
-      N : constant Int'Base := L - F + 1;
-
-   begin
-      return Capacity_Range (N);
-   end Length_Internal;
+   function Length_Internal (Container : Vector) return Capacity_Range
+   is (Storage.To_Array_Index (Container.Last));
 
    ----------
    -- Move --
@@ -1134,7 +600,7 @@ is
       end if;
 
       if Target.Elements /= null then
-         Clear (Target);
+         Ops.Clear (Target.Elements.all, Target.Last);
          Free_Element_Array (Target.Elements);
       end if;
 
@@ -1182,7 +648,7 @@ is
          raise Constraint_Error with "Index is out of range";
       end if;
 
-      return Container.Elements (To_Array_Index (Index));
+      return Cells.Reference (Container.Elements (To_Array_Index (Index)));
    end Reference;
 
    ---------------------
@@ -1192,50 +658,14 @@ is
    procedure Replace_Element
      (Container : in out Vector; Index : Index_Type; New_Item : Element_Type)
    is
-      Index_Arr : constant Array_Index := To_Array_Index (Index);
    begin
       if Index > Container.Last then
          raise Constraint_Error with "Index is out of range";
       end if;
 
-      Free_Element (Container.Elements (Index_Arr));
-
-      Container.Elements (Index_Arr) := new Element_Type'(New_Item);
+      Ops.Replace_Element
+        (Container.Elements.all, Container.Last, Index, New_Item);
    end Replace_Element;
-
-   ------------
-   -- Resize --
-   ------------
-
-   procedure Resize (Container : in out Vector; Size : Count_Type := 0) is
-      EA : Element_Array_Access renames Container.Elements;
-
-   begin
-      if EA = null then
-         EA := new Element_Array (1 .. Count_Type'Max (Min_Size, Size));
-         Container.Last := No_Index;
-         return;
-      end if;
-
-      declare
-         New_Length : constant Capacity_Range :=
-           (if Container.Elements'Length < Capacity_Range'Last / 2
-            then
-              (if Container.Elements'Length * 2 < Size
-               then Size
-               else Container.Elements'Length * 2)
-            else Capacity_Range'Last);
-
-         New_Array : constant Element_Array_Access :=
-           new Element_Array (1 .. Count_Type'Max (Min_Size, New_Length));
-         Last      : constant Count_Type := Length (Container);
-
-      begin
-         New_Array (1 .. Last) := EA (1 .. Last);
-         Free_Element_Array (EA);
-         EA := New_Array;
-      end;
-   end Resize;
 
    ----------------------
    -- Reverse_Elements --
@@ -1243,29 +673,9 @@ is
 
    procedure Reverse_Elements (Container : in out Vector) is
    begin
-      if Length (Container) <= 1 then
-         return;
+      if Container.Elements /= null then
+         Ops.Reverse_Elements (Container.Elements.all, Container.Last);
       end if;
-
-      declare
-         I, J : Capacity_Range;
-         E    : Element_Array_Access renames Container.Elements;
-      begin
-         I := 1;
-         J := Length (Container);
-         while I < J loop
-            declare
-               EI : constant Element_Access := E (I);
-
-            begin
-               E (I) := E (J);
-               E (J) := EI;
-            end;
-
-            I := I + 1;
-            J := J - 1;
-         end loop;
-      end;
    end Reverse_Elements;
 
    ------------------------
@@ -1275,20 +685,15 @@ is
    function Reverse_Find_Index
      (Container : Vector;
       Item      : Element_Type;
-      Index     : Index_Type := Index_Type'Last) return Extended_Index
-   is
-
-      Last : constant Index_Type'Base :=
-        Index_Type'Min (Container.Last, Index);
-
+      Index     : Index_Type := Index_Type'Last) return Extended_Index is
    begin
-      for Indx in reverse Index_Type'First .. Last loop
-         if Container.Elements (To_Array_Index (Indx)).all = Item then
-            return Indx;
-         end if;
-      end loop;
+      if Container.Elements = null then
+         return No_Index;
+      end if;
 
-      return No_Index;
+      return
+        Ops.Reverse_Find_Index
+          (Container.Elements.all, Container.Last, Item, Index);
    end Reverse_Find_Index;
 
    ----------
@@ -1306,57 +711,15 @@ is
          raise Constraint_Error with "J index is out of range";
       end if;
 
-      if I = J then
-         return;
-      end if;
-
-      declare
-         II : constant Array_Index := To_Array_Index (I);
-         JJ : constant Array_Index := To_Array_Index (J);
-
-         EI : Element_Access renames Container.Elements (II);
-         EJ : Element_Access renames Container.Elements (JJ);
-
-         EI_Copy : constant Element_Access := EI;
-
-      begin
-         EI := EJ;
-         EJ := EI_Copy;
-      end;
+      Ops.Swap (Container.Elements.all, Container.Last, I, J);
    end Swap;
 
    --------------------
    -- To_Array_Index --
    --------------------
 
-   function To_Array_Index (Index : Index_Type) return Array_Index is
-      Offset : Count_Type'Base;
-
-   begin
-      --  We know that
-      --    Index >= Index_Type'First
-      --  hence we also know that
-      --    Index - Index_Type'First >= 0
-
-      --  The issue is that even though 0 is guaranteed to be a value in
-      --  the type Index_Type'Base, there's no guarantee that the difference
-      --  is a value in that type. To prevent overflow we use the wider
-      --  of Count_Type'Base and Index_Type'Base to perform intermediate
-      --  calculations.
-
-      if Index_Type'Base'Last >= Count_Type'Pos (Count_Type'Last) then
-         Offset := Count_Type'Base (Index - Index_Type'First);
-
-      else
-         Offset :=
-           Count_Type'Base (Index) - Count_Type'Base (Index_Type'First);
-      end if;
-
-      --  The array index subtype for all container element arrays always
-      --  starts with 1.
-
-      return 1 + Offset;
-   end To_Array_Index;
+   function To_Array_Index (Index : Index_Type) return Array_Index
+   is (Storage.To_Array_Index (Index));
 
    ---------------
    -- To_Vector --
