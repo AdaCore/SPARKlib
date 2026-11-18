@@ -13,6 +13,9 @@ with SPARK.Containers.Types; use SPARK.Containers.Types;
 with SPARK.Big_Integers;     use SPARK.Big_Integers;
 
 private with Ada.Finalization;
+private with SPARK.Containers.Formal.Generic_List_Storage;
+private with SPARK.Containers.Formal.Generic_Indefinite_List_Operations;
+private with SPARK.Pointers.Poisoned.Pointers;
 
 generic
    type Element_Type (<>) is private;
@@ -1955,29 +1958,24 @@ private
 
    use Ada.Finalization;
 
-   type Element_Access is access all Element_Type;
+   package Cells is new SPARK.Pointers.Poisoned.Pointers (Element_Type);
+   package Storage is new Generic_List_Storage (Cells.Pointer);
+   package Indefinite_Ops is new
+     Generic_Indefinite_List_Operations (Element_Type, "=", Cells, Storage);
+   package Ops renames Indefinite_Ops.Ops;
 
-   type Node_Type is record
-      Prev    : Count_Type'Base := -1;
-      Next    : Count_Type := 0;
-      Element : Element_Access := null;
-   end record;
-
-   type Node_Access is access all Node_Type;
-
-   function "=" (L, R : Node_Type) return Boolean is abstract;
-
-   type Node_Array is array (Count_Type range <>) of Node_Type;
-   function "=" (L, R : Node_Array) return Boolean is abstract;
-
-   type Node_Array_Access is access all Node_Array;
+   subtype Node_Array is Storage.Node_Array;
+   subtype Elements_Array is Storage.Elements_Array;
+   subtype Node_Array_Access is Indefinite_Ops.Node_Array_Access;
+   subtype Elements_Array_Access is Indefinite_Ops.Elements_Array_Access;
 
    type List is new Controlled with record
-      Free   : Count_Type'Base := -1;
-      Length : Count_Type := 0;
-      First  : Count_Type := 0;
-      Last   : Count_Type := 0;
-      Nodes  : Node_Array_Access := null;
+      Free     : Count_Type'Base := -1;
+      Length   : Count_Type := 0;
+      First    : Count_Type := 0;
+      Last     : Count_Type := 0;
+      Nodes    : Node_Array_Access := null;
+      Elements : Elements_Array_Access := null;
    end record;
 
    overriding

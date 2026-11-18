@@ -1,0 +1,11 @@
+driver: proof
+jobs: 4
+large: true
+timeout: 1500
+replay: session
+session_opt:
+  level: 3
+  switches: ["--prover=cvc5,z3,altergo"]
+body_mode: true
+config_dir: config
+switches: ["--counterexamples=off"]
