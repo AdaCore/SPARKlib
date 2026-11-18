@@ -24,42 +24,176 @@ pragma Ada_2022;
 
 with SPARK.Containers.Types; use SPARK.Containers.Types;
 with SPARK.Containers.Formal.Impl.Address_Space;
+with SPARK.Containers.Formal.Generic_Vector_Operations;
 
 private generic
 package SPARK.Containers.Formal.Vectors.Impl with SPARK_Mode, Always_Terminates
 is
    use SPARK.Containers.Formal.Impl.Address_Space;
 
-   --  The following ghost helpers express, without any model, the exact
-   --  conditions under which the insertion operations raise en exception. They
-   --  are used in the Exit_Cases below so that those contracts state precisely
-   --  when, and which, exception is raised.
+   --  Inline element storage for the shared vector operations. Contracts on
+   --  these actuals track initialization of the Relaxed_Element wrapper
+   --  declared in the parent's private part.
+
+   function Is_Initialized (H : Relaxed_Element) return Boolean
+   is (H.V'Initialized)
+   with Ghost => Static;
+
+   function Is_Reclaimed (Dummy : Relaxed_Element) return Boolean
+   is (True)
+   with Ghost => Static;
+   --  An element held inline owns nothing, so no cell ever needs reclaiming
+   --  and no assignment to one can leak.
+
+   function Constant_Access
+     (H : aliased Relaxed_Element) return not null access constant Element_Type
+   is (H.V'Access)
+   with Global => null, Pre => (Static => Is_Initialized (H));
+
+   procedure Move
+     (Source : in out Relaxed_Element; Target : in out Relaxed_Element)
+   with
+     Global => null,
+     Pre    => (Static => Source'Initialized),
+     Post   => (Static => Target'Initialized);
+
+   procedure Reclaim
+     (E : in out Storage.Elements_Array; First, Last : Count_Type'Base)
+   with
+     Post =>
+       (Static =>
+          (for all I in E'Range =>
+             Is_Initialized (E (I)) = Is_Initialized (E'Old (I))));
+   --  Inline storage requires no reclamation
+
+   procedure Fill (H : out Relaxed_Element; Item : Element_Type)
+   with Global => null, Post => (Static => H'Initialized), Inline;
+   --  Fill the inline element with one assignment
+
+   procedure Fill (E : in out Storage.Elements_Array; Item : Element_Type)
+   with
+     Global => null,
+     Post   => (Static => (for all H of E => Is_Initialized (H))),
+     Inline;
+   --  Fill with an aggregate assignment
+
+   procedure Exchange
+     (E : in out Storage.Elements_Array; I, J : Count_Type'Base)
+   with
+     Global => null,
+     Pre    =>
+       (Static =>
+          I in E'Range
+          and then J in E'Range
+          and then Is_Initialized (E (I))
+          and then Is_Initialized (E (J))),
+     Post   =>
+       (Static =>
+          (for all K in E'Range =>
+             Is_Initialized (E (K)) = Is_Initialized (E'Old (K)))),
+     Inline;
+   --  Exchange inline elements without default-initializing a temporary
+
+   --  Bulk transfers keep slice assignments in the bounded instance.
+   --  Initialization is preserved outside their target ranges; inline cells
+   --  are always reclaimed, including the vacated cells of a relocation.
+
+   procedure Relocate
+     (E                         : in out Storage.Elements_Array;
+      Source_From, Source_Up_To : Count_Type'Base;
+      Target_From, Target_Up_To : Count_Type'Base)
+   with
+     Global => null,
+     Pre    =>
+       (Static =>
+          (if Source_From <= Source_Up_To
+           then
+             Source_From in E'Range
+             and then Source_Up_To in E'Range
+             and then Target_From in E'Range
+             and then Target_Up_To in E'Range
+             and then Source_Up_To - Source_From = Target_Up_To - Target_From
+             and then
+               (for all I in Source_From .. Source_Up_To =>
+                  Is_Initialized (E (I)))
+           else Target_From > Target_Up_To)),
+     Post   =>
+       (Static =>
+          (for all I in Target_From .. Target_Up_To => Is_Initialized (E (I)))
+          and then
+            (for all I in E'Range =>
+               (if I not in Target_From .. Target_Up_To
+                then Is_Initialized (E (I)) = Is_Initialized (E'Old (I))))),
+     Inline;
+
+   procedure Copy
+     (Target : in out Storage.Elements_Array; Source : Storage.Elements_Array)
+   with
+     Global => null,
+     Pre    =>
+       (Static =>
+          Target'Length = Source'Length
+          and then (for all H of Source => Is_Initialized (H))),
+     Post   => (Static => (for all H of Target => Is_Initialized (H))),
+     Inline;
+
+   procedure Move_Range
+     (Source : in out Storage.Elements_Array;
+      Target : in out Storage.Elements_Array)
+   with
+     Global => null,
+     Pre    =>
+       (Static =>
+          Target'Length = Source'Length
+          and then (for all H of Source => Is_Initialized (H))),
+     Post   =>
+       (Static =>
+          (for all H of Target => Is_Initialized (H))
+          and then (for all H of Source => Is_Initialized (H))),
+     Inline;
+   --  Transfer elements with a slice assignment
+
+   package Ops is new
+     SPARK.Containers.Formal.Generic_Vector_Operations
+       (Last_Count      => Last_Count,
+        Index_Type      => Index_Type,
+        No_Index        => No_Index,
+        Element_Type    => Element_Type,
+        "="             => "=",
+        Holder_Type     => Relaxed_Element,
+        Storage         => Storage,
+        Is_Initialized  => Is_Initialized,
+        Is_Reclaimed    => Is_Reclaimed,
+        Constant_Access => Constant_Access,
+        Fill            => Fill,
+        Move            => Move,
+        Copy            => Copy,
+        Exchange        => Exchange,
+        Fill_Range      => Fill,
+        Move_Range      => Move_Range,
+        Reclaim         => Reclaim,
+        Relocate        => Relocate);
+
+   package Vector_Model is new Ops.Generic_Model (Formal_Model.M);
+
+   --  The ghost helpers that express, without any model, the exact conditions
+   --  under which the insertion operations raise an exception. They are used
+   --  in the Exit_Cases below so that those contracts state precisely when,
+   --  and which, exception is raised. They are shared, since they are pure
+   --  index arithmetic with no representation in them.
 
    function Valid_Index_For_Insertion
      (Last : Extended_Index; Before : Extended_Index) return Boolean
-   is ((Before in Index_Type'First .. Last)
-       or else (Before /= No_Index and then Before - 1 = Last))
-   with Ghost => Static, Global => null;
-   --  Before designates a valid insertion point: an existing index, or the
-   --  slot immediately after the last one (so that appending is allowed). A
-   --  Before outside this set makes the insertion raise Constraint_Error.
+   renames Ops.Valid_Index_For_Insertion;
 
    function Exceeds_Last_Count
      (Length : Count_Type; Count : Count_Type) return Boolean
-   is (Count > 0 and then Length > Last_Count - Count)
-   with Ghost => Static, Global => null;
-   --  Inserting Count items would push the length past the maximum vector
-   --  length Last_Count, which raises Constraint_Error.
+   renames Ops.Exceeds_Last_Count;
 
    function Exceeds_Capacity
      (Length : Count_Type; Capacity : Capacity_Range; Count : Count_Type)
       return Boolean
-   is (Count > 0
-       and then Length <= Last_Count - Count
-       and then Length > Capacity - Count)
-   with Ghost => Static, Global => null;
-   --  Inserting Count items fits within Last_Count but exceeds the allocated
-   --  capacity, which raises Capacity_Error.
+   renames Ops.Exceeds_Capacity;
 
    function Model (Container : Vector) return Formal_Model.M.Sequence
    with Ghost => SPARKlib_Logic;

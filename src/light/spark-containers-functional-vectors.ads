@@ -558,7 +558,8 @@ is
                   (Get (Left, I), Get (Right, Of_Big (Big (I) + Offset))))
              and
                (for all I in
-                  Of_Big (Big (Fst) + Offset) .. Of_Big (Big (Lst) + Offset) =>
+                  Vectors.Of_Big (Big (Fst) + Offset)
+                  .. Vectors.Of_Big (Big (Lst) + Offset) =>
                   Element_Logic_Equal
                     (Get (Left, Of_Big (Big (I) - Offset)), Get (Right, I)))));
    pragma Annotate (GNATprove, Inline_For_Proof, Entity => Range_Shifted);

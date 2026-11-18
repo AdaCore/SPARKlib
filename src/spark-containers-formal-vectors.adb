@@ -165,40 +165,8 @@ is
 
       function M_Elements_In_Union
         (Container : M.Sequence; Left : M.Sequence; Right : M.Sequence)
-         return Boolean is
-      begin
-         for Index in Index_Type'First .. M.Last (Container) loop
-            declare
-               Found : Boolean := False;
-            begin
-               for J in Index_Type'First .. M.Last (Left) loop
-                  if Element_Logic_Equal
-                       (Element (Container, Index), Element (Left, J))
-                  then
-                     Found := True;
-                     exit;
-                  end if;
-               end loop;
-
-               if not Found then
-                  for J in Index_Type'First .. M.Last (Right) loop
-                     if Element_Logic_Equal
-                          (Element (Container, Index), Element (Right, J))
-                     then
-                        Found := True;
-                        exit;
-                     end if;
-                  end loop;
-               end if;
-
-               if not Found then
-                  return False;
-               end if;
-            end;
-         end loop;
-
-         return True;
-      end M_Elements_In_Union;
+         return Boolean
+      renames Vector_Impl.Vector_Model.M_Elements_In_Union;
 
       -------------------------
       -- M_Elements_Included --
@@ -212,28 +180,9 @@ is
          R_Fst : Index_Type := Index_Type'First;
          R_Lst : Extended_Index) return Boolean is
       begin
-         for I in L_Fst .. L_Lst loop
-            declare
-               Found : Boolean := False;
-               J     : Extended_Index := R_Fst - 1;
-
-            begin
-               while not Found and J < R_Lst loop
-                  J := J + 1;
-                  if Element_Logic_Equal
-                       (Element (Left, I), Element (Right, J))
-                  then
-                     Found := True;
-                  end if;
-               end loop;
-
-               if not Found then
-                  return False;
-               end if;
-            end;
-         end loop;
-
-         return True;
+         return
+           Vector_Impl.Vector_Model.M_Elements_Included
+             (Left, L_Fst, L_Lst, Right, R_Fst, R_Lst);
       end M_Elements_Included;
 
       -------------------------
@@ -242,24 +191,7 @@ is
 
       function M_Elements_Reversed
         (Left : M.Sequence; Right : M.Sequence) return Boolean
-      is
-         L : constant Extended_Index := M.Last (Left);
-
-      begin
-         if L /= M.Last (Right) then
-            return False;
-         end if;
-
-         for I in Index_Type'First .. L loop
-            if not Element_Logic_Equal
-                     (Element (Left, I), Element (Right, L - I + 1))
-            then
-               return False;
-            end if;
-         end loop;
-
-         return True;
-      end M_Elements_Reversed;
+      renames Vector_Impl.Vector_Model.M_Elements_Reversed;
 
       ------------------------
       -- M_Elements_Swapped --
@@ -267,29 +199,8 @@ is
 
       function M_Elements_Swapped
         (Left : M.Sequence; Right : M.Sequence; X : Index_Type; Y : Index_Type)
-         return Boolean is
-      begin
-         if M.Length (Left) /= M.Length (Right)
-           or else
-             not Element_Logic_Equal (Element (Left, X), Element (Right, Y))
-           or else
-             not Element_Logic_Equal (Element (Left, Y), Element (Right, X))
-         then
-            return False;
-         end if;
-
-         for I in Index_Type'First .. M.Last (Left) loop
-            if I /= X
-              and then I /= Y
-              and then
-                not Element_Logic_Equal (Element (Left, I), Element (Right, I))
-            then
-               return False;
-            end if;
-         end loop;
-
-         return True;
-      end M_Elements_Swapped;
+         return Boolean
+      renames Vector_Impl.Vector_Model.M_Elements_Swapped;
 
       -----------
       -- Model --
@@ -314,38 +225,15 @@ is
       ------------------
 
       package body Formal_Model is
+         package Model_Sorting is new
+           Vector_Impl.Vector_Model.Generic_Sorting ("<");
 
          -----------------------
          -- M_Elements_Sorted --
          -----------------------
 
-         function M_Elements_Sorted (Container : M.Sequence) return Boolean is
-         begin
-            if M.Length (Container) = 0 then
-               return True;
-            end if;
-
-            declare
-               E1 : Element_Type := Element (Container, Index_Type'First);
-
-            begin
-               for I in Index_Type'First + 1 .. M.Last (Container) loop
-                  declare
-                     E2 : constant Element_Type := Element (Container, I);
-
-                  begin
-                     if E2 < E1 then
-                        return False;
-                     end if;
-
-                     E1 := E2;
-                  end;
-               end loop;
-            end;
-
-            return True;
-         end M_Elements_Sorted;
-
+         function M_Elements_Sorted (Container : M.Sequence) return Boolean
+         renames Model_Sorting.M_Elements_Sorted;
       end Formal_Model;
 
       ---------------
