@@ -1,0 +1,205 @@
+#!/usr/bin/env python3
+"""Update SPARKlib test.out files from a previous testsuite run."""
+
+import argparse
+import os
+from pathlib import Path
+import sys
+import tarfile
+import tempfile
+import zipfile
+
+from e3.testsuite.report.index import ReportIndex
+from e3.testsuite.result import FailureReason, TestStatus
+
+
+TESTS_DIR = Path(__file__).resolve().parent.parent / "tests"
+GITLAB_PROJECT = "200"
+
+
+def download_gaia_report(event_id, directory):
+    from e3.gaia.api import GAIA
+    from e3.net.http import HTTPError
+
+    archive = directory / "tests_log.tgz"
+    try:
+        with GAIA().request(
+            "GET", f"event/attachment/{event_id}/tests_log/", stream=True
+        ) as response, archive.open("wb") as output:
+            for chunk in response.iter_content(chunk_size=64 * 1024):
+                output.write(chunk)
+        with tarfile.open(archive, "r:gz") as tar:
+            tar.extractall(directory, filter="data")
+    except (HTTPError, tarfile.TarError) as exc:
+        raise SystemExit(
+            f"GAIA event {event_id} has no usable tests_log: {exc}"
+        ) from None
+
+    indexes = list(directory.rglob(ReportIndex.INDEX_FILENAME))
+    if len(indexes) != 1:
+        raise SystemExit(f"Expected one e3-testsuite index in GAIA event {event_id}")
+    return indexes[0].parent
+
+
+def download_gitlab_report(mr_or_pipeline, directory):
+    import gitlab
+    from e3.auth.gitlab import GitlabRegistry
+
+    proxy = os.environ.get("GITLAB_PROXY_URL")
+    if proxy:
+        client = gitlab.Gitlab(proxy, keep_base_url=True)
+    else:
+        client = gitlab.Gitlab(
+            f"https://{GitlabRegistry.GITLAB_DOMAIN}",
+            private_token=GitlabRegistry().token,
+        )
+    project = client.projects.get(GITLAB_PROJECT, lazy=True)
+
+    pipeline_id = mr_or_pipeline
+    try:
+        mr = project.mergerequests.get(mr_or_pipeline)
+    except gitlab.GitlabGetError as exc:
+        if exc.response_code != 404:
+            raise
+    else:
+        pipeline = next(
+            (
+                p
+                for p in mr.pipelines.list(iterator=True)
+                if p.status in {"success", "failed"}
+            ),
+            None,
+        )
+        if pipeline is None:
+            raise SystemExit(f"SPARKlib MR !{mr.iid} has no completed pipeline")
+        pipeline_id = pipeline.id
+        print(f"SPARKlib MR !{mr.iid} uses pipeline {pipeline_id}")
+
+    pipeline = project.pipelines.get(pipeline_id, lazy=True)
+    try:
+        job = next(
+            (j for j in pipeline.jobs.list(iterator=True) if j.name == "sparklib"),
+            None,
+        )
+    except gitlab.GitlabListError as exc:
+        if exc.response_code != 404:
+            raise
+        raise SystemExit(f"SPARKlib GitLab pipeline {pipeline_id} not found") from None
+    if job is None or not getattr(job, "artifacts_file", None):
+        raise SystemExit(f"No sparklib job archive in GitLab pipeline {pipeline_id}")
+
+    print(f"Downloading GitLab job {job.id} from pipeline {pipeline_id}")
+    archive = directory / "artifacts.zip"
+    try:
+        with archive.open("wb") as output:
+            project.jobs.get(job.id, lazy=True).artifacts(
+                streamed=True, action=output.write
+            )
+    except gitlab.GitlabGetError as exc:
+        if exc.response_code != 404:
+            raise
+        raise SystemExit(f"GitLab job {job.id} archive is unavailable") from None
+    with zipfile.ZipFile(archive) as zipped:
+        zipped.extractall(
+            directory,
+            (
+                name
+                for name in zipped.namelist()
+                if name.startswith("testsuite-results/")
+            ),
+        )
+    return directory / "testsuite-results"
+
+
+def update_baselines(report_dir):
+    if not (report_dir / ReportIndex.INDEX_FILENAME).is_file():
+        raise SystemExit(f"No e3-testsuite index in {report_dir}")
+    report = ReportIndex.read(str(report_dir))
+
+    # Map local paths to report names. A literal '__' in a directory name
+    # cannot be distinguished from a path separator by splitting the name.
+    baselines = {}
+    for config in TESTS_DIR.rglob("test.yaml"):
+        test_dir = config.parent
+        name = test_dir.relative_to(TESTS_DIR).as_posix().replace("/", "__")
+        if name in baselines:
+            raise SystemExit(f"Ambiguous local test name: {name}")
+        baselines[name] = test_dir / "test.out"
+
+    updated = 0
+    for name, entry in sorted(report.entries.items()):
+        if entry.status not in {TestStatus.FAIL, TestStatus.ERROR}:
+            continue
+        if entry.status != TestStatus.FAIL or entry.failure_reasons != {
+            FailureReason.DIFF
+        }:
+            print(
+                f"Skipping {name}: test did not fail solely because of a diff",
+                file=sys.stderr,
+            )
+            continue
+        if name not in baselines:
+            print(
+                f"Skipping {name}: test does not exist in this checkout",
+                file=sys.stderr,
+            )
+            continue
+
+        result = entry.load()
+        if result.out is None:
+            print(f"Skipping {name}: report has no actual output", file=sys.stderr)
+            continue
+        env = result.env or {}
+        driver = env.get("driver")
+        if driver in {"exec", "versions"}:
+            print(f"Skipping {name}: test has no output baseline", file=sys.stderr)
+            continue
+
+        output = result.out
+        if isinstance(output, str):
+            # Proof drivers ignore the final newline when comparing baselines.
+            # Keep it in the file, as in the checked-in proof baselines.
+            if (
+                output
+                and driver in {"proof", "library-replay"}
+                and not output.endswith("\n")
+            ):
+                output += "\n"
+            output = output.encode(env.get("encoding", "utf-8"))
+        baseline = baselines[name]
+        if baseline.is_file() and baseline.read_bytes() == output:
+            continue
+        baseline.write_bytes(output)
+        print(f"Updated {baseline.relative_to(TESTS_DIR.parent)}")
+        updated += 1
+
+    print(f"Updated {updated} baseline(s)")
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    source = parser.add_mutually_exclusive_group()
+    source.add_argument(
+        "-o", "--output-dir", type=Path, help="report directory (default: out/new)"
+    )
+    source.add_argument("--from-gaia", type=int, metavar="EVENT", help="GAIA event ID")
+    source.add_argument(
+        "--from-gitlab", type=int, metavar="ID", help="SPARKlib MR or pipeline ID"
+    )
+    args = parser.parse_args()
+
+    if args.from_gaia is None and args.from_gitlab is None:
+        update_baselines(args.output_dir or Path("out/new"))
+        return
+
+    with tempfile.TemporaryDirectory() as tmp:
+        directory = Path(tmp)
+        if args.from_gaia is not None:
+            report = download_gaia_report(args.from_gaia, directory)
+        else:
+            report = download_gitlab_report(args.from_gitlab, directory)
+        update_baselines(report)
+
+
+if __name__ == "__main__":
+    main()

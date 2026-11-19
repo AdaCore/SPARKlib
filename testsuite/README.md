@@ -137,6 +137,25 @@ The driver only replays existing proofs. It is excluded from `--update-sessions`
 and `update-session-test`: its sessions need to be replayed with the
 `generate_sessions.py` script.
 
+### Updating expected outputs
+
+From `testsuite/`, use a local run or retrieve the report from GAIA or GitLab:
+
+```sh
+./update-expected-outputs                       # reads out/new
+./update-expected-outputs -o /path/to/results/new
+./update-expected-outputs --from-gaia EVENT_ID
+./update-expected-outputs --from-gitlab MR_OR_PIPELINE_ID
+```
+
+Use a checkout matching the run and review the resulting `test.out` diffs.
+The script updates tests that failed solely because of an output difference.
+The report must include the native e3-testsuite index. GAIA publishes it in
+the `tests_log` attachment. In GitLab, an MR number selects its newest
+successful or failed pipeline, and the `sparklib` job publishes the report in
+`testsuite-results`. GitLab retrieval uses `python-gitlab` and honors
+`GITLAB_PROXY_URL`. GAIA uses `E3_GAIA_API_URL` when set.
+
 ### Updating recorded sessions
 
 Use `update-session-test` for tests with `driver: proof` and
