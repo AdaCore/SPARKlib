@@ -30,6 +30,7 @@ generic
    with package Memory_Index_Sequences is new
      SPARK.Containers.Functional.Infinite_Sequences
        (Index_Type,
+        "="                  => "=",
         Use_Logical_Equality => True);
 
    Automatically_Instantiate_Definitions : Boolean := True;
