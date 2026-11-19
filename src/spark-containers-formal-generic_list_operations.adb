@@ -2081,7 +2081,7 @@ is
 
          procedure Merge_Sort (Arg : in out List_Descriptor)
          with
-           Subprogram_Variant => (Decreases => Arg.Length),
+           Subprogram_Variant => (Decreases => Arg.Length, Decreases => 1),
            Pre                =>
              (Static =>
                 Valid_Links (Nodes, Free)
@@ -2104,6 +2104,58 @@ is
                      Reachable_Set (Arg'Old.First, Memory (Nodes'Old, Free))));
          --  Sort a segment in place using MergeSort. As required by the RM,
          --  the sort is stable.
+
+         procedure Sort_Parts (Part1, Part2 : in out List_Descriptor)
+         with
+           Inline,
+           Subprogram_Variant =>
+             (Decreases => Part1.Length + Part2.Length, Decreases => 0),
+           Pre                =>
+             (Static =>
+                Valid_Links (Nodes, Free)
+                and then Valid_Elements (Nodes, Elements, Free)
+                and then Segment_Valid (Memory (Nodes, Free), Elements, Part1)
+                and then Segment_Valid (Memory (Nodes, Free), Elements, Part2)
+                and then Part1.Length >= 1
+                and then Part2.Length >= 1
+                and then Part1.Length <= Count_Type'Last - Part2.Length
+                and then
+                  Memory_Index_Sets.No_Overlap
+                    (Reachable_Set (Part1.First, Memory (Nodes, Free)),
+                     Reachable_Set (Part2.First, Memory (Nodes, Free)))),
+           Post               =>
+             (Static =>
+                Valid_Links (Nodes, Free)
+                and then Valid_Elements (Nodes, Elements, Free)
+                and then Segment_Valid (Memory (Nodes, Free), Elements, Part1)
+                and then Segment_Valid (Memory (Nodes, Free), Elements, Part2)
+                and then Part1.Length = Part1'Old.Length
+                and then Part2.Length = Part2'Old.Length
+                and then
+                  Memory_Index_Sets.No_Overlap
+                    (Reachable_Set (Part1.First, Memory (Nodes, Free)),
+                     Reachable_Set (Part2.First, Memory (Nodes, Free)))
+                and then
+                  Memory_Index_Sets."="
+                    (Memory_Index_Sets.Union
+                       (Reachable_Set (Part1.First, Memory (Nodes, Free)),
+                        Reachable_Set (Part2.First, Memory (Nodes, Free))),
+                     Memory_Index_Sets.Union
+                       (Reachable_Set
+                          (Part1'Old.First, Memory (Nodes'Old, Free)),
+                        Reachable_Set
+                          (Part2'Old.First, Memory (Nodes'Old, Free))))
+                and then
+                  Untouched_Outside
+                    (Memory (Nodes'Old, Free),
+                     Memory (Nodes, Free),
+                     Memory_Index_Sets.Union
+                       (Reachable_Set
+                          (Part1'Old.First, Memory (Nodes'Old, Free)),
+                        Reachable_Set
+                          (Part2'Old.First, Memory (Nodes'Old, Free)))));
+         --  Sort two disjoint non-empty segments while preserving their
+         --  combined node set and all links outside it.
 
          procedure Split_List
            (Unsplit : List_Descriptor; Part1, Part2 : out List_Descriptor)
@@ -2617,14 +2669,6 @@ is
          procedure Merge_Sort (Arg : in out List_Descriptor) is
             Part1, Part2 : List_Descriptor;
 
-            Cells : constant Memory_Index_Set :=
-              Reachable_Set (Arg.First, Memory (Nodes, Free))
-            with Ghost => Static;
-            --  The nodes of the segment on entry. Each step below states that
-            --  the two parts still cover exactly them: the final equality is
-            --  a chain of five set equalities composed through Union, and it
-            --  times out unless each link is established on its own.
-
          begin
             if Arg.Length < 2 then
 
@@ -2634,41 +2678,30 @@ is
             end if;
 
             Split_List (Arg, Part1, Part2);
+            Sort_Parts (Part1, Part2);
+            Merge_Parts (Part1, Part2, Arg);
+         end Merge_Sort;
 
-            pragma
-              Assert
-                (Static =>
-                   Memory_Index_Sets."="
-                     (Memory_Index_Sets.Union
-                        (Reachable_Set (Part1.First, Memory (Nodes, Free)),
-                         Reachable_Set (Part2.First, Memory (Nodes, Free))),
-                      Cells));
+         ----------------
+         -- Sort_Parts --
+         ----------------
 
-            declare
-               M_Split : constant Nodes_Type_Base := Memory (Nodes, Free)
-               with Ghost => Static;
-            begin
-               Merge_Sort (Part1);
+         procedure Sort_Parts (Part1, Part2 : in out List_Descriptor) is
+            M_Split : constant Nodes_Type_Base := Memory (Nodes, Free)
+            with Ghost => Static;
 
-               --  Part2 lies outside Part1, so sorting Part1 left it alone.
-               --  Part2 being closed under Next is what places the successor
-               --  of each of its nodes outside Part1 too.
+         begin
+            Merge_Sort (Part1);
 
-               Lemma_Reachable_Preserved
-                 (Part2.First, M_Split, Memory (Nodes, Free));
-               Lemma_Is_Acyclic_Preserved
-                 (Part2.First, M_Split, Memory (Nodes, Free));
-               Lemma_Reachable_Closed_By_Next (Part2.First, M_Split);
+            --  Part2 lies outside Part1, so sorting Part1 left it alone.
+            --  Part2 being closed under Next is what places the successor
+            --  of each of its nodes outside Part1 too.
 
-               pragma
-                 Assert
-                   (Static =>
-                      Memory_Index_Sets."="
-                        (Memory_Index_Sets.Union
-                           (Reachable_Set (Part1.First, Memory (Nodes, Free)),
-                            Reachable_Set (Part2.First, Memory (Nodes, Free))),
-                         Cells));
-            end;
+            Lemma_Reachable_Preserved
+              (Part2.First, M_Split, Memory (Nodes, Free));
+            Lemma_Is_Acyclic_Preserved
+              (Part2.First, M_Split, Memory (Nodes, Free));
+            Lemma_Reachable_Closed_By_Next (Part2.First, M_Split);
 
             declare
                M_Sorted1 : constant Nodes_Type_Base := Memory (Nodes, Free)
@@ -2681,24 +2714,8 @@ is
                Lemma_Is_Acyclic_Preserved
                  (Part1.First, M_Sorted1, Memory (Nodes, Free));
                Lemma_Reachable_Closed_By_Next (Part1.First, M_Sorted1);
-
-               pragma
-                 Assert
-                   (Static =>
-                      Memory_Index_Sets."="
-                        (Memory_Index_Sets.Union
-                           (Reachable_Set (Part1.First, Memory (Nodes, Free)),
-                            Reachable_Set (Part2.First, Memory (Nodes, Free))),
-                         Cells));
             end;
-
-            pragma
-              Assert
-                (Static =>
-                   Segment_Valid (Memory (Nodes, Free), Elements, Part1));
-
-            Merge_Parts (Part1, Part2, Arg);
-         end Merge_Sort;
+         end Sort_Parts;
 
          ----------------
          -- Split_List --

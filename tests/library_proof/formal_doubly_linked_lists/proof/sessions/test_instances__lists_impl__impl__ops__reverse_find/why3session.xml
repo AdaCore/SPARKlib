@@ -3,7 +3,6 @@
 "https://www.why3.org/why3session.dtd">
 <why3session shape_version="6">
   <prover id="1" name="CVC5" version="0.0.7-gnatprove" timelimit="0" steplimit="7285" memlimit="0" />
-  <prover id="2" name="Z3" version="4.5.1-gnatprove" timelimit="0" steplimit="310622" memlimit="0" />
   <prover id="3" name="Trivial" version="1.0" alternative="trivial" timelimit="1" steplimit="1" memlimit="1000" />
   <file format="gnat-json" proved="true">
     <path name=".." />
@@ -580,8 +579,8 @@
             </proof>
           </goal>
           <goal name="def'vc.113" proved="true">
-            <proof prover="2">
-              <result status="valid" steps="282383" />
+            <proof prover="1" steplimit="39580">
+              <result status="valid" steps="35981" />
             </proof>
           </goal>
           <goal name="def'vc.114" proved="true">
@@ -700,8 +699,8 @@
             </proof>
           </goal>
           <goal name="def'vc.137" proved="true">
-            <proof prover="2" steplimit="300374">
-              <result status="valid" steps="273067" />
+            <proof prover="1" steplimit="40225">
+              <result status="valid" steps="36568" />
             </proof>
           </goal>
           <goal name="def'vc.138" proved="true">
