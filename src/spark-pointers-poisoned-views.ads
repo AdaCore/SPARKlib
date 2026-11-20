@@ -166,7 +166,9 @@ is
 
    generic
       type Input (<>) is private;
-      with function Create_Object (X : Input) return Object;
+      with
+        function Create_Object (X : Input) return Object
+        with Pre => True;
    function Create (X : Input) return View
    with
      Global => null,

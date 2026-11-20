@@ -145,7 +145,9 @@ is
 
    generic
       type Input (<>) is private;
-      with function Create_Object (X : Input) return Object;
+      with
+        function Create_Object (X : Input) return Object
+        with Pre => True;
    function Create (X : Input) return Pointer
    with
      Global => null,
@@ -211,7 +213,8 @@ is
    generic
       with
         function Copy (O : Object) return Object
-        is (O);
+        is (O)
+        with Pre => True;
       --  A copy of the designated value, as SPARK understands copies: if
       --  Object is subject to ownership, Copy has to duplicate what it owns.
 

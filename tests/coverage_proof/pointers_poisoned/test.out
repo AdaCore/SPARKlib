@@ -41,12 +41,13 @@ test.adb:67:18: warning: "H" is set by "Take" but not used after the call
 test.adb:99:13: warning: "Source" is set by "Move" but not used after the call
 
 Analyzed 2 units
-in unit inst, 29 subprograms and packages out of 132 analyzed
+in unit inst, 33 subprograms and packages out of 136 analyzed
   Inst at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Owning_Side at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Owning_Side.Copy at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Owning_Side.Copy_Ops at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Owning_Side.Copy_Ops.Assign at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning_Side.Copy_Ops.Copy at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Owning_Side.Copy_Ops.Create_Copy at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Owning_Side.Copy_Ops.Deref at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Owning_Side.Freegp2281 at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
@@ -83,12 +84,14 @@ in unit inst, 29 subprograms and packages out of 132 analyzed
   Inst.Pointer_Side at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Pointer_Side.Copy_Ops at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Pointer_Side.Copy_Ops.Assign at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Copy_Ops.Copy at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Pointer_Side.Copy_Ops.Copy at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Pointer_Side.Copy_Ops.Create_Copy at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Pointer_Side.Copy_Ops.Deref at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Pointer_Side.Create_Object_Handlegp1880 at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Pointer_Side.Create_Object_Handlegp1880.Create_Object_Handle at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Pointer_Side.Create_Pointergp1032 at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Pointer_Side.Create_Pointergp1032.Create_Object at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Pointer_Side.Create_Pointergp1032.Create_Pointer at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Pointer_Side.Id at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Pointer_Side.Pointer_Arrays at inst.ads skipped; body is SPARK_Mode => Off
@@ -130,6 +133,7 @@ in unit inst, 29 subprograms and packages out of 132 analyzed
   Inst.Pointer_Side.Pointers.Take at spark-pointers-poisoned-pointers.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.View_Side at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.View_Side.Create_Viewgp3380 at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.View_Side.Create_Viewgp3380.Create_Object at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.View_Side.Create_Viewgp3380.Create_View at inst.ads skipped; body is SPARK_Mode => Off
   Inst.View_Side.Make at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.View_Side.View_Arrays at inst.ads skipped; body is SPARK_Mode => Off
