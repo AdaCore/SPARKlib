@@ -12,6 +12,9 @@ with SPARK.Containers.Functional.Vectors;
 with SPARK.Containers.Parameter_Checks;
 
 private with Ada.Finalization;
+private with SPARK.Containers.Formal.Generic_Indefinite_Vector_Operations;
+private with SPARK.Containers.Formal.Generic_Vector_Storage;
+private with SPARK.Pointers.Poisoned.Pointers;
 
 generic
    type Index_Type is range <>;
@@ -1156,10 +1159,32 @@ private
    pragma Inline (Replace_Element);
    pragma Inline (Contains);
 
-   subtype Array_Index is Capacity_Range range 1 .. Capacity_Range'Last;
-   type Element_Access is access all Element_Type;
-   type Element_Array is array (Array_Index range <>) of Element_Access;
-   type Element_Array_Access is access all Element_Array;
+   --  Poisoned pointers allow ownership transfers through pointer slice
+   --  assignments without clearing source cells at run time. In the proof,
+   --  cells whose elements have been moved are unreadable and reclaimed.
+   --  This lets the separate proof instance check the shared operations for
+   --  leaks and double deallocation.
+   package Cells is new SPARK.Pointers.Poisoned.Pointers (Element_Type);
+   package Storage is new
+     SPARK.Containers.Formal.Generic_Vector_Storage
+       (Last_Count  => Last_Count,
+        Index_Type  => Index_Type,
+        No_Index    => No_Index,
+        Holder_Type => Cells.Pointer);
+   package Indefinite_Ops is new
+     SPARK.Containers.Formal.Generic_Indefinite_Vector_Operations
+       (Last_Count   => Last_Count,
+        Index_Type   => Index_Type,
+        No_Index     => No_Index,
+        Element_Type => Element_Type,
+        "="          => "=",
+        Cells        => Cells,
+        Storage      => Storage);
+   package Ops renames Indefinite_Ops.Ops;
+
+   subtype Array_Index is Storage.Array_Index;
+   subtype Element_Array is Storage.Elements_Array;
+   subtype Element_Array_Access is Indefinite_Ops.Elements_Array_Access;
 
    type Vector is new Ada.Finalization.Controlled with record
       Last     : Extended_Index := No_Index;
