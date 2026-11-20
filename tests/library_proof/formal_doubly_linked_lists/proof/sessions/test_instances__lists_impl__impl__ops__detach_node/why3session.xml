@@ -3,7 +3,7 @@
 "https://www.why3.org/why3session.dtd">
 <why3session shape_version="6">
   <prover id="1" name="CVC5" version="0.0.7-gnatprove" timelimit="0" steplimit="19603" memlimit="0" />
-  <prover id="2" name="Z3" version="4.5.1-gnatprove" timelimit="0" steplimit="419709" memlimit="0" />
+  <prover id="2" name="Z3" version="4.5.1-gnatprove" timelimit="0" steplimit="191659" memlimit="0" />
   <prover id="3" name="Trivial" version="1.0" alternative="trivial" timelimit="1" steplimit="1" memlimit="1000" />
   <file format="gnat-json" proved="true">
     <path name=".." />
@@ -415,7 +415,7 @@
             </proof>
           </goal>
           <goal name="def'vc.80" proved="true">
-            <proof prover="2">
+            <proof prover="2" steplimit="419709">
               <result status="valid" steps="381553" />
             </proof>
           </goal>
@@ -445,13 +445,13 @@
             </proof>
           </goal>
           <goal name="def'vc.86" proved="true">
-            <proof prover="1" steplimit="127044">
-              <result status="valid" steps="115494" />
+            <proof prover="2">
+              <result status="valid" steps="174235" />
             </proof>
           </goal>
           <goal name="def'vc.87" proved="true">
-            <proof prover="1" steplimit="100405">
-              <result status="valid" steps="91277" />
+            <proof prover="2">
+              <result status="valid" steps="174235" />
             </proof>
           </goal>
           <goal name="def'vc.88" proved="true">
@@ -470,8 +470,8 @@
             </proof>
           </goal>
           <goal name="def'vc.91" proved="true">
-            <proof prover="1" steplimit="104079">
-              <result status="valid" steps="94617" />
+            <proof prover="2" steplimit="151332">
+              <result status="valid" steps="137574" />
             </proof>
           </goal>
           <goal name="def'vc.92" proved="true">
