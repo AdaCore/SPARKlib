@@ -188,7 +188,8 @@ is
    generic
       with
         function Copy (O : Object) return Object
-        is (O);
+        is (O)
+        with Pre => True;
       --  A copy of the designated value
 
    package Copy_Operations with Always_Terminates
@@ -234,7 +235,9 @@ is
 
    generic
       type Input (<>) is private;
-      with function Create_Object (X : Input) return Object;
+      with
+        function Create_Object (X : Input) return Object
+        with Pre => True;
    procedure Create (Memory : in out Memory_Type; X : Input; P : out Pointer)
    with
      Global => SPARK.Pointers.Memory_Addresses,

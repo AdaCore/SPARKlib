@@ -20,13 +20,15 @@ test.adb:98:10: warning: statement has no effect
 test.adb:98:19: warning: "M" is set by "Dealloc" but not used after the call
 
 Analyzed 2 units
-in unit inst, 46 subprograms and packages out of 151 analyzed
+in unit inst, 49 subprograms and packages out of 154 analyzed
   Inst at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Create_From_Intgp1382 at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Create_From_Intgp1382.Create_From_Int at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Create_From_Intgp1382.Create_Object at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Make at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Ops at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Ops.Assign at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Ops.Copy at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Ops.Copy at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Ops.Create_Copy at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Ops.Deref at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
@@ -37,6 +39,7 @@ in unit inst, 46 subprograms and packages out of 151 analyzed
   Inst.Owning.Is_Reclaimed at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Owning.Ops at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Owning.Ops.Assign at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
+  Inst.Owning.Ops.Copy at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Owning.Ops.Create_Copy at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Owning.Ops.Deref at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Owning.Pointers at inst.ads skipped; body is SPARK_Mode => Off
@@ -74,8 +77,8 @@ in unit inst, 46 subprograms and packages out of 151 analyzed
   Inst.Owning.Pointers.Memory_Model.Pointer_Sets.Logical_Eq at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Owning.Pointers.Memory_Model.Pointer_Sets.Set at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Owning.Pointers.Memory_Model.Pointer_Sets.Singleton at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
-  Inst.Owning.Pointers.Memory_Model.Pointer_Sets.T119S at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
-  Inst.Owning.Pointers.Memory_Model.Pointer_Sets.T121S at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Pointers.Memory_Model.Pointer_Sets.T120S at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning.Pointers.Memory_Model.Pointer_Sets.T122S at spark-pointers-abstract_sets.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps."+" at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Owning.Pointers.Memory_Model.Pointer_To_Object_Maps."+" at spark-pointers-abstract_maps.ads, instantiated at spark-pointers-explicit_reclamation-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
