@@ -330,8 +330,10 @@ is
      Global     => null,
      Exit_Cases =>
        (Has_Element (Container, Position) => Normal_Return,
+        Position = No_Element             =>
+          (Exception_Raised => Constraint_Error),
         others                            =>
-          (Exception_Raised => Constraint_Error));
+          (Exception_Raised => Program_Error));
 
    procedure Replace_Element
      (Container : in out List; Position : Cursor; New_Item : Element_Type)
@@ -553,8 +555,10 @@ is
                Position'Old.Node)),
      Exit_Cases =>
        (Has_Element (Container, Position) => Normal_Return,
+        Position = No_Element             =>
+          (Exception_Raised => Constraint_Error),
         others                            =>
-          (Exception_Raised => Constraint_Error));
+          (Exception_Raised => Program_Error));
 
    procedure Delete
      (Container : in out List; Position : in out Cursor; Count : Count_Type)
@@ -564,8 +568,10 @@ is
      Post       => (Static => Structural_Invariant (Container)),
      Exit_Cases =>
        (Has_Element (Container, Position) => Normal_Return,
+        Position = No_Element             =>
+          (Exception_Raised => Constraint_Error),
         others                            =>
-          (Exception_Raised => Constraint_Error));
+          (Exception_Raised => Program_Error));
 
    procedure Delete_First (Container : in out List)
    with
@@ -686,26 +692,27 @@ is
                     Active_Set (Source'Old),
                     Position'Old.Node))),
      Exit_Cases =>
-       (not Is_Relevant (Target, Before)
-        or else
-          (Position /= No_Element and then not Has_Element (Source, Position))
-        => (Exception_Raised => Program_Error),
-        Is_Relevant (Target, Before) and then Position = No_Element
-        => (Exception_Raised => Constraint_Error),
+       (Position = No_Element                                           =>
+          (Exception_Raised => Constraint_Error),
+        Position /= No_Element
+        and then
+          (not Is_Relevant (Target, Before)
+           or else not Has_Element (Source, Position))                  =>
+          (Exception_Raised => Program_Error),
         Is_Relevant (Target, Before)
         and then Position /= No_Element
         and then Has_Element (Source, Position)
         and then not Same_Object_Ghost
-        and then Exceeds_Count_Type (Length (Target), 1)
-        => (Exception_Raised => Constraint_Error),
+        and then Exceeds_Count_Type (Length (Target), 1)                =>
+          (Exception_Raised => Constraint_Error),
         Is_Relevant (Target, Before)
         and then Position /= No_Element
         and then Has_Element (Source, Position)
         and then not Same_Object_Ghost
-        and then Exceeds_Capacity (Length (Target), Target.Capacity, 1)
-        => (Exception_Raised => Capacity_Error),
-        others
-        => Normal_Return);
+        and then Exceeds_Capacity (Length (Target), Target.Capacity, 1) =>
+          (Exception_Raised => Capacity_Error),
+        others                                                          =>
+          Normal_Return);
 
    procedure Splice
      (Container : in out List; Before : Cursor; Position : Cursor)
@@ -724,13 +731,14 @@ is
             Memory_Index_Sets."="
               (Active_Set (Container), Active_Set (Container'Old))),
      Exit_Cases =>
-       (not Is_Relevant (Container, Before)
-        or not Is_Relevant (Container, Position)                       =>
-          (Exception_Raised => Program_Error),
-        Is_Relevant (Container, Before) and then Position = No_Element =>
+       (Position = No_Element                             =>
           (Exception_Raised => Constraint_Error),
-        others                                                         =>
-          Normal_Return);
+        Position /= No_Element
+        and then
+          (not Is_Relevant (Container, Before)
+           or else not Is_Relevant (Container, Position)) =>
+          (Exception_Raised => Program_Error),
+        others                                            => Normal_Return);
 
    function First_Element (Container : List) return Element_Type
    with

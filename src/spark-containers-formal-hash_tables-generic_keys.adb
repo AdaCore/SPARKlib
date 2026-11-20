@@ -7,8 +7,6 @@ pragma Ada_2022;
 
 package body SPARK.Containers.Formal.Hash_Tables.Generic_Keys is
 
-   Checks : constant Boolean := Container_Checks'Enabled;
-
    --------------------------
    -- Delete_Key_Sans_Free --
    --------------------------
@@ -97,7 +95,7 @@ package body SPARK.Containers.Formal.Hash_Tables.Generic_Keys is
       Node := HT.Buckets (Indx);
 
       if Node = 0 then
-         if Checks and then HT.Length = HT.Capacity then
+         if HT.Length = HT.Capacity then
             raise Capacity_Error with "no more capacity for insertion";
          end if;
 
@@ -123,7 +121,7 @@ package body SPARK.Containers.Formal.Hash_Tables.Generic_Keys is
          exit when Node = 0;
       end loop;
 
-      if Checks and then HT.Length = HT.Capacity then
+      if HT.Length = HT.Capacity then
          raise Capacity_Error with "no more capacity for insertion";
       end if;
 
@@ -178,7 +176,7 @@ package body SPARK.Containers.Formal.Hash_Tables.Generic_Keys is
 
       N := New_Bucket;
       while N /= 0 loop
-         if Checks and then Equivalent_Keys (Key, NN (N)) then
+         if Equivalent_Keys (Key, NN (N)) then
             pragma Assert (N /= Node);
             raise Program_Error with "attempt to replace existing element";
          end if;

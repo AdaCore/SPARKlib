@@ -62,9 +62,6 @@ is
    procedure Set_Next (Node : in out Node_Type; Next : Count_Type);
    pragma Inline (Set_Next);
 
-   function Vet (Container : Set; Position : Cursor) return Boolean
-   with Ghost, Inline;
-
    --------------------------
    -- Local Instantiations --
    --------------------------
@@ -156,9 +153,12 @@ is
       --  Start of processing for Assign
 
    begin
-      if Target.Capacity < Length (Source) then
-         raise Storage_Error with "not enough capacity";  -- SE or CE? ???
+      if Target'Address = Source'Address then
+         return;
+      end if;
 
+      if Target.Capacity < Length (Source) then
+         raise Capacity_Error with "not enough capacity";
       end if;
 
       HT_Ops.Clear (Target.Content);
@@ -191,12 +191,12 @@ is
      (Container : aliased Set; Position : Cursor)
       return not null access constant Element_Type is
    begin
-      if not Has_Element (Container, Position) then
-         raise Constraint_Error with "Position cursor equals No_Element";
+      if Position.Node = 0 then
+         raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
-
-      pragma
-        Assert (Vet (Container, Position), "bad cursor in function Element");
 
       return Container.Content.Nodes (Position.Node).Element'Access;
    end Constant_Reference;
@@ -283,11 +283,12 @@ is
 
    procedure Delete (Container : in out Set; Position : in out Cursor) is
    begin
-      if not Has_Element (Container, Position) then
+      if Position.Node = 0 then
          raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
-
-      pragma Assert (Vet (Container, Position), "bad cursor in Delete");
 
       HT_Ops.Delete_Node_Sans_Free (Container.Content, Position.Node);
       Free (Container, Position.Node);
@@ -404,12 +405,12 @@ is
 
    function Element (Container : Set; Position : Cursor) return Element_Type is
    begin
-      if not Has_Element (Container, Position) then
-         raise Constraint_Error with "Position cursor equals No_Element";
+      if Position.Node = 0 then
+         raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
-
-      pragma
-        Assert (Vet (Container, Position), "bad cursor in function Element");
 
       return Container.Content.Nodes (Position.Node).Element;
    end Element;
@@ -932,12 +933,12 @@ is
 
       function Key (Container : Set; Position : Cursor) return Key_Type is
       begin
-         if not Has_Element (Container, Position) then
+         if Position.Node = 0 then
             raise Constraint_Error with "Position cursor has no element";
+         elsif not Has_Element (Container, Position) then
+            raise Program_Error
+              with "Position cursor designates no element in Container";
          end if;
-
-         pragma
-           Assert (Vet (Container, Position), "bad cursor in function Key");
 
          declare
             N : Node_Type renames Container.Content.Nodes (Position.Node);
@@ -1215,9 +1216,7 @@ is
 
    begin
       if Target.Capacity < Length (Source) then
-         raise Constraint_Error
-           with  -- ???
-             "Source length exceeds Target capacity";
+         raise Capacity_Error with "Source length exceeds Target capacity";
       end if;
 
       Clear (Target);
@@ -1252,13 +1251,10 @@ is
    begin
       if Position.Node = 0 then
          return No_Element;
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
-
-      if not Has_Element (Container, Position) then
-         raise Constraint_Error with "Position has no element";
-      end if;
-
-      pragma Assert (Vet (Container, Position), "bad cursor in Next");
 
       return (Node => HT_Ops.Next (Container.Content, Position.Node));
    end Next;
@@ -1322,12 +1318,12 @@ is
    procedure Replace_Element
      (Container : in out Set; Position : Cursor; New_Item : Element_Type) is
    begin
-      if not Has_Element (Container, Position) then
-         raise Constraint_Error with "Position cursor equals No_Element";
+      if Position.Node = 0 then
+         raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
-
-      pragma
-        Assert (Vet (Container, Position), "bad cursor in Replace_Element");
 
       Replace_Element (Container.Content, Position.Node, New_Item);
    end Replace_Element;
@@ -1340,7 +1336,7 @@ is
    is
    begin
       if Capacity > Container.Capacity then
-         raise Constraint_Error with "requested capacity is too large";
+         raise Capacity_Error with "requested capacity is too large";
       end if;
    end Reserve_Capacity;
 
@@ -1487,62 +1483,5 @@ is
          end return;
       end;
    end Union;
-
-   ---------
-   -- Vet --
-   ---------
-
-   function Vet (Container : Set; Position : Cursor) return Boolean is
-   begin
-      if not Container_Checks'Enabled then
-         return True;
-      end if;
-
-      if Position.Node = 0 then
-         return True;
-      end if;
-
-      declare
-         S : Set renames Container;
-         N : Nodes_Type renames S.Content.Nodes;
-         X : Count_Type;
-
-      begin
-         if S.Content.Length = 0 then
-            return False;
-         end if;
-
-         if Position.Node > N'Last then
-            return False;
-         end if;
-
-         if N (Position.Node).Next = Position.Node then
-            return False;
-         end if;
-
-         X :=
-           S.Content.Buckets
-             (Element_Keys.Index (S.Content, N (Position.Node).Element));
-
-         for J in 1 .. S.Content.Length loop
-            if X = Position.Node then
-               return True;
-            end if;
-
-            if X = 0 then
-               return False;
-            end if;
-
-            if X = N (X).Next then
-               --  to prevent unnecessary looping
-               return False;
-            end if;
-
-            X := N (X).Next;
-         end loop;
-
-         return False;
-      end;
-   end Vet;
 
 end SPARK.Containers.Formal.Hashed_Sets;

@@ -7,6 +7,7 @@ driver, so the usual options apply:
 ```sh
 ./run-tests                     # run everything
 ./run-tests coverage_test/c_strings # run one test
+./run-tests robustness/formal_hashed_maps # run defensive checks
 ./run-tests coverage_proof/functional_trees
 ./run-tests library_proof/formal_vectors
 ./run-tests --disc=coq -j4 library_proof/main
@@ -35,7 +36,9 @@ same mechanism the CI jobs use.
 A test of this testsuite is a directory under `../tests` whose `test.yaml`
 names a driver. Coverage clients live in
 `../tests/coverage_test/<name>`, with their proofs in
-`../tests/coverage_proof/<name>`. Contract-focused client proofs live in `../tests/client_proof/<name>` and use
+`../tests/coverage_proof/<name>`. Robustness clients that exercise error paths
+with defensive contracts disabled live in `../tests/robustness/<name>`.
+Contract-focused client proofs live in `../tests/client_proof/<name>` and use
 `driver: proof` with `body_mode: false` and `--no-inlining`, so they exercise
 the public API without relying on implementation visibility.
 Component proofs of library implementations,

@@ -115,6 +115,8 @@ procedure Test with SPARK_Mode is
       X, Y : Map (1000);
    begin
       Create_Non_Empty_Map (X);
+      Assign (X, X);
+      Assert (Length (X) = 5, "Assign on itself");
       Assign (X, Y);
       Assert (Length (X) = 0, "Assign on empty map");
       Create_Non_Empty_Map (X);

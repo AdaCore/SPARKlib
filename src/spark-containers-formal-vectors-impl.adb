@@ -200,7 +200,7 @@ is
       end if;
 
       if Target.Capacity < LS then
-         raise Constraint_Error;
+         raise Capacity_Error with "Source length exceeds Target capacity";
       end if;
 
       Ops.Clear (Target.Elements, Target.Last);

@@ -413,9 +413,20 @@ procedure Test_Gen with SPARK_Mode is
          Assert (Length (X) = 4, "Delete first element, length is decremented");
          Assert (Element (X, 1) = 2 and Element (X, 2) = 3 and Element (X, 3) = 4 and Element (X, 4) = 5, "Delete 1 element, following elements are slided");
       end Test_Delete_First;
+
+      procedure Test_Delete_Last with Pre => True is
+         X : Vector (1000);
+      begin
+         Create_Non_Empty_Vector (X);
+
+         Delete (X, Last_Index (X));
+         Assert (Length (X) = 4, "Delete last element, length is decremented");
+         Assert (Element (X, 1) = 1 and Element (X, 2) = 2 and Element (X, 3) = 3 and Element (X, 4) = 4, "Delete last element, previous elements are preserved");
+      end Test_Delete_Last;
    begin
       Test_Delete_In_The_Middle;
       Test_Delete_First;
+      Test_Delete_Last;
    end Test_Delete_1;
 
    --  Delete with a Count parameter

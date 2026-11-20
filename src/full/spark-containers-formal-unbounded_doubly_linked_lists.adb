@@ -43,9 +43,6 @@ is
    procedure Insert_Internal
      (Container : in out List; Before : Count_Type; New_Node : Count_Type);
 
-   function Vet (L : List; Position : Cursor) return Boolean
-   with Inline;
-
    procedure Resize (Container : in out List)
    with
      --  Add more room in the internal array
@@ -257,8 +254,11 @@ is
      (Container : List; Position : Cursor)
       return not null access constant Element_Type is
    begin
-      if not Has_Element (Container => Container, Position => Position) then
+      if Position.Node = 0 then
          raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
 
       return Container.Nodes (Position.Node).Element;
@@ -381,11 +381,13 @@ is
       X : Count_Type;
 
    begin
-      if not Has_Element (Container => Container, Position => Position) then
+      if Position.Node = 0 then
          raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
 
-      pragma Assert (Vet (Container, Position), "bad cursor in Delete");
       pragma Assert (Container.First >= 1);
       pragma Assert (Container.Last >= 1);
       pragma Assert (N (Container.First).Prev = 0);
@@ -473,8 +475,11 @@ is
    function Element (Container : List; Position : Cursor) return Element_Type
    is
    begin
-      if not Has_Element (Container => Container, Position => Position) then
+      if Position.Node = 0 then
          raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
 
       return Container.Nodes (Position.Node).Element.all;
@@ -524,16 +529,17 @@ is
       From : Count_Type := Position.Node;
 
    begin
+      if From /= 0 and then not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
+      end if;
+
       if From = 0 and Container.Length = 0 then
          return No_Element;
       end if;
 
       if From = 0 then
          From := Container.First;
-      end if;
-
-      if Position.Node /= 0 and then not Has_Element (Container, Position) then
-         raise Constraint_Error with "Position cursor has no element";
       end if;
 
       while From /= 0 loop
@@ -1167,8 +1173,9 @@ is
       J : Count_Type;
 
    begin
-      if Before.Node /= 0 then
-         pragma Assert (Vet (Container, Before), "bad cursor in Insert");
+      if Before.Node /= 0 and then not Has_Element (Container, Before) then
+         raise Program_Error
+           with "Before cursor designates no element in Container";
       end if;
 
       if Count = 0 then
@@ -1404,10 +1411,9 @@ is
    begin
       if Position.Node = 0 then
          return No_Element;
-      end if;
-
-      if not Has_Element (Container, Position) then
-         raise Program_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
 
       return (Node => Container.Nodes (Position.Node).Next);
@@ -1441,10 +1447,9 @@ is
    begin
       if Position.Node = 0 then
          return No_Element;
-      end if;
-
-      if not Has_Element (Container, Position) then
-         raise Program_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
 
       return (Node => Container.Nodes (Position.Node).Prev);
@@ -1458,8 +1463,11 @@ is
      (Container : List; Position : Cursor) return not null access Element_Type
    is
    begin
-      if not Has_Element (Container, Position) then
+      if Position.Node = 0 then
          raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
 
       return Container.Nodes (Position.Node).Element;
@@ -1472,12 +1480,12 @@ is
    procedure Replace_Element
      (Container : in out List; Position : Cursor; New_Item : Element_Type) is
    begin
-      if not Has_Element (Container, Position) then
+      if Position.Node = 0 then
          raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
-
-      pragma
-        Assert (Vet (Container, Position), "bad cursor in Replace_Element");
 
       Finalize_Element (Container.Nodes (Position.Node).Element);
       Container.Nodes (Position.Node).Element := new Element_Type'(New_Item);
@@ -1624,6 +1632,11 @@ is
       CFirst : Count_Type := Position.Node;
 
    begin
+      if Position.Node /= 0 and then not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
+      end if;
+
       if CFirst = 0 then
          CFirst := Container.Last;
       end if;
@@ -1658,8 +1671,9 @@ is
          raise Program_Error with "Target and Source denote same container";
       end if;
 
-      if Before.Node /= 0 then
-         pragma Assert (Vet (Target, Before), "bad cursor in Splice");
+      if Before.Node /= 0 and then not Has_Element (Target, Before) then
+         raise Program_Error
+           with "Before cursor designates no element in Target";
       end if;
 
       if Is_Empty (Source) then
@@ -1707,9 +1721,15 @@ is
 
       if Position.Node = 0 then
          raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Source, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Source";
       end if;
 
-      pragma Assert (Vet (Source, Position), "bad Position cursor in Splice");
+      if Before.Node /= 0 and then not Has_Element (Target, Before) then
+         raise Program_Error
+           with "Before cursor designates no element in Target";
+      end if;
 
       declare
          X : Count_Type;
@@ -1738,17 +1758,17 @@ is
       N : Node_Array_Access renames Container.Nodes;
 
    begin
-      if Before.Node /= 0 then
-         pragma
-           Assert (Vet (Container, Before), "bad Before cursor in Splice");
-      end if;
-
       if Position.Node = 0 then
          raise Constraint_Error with "Position cursor has no element";
+      elsif not Has_Element (Container, Position) then
+         raise Program_Error
+           with "Position cursor designates no element in Container";
       end if;
 
-      pragma
-        Assert (Vet (Container, Position), "bad Position cursor in Splice");
+      if Before.Node /= 0 and then not Has_Element (Container, Before) then
+         raise Program_Error
+           with "Before cursor designates no element in Container";
+      end if;
 
       if Position.Node = Before.Node
         or else N (Position.Node).Next = Before.Node
@@ -1837,12 +1857,19 @@ is
          raise Constraint_Error with "J cursor has no element";
       end if;
 
+      if not Has_Element (Container, I) then
+         raise Program_Error
+           with "I cursor designates no element in Container";
+      end if;
+
+      if not Has_Element (Container, J) then
+         raise Program_Error
+           with "J cursor designates no element in Container";
+      end if;
+
       if I.Node = J.Node then
          return;
       end if;
-
-      pragma Assert (Vet (Container, I), "bad I cursor in Swap");
-      pragma Assert (Vet (Container, J), "bad J cursor in Swap");
 
       declare
          NN : Node_Array_Access renames Container.Nodes;
@@ -1874,12 +1901,19 @@ is
          raise Constraint_Error with "J cursor has no element";
       end if;
 
+      if not Has_Element (Container, I) then
+         raise Program_Error
+           with "I cursor designates no element in Container";
+      end if;
+
+      if not Has_Element (Container, J) then
+         raise Program_Error
+           with "J cursor designates no element in Container";
+      end if;
+
       if I.Node = J.Node then
          return;
       end if;
-
-      pragma Assert (Vet (Container, I), "bad I cursor in Swap_Links");
-      pragma Assert (Vet (Container, J), "bad J cursor in Swap_Links");
 
       I_Next := Next (Container, I);
 
@@ -1899,139 +1933,5 @@ is
          end if;
       end if;
    end Swap_Links;
-
-   ---------
-   -- Vet --
-   ---------
-
-   function Vet (L : List; Position : Cursor) return Boolean is
-      N : Node_Array_Access renames L.Nodes;
-   begin
-      if not Container_Checks'Enabled then
-         return True;
-      end if;
-
-      if L.Length = 0 then
-         return False;
-      end if;
-
-      if L.First = 0 then
-         return False;
-      end if;
-
-      if L.Last = 0 then
-         return False;
-      end if;
-
-      if Position.Node > L.Nodes'Length then
-         return False;
-      end if;
-
-      if N (Position.Node).Prev < 0
-        or else N (Position.Node).Prev > L.Nodes'Length
-      then
-         return False;
-      end if;
-
-      if N (Position.Node).Next > L.Nodes'Length then
-         return False;
-      end if;
-
-      if N (L.First).Prev /= 0 then
-         return False;
-      end if;
-
-      if N (L.Last).Next /= 0 then
-         return False;
-      end if;
-
-      if N (Position.Node).Prev = 0 and then Position.Node /= L.First then
-         return False;
-      end if;
-
-      if N (Position.Node).Next = 0 and then Position.Node /= L.Last then
-         return False;
-      end if;
-
-      if L.Length = 1 then
-         return L.First = L.Last;
-      end if;
-
-      if L.First = L.Last then
-         return False;
-      end if;
-
-      if N (L.First).Next = 0 then
-         return False;
-      end if;
-
-      if N (L.Last).Prev = 0 then
-         return False;
-      end if;
-
-      if N (N (L.First).Next).Prev /= L.First then
-         return False;
-      end if;
-
-      if N (N (L.Last).Prev).Next /= L.Last then
-         return False;
-      end if;
-
-      if L.Length = 2 then
-         if N (L.First).Next /= L.Last then
-            return False;
-         end if;
-
-         if N (L.Last).Prev /= L.First then
-            return False;
-         end if;
-
-         return True;
-      end if;
-
-      if N (L.First).Next = L.Last then
-         return False;
-      end if;
-
-      if N (L.Last).Prev = L.First then
-         return False;
-      end if;
-
-      if Position.Node = L.First then
-         return True;
-      end if;
-
-      if Position.Node = L.Last then
-         return True;
-      end if;
-
-      if N (Position.Node).Next = 0 then
-         return False;
-      end if;
-
-      if N (Position.Node).Prev = 0 then
-         return False;
-      end if;
-
-      if N (N (Position.Node).Next).Prev /= Position.Node then
-         return False;
-      end if;
-
-      if N (N (Position.Node).Prev).Next /= Position.Node then
-         return False;
-      end if;
-
-      if L.Length = 3 then
-         if N (L.First).Next /= Position.Node then
-            return False;
-         end if;
-
-         if N (L.Last).Prev /= Position.Node then
-            return False;
-         end if;
-      end if;
-
-      return True;
-   end Vet;
 
 end SPARK.Containers.Formal.Unbounded_Doubly_Linked_Lists;
