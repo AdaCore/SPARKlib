@@ -8,6 +8,7 @@ os.environ["SPARKLIB_BODY_MODE"] = "On"
 if __name__ == "__main__":
     prove_all(
         counterexample=False,
+        steps=2000,
         sparklib=True,
         opt=["-u", "inst.ads", "test.adb", "test_resize.adb"],
     )
