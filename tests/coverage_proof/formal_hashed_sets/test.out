@@ -1,69 +1,71 @@
 spark-containers-parameter_checks.ads:274:50: medium: postcondition might fail, in instantiation at spark-containers-formal-hashed_sets.ads:159, in instantiation at inst_gen.ads:12, in instantiation at test_gen.adb:6, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
 test_gen.adb:124:15: high: formal parameters "Target" and "Source" are aliased (SPARK RM 6.4.2), in instantiation at test.adb:11
 test_gen.adb:124:15: high: formal parameters "Target" and "Source" are aliased (SPARK RM 6.4.2), in instantiation at test.adb:17
-test_gen.adb:199:07: medium: precondition might fail, cannot prove (Equivalent_Elements (Element (Container, Position), New_Item) or else not Contains (Container, New_Item)), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:246:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:247:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:248:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:24:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in call inlined at test_gen.adb:180, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:24:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in call inlined at test_gen.adb:211, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:24:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in call inlined at test_gen.adb:338, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:24:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in call inlined at test_gen.adb:390, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:24:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in call inlined at test_gen.adb:738, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:24:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in call inlined at test_gen.adb:745, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:24:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in call inlined at test_gen.adb:770, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:251:07: medium: precondition might fail, in instantiation at test.adb:11 [possible fix: postcondition of call at line 250 should mention Inserted (for argument B1)] [provers reached step limit before completing the proof]
-test_gen.adb:252:08: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:253:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:254:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:254:15: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:257:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:258:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:181:13: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:212:07: medium: precondition might fail, cannot prove (Equivalent_Elements (Element (Container, Position), New_Item) or else not Contains (Container, New_Item)), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:24:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in call inlined at test_gen.adb:193, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:24:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in call inlined at test_gen.adb:224, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:24:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in call inlined at test_gen.adb:351, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:24:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in call inlined at test_gen.adb:369, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:24:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in call inlined at test_gen.adb:413, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:24:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in call inlined at test_gen.adb:761, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:24:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in call inlined at test_gen.adb:768, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:24:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in call inlined at test_gen.adb:793, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
 test_gen.adb:259:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
 test_gen.adb:260:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:299:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:303:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:309:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:313:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:314:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:341:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:408:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:410:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:413:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:440:10: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:444:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:470:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:502:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:528:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:261:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:264:07: medium: precondition might fail, in instantiation at test.adb:11 [possible fix: postcondition of call at line 263 should mention Inserted (for argument B1)] [provers reached step limit before completing the proof]
+test_gen.adb:265:08: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:266:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:267:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:267:15: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:270:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:271:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:272:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:273:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:312:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:316:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:322:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:326:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:327:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:354:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:431:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:433:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:436:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:463:10: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:467:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:493:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:525:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
 test_gen.adb:53:07: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
 test_gen.adb:54:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:551:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
 test_gen.adb:55:07: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:567:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
 test_gen.adb:56:07: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
 test_gen.adb:57:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:592:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:596:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:597:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:619:10: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:623:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:644:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:646:07: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:662:07: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:727:14: warning: subprogram "Test_Default_Modulus" has no effect, in instantiation at test.adb:11
-test_gen.adb:727:14: warning: subprogram "Test_Default_Modulus" has no effect, in instantiation at test.adb:17
+test_gen.adb:590:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:615:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:619:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:620:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:642:10: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:646:10: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:667:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:669:07: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:685:07: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
 test_gen.adb:73:07: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
 test_gen.adb:74:07: medium: precondition might fail, cannot prove not Contains (Container, New_Item), in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:750:14: warning: subprogram "Test_Default_Modulus" has no effect, in instantiation at test.adb:11
+test_gen.adb:750:14: warning: subprogram "Test_Default_Modulus" has no effect, in instantiation at test.adb:17
 test_gen.adb:75:22: medium: assertion might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:778:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:780:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:793:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
-test_gen.adb:805:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:801:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:803:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
 test_gen.adb:816:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:828:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
+test_gen.adb:839:07: medium: precondition might fail, in instantiation at test.adb:11 [provers reached step limit before completing the proof]
 
 Analyzed 3 units
 in unit inst_gen, 0 subprograms and packages out of 0 analyzed
 flow analysis and proof skipped for this unit (generic unit is not analyzed)
-in unit test, 296 subprograms and packages out of 644 analyzed
+in unit test, 300 subprograms and packages out of 648 analyzed
   Test at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Nested at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements), proof skipped (pragma Annotate Skip_Proof)
   Test.Nested.Test_With_Collisionsgp722 at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements), proof skipped (pragma Annotate Skip_Proof)
@@ -346,10 +348,12 @@ in unit test, 296 subprograms and packages out of 644 analyzed
   Test.Nested.Test_With_Collisionsgp722.Test_With_Collisions.Test_Contains at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements), proof skipped (pragma Annotate Skip_Proof)
   Test.Nested.Test_With_Collisionsgp722.Test_With_Collisions.Test_Contains_Key at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements), proof skipped (pragma Annotate Skip_Proof)
   Test.Nested.Test_With_Collisionsgp722.Test_With_Collisions.Test_Copy at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements), proof skipped (pragma Annotate Skip_Proof)
+  Test.Nested.Test_With_Collisionsgp722.Test_With_Collisions.Test_Copy.Test_After_Delete at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements), proof skipped (pragma Annotate Skip_Proof)
   Test.Nested.Test_With_Collisionsgp722.Test_With_Collisions.Test_Copy.Test_No_Capacity at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements), proof skipped (pragma Annotate Skip_Proof)
   Test.Nested.Test_With_Collisionsgp722.Test_With_Collisions.Test_Copy.Test_With_Capacity at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements), proof skipped (pragma Annotate Skip_Proof)
   Test.Nested.Test_With_Collisionsgp722.Test_With_Collisions.Test_Default_Modulus at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 1 warnings and 0 pragma Assume statements), proof skipped (pragma Annotate Skip_Proof)
   Test.Nested.Test_With_Collisionsgp722.Test_With_Collisions.Test_Delete_1 at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements), proof skipped (pragma Annotate Skip_Proof)
+  Test.Nested.Test_With_Collisionsgp722.Test_With_Collisions.Test_Delete_1.Test_Delete_Collision_Tail at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements), proof skipped (pragma Annotate Skip_Proof)
   Test.Nested.Test_With_Collisionsgp722.Test_With_Collisions.Test_Delete_2 at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements), proof skipped (pragma Annotate Skip_Proof)
   Test.Nested.Test_With_Collisionsgp722.Test_With_Collisions.Test_Delete_Key at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements), proof skipped (pragma Annotate Skip_Proof)
   Test.Nested.Test_With_Collisionsgp722.Test_With_Collisions.Test_Difference_1 at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements), proof skipped (pragma Annotate Skip_Proof)
@@ -667,10 +671,12 @@ in unit test, 296 subprograms and packages out of 644 analyzed
   Test.Test_No_Collisionsgp499.Test_No_Collisions.Test_Contains at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_No_Collisionsgp499.Test_No_Collisions.Test_Contains_Key at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
   Test.Test_No_Collisionsgp499.Test_No_Collisions.Test_Copy at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_No_Collisionsgp499.Test_No_Collisions.Test_Copy.Test_After_Delete at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
   Test.Test_No_Collisionsgp499.Test_No_Collisions.Test_Copy.Test_No_Capacity at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_No_Collisionsgp499.Test_No_Collisions.Test_Copy.Test_With_Capacity at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_No_Collisionsgp499.Test_No_Collisions.Test_Default_Modulus at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 1 warnings and 0 pragma Assume statements) and proved
   Test.Test_No_Collisionsgp499.Test_No_Collisions.Test_Delete_1 at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_No_Collisionsgp499.Test_No_Collisions.Test_Delete_1.Test_Delete_Collision_Tail at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
   Test.Test_No_Collisionsgp499.Test_No_Collisions.Test_Delete_2 at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
   Test.Test_No_Collisionsgp499.Test_No_Collisions.Test_Delete_Key at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
   Test.Test_No_Collisionsgp499.Test_No_Collisions.Test_Difference_1 at test_gen.adb, instantiated at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved

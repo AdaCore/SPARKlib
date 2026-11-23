@@ -7,17 +7,17 @@ test.adb:19:04: warning: precondition is statically False [precondition-statical
 test.adb:19:04: warning: precondition is statically False [precondition-statically-false]
 test.adb:19:04: warning: precondition is statically False [precondition-statically-false]
 test.adb:209:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:261:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:270:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:271:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:274:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:279:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:280:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:288:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:289:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:277:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:286:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:287:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:290:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:295:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:296:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:304:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:305:07: medium: precondition might fail [provers reached step limit before completing the proof]
 
 Analyzed 1 unit
-in unit test, 24 subprograms and packages out of 46 analyzed
+in unit test, 25 subprograms and packages out of 47 analyzed
   Test at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Assert at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Int_Trees at test.adb skipped; body is SPARK_Mode => Off
@@ -63,4 +63,5 @@ in unit test, 24 subprograms and packages out of 46 analyzed
   Test.Test_Get at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Height at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Set_Child at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test.Test_Set_Child.Test_Empty_Child at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Set_Root at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved

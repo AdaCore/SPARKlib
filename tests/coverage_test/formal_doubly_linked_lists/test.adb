@@ -540,6 +540,17 @@ procedure Test with SPARK_Mode is
          Assert (P5 = Next (X, P4), "Delete first element, order of other cursors is preserved");
       end Test_Delete_First;
 
+      procedure Test_Delete_Last with Pre => True is
+         X : List (1000);
+         P : Cursor;
+      begin
+         Create_Non_Empty_List (X);
+         P := Last (X);
+         Delete (X, P);
+         Assert (P = No_Element and then Length (X) = 4,
+                 "Delete last element through cursor");
+      end Test_Delete_Last;
+
       --  Test that deletion works on a full container
 
       procedure Test_Delete_Full_Container with Pre => True is
@@ -559,11 +570,25 @@ procedure Test with SPARK_Mode is
    begin
       Test_Delete_In_The_Middle;
       Test_Delete_First;
+      Test_Delete_Last;
       Test_Delete_Full_Container;
    end Test_Delete_1;
 
    --  Delete with a Count parameter
    procedure Test_Delete_2 with Pre => True is
+      procedure Test_Delete_First with Pre => True is
+         X : List (1000);
+         P : Cursor;
+      begin
+         Create_Non_Empty_List (X);
+         P := First (X);
+         Delete (X, P, 2);
+         Assert (P = No_Element and then Length (X) = 3,
+                 "Delete first elements through cursor");
+         Assert (First_Element (X) = 3,
+                 "Delete first elements preserves following elements");
+      end Test_Delete_First;
+
       procedure Test_Delete_No_Element with Pre => True is
          X              : List (1000);
          P1, P2, P3     : Cursor;
@@ -621,6 +646,7 @@ procedure Test with SPARK_Mode is
       end Test_Delete_Last;
 
    begin
+      Test_Delete_First;
       Test_Delete_No_Element;
       Test_Delete_In_The_Middle;
       Test_Delete_Last;

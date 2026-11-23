@@ -237,6 +237,22 @@ procedure Test with SPARK_Mode is
 
       T5 : Tree := Set_Child (Set_Child (T2, 3, Empty_Tree), 3, Create (6, (1 => Create (1, (1 => Create (1))))));
       T6 : Tree := Set_Child (Set_Child (T2, 4, Empty_Tree), 4, Create (6));
+
+      procedure Test_Empty_Child is
+         Base : Tree := Create (10);
+         Tall : Tree := Create (1, (1 => Create (11, (1 => Create (111)))));
+         Mid  : Tree := Create (2, (1 => Create (22)));
+         T    : Tree := Set_Child (Set_Child (Base, 1, Tall), 2, Mid);
+         R    : Tree;
+      begin
+         R := Set_Child (T, 3, Empty_Tree);
+         Assert (R = T, "Adding an empty absent child preserves the tree");
+
+         R := Set_Child (T, 1, Empty_Tree);
+         Assert (Height (R) = 3 and then Count (R) = 3,
+                 "Removing tallest child preserves shorter sibling height");
+      end Test_Empty_Child;
+
    begin
       Assert (Get (T1) = 10, "Set_Child on empty tree, get");
       Assert (Child (T1, 1) = Create (1), "Set_Child on empty tree, child");
@@ -287,6 +303,8 @@ procedure Test with SPARK_Mode is
 	      "Set_Child with empty child ex2, children");
       Assert (Count (T6) = 5, "Set_Child with empty child ex2, count");
       Assert (Height (T6) = 2, "Set_Child with empty child ex2, depth");
+
+      Test_Empty_Child;
    end Test_Set_Child;
 
    procedure Test_Set_Root is

@@ -380,6 +380,21 @@ procedure Test is
       Record_Failure;
    end Test_Replace_Element;
 
+   procedure Test_Move is
+      procedure Test_Move_Same_Container is
+         X : Tree;
+      begin
+         Set_Label ("Move on same container: ");
+         Create_Non_Empty_Tree (X);
+         Move (X, X);
+         if Node_Count (X) /= 3 or else Element (X, Root (X)) /= 1 then
+            Record_Failure;
+         end if;
+      end Test_Move_Same_Container;
+   begin
+      Test_Move_Same_Container;
+   end Test_Move;
+
 begin
    Test_Child;
    Test_Constant_Reference;
@@ -401,5 +416,6 @@ begin
    Test_Previous_Sibling;
    Test_Reference;
    Test_Replace_Element;
+   Test_Move;
    Check_Results;
 end Test;

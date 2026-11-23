@@ -209,7 +209,19 @@ procedure Test is
    procedure Test_Move is
       X : Set (5);
       Y : Set (3);
+      procedure Test_Move_Same_Container is
+         X : Set (5);
+      begin
+         Set_Label ("Move on same container: ");
+         Create_Non_Empty_Set (X);
+         Move (X, X);
+         if Length (X) /= 5 or else not Contains (X, 1) then
+            Record_Failure;
+         end if;
+      end Test_Move_Same_Container;
+
    begin
+      Test_Move_Same_Container;
       Set_Label ("Move with full container: ");
       Create_Non_Empty_Set (X);
       begin

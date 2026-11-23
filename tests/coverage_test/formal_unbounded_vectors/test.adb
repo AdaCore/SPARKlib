@@ -2,6 +2,7 @@ with Ada.Text_IO;
 with SPARK.Containers.Types; use SPARK.Containers.Types;
 with Inst; use Inst;
 with Test_Gen;
+with Test_Resize;
 
 procedure Test with SPARK_Mode is
 
@@ -17,4 +18,5 @@ procedure Test with SPARK_Mode is
 begin
    Test_Big_Indexes;
    Test_Small_Indexes;
+   Test_Resize;
 end Test;

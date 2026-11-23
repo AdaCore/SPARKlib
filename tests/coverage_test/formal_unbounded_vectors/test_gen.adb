@@ -43,6 +43,7 @@ procedure Test_Gen with SPARK_Mode is
    begin
       Assert (X = Y, """="" on empty vectors");
       Create_Non_Empty_Vector (X);
+      Assert (X /= Y and Y /= X, """="" with one empty vector");
       Append (Y, 1);
       Assert (X /= Y, """="" on vectors with different lengths");
       Y := X;
@@ -181,6 +182,8 @@ procedure Test_Gen with SPARK_Mode is
          X, Y : Vector;
       begin
          Create_Non_Empty_Vector (X);
+         Insert_Vector (X, 3, Y);
+         Assert (Length (X) = 5, "Insert_Vector of empty vector");
          Append (Y, 6);
          Append (Y, 7);
          Append (Y, 8);
@@ -205,9 +208,23 @@ procedure Test_Gen with SPARK_Mode is
          Assert (Element (X, 6) = 6 and Element (X, 7) = 7 and Element (X, 8) = 8, "Insert_Vector at the end, new vector is inserted at the end");
          Assert (Element (X, 2) = 2, "Insert_Vector at the end, other elements are preserved");
       end Test_Insert_At_The_End;
+
+      procedure Test_Insert_With_Resize with Pre => True is
+         pragma Assertion_Policy (SPARKlib_Full => Ignore);
+         X, Y : Vector;
+      begin
+         for I in 1 .. 60 loop
+            Append (X, I);
+            Append (Y, I);
+         end loop;
+         Insert_Vector (X, 31, Y);
+         Assert (Length (X) = 120 and then Element (X, 31) = 1,
+                 "Insert_Vector resizes the target");
+      end Test_Insert_With_Resize;
    begin
       Test_Insert_In_The_Middle;
       Test_Insert_At_The_End;
+      Test_Insert_With_Resize;
    end Test_Insert_Vector;
 
    --  Insert element with no Count parameter
@@ -287,6 +304,8 @@ procedure Test_Gen with SPARK_Mode is
       X, Y : Vector;
    begin
       Create_Non_Empty_Vector (X);
+      Append_Vector (X, Y);
+      Assert (Length (X) = 5, "Append_Vector of empty vector");
       Append (Y, 6);
       Append (Y, 7);
       Append (Y, 8);
@@ -635,6 +654,19 @@ procedure Test_Gen with SPARK_Mode is
    end Test_Sort;
 
    procedure Test_Merge with Pre => True is
+      procedure Test_Merge_With_Resize with Pre => True is
+         pragma Assertion_Policy (SPARKlib_Full => Ignore);
+         X, Y : Vector;
+      begin
+         for I in 1 .. 60 loop
+            Append (X, I);
+            Append (Y, I);
+         end loop;
+         Merge (X, Y);
+         Assert (Length (X) = 120 and then Is_Empty (Y),
+                 "Merge resizes the target");
+      end Test_Merge_With_Resize;
+
       X, Y : Vector;
    begin
       Merge (X, Y);
@@ -653,6 +685,7 @@ procedure Test_Gen with SPARK_Mode is
       Merge (X, Y);
       Assert (Is_Sorted (X), "Merge non-empty vectors is sorted");
       Assert (Length (Y) = 0 and Length (X) = 10 and First_Element (X) = 0 and Last_Element (X) = 7, "Merge non-empty vectors");
+      Test_Merge_With_Resize;
    end Test_Merge;
 
    procedure Test_Iteration with Pre => True is

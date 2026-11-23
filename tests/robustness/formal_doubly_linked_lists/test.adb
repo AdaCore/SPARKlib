@@ -252,6 +252,17 @@ procedure Test is
    end Test_Copy;
 
    procedure Test_Move is
+      procedure Test_Move_Same_Container is
+         X : List (5);
+      begin
+         Set_Label ("Move on same container: ");
+         Create_Non_Empty_List (X);
+         Move (X, X);
+         if Length (X) /= 5 or else First_Element (X) /= 1 then
+            Record_Failure;
+         end if;
+      end Test_Move_Same_Container;
+
       procedure Test_Move_Full_Container is
          X : List (5);
          Y : List (4);
@@ -268,6 +279,7 @@ procedure Test is
       end Test_Move_Full_Container;
 
    begin
+      Test_Move_Same_Container;
       Test_Move_Full_Container;
    end Test_Move;
 
@@ -872,6 +884,23 @@ procedure Test is
    end Test_Splice_2;
 
    procedure Test_Splice_3 is
+      procedure Test_Splice_3_Same_Container is
+         X : List (5);
+         Before, Position : Cursor;
+      begin
+         Set_Label ("Splice on same container: ");
+         Create_Non_Empty_List (X);
+         Before := First (X);
+         Position := Last (X);
+         Splice (X, Before, X, Position);
+         if Length (X) /= 5
+           or else First_Element (X) /= 5
+           or else Last_Element (X) /= 4
+         then
+            Record_Failure;
+         end if;
+      end Test_Splice_3_Same_Container;
+
       procedure Test_Splice_3_Full_Container is
          X : List (5);
          Y : List (5);
@@ -974,6 +1003,7 @@ procedure Test is
       end Test_Splice_3_Position_Deleted_Element;
 
    begin
+      Test_Splice_3_Same_Container;
       Test_Splice_3_Full_Container;
       Test_Splice_3_Before_Deleted_Element;
       Test_Splice_3_Position_No_Element;

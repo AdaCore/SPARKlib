@@ -204,6 +204,8 @@ procedure Test_Gen with SPARK_Mode is
          X, Y : Vector (1000);
       begin
          Create_Non_Empty_Vector (X);
+         Insert_Vector (X, 3, Y);
+         Assert (Length (X) = 5, "Insert_Vector of empty vector");
          Append (Y, 6);
          Append (Y, 7);
          Append (Y, 8);
@@ -353,6 +355,8 @@ procedure Test_Gen with SPARK_Mode is
       X, Y : Vector (1000);
    begin
       Create_Non_Empty_Vector (X);
+      Append_Vector (X, Y);
+      Assert (Length (X) = 5, "Append_Vector of empty vector");
       Append (Y, 6);
       Append (Y, 7);
       Append (Y, 8);

@@ -561,6 +561,21 @@ procedure Test is
       Record_Failure;
    end Test_Element_2;
 
+   procedure Test_Move is
+      procedure Test_Move_Same_Container is
+         X : Map;
+      begin
+         Set_Label ("Move on same container: ");
+         Create_Non_Empty_Map (X);
+         Move (X, X);
+         if Length (X) /= 5 or else not Contains (X, 1) or else Element (X, 1) /= 1 then
+            Record_Failure;
+         end if;
+      end Test_Move_Same_Container;
+   begin
+      Test_Move_Same_Container;
+   end Test_Move;
+
 begin
    Test_Constant_Reference;
    Test_Constant_Reference_2;
@@ -584,5 +599,6 @@ begin
    Test_Reference_2;
    Test_Replace;
    Test_Replace_Element;
+   Test_Move;
    Check_Results;
 end Test;

@@ -171,9 +171,22 @@ procedure Test_Gen with SPARK_Mode is
             Assert (Y = X, "Copy with capacity of non-empty map");
          end;
       end Test_With_Capacity;
+
+      procedure Test_After_Delete is
+         X : Map (100, Default_Modulus (100));
+      begin
+         Create_Non_Empty_Map (X);
+         Delete (X, 1);
+         declare
+            Y : constant Map := Copy (X, 200);
+         begin
+            Assert (Y = X, "Copy with capacity after deleting an element");
+         end;
+      end Test_After_Delete;
    begin
       Test_No_Capacity;
       Test_With_Capacity;
+      Test_After_Delete;
    end Test_Copy;
 
    procedure Test_Key with Pre => True is
@@ -447,6 +460,15 @@ procedure Test_Gen with SPARK_Mode is
 
    --  Delete a key from the map
    procedure Test_Delete_1 with Pre => True is
+      procedure Test_Delete_Collision_Tail with Pre => True is
+         X : Map (1000, Default_Modulus (1000));
+      begin
+         Create_Non_Empty_Map (X);
+         Delete (X, 1);
+         Assert (Length (X) = 4 and then not Contains (X, 1),
+                 "Delete tail of collision chain");
+      end Test_Delete_Collision_Tail;
+
       X, Y : Map (1000, Default_Modulus (1000));
       Q    : Cursor;
    begin
@@ -458,6 +480,7 @@ procedure Test_Gen with SPARK_Mode is
       Assert (not Contains (X, 3), "Delete, key is removed");
       Assert (Key (X, Q) = 1, "Delete, other keys are preserved");
       Assert (Element (X, 1) = 1, "Delete, other mappings are preserved");
+      Test_Delete_Collision_Tail;
    end Test_Delete_1;
 
    --  Delete a cursor

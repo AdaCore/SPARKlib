@@ -1,35 +1,37 @@
-test.adb:206:07: warning: unused variable "P1"
-test.adb:301:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:302:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:118:18: high: formal parameters "Target" and "Source" are aliased (SPARK RM 6.4.2)
+test.adb:118:18: high: formal parameters "Target" and "Source" are aliased (SPARK RM 6.4.2), in call inlined at test.adb:124
+test.adb:215:07: warning: unused variable "P1"
+test.adb:310:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:311:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:32:29: medium: postcondition might fail, cannot prove K in 1 .. 5 [provers reached step limit before completing the proof]
-test.adb:379:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:381:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:382:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:392:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:396:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:396:15: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:397:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:409:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:413:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:413:15: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:414:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:414:15: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:430:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:430:15: medium: precondition might fail [possible fix: call at line 426 should mention Container (for argument X) in a postcondition] [provers reached step limit before completing the proof]
-test.adb:431:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:431:15: medium: precondition might fail [possible fix: call at line 426 should mention Container (for argument X) in a postcondition] [provers reached step limit before completing the proof]
-test.adb:447:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:448:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:388:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:390:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:391:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:401:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:405:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:405:15: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:406:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:418:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:422:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:422:15: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:423:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:423:15: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:439:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:439:15: medium: precondition might fail [possible fix: call at line 435 should mention Container (for argument X) in a postcondition] [provers reached step limit before completing the proof]
+test.adb:440:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:440:15: medium: precondition might fail [possible fix: call at line 435 should mention Container (for argument X) in a postcondition] [provers reached step limit before completing the proof]
 test.adb:456:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:499:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:513:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:558:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:581:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:582:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:585:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:597:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:600:07: medium: precondition might fail [provers reached step limit before completing the proof]
-test.adb:611:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:457:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:465:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:508:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:522:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:567:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:590:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:591:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:594:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:606:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:609:07: medium: precondition might fail [provers reached step limit before completing the proof]
+test.adb:620:07: medium: precondition might fail [provers reached step limit before completing the proof]
 test.adb:72:07: medium: precondition might fail, cannot prove not Contains (Container, Key) [provers reached step limit before completing the proof]
 test.adb:78:07: medium: precondition might fail, cannot prove not Contains (Container, Key) [provers reached step limit before completing the proof]
 test.adb:79:07: medium: precondition might fail, cannot prove not Contains (Container, Key) [provers reached step limit before completing the proof]
@@ -39,7 +41,7 @@ test.adb:85:07: medium: precondition might fail, cannot prove not Contains (Cont
 Analyzed 2 units
 in unit big_test, 0 subprograms and packages out of 1 analyzed
   Big_Test at big_test.ads skipped; body is SPARK_Mode => Off
-in unit test, 145 subprograms and packages out of 314 analyzed
+in unit test, 146 subprograms and packages out of 315 analyzed
   Test at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Assert at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Create_Non_Empty_Map at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
@@ -316,6 +318,7 @@ in unit test, 145 subprograms and packages out of 314 analyzed
   Test.Lt at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Aggregate at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Assign at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Assign.Test_Same_Container at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Ceiling at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
   Test.Test_Clear at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Constant_Reference_1 at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
