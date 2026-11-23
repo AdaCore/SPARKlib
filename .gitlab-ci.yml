@@ -66,7 +66,8 @@ coverage:
       else
         export SPARK2014_DIR=/tmp/spark2014
         rm -rf $SPARK2014_DIR
-        git clone $GIT_CLONE_BASE/eng/spark/spark2014 --depth 1 $SPARK2014_DIR
+        git clone --depth 1 --branch "${CI_MERGE_REQUEST_TARGET_BRANCH_NAME:-master}" \
+          "$GIT_CLONE_BASE/eng/spark/spark2014" "$SPARK2014_DIR"
       fi
     - cd $SPARK2014_DIR
     - rm -rf include testsuite/gnatprove/sparklib
