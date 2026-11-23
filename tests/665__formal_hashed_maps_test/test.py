@@ -6,5 +6,5 @@ os.environ["SPARKLIB_BODY_MODE"] = "On"
 
 
 if __name__ == "__main__":
-    prove_all(counterexample=False, sparklib=True)
+    prove_all(counterexample=False, sparklib=True, steps=2000)
     sparklib_exec_test()
