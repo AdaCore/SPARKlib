@@ -31,6 +31,7 @@ known_yaml_keys = {
     "jobs",
     "large",
     "level",
+    "manifest",
     "project",
     "config_dir",
     "replay",
@@ -113,14 +114,21 @@ class ProofTestDriver(SparklibDriverMixin, DiffTestDriver):
         if config.get("replay") and not generate_session:
             cmd += ["--replay"]
 
-        level = config.get("level")
-        if level is None:
-            steps = config.get("steps", default_steps)
-            cmd += [f"--steps={steps}", f"--timeout={default_vc_timeout}"]
+        manifest = config.get("manifest")
+        if manifest is not None:
+            if "level" in config or "steps" in config:
+                raise ValueError("manifest cannot be combined with level or steps")
+            manifest = os.path.abspath(self.working_dir(manifest))
+            cmd += [f"--proof-manifest-dir={manifest}"]
         else:
-            cmd += [f"--level={level}"]
+            level = config.get("level")
+            if level is None:
+                steps = config.get("steps", default_steps)
+                cmd += [f"--steps={steps}", f"--timeout={default_vc_timeout}"]
+            else:
+                cmd += [f"--level={level}"]
+            cmd += ["--prover=" + ",".join(default_provers)]
 
-        cmd += ["--prover=" + ",".join(default_provers)]
         cmd += config.get("switches", [])
         return cmd
 
