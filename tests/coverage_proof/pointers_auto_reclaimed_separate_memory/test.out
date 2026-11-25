@@ -3,14 +3,14 @@ test.adb:238:10: warning: initialization of "W2" has no effect
 test.adb:38:09: warning: unused assignment
 
 Analyzed 2 units
-in unit inst, 51 subprograms and packages out of 162 analyzed
+in unit inst, 50 subprograms and packages out of 161 analyzed
   Inst at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Copy_Owning at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Create_From_Intgp2196 at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Create_From_Intgp2196.Create_From_Int at inst.ads skipped; body is SPARK_Mode => Off
-  Inst.Create_From_Intgp2196.Create_Object at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Create_From_Intgp2196.Create_Object at spark-pointers-auto_reclaimed-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Create_Owninggp1905 at inst.ads skipped; body is SPARK_Mode => Off
-  Inst.Create_Owninggp1905.Create_Object at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Create_Owninggp1905.Create_Object at spark-pointers-auto_reclaimed-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Create_Owninggp1905.Create_Owning at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Freegp1011 at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Freegp1011.Free at inst.ads skipped; body is SPARK_Mode => Off
@@ -39,10 +39,10 @@ in unit inst, 51 subprograms and packages out of 162 analyzed
   Inst.Owning_Live_Ops at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Owning_Live_Ops.Of_Weak_Handle at spark-pointers-auto_reclaimed-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Owning_Live_Ops.To_Strong_Handle at spark-pointers-auto_reclaimed-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
-  Inst.Owning_Live_Ops.Witness at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning_Live_Ops.Witness at spark-pointers-auto_reclaimed-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Owning_Ops at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Owning_Ops.Assign at spark-pointers-auto_reclaimed-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
-  Inst.Owning_Ops.Copy at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning_Ops.Copy at spark-pointers-auto_reclaimed-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Owning_Ops.Create_Copy at spark-pointers-auto_reclaimed-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Owning_Ops.Deref at spark-pointers-auto_reclaimed-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Owning_Pointers at inst.ads skipped; body is SPARK_Mode => Off
@@ -103,7 +103,6 @@ in unit inst, 51 subprograms and packages out of 162 analyzed
   Inst.Owning_Pointers.Reclamation_Checks.Check_Reclamation.Any_Value at spark-pointers-parameter_checks.adb, instantiated at spark-pointers-auto_reclaimed-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Plain_Ops at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Plain_Ops.Assign at spark-pointers-auto_reclaimed-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
-  Inst.Plain_Ops.Copy at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Plain_Ops.Copy at spark-pointers-auto_reclaimed-separate_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Plain_Ops.Create_Copy at spark-pointers-auto_reclaimed-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Plain_Ops.Deref at spark-pointers-auto_reclaimed-separate_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
