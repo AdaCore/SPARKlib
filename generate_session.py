@@ -7,7 +7,6 @@ from pathlib import Path
 import shutil
 import sys
 
-
 LIB_PYTHON_DIR = (
     Path(__file__).resolve().parent / "../testsuite/gnatprove/lib/python"
 ).resolve()

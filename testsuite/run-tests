@@ -45,7 +45,7 @@ def session_support_dir():
         if candidate and os.path.isfile(os.path.join(candidate, "clean_sessions.py")):
             return os.path.abspath(candidate)
     raise RuntimeError(
-        "cannot find clean_sessions.py for session updates; " f"set {spark2014_lib_env}"
+        f"cannot find clean_sessions.py for session updates; set {spark2014_lib_env}"
     )
 
 
