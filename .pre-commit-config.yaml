@@ -56,7 +56,5 @@ repos:
       - id: check-gnatformat-gnatprove
         name: Check for Ada formatting
         files: ^src/.*\.ad(b|s)$
-        env:
-          SPARKLIB_INSTALLED: 'False'
         language: system
-        entry: gnatformat -P sparklib_internal.gpr
+        entry: env SPARKLIB_INSTALLED=False gnatformat -P sparklib_internal.gpr
