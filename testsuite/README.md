@@ -99,6 +99,7 @@ jobs: 4                # cores for gnatprove, and slots taken in the run
 body_mode: false       # use normal library visibility (default: true)
 config_dir: config # hide the higher-order reachability body
 level: 2               # or "steps:", which defaults to 200
+manifest: proof/manifest # use manifest proof settings instead of level/steps
 replay: session        # replay the recorded sessions in proof/sessions
 session_opt:           # options for regenerating sessions only
   level: 3             # level, steps, or switches; defaults to the test settings
@@ -113,6 +114,11 @@ own timeout, its own result, and its own share of the machine; `sources` is
 what keeps the program itself in a single place. A proof test declares how
 many cores it takes with `jobs`, and the run schedules it against that weight,
 so that `-j16` means sixteen cores rather than sixteen tests.
+
+For a test with `manifest`, the driver passes the directory relative to the
+test working directory and leaves prover, steps, and VC timeout settings to
+GNATprove and the manifest. It cannot be combined with `level` or `steps`;
+command-line options supplied through `switches` can override the manifest.
 
 A proof test can set `config_dir` to a directory containing its own
 `sparklib_config.ads`, relative to the test working directory. The driver passes
