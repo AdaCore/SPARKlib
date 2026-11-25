@@ -1,4 +1,4 @@
-with SPARK.Containers.Formal.Unbounded_Holders;
+with SPARK.Containers.Formal.Indefinite_Holders;
 
 --  Clients of holders of strings and of class-wide values. Their proof relies
 --  only on the contracts of the holders.
@@ -13,7 +13,7 @@ is
    ------------------------
 
    package String_Holders is new
-     SPARK.Containers.Formal.Unbounded_Holders (String);
+     SPARK.Containers.Formal.Indefinite_Holders (String);
    use String_Holders;
 
    function Name_Or (H : Holder; Default : String) return String
@@ -73,7 +73,7 @@ is
    is (Left.X = Right.X and then Left.Y = Right.Y);
 
    package Shape_Holders is new
-     SPARK.Containers.Formal.Unbounded_Holders (Shape'Class, Same_Position);
+     SPARK.Containers.Formal.Indefinite_Holders (Shape'Class, Same_Position);
 
    function Is_Circle (H : Shape_Holders.Holder) return Boolean
    is (not Shape_Holders.Is_Empty (H)

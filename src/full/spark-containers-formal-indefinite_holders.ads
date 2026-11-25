@@ -12,7 +12,7 @@
 
 --  A holder is a container that is either empty or holds exactly one element.
 --  The element can be of an indefinite type, such as String or a class-wide
---  type. As for the other unbounded containers, assigning a holder copies its
+--  type. As for the unbounded containers, assigning a holder copies its
 --  element, and the memory of the element is reclaimed automatically through
 --  finalization. Unlike in Ada.Containers.Indefinite_Holders, Empty_Holder is
 --  a function, Constant_Reference and Reference return access values, and
@@ -45,7 +45,7 @@ generic
      procedure Eq_Transitive (X, Y, Z : Element_Type) is null
      with Ghost => Static;
 
-package SPARK.Containers.Formal.Unbounded_Holders with
+package SPARK.Containers.Formal.Indefinite_Holders with
     SPARK_Mode,
     Always_Terminates
 is
@@ -269,4 +269,4 @@ private
       Content : EHT.Holder_Type;
    end record;
 
-end SPARK.Containers.Formal.Unbounded_Holders;
+end SPARK.Containers.Formal.Indefinite_Holders;

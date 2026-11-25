@@ -16,7 +16,7 @@ with SPARK.Containers.Formal.Unbounded_Hashed_Maps;
 with SPARK.Containers.Formal.Unbounded_Hashed_Sets;
 with SPARK.Containers.Formal.Unbounded_Ordered_Maps;
 with SPARK.Containers.Formal.Unbounded_Ordered_Sets;
-with SPARK.Containers.Formal.Unbounded_Holders;
+with SPARK.Containers.Formal.Indefinite_Holders;
 with SPARK.Containers.Types; use SPARK.Containers.Types;
 
 --  Check that it is possible to instantiate the containers
@@ -61,7 +61,7 @@ package Containers_Inst with SPARK_Mode is
      SPARK.Containers.Formal.Unbounded_Ordered_Maps (Integer, Integer);
    package Unb_Ordered_Sets is new
      SPARK.Containers.Formal.Unbounded_Ordered_Sets (Integer);
-   package Unb_Holders is new
-     SPARK.Containers.Formal.Unbounded_Holders (Integer);
+   package Indef_Holders is new
+     SPARK.Containers.Formal.Indefinite_Holders (Integer);
 
 end Containers_Inst;

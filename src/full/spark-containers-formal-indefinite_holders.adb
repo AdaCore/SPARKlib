@@ -9,7 +9,7 @@ pragma Ada_2022;
 with System;
 use type System.Address;
 
-package body SPARK.Containers.Formal.Unbounded_Holders
+package body SPARK.Containers.Formal.Indefinite_Holders
   with SPARK_Mode => Off
 is
 
@@ -62,7 +62,10 @@ is
    function Constant_Reference
      (Container : Holder) return not null access constant Element_Type is
    begin
-      return EHT.Element_Access (Container.Content);
+      --  Avoid propagating the anonymous result's accessibility level through
+      --  Element_Access: GNAT can pass an incorrect level for nested callers.
+
+      return EHT.Element_Access (Container.Content).all'Unchecked_Access;
    end Constant_Reference;
 
    ----------
@@ -139,7 +142,9 @@ is
    function Reference (Container : Holder) return not null access Element_Type
    is
    begin
-      return EHT.Element_Access (Container.Content);
+      --  Use the same accessibility workaround as Constant_Reference
+
+      return EHT.Element_Access (Container.Content).all'Unchecked_Access;
    end Reference;
 
    ---------------------
@@ -184,4 +189,4 @@ is
       end return;
    end To_Holder;
 
-end SPARK.Containers.Formal.Unbounded_Holders;
+end SPARK.Containers.Formal.Indefinite_Holders;
