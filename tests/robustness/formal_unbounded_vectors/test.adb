@@ -51,18 +51,37 @@ procedure Test is
    end Create_Non_Empty_Vector;
 
    procedure Test_Element is
-      X : Vector;
-      I : Integer;
-   begin
-      Set_Label ("Element: ");
-      Create_Non_Empty_Vector (X);
+      procedure Test_Out_Of_Range is
+         X : Vector;
+         I : Integer;
       begin
-         I := Element (X, 6);
-      exception
-         when Constraint_Error => return;
-         when others => null;
-      end;
-      Record_Failure;
+         Set_Label ("Element: ");
+         Create_Non_Empty_Vector (X);
+         begin
+            I := Element (X, 6);
+         exception
+            when Constraint_Error => return;
+            when others => null;
+         end;
+         Record_Failure;
+      end Test_Out_Of_Range;
+
+      procedure Test_Empty is
+         X : Vector;
+         I : Integer;
+      begin
+         Set_Label ("Element on empty vector: ");
+         begin
+            I := Element (X, 1);
+         exception
+            when Constraint_Error => return;
+            when others => null;
+         end;
+         Record_Failure;
+      end Test_Empty;
+   begin
+      Test_Out_Of_Range;
+      Test_Empty;
    end Test_Element;
 
    procedure Test_Replace_Element is
@@ -412,7 +431,19 @@ procedure Test is
 
    procedure Test_Delete_2 is
       X : Vector;
+      procedure Test_Delete_After_Last is
+         X : Vector;
+      begin
+         Set_Label ("Delete immediately after last index: ");
+         Create_Non_Empty_Vector (X);
+         Delete (X, 6, 2);
+         if Length (X) /= 5 or else Element (X, 5) /= 5 then
+            Record_Failure;
+         end if;
+      end Test_Delete_After_Last;
+
    begin
+      Test_Delete_After_Last;
       Set_Label ("Delete 2: ");
       Create_Non_Empty_Vector (X);
       begin
@@ -554,6 +585,21 @@ procedure Test is
       Test_Insert_Count_Overflow;
    end Test_Defensive_Limits;
 
+   procedure Test_Move is
+      procedure Test_Move_Same_Container is
+         X : Vector;
+      begin
+         Set_Label ("Move on same container: ");
+         Create_Non_Empty_Vector (X);
+         Move (X, X);
+         if Length (X) /= 5 or else Element (X, 1) /= 1 or else Element (X, 5) /= 5 then
+            Record_Failure;
+         end if;
+      end Test_Move_Same_Container;
+   begin
+      Test_Move_Same_Container;
+   end Test_Move;
+
 begin
    Test_Append;
    Test_Append_2;
@@ -575,5 +621,6 @@ begin
    Test_Replace_Element;
    Test_Swap;
    Test_Defensive_Limits;
+   Test_Move;
    Check_Results;
 end Test;

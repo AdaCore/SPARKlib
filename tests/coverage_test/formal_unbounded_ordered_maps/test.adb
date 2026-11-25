@@ -111,8 +111,17 @@ procedure Test with SPARK_Mode is
    end Test_Clear;
 
    procedure Test_Assign with Pre => True is
+      procedure Test_Same_Container is
+         X : Map;
+      begin
+         Create_Non_Empty_Map (X);
+         Assign (X, X);
+         Assert (Length (X) = 5, "Assign on itself");
+      end Test_Same_Container;
+
       X, Y : Map;
    begin
+      Test_Same_Container;
       Create_Non_Empty_Map (X);
       Assign (X, Y);
       Assert (Length (X) = 0, "Assign on empty map");

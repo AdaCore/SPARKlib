@@ -1,5 +1,27 @@
+test.adb:295:10: medium: precondition might fail
+test.adb:296:10: medium: precondition might fail
+test.adb:315:10: medium: precondition might fail
+test.adb:316:10: medium: precondition might fail
+test.adb:367:10: medium: precondition might fail
+test.adb:369:15: medium: precondition might fail
+test.adb:370:10: medium: precondition might fail
+test.adb:401:10: medium: precondition might fail
+test.adb:401:18: medium: precondition might fail
+test.adb:434:13: medium: precondition might fail
+test.adb:570:07: medium: precondition might fail
+test.adb:677:33: medium: precondition might fail [possible fix: precondition of subprogram at line 676 should mention T1]
+test.adb:679:10: medium: precondition might fail, cannot prove Has_Element (Container, Parent) [possible fix: precondition of subprogram at line 676 should mention T1]
+test.adb:680:10: medium: precondition might fail, cannot prove Has_Element (Container, Parent)
+test.adb:682:10: medium: precondition might fail
+test.adb:685:35: medium: precondition might fail
+test.adb:686:10: medium: precondition might fail
+test.adb:687:13: medium: precondition might fail
+test.adb:687:26: medium: precondition might fail
+test.adb:703:07: warning: "T1" is set by "Test_Deep_Copy" but not used after the call
+test.adb:703:07: warning: "T2" is set by "Test_Deep_Copy" but not used after the call
+
 Analyzed 1 unit
-in unit test, 138 subprograms and packages out of 313 analyzed
+in unit test, 144 subprograms and packages out of 319 analyzed
   Test at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Assert at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Int_Trees at test.adb skipped; body is SPARK_Mode => Off
@@ -286,30 +308,36 @@ in unit test, 138 subprograms and packages out of 313 analyzed
   Test.Test_Assign at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Child at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Constant_Reference at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
-  Test.Test_Copy at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Copy at test.adb flow analyzed (0 errors, 2 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Copy.Test_Deep_Copy at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
   Test.Test_Default_Init at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
-  Test.Test_Delete_Leaf at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
-  Test.Test_Delete_Root at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Delete at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Delete.Test_Delete_Non_Root at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Delete.Test_Delete_Non_Root.Test_Delete_Subtree at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test.Test_Delete.Test_Delete_Root at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Depth at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Element at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Empty_Tree at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
-  Test.Test_Eq_Different_Counts at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
-  Test.Test_Eq_Different_Depths at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
-  Test.Test_Eq_Different_Insertion_Order at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
-  Test.Test_Eq_Different_Roots at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
-  Test.Test_Eq_Empty_Vs_Non_Empty at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
-  Test.Test_Eq_Same_Insertion_Order at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
-  Test.Test_Eq_Same_Obj at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Eq at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Eq.Test_Eq_Different_Counts at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Eq.Test_Eq_Different_Depths at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Eq.Test_Eq_Different_Directions at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Eq.Test_Eq_Different_Insertion_Order at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test.Test_Eq.Test_Eq_Different_Roots at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Eq.Test_Eq_Empty_Vs_Non_Empty at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Eq.Test_Eq_Same_Insertion_Order at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test.Test_Eq.Test_Eq_Same_Obj at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_First_Child at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_In_Subtree at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
-  Test.Test_Insert_Parent_Non_Root at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
-  Test.Test_Insert_Parent_Root at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Insert_Parent at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Insert_Parent.Test_Insert_Parent_Non_Root at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
+  Test.Test_Insert_Parent.Test_Insert_Parent_Root at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
   Test.Test_Is_Ancestor_Of at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Is_Leaf at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Is_Root at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Last_Child at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Move at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Next_Sibling at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
-  Test.Test_Previous_Sibling at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Test.Test_Previous_Sibling at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and not proved
   Test.Test_Reference at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Test.Test_Replace_Element at test.adb flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved

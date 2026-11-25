@@ -1,6 +1,7 @@
 with Ada.Text_IO;
 with SPARK.Containers.Types; use SPARK.Containers.Types;
 with Inst; use Inst.Int_Lists; use Inst.Sorting;
+with Test_Resize;
 
 procedure Test with SPARK_Mode is
 
@@ -43,18 +44,6 @@ procedure Test with SPARK_Mode is
          Delete (X, P);
       end;
    end Create_Non_Empty_List_With_Holes;
-
-   --  Unbounded containers are resized automatically when they grow. Test
-   --  the capability by inserting enough elements in a container.
-
-   procedure Test_Resize with Pre => True is
-      X : List;
-   begin
-      for I in 1 .. 1000 loop
-         Append (X, I);
-         pragma Loop_Invariant (Length (X) = Count_Type (I));
-      end loop;
-   end Test_Resize;
 
    procedure Test_Length with Pre => True is
       X : List;
@@ -134,6 +123,18 @@ procedure Test with SPARK_Mode is
    end Test_Assign;
 
    procedure Test_Copy with Pre => True is
+      procedure Test_Cleared is
+         X : List;
+      begin
+         Create_Non_Empty_List (X);
+         Clear (X);
+         declare
+            Y : List := X;
+         begin
+            Assert (Is_Empty (Y), "Copy of cleared list");
+         end;
+      end Test_Cleared;
+
       X : List;
       W : List;
    begin
@@ -154,6 +155,7 @@ procedure Test with SPARK_Mode is
       begin
          Assert (Y = W, "Copy of non-empty list with holes");
       end;
+      Test_Cleared;
    end Test_Copy;
 
    procedure Test_Element with Pre => True is
@@ -212,6 +214,16 @@ procedure Test with SPARK_Mode is
    end Test_Reference;
 
    procedure Test_Move with Pre => True is
+      procedure Test_To_Small_Target with Pre => True is
+         X, Y : List;
+      begin
+         Append (X, 0);
+         Append (Y, 1, 101);
+         Move (X, Y);
+         Assert (Length (X) = 101 and Is_Empty (Y),
+                 "Move to smaller allocation");
+      end Test_To_Small_Target;
+
       X, Y : List;
    begin
       Create_Non_Empty_List (X);
@@ -226,6 +238,7 @@ procedure Test with SPARK_Mode is
       Create_Non_Empty_List_With_Holes (Y);
       Move (X, Y);
       Assert (Length (X) = 5 and Is_Empty (Y), "Move list with holes");
+      Test_To_Small_Target;
    end Test_Move;
 
    --  Insert with no Position or Count parameters
@@ -1251,7 +1264,7 @@ procedure Test with SPARK_Mode is
    end Test_Aggregate;
 
 begin
-   --  Test_Resize;
+   Test_Resize;
    Test_Length;
    Test_Empty_List;
    Test_Eq;

@@ -373,6 +373,21 @@ procedure Test is
       end;
    end Test_Deleted_Cursors;
 
+   procedure Test_Move is
+      procedure Test_Move_Same_Container is
+         X : Set;
+      begin
+         Set_Label ("Move on same container: ");
+         Create_Non_Empty_Set (X);
+         Move (X, X);
+         if Length (X) /= 5 or else not Contains (X, 1) then
+            Record_Failure;
+         end if;
+      end Test_Move_Same_Container;
+   begin
+      Test_Move_Same_Container;
+   end Test_Move;
+
 begin
    Test_Constant_Reference;
    Test_Deleted_Cursors;
@@ -390,5 +405,6 @@ begin
    Test_Previous;
    Test_Replace;
    Test_Replace_Element;
+   Test_Move;
    Check_Results;
 end Test;

@@ -177,7 +177,7 @@ procedure Test is
       Record_Failure;
    end Test_Copy;
 
-    procedure Test_Move is
+   procedure Test_Move is
       procedure Test_Move_Full_Container is
          X : Vector (5);
          Y : Vector (4);
@@ -193,7 +193,19 @@ procedure Test is
          Record_Failure;
       end Test_Move_Full_Container;
 
+      procedure Test_Move_Same_Container is
+         X : Vector (5);
+      begin
+         Set_Label ("Move on same container: ");
+         Create_Non_Empty_Vector (X);
+         Move (X, X);
+         if Length (X) /= 5 or else Element (X, 1) /= 1 or else Element (X, 5) /= 5 then
+            Record_Failure;
+         end if;
+      end Test_Move_Same_Container;
+
    begin
+      Test_Move_Same_Container;
       Test_Move_Full_Container;
    end Test_Move;
 
@@ -495,7 +507,19 @@ procedure Test is
 
    procedure Test_Delete_2 is
       X : Vector (5);
+      procedure Test_Delete_After_Last is
+         X : Vector (10);
+      begin
+         Set_Label ("Delete immediately after last index: ");
+         Create_Non_Empty_Vector (X);
+         Delete (X, 6, 2);
+         if Length (X) /= 5 or else Element (X, 5) /= 5 then
+            Record_Failure;
+         end if;
+      end Test_Delete_After_Last;
+
    begin
+      Test_Delete_After_Last;
       Set_Label ("Delete 2: ");
       Create_Non_Empty_Vector (X);
       begin
@@ -569,6 +593,21 @@ procedure Test is
    end Test_Last_Element;
 
    procedure Test_Merge is
+      procedure Test_Merge_Empty_Target_Too_Small is
+         X : Vector (5);
+         Y : Vector (4);
+      begin
+         Set_Label ("Merge into undersized empty vector: ");
+         Create_Non_Empty_Vector (X);
+         begin
+            Sorting.Merge (Y, X);
+         exception
+            when Capacity_Error => return;
+            when others => null;
+         end;
+         Record_Failure;
+      end Test_Merge_Empty_Target_Too_Small;
+
       procedure Test_Merge_Full_Container is
          X : Vector (5);
          Y : Vector (9);
@@ -599,6 +638,7 @@ procedure Test is
          Record_Failure;
       end Test_Merge_Alias;
    begin
+      Test_Merge_Empty_Target_Too_Small;
       Test_Merge_Full_Container;
       Test_Merge_Alias;
    end Test_Merge;

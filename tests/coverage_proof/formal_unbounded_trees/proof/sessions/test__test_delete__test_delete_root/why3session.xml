@@ -2,23 +2,21 @@
 <!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
 "https://www.why3.org/why3session.dtd">
 <why3session shape_version="6">
-  <prover id="0" name="altergo" version="1.30-gnatprove" timelimit="5" steplimit="0" memlimit="2000" />
-  <prover id="1" name="CVC5" version="0.0.7-gnatprove" timelimit="5" steplimit="0" memlimit="2000" />
-  <prover id="2" name="Z3" version="4.5.1-gnatprove" timelimit="5" steplimit="0" memlimit="2000" />
+  <prover id="1" name="CVC5" version="0.0.7-gnatprove" timelimit="0" steplimit="6528" memlimit="0" />
+  <prover id="2" name="Z3" version="4.5.1-gnatprove" timelimit="0" steplimit="85442" memlimit="0" />
   <prover id="3" name="Trivial" version="1.0" alternative="trivial" timelimit="1" steplimit="1" memlimit="1000" />
-  <prover id="4" name="colibri" version="2137" timelimit="5" steplimit="0" memlimit="2000" />
   <file format="gnat-json" proved="true">
     <path name=".." />
     <path name=".." />
     <path name=".." />
     <path name="obj" />
     <path name="gnatprove" />
-    <path name="test__test_delete_root.gnat-json" />
-    <theory name="Test__test_delete_root__subprogram_def" proved="true">
+    <path name="test__test_delete__test_delete_root.gnat-json" />
+    <theory name="Test__test_delete__test_delete_root__subprogram_def" proved="true">
       <goal name="def'vc" proved="true">
         <transf name="split_goal_wp_conj" proved="true">
           <goal name="def'vc.0" proved="true">
-            <proof prover="1">
+            <proof prover="1" steplimit="1280">
               <result status="valid" steps="1163" />
             </proof>
           </goal>
@@ -28,18 +26,18 @@
             </proof>
           </goal>
           <goal name="def'vc.2" proved="true">
-            <proof prover="1">
+            <proof prover="1" steplimit="4429">
               <result status="valid" steps="4026" />
             </proof>
           </goal>
           <goal name="def'vc.3" proved="true">
-            <proof prover="1">
+            <proof prover="1" steplimit="4088">
               <result status="valid" steps="3716" />
             </proof>
           </goal>
           <goal name="def'vc.4" proved="true">
-            <proof prover="2">
-              <result status="valid" steps="31526" />
+            <proof prover="1" steplimit="8326">
+              <result status="valid" steps="7569" />
             </proof>
           </goal>
           <goal name="def'vc.5" proved="true">
@@ -48,7 +46,7 @@
             </proof>
           </goal>
           <goal name="def'vc.6" proved="true">
-            <proof prover="1">
+            <proof prover="1" steplimit="11184">
               <result status="valid" steps="10167" />
             </proof>
           </goal>
@@ -58,8 +56,8 @@
             </proof>
           </goal>
           <goal name="def'vc.8" proved="true">
-            <proof prover="2">
-              <result status="valid" steps="60874" />
+            <proof prover="1" steplimit="20129">
+              <result status="valid" steps="18299" />
             </proof>
           </goal>
           <goal name="def'vc.9" proved="true">
@@ -68,12 +66,12 @@
             </proof>
           </goal>
           <goal name="def'vc.10" proved="true">
-            <proof prover="1">
+            <proof prover="1" steplimit="15126">
               <result status="valid" steps="13750" />
             </proof>
           </goal>
           <goal name="def'vc.11" proved="true">
-            <proof prover="1">
+            <proof prover="1" steplimit="7577">
               <result status="valid" steps="6888" />
             </proof>
           </goal>
@@ -88,7 +86,7 @@
             </proof>
           </goal>
           <goal name="def'vc.14" proved="true">
-            <proof prover="1">
+            <proof prover="1" steplimit="19269">
               <result status="valid" steps="17517" />
             </proof>
           </goal>
@@ -98,7 +96,7 @@
             </proof>
           </goal>
           <goal name="def'vc.16" proved="true">
-            <proof prover="1">
+            <proof prover="1" steplimit="18650">
               <result status="valid" steps="16954" />
             </proof>
           </goal>
@@ -108,7 +106,7 @@
             </proof>
           </goal>
           <goal name="def'vc.18" proved="true">
-            <proof prover="1">
+            <proof prover="1" steplimit="20145">
               <result status="valid" steps="18313" />
             </proof>
           </goal>

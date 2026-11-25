@@ -160,9 +160,22 @@ procedure Test with SPARK_Mode is
             Assert (Y = X, "Copy with capacity of non-empty map");
          end;
       end Test_With_Capacity;
+
+      procedure Test_After_Delete is
+         X : Map (100);
+      begin
+         Create_Non_Empty_Map (X);
+         Delete (X, 1);
+         declare
+            Y : constant Map := Copy (X, 200);
+         begin
+            Assert (Y = X, "Copy with capacity after deleting an element");
+         end;
+      end Test_After_Delete;
    begin
       Test_No_Capacity;
       Test_With_Capacity;
+      Test_After_Delete;
    end Test_Copy;
 
    procedure Test_Key with Pre => True is

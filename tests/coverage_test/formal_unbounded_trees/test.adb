@@ -51,8 +51,8 @@ procedure Test with SPARK_Mode is
    begin
       Insert_Root (T, 10);
       Insert_Child (T, 1, Root (T), 1);
-      Insert_Child (T, 2, Root (T), 2);
       Insert_Child (T, 3, Root (T), 3);
+      Insert_Child (T, 2, Root (T), 2);
 
       --  With a non-empty child
 
@@ -155,165 +155,188 @@ procedure Test with SPARK_Mode is
       Assert (Depth (T, C2) = 2, "node 2 not at depth 2");
    end Test_Depth;
 
-   procedure Test_Eq_Same_Obj with Pre => True is
-      T1 : Tree;
+   procedure Test_Eq with Pre => True is
+      procedure Test_Eq_Same_Obj with Pre => True is
+         T1 : Tree;
 
-      B11 : Boolean;
+         B11 : Boolean;
 
+      begin
+         Insert_Root (T1, 10);
+         Insert_Child (T1, 1, Root (T1), 1);
+         Insert_Child (T1, 2, Root (T1), 2);
+         Insert_Child (T1, 3, Root (T1), 3);
+         Insert_Child (T1, 4, Root (T1), 4);
+
+         --  Same object
+
+         B11 := T1 = T1;
+
+         Assert (B11, "=, same objects");
+      end Test_Eq_Same_Obj;
+
+      procedure Test_Eq_Empty_Vs_Non_Empty with Pre => True is
+         T1 : Tree;
+
+         B1E : Boolean;
+         BE1 : Boolean;
+
+      begin
+         Insert_Root (T1, 10);
+         Insert_Child (T1, 1, Root (T1), 1);
+         Insert_Child (T1, 2, Root (T1), 2);
+         Insert_Child (T1, 3, Root (T1), 3);
+         Insert_Child (T1, 4, Root (T1), 4);
+
+         --  An empty and a non-empty object
+
+         B1E := T1 = Empty_Tree;
+         BE1 := Empty_Tree = T1;
+
+         Assert (not B1E and not BE1, "=, empty and non-empty object");
+      end Test_Eq_Empty_Vs_Non_Empty;
+
+      procedure Test_Eq_Different_Roots with Pre => True is
+         T1, T2 : Tree;
+
+         B12 : Boolean;
+         B21 : Boolean;
+
+      begin
+         Insert_Root (T1, 10);
+         Insert_Child (T1, 1, Root (T1), 1);
+         Insert_Child (T1, 2, Root (T1), 2);
+         Insert_Child (T1, 3, Root (T1), 3);
+         Insert_Child (T1, 4, Root (T1), 4);
+
+         --  Objects with different roots
+
+         Insert_Root (T2, 11);
+         Insert_Child (T2, 1, Root (T2), 1);
+         Insert_Child (T2, 2, Root (T2), 2);
+         Insert_Child (T2, 3, Root (T2), 3);
+         Insert_Child (T2, 4, Root (T2), 4);
+
+         B12 := T1 = T2;
+         B21 := T2 = T1;
+
+         Assert (not B12 and not B21, "=, different roots");
+      end Test_Eq_Different_Roots;
+
+      procedure Test_Eq_Different_Depths with Pre => True is
+         T1, T3 : Tree;
+
+         B13 : Boolean;
+         B31 : Boolean;
+
+      begin
+         Insert_Root (T1, 10);
+         Insert_Child (T1, 1, Root (T1), 1);
+         Insert_Child (T1, 2, Root (T1), 2);
+         Insert_Child (T1, 3, Root (T1), 3);
+         Insert_Child (T1, 4, Root (T1), 4);
+
+         --  Objects with different depths
+
+         Insert_Root (T3, 10);
+         Insert_Child (T3, 1, Root (T3), 1);
+         Insert_Child (T3, 2, Root (T3), 2);
+         Insert_Child (T3, 3, Root (T3), 3);
+         Insert_Child (T3, 1, Child (T3, Root (T3), 3), 1);
+
+         B13 := T1 = T3;
+         B31 := T3 = T1;
+
+         Assert (not B13 and not B31, "=, different depths");
+      end Test_Eq_Different_Depths;
+
+      procedure Test_Eq_Different_Counts with Pre => True is
+         T1, T4 : Tree;
+
+         B14 : Boolean;
+         B41 : Boolean;
+
+      begin
+         Insert_Root (T1, 10);
+         Insert_Child (T1, 1, Root (T1), 1);
+         Insert_Child (T1, 2, Root (T1), 2);
+         Insert_Child (T1, 3, Root (T1), 3);
+         Insert_Child (T1, 4, Root (T1), 4);
+
+         --  Objects with different counts
+
+         Insert_Root (T4, 11);
+         Insert_Child (T4, 1, Root (T4), 1);
+         Insert_Child (T4, 2, Root (T4), 2);
+         Insert_Child (T4, 3, Root (T4), 3);
+
+         B14 := T1 = T4;
+         B41 := T4 = T1;
+
+         Assert (not B14 and not B41, "=, different counts");
+      end Test_Eq_Different_Counts;
+
+      procedure Test_Eq_Same_Insertion_Order with Pre => True is
+         T1, T5 : Tree;
+      begin
+         Insert_Root (T1, 10);
+         Insert_Child (T1, 1, Root (T1), 1);
+         Insert_Child (T1, 2, Root (T1), 2);
+         Insert_Child (T1, 3, Root (T1), 3);
+
+         --  Objects with same tree structure and elements, and same
+         --  insertion order
+
+         Insert_Root (T5, 10);
+         Insert_Child (T5, 1, Root (T5), 1);
+         Insert_Child (T5, 2, Root (T5), 2);
+         Insert_Child (T5, 3, Root (T5), 3);
+
+         Assert (T1 = T5, "T1 = T5, same insertion order");
+         Assert (T5 = T1, "T5 = T1, same insertion order");
+      end Test_Eq_Same_Insertion_Order;
+
+      procedure Test_Eq_Different_Insertion_Order with Pre => True is
+         T1, T5 : Tree;
+      begin
+         Insert_Root (T1, 10);
+         Insert_Child (T1, 1, Root (T1), 1);
+         Insert_Child (T1, 2, Root (T1), 2);
+         Insert_Child (T1, 3, Root (T1), 3);
+
+         --  Objects with same tree structure and elements, but different
+         --  insertion order
+
+         Insert_Root (T5, 10);
+         Insert_Child (T5, 3, Root (T5), 3);
+         Insert_Child (T5, 2, Root (T5), 2);
+         Insert_Child (T5, 1, Root (T5), 1);
+
+         Assert (T1 = T5, "T1 = T5, different insertion order");
+         Assert (T5 = T1, "T5 = T1, different insertion order");
+      end Test_Eq_Different_Insertion_Order;
+
+      procedure Test_Eq_Different_Directions with Pre => True is
+         T1, T2 : Tree;
+      begin
+         Insert_Root (T1, 10);
+         Insert_Root (T2, 10);
+         Insert_Child (T1, 1, Root (T1), 1);
+         Insert_Child (T2, 1, Root (T2), 2);
+
+         Assert (T1 /= T2 and then T2 /= T1,
+                 "Equal elements at different child directions");
+      end Test_Eq_Different_Directions;
    begin
-      Insert_Root (T1, 10);
-      Insert_Child (T1, 1, Root (T1), 1);
-      Insert_Child (T1, 2, Root (T1), 2);
-      Insert_Child (T1, 3, Root (T1), 3);
-      Insert_Child (T1, 4, Root (T1), 4);
-
-      --  Same object
-
-      B11 := T1 = T1;
-
-      Assert (B11, "=, same objects");
-   end Test_Eq_Same_Obj;
-
-   procedure Test_Eq_Empty_Vs_Non_Empty with Pre => True is
-      T1 : Tree;
-
-      B1E : Boolean;
-      BE1 : Boolean;
-
-   begin
-      Insert_Root (T1, 10);
-      Insert_Child (T1, 1, Root (T1), 1);
-      Insert_Child (T1, 2, Root (T1), 2);
-      Insert_Child (T1, 3, Root (T1), 3);
-      Insert_Child (T1, 4, Root (T1), 4);
-
-      --  An empty and a non-empty object
-
-      B1E := T1 = Empty_Tree;
-      BE1 := Empty_Tree = T1;
-
-      Assert (not B1E and not BE1, "=, empty and non-empty object");
-   end Test_Eq_Empty_Vs_Non_Empty;
-
-   procedure Test_Eq_Different_Roots with Pre => True is
-      T1, T2 : Tree;
-
-      B12 : Boolean;
-      B21 : Boolean;
-
-   begin
-      Insert_Root (T1, 10);
-      Insert_Child (T1, 1, Root (T1), 1);
-      Insert_Child (T1, 2, Root (T1), 2);
-      Insert_Child (T1, 3, Root (T1), 3);
-      Insert_Child (T1, 4, Root (T1), 4);
-
-      --  Objects with different roots
-
-      Insert_Root (T2, 11);
-      Insert_Child (T2, 1, Root (T2), 1);
-      Insert_Child (T2, 2, Root (T2), 2);
-      Insert_Child (T2, 3, Root (T2), 3);
-      Insert_Child (T2, 4, Root (T2), 4);
-
-      B12 := T1 = T2;
-      B21 := T2 = T1;
-
-      Assert (not B12 and not B21, "=, different roots");
-   end Test_Eq_Different_Roots;
-
-   procedure Test_Eq_Different_Depths with Pre => True is
-      T1, T3 : Tree;
-
-      B13 : Boolean;
-      B31 : Boolean;
-
-   begin
-      Insert_Root (T1, 10);
-      Insert_Child (T1, 1, Root (T1), 1);
-      Insert_Child (T1, 2, Root (T1), 2);
-      Insert_Child (T1, 3, Root (T1), 3);
-      Insert_Child (T1, 4, Root (T1), 4);
-
-      --  Objects with different depths
-
-      Insert_Root (T3, 10);
-      Insert_Child (T3, 1, Root (T3), 1);
-      Insert_Child (T3, 2, Root (T3), 2);
-      Insert_Child (T3, 3, Root (T3), 3);
-      Insert_Child (T3, 1, Child (T3, Root (T3), 3), 1);
-
-      B13 := T1 = T3;
-      B31 := T3 = T1;
-
-      Assert (not B13 and not B31, "=, different depths");
-   end Test_Eq_Different_Depths;
-
-   procedure Test_Eq_Different_Counts with Pre => True is
-      T1, T4 : Tree;
-
-      B14 : Boolean;
-      B41 : Boolean;
-
-   begin
-      Insert_Root (T1, 10);
-      Insert_Child (T1, 1, Root (T1), 1);
-      Insert_Child (T1, 2, Root (T1), 2);
-      Insert_Child (T1, 3, Root (T1), 3);
-      Insert_Child (T1, 4, Root (T1), 4);
-
-      --  Objects with different counts
-
-      Insert_Root (T4, 11);
-      Insert_Child (T4, 1, Root (T4), 1);
-      Insert_Child (T4, 2, Root (T4), 2);
-      Insert_Child (T4, 3, Root (T4), 3);
-
-      B14 := T1 = T4;
-      B41 := T4 = T1;
-
-      Assert (not B14 and not B41, "=, different counts");
-   end Test_Eq_Different_Counts;
-
-   procedure Test_Eq_Same_Insertion_Order with Pre => True is
-      T1, T5 : Tree;
-   begin
-      Insert_Root (T1, 10);
-      Insert_Child (T1, 1, Root (T1), 1);
-      Insert_Child (T1, 2, Root (T1), 2);
-      Insert_Child (T1, 3, Root (T1), 3);
-
-      --  Objects with same tree structure and elements, and same
-      --  insertion order
-
-      Insert_Root (T5, 10);
-      Insert_Child (T5, 1, Root (T5), 1);
-      Insert_Child (T5, 2, Root (T5), 2);
-      Insert_Child (T5, 3, Root (T5), 3);
-
-      Assert (T1 = T5, "T1 = T5, same insertion order");
-      Assert (T5 = T1, "T5 = T1, same insertion order");
-   end Test_Eq_Same_Insertion_Order;
-
-   procedure Test_Eq_Different_Insertion_Order with Pre => True is
-      T1, T5 : Tree;
-   begin
-      Insert_Root (T1, 10);
-      Insert_Child (T1, 1, Root (T1), 1);
-      Insert_Child (T1, 2, Root (T1), 2);
-      Insert_Child (T1, 3, Root (T1), 3);
-
-      --  Objects with same tree structure and elements, but different
-      --  insertion order
-
-      Insert_Root (T5, 10);
-      Insert_Child (T5, 3, Root (T5), 3);
-      Insert_Child (T5, 2, Root (T5), 2);
-      Insert_Child (T5, 1, Root (T5), 1);
-
-      Assert (T1 = T5, "T1 = T5, different insertion order");
-      Assert (T5 = T1, "T5 = T1, different insertion order");
-   end Test_Eq_Different_Insertion_Order;
+      Test_Eq_Same_Obj;
+      Test_Eq_Empty_Vs_Non_Empty;
+      Test_Eq_Different_Roots;
+      Test_Eq_Different_Depths;
+      Test_Eq_Different_Counts;
+      Test_Eq_Same_Insertion_Order;
+      Test_Eq_Different_Insertion_Order;
+      Test_Eq_Different_Directions;
+   end Test_Eq;
 
    --  Test default initialization
 
@@ -323,98 +346,140 @@ procedure Test with SPARK_Mode is
       Assert (Is_Empty (T), "Default init, is empty");
    end Test_Default_Init;
 
-   procedure Test_Insert_Parent_Root with Pre => True is
-      T : Tree;
-      C : Cursor;
+   procedure Test_Insert_Parent with Pre => True is
+      procedure Test_Insert_Parent_Root with Pre => True is
+         T : Tree;
+         C : Cursor;
+      begin
+         Insert_Root (T, 10);
+         Insert_Child (T, 1, Root (T), 1);
+         Insert_Child (T, 2, Root (T), 2);
+         Insert_Child (T, 3, Root (T), 3);
+         Insert_Parent (T, 5, Root (T), 1);
+
+         C := Root (T);
+         Assert (Element (T, C) = 5, "Insert parent (root), wrong element (5)");
+
+         C := Child (T, Root (T), 1);
+         Assert (Element (T, C) = 10, "Insert parent (root), wrong element (10)");
+
+         C := Child (T, Child (T, Root (T), 1), 1);
+         Assert (Element (T, C) = 1, "Insert parent (root), wrong element (1)");
+
+         C := Child (T, Child (T, Root (T), 1), 2);
+         Assert (Element (T, C) = 2, "Insert parent (root), wrong element (2)");
+
+         C := Child (T, Child (T, Root (T), 1), 3);
+         Assert (Element (T, C) = 3, "Insert parent (root), wrong element (3)");
+      end Test_Insert_Parent_Root;
+
+      procedure Test_Insert_Parent_Non_Root with Pre => True is
+         T : Tree;
+         C : Cursor;
+      begin
+         Insert_Root (T, 10);
+         Insert_Child (T, 1, Root (T), 1);
+         Insert_Child (T, 2, Root (T), 2);
+         Insert_Child (T, 3, Root (T), 3);
+         Insert_Parent (T, 5, Child (T, Root (T), 1), 1);
+
+         C := Root (T);
+         Assert (Element (T, C) = 10, "Insert parent (root), wrong element (10)");
+
+         C := Child (T, Root (T), 1);
+         Assert (Element (T, C) = 5, "Insert parent (root), wrong element (5)");
+
+         C := Child (T, Child (T, Root (T), 1), 1);
+         Assert (Element (T, C) = 1, "Insert parent (root), wrong element (1)");
+
+         C := Child (T, Root (T), 2);
+         Assert (Element (T, C) = 2, "Insert parent (root), wrong element (2)");
+
+         C := Child (T, Root (T), 3);
+         Assert (Element (T, C) = 3, "Insert parent (root), wrong element (3)");
+         Insert_Parent (T, 20, Child (T, Root (T), 3), 3);
+         Assert (Element (T, Last_Child (T, Root (T))) = 20,
+                 "Insert parent of last child");
+      end Test_Insert_Parent_Non_Root;
    begin
-      Insert_Root (T, 10);
-      Insert_Child (T, 1, Root (T), 1);
-      Insert_Child (T, 2, Root (T), 2);
-      Insert_Child (T, 3, Root (T), 3);
-      Insert_Parent (T, 5, Root (T), 1);
+      Test_Insert_Parent_Root;
+      Test_Insert_Parent_Non_Root;
+   end Test_Insert_Parent;
 
-      C := Root (T);
-      Assert (Element (T, C) = 5, "Insert parent (root), wrong element (5)");
+   procedure Test_Delete with Pre => True is
+      procedure Test_Delete_Non_Root with Pre => True is
+         procedure Test_Delete_Subtree with Pre => True is
+            Subtree : Tree;
+            Parent  : Cursor;
+         begin
+            Insert_Root (Subtree, 10);
+            Insert_Child (Subtree, 1, Root (Subtree), 1);
+            Insert_Child (Subtree, 2, Root (Subtree), 2);
+            Insert_Child (Subtree, 3, Root (Subtree), 3);
+            Parent := Child (Subtree, Root (Subtree), 1);
+            Insert_Child (Subtree, 11, Parent, 1);
+            Insert_Child (Subtree, 12, Parent, 2);
 
-      C := Child (T, Root (T), 1);
-      Assert (Element (T, C) = 10, "Insert parent (root), wrong element (10)");
+            Assert (Node_Count (Subtree, Root (Subtree)) = 6,
+                    "Root subtree count");
+            Assert (Node_Count (Subtree, Parent) = 3,
+                    "Child subtree count");
+            Delete (Subtree, Parent);
+            Assert (Node_Count (Subtree) = 3,
+                    "Delete nonroot subtree");
+            Insert_Child (Subtree, 1, Root (Subtree), 1);
+            Assert (Element (Subtree, Child (Subtree, Root (Subtree), 1)) = 1,
+                    "Reuse node after subtree deletion");
+            Delete (Subtree, Child (Subtree, Root (Subtree), 3));
+            Assert (Last_Child (Subtree, Root (Subtree)) =
+                    Child (Subtree, Root (Subtree), 2),
+                    "Delete last child");
+         end Test_Delete_Subtree;
 
-      C := Child (T, Child (T, Root (T), 1), 1);
-      Assert (Element (T, C) = 1, "Insert parent (root), wrong element (1)");
+         T : Tree;
+         C : Cursor;
+      begin
+         Insert_Root (T, 10);
+         Insert_Child (T, 1, Root (T), 1);
+         Insert_Child (T, 2, Root (T), 2);
+         Insert_Child (T, 3, Root (T), 3);
 
-      C := Child (T, Child (T, Root (T), 1), 2);
-      Assert (Element (T, C) = 2, "Insert parent (root), wrong element (2)");
+         Delete (T, Child (T, Root (T), 2));
 
-      C := Child (T, Child (T, Root (T), 1), 3);
-      Assert (Element (T, C) = 3, "Insert parent (root), wrong element (3)");
-   end Test_Insert_Parent_Root;
+         C := Root (T);
+         Assert (Has_Element (T, C), "No element for root node");
+         Assert (Element (T, C) = 10, "Wrong element for root node");
 
-   procedure Test_Insert_Parent_Non_Root with Pre => True is
-      T : Tree;
-      C : Cursor;
+         C := Child (T, Root (T), 1);
+         Assert (Has_Element (T, C), "No element for node 1");
+         Assert (Element (T, C) = 1, "Wrong element for node 1");
+
+         C := Child (T, Root (T), 2);
+         Assert (not Has_Element (T, C), "node 2 was not deleted");
+
+         C := Child (T, Root (T), 3);
+         Assert (Has_Element (T, C), "No element for node 3");
+         Assert (Element (T, C) = 3, "Wrong element for node 3");
+         Test_Delete_Subtree;
+      end Test_Delete_Non_Root;
+
+      procedure Test_Delete_Root with Pre => True is
+         T : Tree;
+      begin
+         Insert_Root (T, 10);
+         Insert_Child (T, 1, Root (T), 1);
+         Insert_Child (T, 2, Root (T), 2);
+         Insert_Child (T, 3, Root (T), 3);
+
+         Delete (T, Root (T));
+
+         Assert (Is_Empty (T), "Tree not empty after deleted root");
+         Assert (Root (T) = No_Element, "Root not No_Element after deletion");
+      end Test_Delete_Root;
    begin
-      Insert_Root (T, 10);
-      Insert_Child (T, 1, Root (T), 1);
-      Insert_Child (T, 2, Root (T), 2);
-      Insert_Child (T, 3, Root (T), 3);
-      Insert_Parent (T, 5, Child (T, Root (T), 1), 1);
-
-      C := Root (T);
-      Assert (Element (T, C) = 10, "Insert parent (root), wrong element (10)");
-
-      C := Child (T, Root (T), 1);
-      Assert (Element (T, C) = 5, "Insert parent (root), wrong element (5)");
-
-      C := Child (T, Child (T, Root (T), 1), 1);
-      Assert (Element (T, C) = 1, "Insert parent (root), wrong element (1)");
-
-      C := Child (T, Root (T), 2);
-      Assert (Element (T, C) = 2, "Insert parent (root), wrong element (2)");
-
-      C := Child (T, Root (T), 3);
-      Assert (Element (T, C) = 3, "Insert parent (root), wrong element (3)");
-   end Test_Insert_Parent_Non_Root;
-
-   procedure Test_Delete_Leaf with Pre => True is
-      T : Tree;
-      C : Cursor;
-   begin
-      Insert_Root (T, 10);
-      Insert_Child (T, 1, Root (T), 1);
-      Insert_Child (T, 2, Root (T), 2);
-      Insert_Child (T, 3, Root (T), 3);
-
-      Delete (T, Child (T, Root (T), 2));
-
-      C := Root (T);
-      Assert (Has_Element (T, C), "No element for root node");
-      Assert (Element (T, C) = 10, "Wrong element for root node");
-
-      C := Child (T, Root (T), 1);
-      Assert (Has_Element (T, C), "No element for node 1");
-      Assert (Element (T, C) = 1, "Wrong element for node 1");
-
-      C := Child (T, Root (T), 2);
-      Assert (not Has_Element (T, C), "node 2 was not deleted");
-
-      C := Child (T, Root (T), 3);
-      Assert (Has_Element (T, C), "No element for node 3");
-      Assert (Element (T, C) = 3, "Wrong element for node 3");
-   end Test_Delete_Leaf;
-
-   procedure Test_Delete_Root with Pre => True is
-      T : Tree;
-   begin
-      Insert_Root (T, 10);
-      Insert_Child (T, 1, Root (T), 1);
-      Insert_Child (T, 2, Root (T), 2);
-      Insert_Child (T, 3, Root (T), 3);
-
-      Delete (T, Root (T));
-
-      Assert (Is_Empty (T), "Tree not empty after deleted root");
-      Assert (Root (T) = No_Element, "Root not No_Element after deletion");
-   end Test_Delete_Root;
+      Test_Delete_Non_Root;
+      Test_Delete_Root;
+   end Test_Delete;
 
    procedure Test_Replace_Element with Pre => True is
       T : Tree;
@@ -607,6 +672,22 @@ procedure Test with SPARK_Mode is
    procedure Test_Copy with Pre => True is
       T1 : Tree;
       T2 : Tree;
+
+      procedure Test_Deep_Copy with Pre => True is
+         C : constant Cursor := Child (T1, Root (T1), 1);
+      begin
+         Insert_Child (T1, 11, C, 1);
+         Insert_Child (T1, 12, C, 2);
+         T2 := Copy (T1);
+         Assert (Node_Count (T2) = 6 and then T2 = T1,
+                 "Copy tree with grandchildren");
+
+         Replace_Element (T1, 99, Child (T1, C, 1));
+         Assert
+           (Element (T2, Child (T2, Child (T2, Root (T2), 1), 1)) = 11,
+            "Copy preserves grandchildren independently");
+      end Test_Deep_Copy;
+
    begin
       Insert_Root (T1, 10);
       Insert_Child (T1, 1, Root (T1), 1);
@@ -619,6 +700,7 @@ procedure Test with SPARK_Mode is
       Assert (Element (T2, Child (T2, Root (T2), 1)) = 1, "Wrong value for node 1 after copy");
       Assert (Element (T2, Child (T2, Root (T2), 2)) = 2, "Wrong value for node 2 after copy");
       Assert (Element (T2, Child (T2, Root (T2), 3)) = 3, "Wrong value for node 3 after copy");
+      Test_Deep_Copy;
    end Test_Copy;
 
 begin
@@ -630,18 +712,10 @@ begin
    Test_Is_Ancestor_Of;
    Test_In_Subtree;
    Test_Depth;
-   Test_Eq_Same_Obj;
-   Test_Eq_Empty_Vs_Non_Empty;
-   Test_Eq_Different_Roots;
-   Test_Eq_Different_Depths;
-   Test_Eq_Different_Counts;
-   Test_Eq_Same_Insertion_Order;
-   Test_Eq_Different_Insertion_Order;
+   Test_Eq;
    Test_Default_Init;
-   Test_Insert_Parent_Root;
-   Test_Insert_Parent_Non_Root;
-   Test_Delete_Leaf;
-   Test_Delete_Root;
+   Test_Insert_Parent;
+   Test_Delete;
    Test_Replace_Element;
    Test_First_Child;
    Test_Last_Child;
