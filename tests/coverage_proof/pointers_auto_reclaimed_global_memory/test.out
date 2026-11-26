@@ -7,17 +7,17 @@ test.adb:95:10: warning: statement has no effect
 test.adb:95:19: warning: "C" is set by "Reclaim" but not used after the call
 
 Analyzed 2 units
-in unit inst, 71 subprograms and packages out of 242 analyzed
+in unit inst, 69 subprograms and packages out of 240 analyzed
   Inst at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Copy_Owning at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Create_Cellgp3069 at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Create_Cellgp3069.Create_Cell at inst.ads skipped; body is SPARK_Mode => Off
-  Inst.Create_Cellgp3069.Create_Object at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Create_Cellgp3069.Create_Object at spark-pointers-auto_reclaimed-global_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Create_Owninggp1491 at inst.ads skipped; body is SPARK_Mode => Off
-  Inst.Create_Owninggp1491.Create_Object at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Create_Owninggp1491.Create_Object at spark-pointers-auto_reclaimed-global_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Create_Owninggp1491.Create_Owning at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Create_Plaingp544 at inst.ads skipped; body is SPARK_Mode => Off
-  Inst.Create_Plaingp544.Create_Object at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Create_Plaingp544.Create_Object at spark-pointers-auto_reclaimed-global_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Create_Plaingp544.Create_Plain at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Cyclic_Handle_Ops at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Cyclic_Handle_Ops."=" at spark-pointers-auto_reclaimed-global_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
@@ -40,7 +40,6 @@ in unit inst, 71 subprograms and packages out of 242 analyzed
   Inst.Cyclic_Handles.Weak_Handle at spark-pointers-handles-auto_reclaimed_handles.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Cyclic_Ops at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Cyclic_Ops.Assign at spark-pointers-auto_reclaimed-global_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
-  Inst.Cyclic_Ops.Copy at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Cyclic_Ops.Copy at spark-pointers-auto_reclaimed-global_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Cyclic_Ops.Create_Copy at spark-pointers-auto_reclaimed-global_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Cyclic_Ops.Deref at spark-pointers-auto_reclaimed-global_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
@@ -127,10 +126,10 @@ in unit inst, 71 subprograms and packages out of 242 analyzed
   Inst.Owning_Live_Ops at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Owning_Live_Ops.Of_Weak_Handle at spark-pointers-auto_reclaimed-global_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Owning_Live_Ops.To_Strong_Handle at spark-pointers-auto_reclaimed-global_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
-  Inst.Owning_Live_Ops.Witness at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning_Live_Ops.Witness at spark-pointers-auto_reclaimed-global_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Owning_Ops at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Owning_Ops.Assign at spark-pointers-auto_reclaimed-global_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
-  Inst.Owning_Ops.Copy at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning_Ops.Copy at spark-pointers-auto_reclaimed-global_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Owning_Ops.Create_Copy at spark-pointers-auto_reclaimed-global_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Owning_Ops.Deref at spark-pointers-auto_reclaimed-global_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Owning_Pointers at inst.ads skipped; body is SPARK_Mode => Off
@@ -189,7 +188,6 @@ in unit inst, 71 subprograms and packages out of 242 analyzed
   Inst.Owning_Pointers.Reclamation_Checks.Check_Reclamation.Any_Value at spark-pointers-parameter_checks.adb, instantiated at spark-pointers-auto_reclaimed-global_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Plain_Ops at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Plain_Ops.Assign at spark-pointers-auto_reclaimed-global_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
-  Inst.Plain_Ops.Copy at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Plain_Ops.Copy at spark-pointers-auto_reclaimed-global_memory.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Plain_Ops.Create_Copy at spark-pointers-auto_reclaimed-global_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Plain_Ops.Deref at spark-pointers-auto_reclaimed-global_memory.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off

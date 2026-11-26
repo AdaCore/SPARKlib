@@ -11,22 +11,22 @@ test.adb:89:19: warning: "D" is set by "Reclaim" but not used after the call
 test.adb:94:09: warning: unused assignment
 
 Analyzed 2 units
-in unit inst, 35 subprograms and packages out of 106 analyzed
+in unit inst, 34 subprograms and packages out of 105 analyzed
   Inst at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Cell_Next at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Copy at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Count at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Create_Cellgp2987 at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Create_Cellgp2987.Create_Cell at inst.ads skipped; body is SPARK_Mode => Off
-  Inst.Create_Cellgp2987.Create_Object at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Create_Cellgp2987.Create_Object at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Create_Nodegp7316 at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Create_Nodegp7316.Create_Node at inst.ads skipped; body is SPARK_Mode => Off
-  Inst.Create_Nodegp7316.Create_Object at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Create_Nodegp7316.Create_Object at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Create_Owninggp1506 at inst.ads skipped; body is SPARK_Mode => Off
-  Inst.Create_Owninggp1506.Create_Object at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Create_Owninggp1506.Create_Object at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Create_Owninggp1506.Create_Owning at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Create_Plaingp725 at inst.ads skipped; body is SPARK_Mode => Off
-  Inst.Create_Plaingp725.Create_Object at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Create_Plaingp725.Create_Object at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Create_Plaingp725.Create_Plain at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Freegp1133 at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Freegp1133.Free at inst.ads skipped; body is SPARK_Mode => Off
@@ -66,7 +66,7 @@ in unit inst, 35 subprograms and packages out of 106 analyzed
   Inst.Owning_Handles."=" at spark-pointers-handles-auto_reclaimed_handles.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Owning_Handles.Handle at spark-pointers-handles-auto_reclaimed_handles.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Owning_Ops at inst.ads skipped; body is SPARK_Mode => Off
-  Inst.Owning_Ops.Copy at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
+  Inst.Owning_Ops.Copy at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Owning_Ops.Create_Copy at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Owning_Ops.Deref at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Owning_Pointers at inst.ads skipped; body is SPARK_Mode => Off
@@ -78,7 +78,6 @@ in unit inst, 35 subprograms and packages out of 106 analyzed
   Inst.Owning_Pointers.Reclamation_Checks.Check_Reclamation at spark-pointers-parameter_checks.ads, instantiated at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Owning_Pointers.Reclamation_Checks.Check_Reclamation.Any_Value at spark-pointers-parameter_checks.adb, instantiated at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Plain_Ops at inst.ads skipped; body is SPARK_Mode => Off
-  Inst.Plain_Ops.Copy at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Plain_Ops.Copy at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads flow analyzed (0 errors, 0 warnings and 0 pragma Assume statements) and proved
   Inst.Plain_Ops.Create_Copy at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
   Inst.Plain_Ops.Deref at spark-pointers-auto_reclaimed-immutable.ads, instantiated at inst.ads skipped; body is SPARK_Mode => Off
