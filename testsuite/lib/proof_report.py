@@ -10,7 +10,6 @@ import re
 
 from e3.testsuite.driver.diff import OutputRefiner
 
-
 ANALYSIS_HEADER = (
     "========================\n"
     "Detailed analysis report\n"
