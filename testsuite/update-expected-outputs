@@ -13,7 +13,7 @@ from e3.testsuite.report.index import ReportIndex
 from e3.testsuite.result import FailureReason, TestStatus
 
 TESTS_DIR = Path(__file__).resolve().parent.parent / "tests"
-GITLAB_PROJECT = "200"
+GITLAB_PROJECTS = {"sparklib": "200", "spark2014": "168"}
 
 
 def download_gaia_report(event_id, directory):
@@ -40,7 +40,68 @@ def download_gaia_report(event_id, directory):
     return indexes[0].parent
 
 
-def download_gitlab_report(mr_or_pipeline, directory):
+def select_gitlab_pipeline(client, identifier, project_name):
+    import gitlab
+
+    names = [project_name] if project_name else list(GITLAB_PROJECTS)
+    projects = {
+        name: client.projects.get(GITLAB_PROJECTS[name], lazy=True) for name in names
+    }
+    pipelines = []
+    for name, project in projects.items():
+        try:
+            pipeline = project.pipelines.get(identifier)
+        except gitlab.GitlabGetError as exc:
+            if exc.response_code != 404:
+                raise
+            print(f"No pipeline {identifier} in {name}")
+        else:
+            pipelines.append((name, project, pipeline))
+
+    if pipelines:
+        name, project, pipeline = pipelines[0]
+        print(f"Selected {name} pipeline {pipeline.id}; MR lookup skipped")
+        for other_name, _, other_pipeline in pipelines[1:]:
+            print(f"Discarded {other_name} pipeline {other_pipeline.id}")
+        return project, pipeline
+
+    candidates = []
+    for name, project in projects.items():
+        try:
+            mr = project.mergerequests.get(identifier)
+        except gitlab.GitlabGetError as exc:
+            if exc.response_code != 404:
+                raise
+            print(f"No MR !{identifier} in {name}")
+        else:
+            candidates.append((name, project, mr))
+
+    if not candidates:
+        raise SystemExit(f"No GitLab pipeline or MR found for {identifier}")
+    candidates.sort(key=lambda candidate: candidate[2].created_at, reverse=True)
+    name, project, mr = candidates[0]
+    print(f"Selected {name} MR !{mr.iid} (created {mr.created_at})")
+    for other_name, _, other_mr in candidates[1:]:
+        print(
+            f"Discarded {other_name} MR !{other_mr.iid} (created {other_mr.created_at})"
+        )
+    pipeline = next(
+        (
+            p
+            for p in mr.pipelines.list(iterator=True)
+            if p.status in {"success", "failed"}
+        ),
+        None,
+    )
+    if pipeline is None:
+        raise SystemExit(f"{name} MR !{mr.iid} has no completed pipeline")
+    print(
+        f"Selected pipeline {pipeline.id} ({pipeline.status}) for {name} MR !{mr.iid}"
+    )
+    return project, project.pipelines.get(pipeline.id, lazy=True)
+
+
+def download_gitlab_report(mr_or_pipeline, directory, project_name):
     import gitlab
     from e3.auth.gitlab import GitlabRegistry
 
@@ -52,38 +113,11 @@ def download_gitlab_report(mr_or_pipeline, directory):
             f"https://{GitlabRegistry.GITLAB_DOMAIN}",
             private_token=GitlabRegistry().token,
         )
-    project = client.projects.get(GITLAB_PROJECT, lazy=True)
-
-    pipeline_id = mr_or_pipeline
-    try:
-        mr = project.mergerequests.get(mr_or_pipeline)
-    except gitlab.GitlabGetError as exc:
-        if exc.response_code != 404:
-            raise
-    else:
-        pipeline = next(
-            (
-                p
-                for p in mr.pipelines.list(iterator=True)
-                if p.status in {"success", "failed"}
-            ),
-            None,
-        )
-        if pipeline is None:
-            raise SystemExit(f"SPARKlib MR !{mr.iid} has no completed pipeline")
-        pipeline_id = pipeline.id
-        print(f"SPARKlib MR !{mr.iid} uses pipeline {pipeline_id}")
-
-    pipeline = project.pipelines.get(pipeline_id, lazy=True)
-    try:
-        job = next(
-            (j for j in pipeline.jobs.list(iterator=True) if j.name == "sparklib"),
-            None,
-        )
-    except gitlab.GitlabListError as exc:
-        if exc.response_code != 404:
-            raise
-        raise SystemExit(f"SPARKlib GitLab pipeline {pipeline_id} not found") from None
+    project, pipeline = select_gitlab_pipeline(client, mr_or_pipeline, project_name)
+    pipeline_id = pipeline.id
+    job = next(
+        (j for j in pipeline.jobs.list(iterator=True) if j.name == "sparklib"), None
+    )
     if job is None or not getattr(job, "artifacts_file", None):
         raise SystemExit(f"No sparklib job archive in GitLab pipeline {pipeline_id}")
 
@@ -99,15 +133,24 @@ def download_gitlab_report(mr_or_pipeline, directory):
             raise
         raise SystemExit(f"GitLab job {job.id} archive is unavailable") from None
     with zipfile.ZipFile(archive) as zipped:
+        indexes = [
+            name
+            for name in zipped.namelist()
+            if name.count("/") == 1
+            and name.endswith("/" + ReportIndex.INDEX_FILENAME)
+            and (
+                name.startswith("testsuite-results/")
+                or name.startswith("__results-x86_64-linux-sparklib")
+            )
+        ]
+        if len(indexes) != 1:
+            raise SystemExit(f"Expected one SPARKlib report in GitLab job {job.id}")
+        report_dir = indexes[0].split("/")[0]
         zipped.extractall(
             directory,
-            (
-                name
-                for name in zipped.namelist()
-                if name.startswith("testsuite-results/")
-            ),
+            (name for name in zipped.namelist() if name.startswith(report_dir + "/")),
         )
-    return directory / "testsuite-results"
+    return directory / report_dir
 
 
 def update_baselines(report_dir):
@@ -183,9 +226,17 @@ def main():
     )
     source.add_argument("--from-gaia", type=int, metavar="EVENT", help="GAIA event ID")
     source.add_argument(
-        "--from-gitlab", type=int, metavar="ID", help="SPARKlib MR or pipeline ID"
+        "--from-gitlab", type=int, metavar="ID", help="GitLab MR or pipeline ID"
+    )
+    parser.add_argument(
+        "--gitlab-project",
+        choices=GITLAB_PROJECTS,
+        help="restrict --from-gitlab to one project (default: auto-detect)",
     )
     args = parser.parse_args()
+
+    if args.gitlab_project is not None and args.from_gitlab is None:
+        parser.error("--gitlab-project requires --from-gitlab")
 
     if args.from_gaia is None and args.from_gitlab is None:
         update_baselines(args.output_dir or Path("out/new"))
@@ -196,7 +247,9 @@ def main():
         if args.from_gaia is not None:
             report = download_gaia_report(args.from_gaia, directory)
         else:
-            report = download_gitlab_report(args.from_gitlab, directory)
+            report = download_gitlab_report(
+                args.from_gitlab, directory, args.gitlab_project
+            )
         update_baselines(report)
 
 
