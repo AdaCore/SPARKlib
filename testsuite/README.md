@@ -155,15 +155,18 @@ From `testsuite/`, use a local run or retrieve the report from GAIA or GitLab:
 ./update-expected-outputs -o /path/to/results/new
 ./update-expected-outputs --from-gaia EVENT_ID
 ./update-expected-outputs --from-gitlab MR_OR_PIPELINE_ID
+./update-expected-outputs --from-gitlab MR_OR_PIPELINE_ID --gitlab-project spark2014
 ```
 
 Use a checkout matching the run and review the resulting `test.out` diffs.
 The script updates tests that failed solely because of an output difference.
 The report must include the native e3-testsuite index. GAIA publishes it in
-the `tests_log` attachment. In GitLab, an MR number selects its newest
-successful or failed pipeline, and the `sparklib` job publishes the report in
-`testsuite-results`. GitLab retrieval uses `python-gitlab` and honors
-`GITLAB_PROXY_URL`. GAIA uses `E3_GAIA_API_URL` when set.
+the `tests_log` attachment. GitLab retrieval checks for a pipeline ID first,
+then an MR number. It searches both projects unless `--gitlab-project` limits
+the search to one. If both projects have that MR number, it chooses the more
+recently created MR; an MR selects its newest successful or failed pipeline.
+The `sparklib` job publishes the report. GitLab retrieval uses `python-gitlab`
+and honors `GITLAB_PROXY_URL`. GAIA uses `E3_GAIA_API_URL` when set.
 
 ### Updating recorded sessions
 
